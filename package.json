@@ -1,7 +1,7 @@
 {
   "name": "nexoplay-stremio-addon",
-  "version": "1.0.0",
-  "description": "Nexo Play - Tu Cine a tu alcance - Stremio Addon para streaming de peliculas y series",
+  "version": "1.1.0",
+  "description": "Nexo Play - Tu Cine a tu alcance - Stremio Addon para streaming de peliculas, series y anime con Vimeus API",
   "main": "addon.js",
   "scripts": {
     "start": "node addon.js",

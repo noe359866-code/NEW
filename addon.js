@@ -2,8 +2,10 @@
  * Nexo Play - Stremio Addon
  * Tu Cine a tu alcance
  * 
- * Addon para Stremio que proporciona streaming de peliculas y series
+ * Addon para Stremio que proporciona streaming de peliculas, series y anime
  * mediante proxy inverso para manifiestos HLS/M3U8 de Vimeus
+ * 
+ * Usa la API de Vimeus con view_key para obtener URLs de embed
  */
 
 const addonBuilder = require('stremio-addon-sdk')
@@ -19,12 +21,12 @@ const ADDON_CONFIG = {
   id: 'com.nexoplay.stremio',
   name: 'Nexo Play',
   description: 'Tu Cine a tu alcance',
-  version: '1.0.0',
+  version: '1.1.0',
   icon: 'https://raw.githubusercontent.com/noe359866-code/NEW/main/icon.png',
   background: 'https://raw.githubusercontent.com/noe359866-code/NEW/main/background.jpg',
   catalogs: [],
   resources: ['stream'],
-  types: ['movie', 'series'],
+  types: ['movie', 'series', 'anime'],
   idPrefixes: ['tt']
 }
 
@@ -38,13 +40,13 @@ const IMDb_TITLES = {
   'tt0452046': 'Mentes Criminales',
   'tt0944947': 'Juego de Tronos',
   'tt0813715': 'Breaking Bad',
-  'tt1825683': 'Black Panther',
   'tt0795176': 'Dexter',
   'tt1190634': 'The Boys',
   'tt0413573': 'Dr. House',
   'tt0944949': 'The Walking Dead',
   'tt2085059': 'Black Mirror',
   'tt2306299': 'Vikings',
+  'tt1825683': 'Black Panther',
   
   // Películas populares
   'tt0111161': 'Matrix',
@@ -65,7 +67,21 @@ const IMDb_TITLES = {
   'tt0133093': 'El Show de Truman',
   'tt0120338': 'Titanic',
   'tt0482571': 'El Orfanato',
-  'tt0367879': 'El Laberinto del Fauno'
+  'tt0367879': 'El Laberinto del Fauno',
+  
+  // Anime populares
+  'tt0423731': 'Attack on Titan',
+  'tt2560140': 'Attack on Titan',
+  'tt0450447': 'Death Note',
+  'tt0810143': 'Naruto',
+  'tt0479703': 'Naruto Shippuden',
+  'tt0434709': 'One Piece',
+  'tt0412649': 'Bleach',
+  'tt0803081': 'Dragon Ball Z',
+  'tt2593560': 'My Hero Academia',
+  'tt0809547': 'Demon Slayer',
+  'tt10233238': 'Jujutsu Kaisen',
+  'tt12413974': 'Chainsaw Man'
 }
 
 // ============================================================================
@@ -80,6 +96,23 @@ const builder = new addonBuilder(ADDON_CONFIG)
 
 const PROXY_PORT = process.env.PORT || process.env.NEXOPLAY_PORT || 3000
 const PROXY_BASE_URL = process.env.PROXY_BASE_URL || process.env.NEXOPLAY_BASE_URL || `http://localhost:${PROXY_PORT}`
+
+// ============================================================================
+// CONFIGURACIÓN DE VIMEUS
+// ============================================================================
+
+// View Key de Vimeus (requerida para todos los embeds)
+const VIMEUS_VIEW_KEY = process.env.VIMEUS_VIEW_KEY || 'KgY3ACTXKP1F-sv8M6TEKIxqWToi6pyhFkLI1qDkUmA'
+
+// URL base de Vimeus
+const VIMEUS_BASE_URL = process.env.VIMEUS_BASE_URL || 'https://vimeus.com'
+
+// Headers requeridos por Vimeus
+const VIMEUS_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'Referer': 'https://vimeus.com/',
+  'Origin': 'https://vimeus.com'
+}
 
 // ============================================================================
 // CREAR APLICACIÓN EXPRESS PARA EL PROXY
@@ -122,9 +155,7 @@ app.get('/proxy/manifest', async (req, res) => {
     // Obtener el manifiesto original de Vimeus con las cabeceras requeridas
     const response = await axios.get(decodeURIComponent(url), {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://vimeus.com/',
-        'Origin': 'https://vimeus.com',
+        ...VIMEUS_HEADERS,
         'Accept': 'application/vnd.apple.mpegurl,application/x-mpegURL,text/plain'
       },
       timeout: 15000
@@ -207,11 +238,7 @@ app.get('/proxy/segment', async (req, res) => {
       method: 'get',
       url: decodeURIComponent(url),
       responseType: 'stream',
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://vimeus.com/',
-        'Origin': 'https://vimeus.com'
-      },
+      headers: VIMEUS_HEADERS,
       timeout: 30000
     })
 
@@ -264,6 +291,7 @@ const server = app.listen(PROXY_PORT, () => {
   console.log(`📡 Addon ID: ${ADDON_CONFIG.id}`)
   console.log(`🌐 Server running on port: ${PROXY_PORT}`)
   console.log(`🔗 Proxy base URL: ${PROXY_BASE_URL}`)
+  console.log(`🔑 Vimeus View Key: ${VIMEUS_VIEW_KEY.substring(0, 10)}...`)
   console.log('')
   console.log('📋 Endpoints disponibles:')
   console.log(`   - GET /manifest.json - Manifest del addon`)
@@ -273,6 +301,7 @@ const server = app.listen(PROXY_PORT, () => {
   console.log('🎬 Formato de IDs:')
   console.log('   - Películas: tt1234567')
   console.log('   - Series: tt0452046:1:1 (IMDb:temporada:episodio)')
+  console.log('   - Anime: tt0452046:1:1 (IMDb:temporada:episodio)')
   console.log('')
   console.log('✅ Addon listo para usar en Stremio!')
   console.log('')
@@ -312,23 +341,23 @@ builder.defineStreamHandler(async ({ type, id, extra }) => {
   let season, episode
 
   if (parts.length === 3) {
-    // Serie: tt0452046:1:1
+    // Serie o Anime: tt0452046:1:1
     season = parts[1].trim()
     episode = parts[2].trim()
-    console.log(`[Nexo Play] Detected series - Season: ${season}, Episode: ${episode}`)
+    console.log(`[Nexo Play] Detected series/anime - Season: ${season}, Episode: ${episode}`)
   } else {
     // Película: tt1234567
     console.log(`[Nexo Play] Detected movie`)
   }
 
-  // Obtener el nombre de la película/serie de la base de datos simulada
+  // Obtener el nombre de la película/serie/anime de la base de datos simulada
   const name = IMDb_TITLES[imdbId] || 'Contenido'
   console.log(`[Nexo Play] Found title: ${name}`)
 
   // Formatear el título del stream según el tipo
   let streamTitle
   if (season && episode) {
-    // Serie: Nexo Playes [Nombre] T[Temporada]-EPI[Episodio]
+    // Serie o Anime: Nexo Playes [Nombre] T[Temporada]-EPI[Episodio]
     streamTitle = `Nexo Playes ${name} T${season}-EPI${episode}`
   } else {
     // Película: Nexo Playes [Nombre de la película]
@@ -337,14 +366,24 @@ builder.defineStreamHandler(async ({ type, id, extra }) => {
 
   console.log(`[Nexo Play] Stream title: ${streamTitle}`)
 
-  // Construir la URL base del manifiesto en Vimeus
-  // NOTA: En producción, esto debería obtenerse de una fuente real
-  // o construirse dinámicamente basado en el ID
-  const vimeusManifestUrl = `https://vimeus.com/hls/${imdbId}/index.m3u8`
-  console.log(`[Nexo Play] Vimeus manifest URL: ${vimeusManifestUrl}`)
+  // Construir la URL de Vimeus según el tipo de contenido
+  // Usando la API de Vimeus con view_key
+  let vimeusEmbedUrl
+  
+  if (season && episode) {
+    // Para series y anime con temporada y episodio
+    // Determinar si es anime o serie basado en el type
+    const contentType = type === 'anime' ? 'anime' : 'serie'
+    vimeusEmbedUrl = `${VIMEUS_BASE_URL}/e/${contentType}?imdb=${imdbId}&se=${season}&ep=${episode}&view_key=${VIMEUS_VIEW_KEY}`
+  } else {
+    // Para películas
+    vimeusEmbedUrl = `${VIMEUS_BASE_URL}/e/movie?imdb=${imdbId}&view_key=${VIMEUS_VIEW_KEY}`
+  }
+  
+  console.log(`[Nexo Play] Vimeus embed URL: ${vimeusEmbedUrl}`)
 
   // Construir la URL del proxy con el título codificado
-  const proxyManifestUrl = `${PROXY_BASE_URL}/proxy/manifest?url=${encodeURIComponent(vimeusManifestUrl)}&title=${encodeURIComponent(streamTitle)}`
+  const proxyManifestUrl = `${PROXY_BASE_URL}/proxy/manifest?url=${encodeURIComponent(vimeusEmbedUrl)}&title=${encodeURIComponent(streamTitle)}`
   console.log(`[Nexo Play] Proxy manifest URL: ${proxyManifestUrl}`)
 
   // Devolver el stream

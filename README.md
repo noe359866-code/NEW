@@ -6,7 +6,7 @@ Addon para [Stremio](https://www.stremio.com/) que proporciona streaming de pel�
 
 ## ✨ Características
 
-- 🎬 **Soporte para películas y series** con ID de IMDb (prefijo `tt`)
+- 🎬 **Soporte para películas, series y anime** con ID de IMDb (prefijo `tt`)
 - 🔄 **Proxy inverso** para manifiestos .m3u8 de Vimeus
 - 📡 **Simulación de cabeceras HTTP** requeridas por Vimeus:
   - `User-Agent`: Navegador moderno
@@ -16,8 +16,9 @@ Addon para [Stremio](https://www.stremio.com/) que proporciona streaming de pel�
 - 🏷️ **Inyección de etiqueta `#PLAYLIST-TITLE`** con formato personalizado
 - 💨 **Streaming de segmentos** con flujo continuo (responseType: 'stream' y .pipe()) para no saturar memoria RAM
 - 📝 **Formato de títulos personalizado**:
-  - Series: `Nexo Playes [Nombre] T[Temporada]-EPI[Episodio]`
+  - Series/Anime: `Nexo Playes [Nombre] T[Temporada]-EPI[Episodio]`
   - Películas: `Nexo Playes [Nombre de la película]`
+- 🔑 **Integración con API de Vimeus** usando view_key para obtener URLs de embed
 
 ## 📦 Instalación
 
@@ -54,6 +55,8 @@ Addon para [Stremio](https://www.stremio.com/) que proporciona streaming de pel�
    | `PROXY_BASE_URL` | URL base del proxy | http://localhost:3000 |
    | `NEXOPLAY_PORT` | Alternativa a PORT | 3000 |
    | `NEXOPLAY_BASE_URL` | Alternativa a PROXY_BASE_URL | http://localhost:3000 |
+   | `VIMEUS_VIEW_KEY` | View Key de Vimeus para embeds | `KgY3ACTXKP1F-sv8M6TEKIxqWToi6pyhFkLI1qDkUmA` |
+   | `VIMEUS_BASE_URL` | URL base de Vimeus | `https://vimeus.com` |
 
 4. **Iniciar el addon**
    ```bash
@@ -73,11 +76,40 @@ Addon para [Stremio](https://www.stremio.com/) que proporciona streaming de pel�
    - Ingresar la URL del manifest: `http://tuservidor:3000/manifest.json`
    - Hacer clic en "Install" (o "Instalar")
 
+## ⚙️ Configuración de Vimeus
+
+El addon está configurado para trabajar con **Vimeus** usando su API de embeds.
+
+### View Key
+El addon requiere una **view_key** de Vimeus para generar URLs de embed válidas. 
+Por defecto, usa la view_key proporcionada en la documentación:
+```
+KgY3ACTXKP1F-sv8M6TEKIxqWToi6pyhFkLI1qDkUmA
+```
+
+Puedes cambiarla configurando la variable de entorno:
+```bash
+export VIMEUS_VIEW_KEY=tu_view_key_aqui
+```
+
+O en el archivo `.env`:
+```
+VIMEUS_VIEW_KEY=tu_view_key_aqui
+```
+
+### Endpoints de Vimeus utilizados
+
+El addon construye automáticamente las URLs de embed según el tipo de contenido:
+
+- **Películas**: `${VIMEUS_BASE_URL}/e/movie?imdb={id}&view_key=${VIMEUS_VIEW_KEY}`
+- **Series**: `${VIMEUS_BASE_URL}/e/serie?imdb={id}&se={season}&ep={episode}&view_key=${VIMEUS_VIEW_KEY}`
+- **Anime**: `${VIMEUS_BASE_URL}/e/anime?imdb={id}&se={season}&ep={episode}&view_key=${VIMEUS_VIEW_KEY}`
+
 ## 🎯 Uso
 
 ### Formato de IDs
 
-El addon soporta dos formatos de IDs basados en IMDb:
+El addon soporta tres formatos de IDs basados en IMDb:
 
 #### Películas
 ```
@@ -95,6 +127,16 @@ tt0452046:1:1
 
 Ejemplo: `tt0452046:1:1` → "Nexo Playes Mentes Criminales T1-EPI1"
 
+#### Anime
+```
+tt0423731:1:1
+```
+- `tt0423731`: ID de IMDb del anime
+- `1`: Temporada/Parte
+- `1`: Episodio
+
+Ejemplo: `tt0423731:1:1` → "Nexo Playes Attack on Titan T1-EPI1"
+
 ### Ejemplos de búsqueda en Stremio
 
 | Tipo | ID | Título resultante |
@@ -103,6 +145,7 @@ Ejemplo: `tt0452046:1:1` → "Nexo Playes Mentes Criminales T1-EPI1"
 | Película | `tt1375666` | Nexo Playes El Origen |
 | Serie | `tt0452046:1:1` | Nexo Playes Mentes Criminales T1-EPI1 |
 | Serie | `tt0944947:8:10` | Nexo Playes Juego de Tronos T8-EPI10 |
+| Anime | `tt0423731:1:1` | Nexo Playes Attack on Titan T1-EPI1 |
 
 ## 🏗️ Arquitectura
 
