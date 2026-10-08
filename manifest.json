@@ -1,0 +1,12 @@
+{
+  "id": "com.nexoplay.stremio",
+  "name": "Nexo Play",
+  "description": "Tu Cine a tu alcance",
+  "version": "1.0.0",
+  "icon": "https://raw.githubusercontent.com/noe359866-code/NEW/main/icon.png",
+  "background": "https://raw.githubusercontent.com/noe359866-code/NEW/main/background.jpg",
+  "catalogs": [],
+  "resources": ["stream"],
+  "types": ["movie", "series"],
+  "idPrefixes": ["tt"]
+}
