@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { backdropFor, cleanStreamTitle, logoFor, posterFor, typeLabel } from '../lib/api';
 import { GENRES, loadCatalog, shelvesFor, type ShelfConfig } from '../lib/addons';
 import type { InstalledAddon, LibraryItem, MetaPreview, RecentItem } from '../lib/types';
-import { PlayIcon, PlusIcon, StarIcon, TvIcon, FilmIcon, SparkIcon } from './icons';
+import { CheckIcon, ChevronRight, PlusIcon, StarIcon, TvIcon, FilmIcon, SparkIcon } from './icons';
 import { Chip, EmptyState, ErrorState, Poster, SectionHeader, SkeletonRail } from './ui';
 
 interface HomeProps {
@@ -15,6 +15,7 @@ interface HomeProps {
   onAmbient: (url?: string) => void;
   onOpenAddons: () => void;
   onOpenLibrary: () => void;
+  onToggleLibrary: (meta: MetaPreview) => void;
 }
 
 const LOADING = Symbol('loading');
@@ -31,11 +32,11 @@ export default function Home({
   onAmbient,
   onOpenAddons,
   onOpenLibrary,
+  onToggleLibrary,
 }: HomeProps) {
   const shelves = useMemo(() => shelvesFor(addons, 8), [addons]);
   const [data, setData] = useState<Record<string, ShelfState>>({});
   const [nonce, setNonce] = useState(0);
-  const [heroDismissed, setHeroDismissed] = useState<string | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -66,23 +67,33 @@ export default function Home({
   }, [heroItems, heroShelf]);
 
   useEffect(() => {
-    if (hero && heroDismissed !== hero.id) onAmbient(backdropFor(hero));
-  }, [hero, heroDismissed, onAmbient]);
+    onAmbient(hero ? backdropFor(hero) : undefined);
+  }, [hero, onAmbient]);
 
   const everythingFailed =
     shelves.length > 0 && Object.keys(data).length === shelves.length &&
     Object.values(data).every((value) => value === FAILED);
 
   const cinemetaOn = addons.some((a) => a.builtin && a.enabled);
+  const heroLoading = Boolean(heroShelf && !heroItems);
 
   return (
     <div className="home">
-      {hero && heroDismissed !== hero.id ? (
+      {hero ? (
         <Hero
           meta={hero}
-          onPlay={() => onOpenDetail(hero)}
           onInfo={() => onOpenDetail(hero)}
+          inLibrary={library.some((item) => item.id === hero.id && item.type === hero.type)}
+          onToggleLibrary={() => onToggleLibrary(hero)}
         />
+      ) : heroLoading ? (
+        <div className="hero hero--loading" role="status" aria-label="Cargando destacado">
+          <div className="hero-inner" aria-hidden="true">
+            <div className="skel hero-skel-label" />
+            <div className="skel hero-skel-title" />
+            <div className="skel hero-skel-copy" />
+          </div>
+        </div>
       ) : (
         <div className="hero hero--empty">
           <div className="hero-inner">
@@ -91,7 +102,9 @@ export default function Home({
               <span>NÉBULA</span>
             </div>
             <h1>Tu cine, en la palma de la mano.</h1>
-            <p>Cinemeta activado. Añade tus addons de Stremio y explora miles de títulos.</p>
+            <p>{cinemetaOn
+              ? 'Explora tus catálogos y descubre algo nuevo para ver.'
+              : 'Activa Cinemeta o añade tus addons de Stremio para empezar a explorar.'}</p>
             <div className="hero-actions">
               <button type="button" className="btn btn--light" onClick={onOpenAddons}>
                 Gestionar addons
@@ -104,18 +117,20 @@ export default function Home({
         </div>
       )}
 
-      <div className="genre-strip">
-        <div className="genre-strip-head">
-          <span>Explorar por género</span>
+      {cinemetaOn ? (
+        <div className="genre-strip">
+          <div className="genre-strip-head">
+            <span>Explorar por género</span>
+          </div>
+          <div className="rail rail--chips">
+            {GENRES.slice(0, 12).map((genre) => (
+              <Chip key={genre.value} onClick={() => onGenre(genre.value)}>
+                {genre.label}
+              </Chip>
+            ))}
+          </div>
         </div>
-        <div className="rail rail--chips">
-          {GENRES.slice(0, 12).map((genre) => (
-            <Chip key={genre.value} onClick={() => onGenre(genre.value)}>
-              {genre.label}
-            </Chip>
-          ))}
-        </div>
-      </div>
+      ) : null}
 
       {!cinemetaOn ? (
         <div className="notice">
@@ -135,7 +150,7 @@ export default function Home({
 
       {recent.length > 0 ? (
         <section className="shelf">
-          <SectionHeader title="Continuar viendo" subtitle="Abierto hace poco" />
+          <SectionHeader title="Abiertos recientemente" subtitle="Retoma tu exploración" />
           <div className="rail">
             {recent.slice(0, 12).map((item) => (
               <button
@@ -250,12 +265,14 @@ export default function Home({
 
 function Hero({
   meta,
-  onPlay,
   onInfo,
+  inLibrary,
+  onToggleLibrary,
 }: {
   meta: MetaPreview;
-  onPlay: () => void;
   onInfo: () => void;
+  inLibrary: boolean;
+  onToggleLibrary: () => void;
 }) {
   const logo = logoFor(meta);
   const [logoBroken, setLogoBroken] = useState(false);
@@ -276,16 +293,18 @@ function Hero({
       <div className="hero-inner">
         <div className="brand-mark brand-mark--top">
           <SparkIcon width={18} height={18} />
-          <span>NÉBULA</span>
+          <span>DESTACADO EN NÉBULA</span>
         </div>
         {logo && !logoBroken ? (
-          <img
-            className="hero-logo"
-            src={logo}
-            alt={meta.name}
-            referrerPolicy="no-referrer"
-            onError={() => setLogoBroken(true)}
-          />
+          <h1 className="hero-logo-heading">
+            <img
+              className="hero-logo"
+              src={logo}
+              alt={meta.name}
+              referrerPolicy="no-referrer"
+              onError={() => setLogoBroken(true)}
+            />
+          </h1>
         ) : (
           <h1 className="hero-title">{meta.name}</h1>
         )}
@@ -301,11 +320,13 @@ function Hero({
         </div>
         {description ? <p className="hero-desc">{description}</p> : null}
         <div className="hero-actions">
-          <button type="button" className="btn btn--light" onClick={onPlay}>
-            <PlayIcon width={16} height={16} /> Reproducir
+          <button type="button" className="btn btn--light" onClick={onInfo}>
+            Ver detalles <ChevronRight width={15} height={15} />
           </button>
-          <button type="button" className="btn btn--ghost" onClick={onInfo}>
-            <PlusIcon width={16} height={16} /> Más info
+          <button type="button" className="btn btn--ghost" onClick={onToggleLibrary} aria-pressed={inLibrary}
+            aria-label={inLibrary ? 'Quitar de Mi lista' : 'Añadir a Mi lista'}>
+            {inLibrary ? <CheckIcon width={16} height={16} /> : <PlusIcon width={16} height={16} />}
+            {inLibrary ? 'En mi lista' : 'Mi lista'}
           </button>
         </div>
       </div>

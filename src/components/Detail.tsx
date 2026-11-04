@@ -164,7 +164,7 @@ export default function Detail({
         <div className="detail-actions">
           <button type="button" className="btn btn--light btn--wide" onClick={handlePlay}>
             <PlayIcon width={15} height={15} />
-            {seasons.length ? 'Ver episodios' : 'Reproducir'}
+            {seasons.length ? 'Ver episodios' : 'Ver fuentes'}
           </button>
           {trailerId ? (
             <button

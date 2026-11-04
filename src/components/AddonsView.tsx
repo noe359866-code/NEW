@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core';
 import { useEffect, useState } from 'react';
 import {
   cacheInfo,
@@ -430,8 +431,10 @@ export default function AddonsView({
           </div>
 
           <p className="hint">
-            El servidor interno consulta los addons por ti, incluso si no permiten CORS. Por seguridad,
-            solo acepta direcciones públicas. Las imágenes y fuentes siguen cargándose desde sus proveedores.
+            {Capacitor.isNativePlatform()
+              ? 'En Android, la app consulta los addons directamente con HTTP nativo, sin depender de CORS. Evita instalar addons o enlaces de origen desconocido.'
+              : 'El servidor interno consulta los addons por ti, incluso si no permiten CORS. Por seguridad, solo acepta direcciones públicas.'}
+            {' '}Las imágenes y fuentes siguen cargándose desde sus proveedores.
           </p>
         </div>
       </section>

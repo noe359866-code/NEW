@@ -498,6 +498,7 @@ export default function App() {
         onAmbient={setAmbient}
         onOpenAddons={() => changeTab('addons')}
         onOpenLibrary={() => changeTab('library')}
+        onToggleLibrary={toggleLibrary}
       />
     );
   };

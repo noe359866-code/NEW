@@ -23,7 +23,7 @@ protocolo de Stremio.
   enlaces `http`, `magnet`, `infoHash`, `ytId` y `externalUrl`; copia el magnet con un toque.
 - **Series**: temporadas agrupadas, lista de episodios con sinopsis y salto directo a fuentes del
   episodio (`tt123:1:2`).
-- **Mi lista** local, **"Continuar viendo"** con lo último que abriste, **búsqueda global** con
+- **Mi lista** local, **"Abiertos recientemente"** con lo último que exploraste, **búsqueda global** con
   historial, **exploración por género** y **"Cargar más"** en catálogos paginables.
 - **Gestor de addons con salud**: latencia real de cada manifest, aviso de addons caídos o lentos,
   instalación masiva (varias URLs a la vez) y soporte de enlaces `stremio://`.
@@ -129,3 +129,26 @@ página de configuración: ya incluye los ajustes.
 ## Licencia
 
 MIT.
+
+## APK para Android
+
+La app Android utiliza Capacitor e incluye la interfaz dentro del APK. Consulta los addons desde
+el dispositivo con HTTP nativo, sin CORS y sin necesitar el servidor Node de la versión web. A
+diferencia del backend web, esas solicitudes salen desde la red del dispositivo y **no tienen el
+filtro de direcciones privadas del servidor**. Instala únicamente addons de confianza. Android
+permite HTTP sin cifrar para compatibilidad; usa HTTPS siempre que sea posible. La caché local y
+el modo «Solo datos guardados» también funcionan en Android.
+
+Para compilar localmente se necesitan Node 20+, Java 21 y el SDK de Android (API 35):
+
+```bash
+npm ci
+npm run android:sync
+cd android && ./gradlew assembleDebug
+# app/build/outputs/apk/debug/app-debug.apk
+```
+
+El flujo **APK Android** de GitHub Actions compila una APK de depuración, la instala en un
+emulador y comprueba que la interfaz cargue un catálogo real. Si pasa, deja el archivo en el
+artefacto `Nebula-Android-debug` de esa ejecución. Es una compilación firmada con la clave de
+depuración, no una versión de producción ni apta para publicar en Google Play.

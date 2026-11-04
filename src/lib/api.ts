@@ -1,3 +1,4 @@
+import { Capacitor, CapacitorHttp } from '@capacitor/core';
 import { KEYS, readJSON, writeJSON } from './storage';
 import type { Manifest, MetaPreview, Stream } from './types';
 
@@ -109,20 +110,43 @@ export async function fetchJSON<T>(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const res = await fetch('/api/addon', {
-      method: 'POST',
-      body: JSON.stringify({ url }),
-      signal: controller.signal,
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-      credentials: 'omit',
-      referrerPolicy: 'no-referrer',
-    });
-    if (!res.ok) {
-      const body = await res.json().catch(() => null) as { error?: string } | null;
-      if (body?.error) throw new Error(body.error);
-      throw new HttpError(res.status, url);
+    let data: T;
+    if (Capacitor.isNativePlatform()) {
+      // En Android la app lleva sus propios recursos y consulta el addon con HTTP nativo;
+      // no existe un servidor Node local ni se necesita CORS en el WebView.
+      const target = new URL(url);
+      if (!['http:', 'https:'].includes(target.protocol) || target.username || target.password) {
+        throw new Error('Solo se admiten URLs HTTP(S) sin credenciales.');
+      }
+      const res = await CapacitorHttp.get({
+        url,
+        headers: { Accept: 'application/json' },
+        responseType: 'json',
+        connectTimeout: TIMEOUT_MS,
+        readTimeout: TIMEOUT_MS,
+      });
+      if (res.status < 200 || res.status >= 300) throw new HttpError(res.status, url);
+      try {
+        data = (typeof res.data === 'string' ? JSON.parse(res.data) : res.data) as T;
+      } catch {
+        throw new Error('El addon no devolvió JSON válido.');
+      }
+    } else {
+      const res = await fetch('/api/addon', {
+        method: 'POST',
+        body: JSON.stringify({ url }),
+        signal: controller.signal,
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        credentials: 'omit',
+        referrerPolicy: 'no-referrer',
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null) as { error?: string } | null;
+        if (body?.error) throw new Error(body.error);
+        throw new HttpError(res.status, url);
+      }
+      data = (await res.json()) as T;
     }
-    const data = (await res.json()) as T;
     const entry: CacheEntry = { at: Date.now(), data };
     if (useCache) cache.set(url, entry);
     if (persist) writePersisted(url, entry);
@@ -134,7 +158,9 @@ export async function fetchJSON<T>(
       throw new Error('La conexión tardó demasiado. Revisa tu red e inténtalo de nuevo.');
     }
     if (err instanceof TypeError) {
-      throw new Error('No se pudo conectar con el backend. Comprueba que el servidor de Nébula esté activo.');
+      throw new Error(Capacitor.isNativePlatform()
+        ? 'No se pudo conectar con el addon. Revisa tu conexión.'
+        : 'No se pudo conectar con el backend. Comprueba que el servidor de Nébula esté activo.');
     }
     throw err;
   } finally {
