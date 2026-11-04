@@ -27,7 +27,15 @@ jobs:
       - run: npm run android:sync
       - name: Compilar APK y prueba de instrumentación
         working-directory: android
-        run: ./gradlew --no-daemon assembleDebug assembleDebugAndroidTest
+        run: |
+          if ./gradlew --no-daemon assembleDebug assembleDebugAndroidTest > ../gradle.log 2>&1; then
+            cat ../gradle.log
+          else
+            cat ../gradle.log
+            details=$(tail -n 45 ../gradle.log | sed ':a;N;$!ba;s/\n/%0A/g')
+            echo "::error::Gradle: $details"
+            exit 1
+          fi
       - name: Habilitar KVM para el emulador
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
