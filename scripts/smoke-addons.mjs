@@ -2,6 +2,14 @@
 import assert from 'node:assert/strict';
 import { setTimeout as delay } from 'node:timers/promises';
 
+process.on('uncaughtException', (error) => {
+  console.error(error);
+  if (process.env.GITHUB_ACTIONS) {
+    console.error(`::error::${String(error.message).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A')}`);
+  }
+  process.exitCode = 1;
+});
+
 const base = process.env.NEBULA_BASE_URL || 'http://127.0.0.1:8080';
 let ready = false;
 for (let i = 0; i < 20; i++) {
