@@ -1,0 +1,32 @@
+name: Pruebas
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Construir y arrancar el contenedor
+        run: |
+          docker build -t nebula-test .
+          docker run -d --name nebula-test -p 8080:8080 nebula-test
+      - name: Comprobar addons reales a través del backend
+        run: node scripts/smoke-addons.mjs
+      - name: Mostrar registros del contenedor si falla
+        if: failure()
+        run: docker logs nebula-test || true

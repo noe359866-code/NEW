@@ -377,8 +377,8 @@ export default function AddonsView({
             <div className="panel-text">
               <div className="panel-title">Solo datos guardados</div>
               <p className="panel-desc">
-                Corta cualquier petición a servidores externos: solo verás catálogos y metadatos que
-                ya estén en este dispositivo.
+                Evita las consultas a addons: solo verás catálogos y metadatos que
+                ya estén en este dispositivo. Las imágenes y enlaces aún pueden usar la red.
               </p>
             </div>
             <Toggle
@@ -404,8 +404,7 @@ export default function AddonsView({
             <div className="panel-text">
               <div className="panel-title">Servidor de Cinemeta</div>
               <p className="panel-desc">
-                Público por defecto. Cámbialo por tu propia instancia si no quieres depender de
-                terceros.
+                Público por defecto. Puedes usar tu propia instancia con una dirección pública.
               </p>
             </div>
             <form
@@ -431,9 +430,8 @@ export default function AddonsView({
           </div>
 
           <p className="hint">
-            Nébula es una app estática: sin backend propio, sin analítica y sin recursos de
-            terceros (tipografía del sistema e iconos SVG incluidos). Con tu Cinemeta y tus addons
-            autoalojados, ningún servidor ajeno interviene.
+            El servidor interno consulta los addons por ti, incluso si no permiten CORS. Por seguridad,
+            solo acepta direcciones públicas. Las imágenes y fuentes siguen cargándose desde sus proveedores.
           </p>
         </div>
       </section>

@@ -27,50 +27,46 @@ protocolo de Stremio.
   historial, **exploración por género** y **"Cargar más"** en catálogos paginables.
 - **Gestor de addons con salud**: latencia real de cada manifest, aviso de addons caídos o lentos,
   instalación masiva (varias URLs a la vez) y soporte de enlaces `stremio://`.
-- **PWA instalable y offline**: service worker propio (mismo origen, sin CDN) que cachea el shell,
-  las respuestas de los addons y las imágenes; la app abre y navega sin red.
-- **Sin servidores propios ni terceros**: cero backend, cero analítica, cero fuentes web, cero
-  recursos de CDN. Cinemeta se puede apuntar a tu propia instancia y hay modo "solo datos
-  guardados" que corta toda petición externa.
+- **Backend interno para addons**: consulta manifests, catálogos, metadatos y streams sin depender
+  del CORS del navegador. La API limita destinos, tiempo y tamaño de respuesta.
+- **PWA instalable y offline**: el service worker cachea el shell y las imágenes; la app guarda
+  catálogos y metadatos en el dispositivo para consultarlos sin conexión.
+- **Sin analítica ni CDN**: los addons y la lista se guardan localmente. El modo "solo datos
+  guardados" evita las consultas a addons; las imágenes y enlaces aún pueden usar la red.
 - Enlaces profundos: `?addon=https://…/manifest.json` instala un addon al abrir la app.
 
 ## Cómo funciona
 
 ```
-Navegador (móvil)
-   └── Nébula (React + Vite)
-         ├── Cinemeta  https://v3-cinemeta.strem.io   → catálogos + metadatos
-         └── Addons    manifest.json / catalog / meta / stream  → fuentes
+Navegador (React + Vite)
+   └── POST /api/addon (servidor interno de Nébula)
+         ├── Cinemeta → catálogos y metadatos
+         └── Addons → manifest, catalog, meta y stream
 ```
 
-Todo se resuelve en el cliente: no hay backend ni base de datos. Tus addons y tu lista viven en
-`localStorage`.
+El servidor hace las consultas JSON, por lo que los addons no necesitan habilitar CORS. Las URLs
+configuradas de los addons pueden contener claves: se envían al servidor interno y al addon, sin
+registrarse ni almacenarse deliberadamente en el servidor. La lista de addons, favoritos y la caché
+persistente permanecen en `localStorage` del navegador. Las imágenes y los enlaces de reproducción
+se cargan directamente desde sus proveedores; el backend no transmite vídeo ni convierte torrents.
 
-## Sin servidores externos
+Por seguridad, el backend solo permite HTTP(S) hacia direcciones IP públicas, valida cada resolución
+DNS y redirección y bloquea localhost, redes privadas y otros destinos reservados. Esto significa que
+**no puede consultar addons autoalojados accesibles únicamente por la red local**. Limita cada respuesta
+a 2 MB y la consulta a 12 segundos. No expongas el servidor a Internet sin protección adicional:
+la API no tiene cuentas ni autenticación; usa un proxy autenticado o restringe el acceso a tu red de
+confianza. No actúa como proxy general de archivos.
 
-Nébula es una **app estática**: no hay backend de Nébula, ni cuentas, ni analítica, ni llamadas a
-CDN. Todo lo que necesita para arrancar (HTML, JS, CSS, iconos SVG, tipografía del sistema) viaja
-con la app y se guarda en el dispositivo gracias al service worker.
+En **Addons → Datos y privacidad**, «Solo datos guardados» desactiva las consultas a addons y usa
+la caché guardada; no bloquea la carga de imágenes ni la apertura de enlaces. La caché local guarda
+catálogos y metadatos hasta 7 días (80 respuestas, 250 KB por respuesta). Cinemeta puede cambiarse
+por una instancia con dirección pública.
 
-Tres controles en **Addons → Datos y privacidad**:
-
-| Control | Qué hace |
-| --- | --- |
-| **Solo datos guardados** | Bloquea cualquier petición de red. La app usa únicamente lo que ya está en caché local. |
-| **Caché local** | Catálogos y metadatos se guardan 7 días en el dispositivo (hasta 80 respuestas, 250 KB por respuesta). |
-| **Servidor de Cinemeta** | Por defecto el público de Stremio; puedes apuntarlo a tu instancia autoalojada. |
-
-Y para que el servidor de la app también sea tuyo:
+Para alojar frontend y backend juntos:
 
 ```bash
 docker compose up -d --build   # http://localhost:8080
 ```
-
-El `Dockerfile` compila y sirve con nginx: no hay procesos ni servicios de terceros.
-
-**El límite honesto**: una app no puede inventar contenido. Catálogos, metadatos, imágenes y
-fuentes vienen necesariamente de los addons que configures. Si quieres que ningún tercero
-intervenga, autoaloja Cinemeta y tus addons en tu red, apunta ahí y activa el modo solo-local.
 
 ## Desarrollo
 
@@ -78,15 +74,19 @@ intervenga, autoaloja Cinemeta y tus addons en tu red, apunta ahí y activa el m
 npm install
 npm run dev      # http://localhost:3000
 npm run build    # typecheck + build de producción
-npm run preview  # sirve dist/
+npm run preview  # sirve dist/ con la API
+npm start        # servidor de producción (ejecutar npm run build primero)
+npm test         # pruebas del backend
 docker compose up -d --build   # autoalojado en http://localhost:8080
 ```
 
-Requisitos: Node 18+.
+Requisitos: Node 18+ (recomendado Node 20+).
 
 ## Estructura
 
 ```
+server/                  API interna y servidor de producción
+test/                    pruebas de la API
 src/
   App.tsx                 navegación, pila de pantallas, addons, lista y toasts
   lib/
@@ -119,8 +119,8 @@ página de configuración: ya incluye los ajustes.
 
 ## Notas
 
-- Algunos addons no envían cabeceras CORS; en ese caso Nébula muestra el error y puedes probar con
-  otro addon o abrir su enlace directamente.
+- Los errores de conexión pueden deberse a que el addon esté caído, devuelva JSON inválido o use
+  una dirección privada bloqueada por seguridad.
 - Los `magnet` se copian al portapapeles porque un navegador móvil no puede abrirlos; pégalos en tu
   cliente de torrents.
 - **Nébula no aloja ni distribuye contenido.** Los enlaces provienen de los addons que tú decides

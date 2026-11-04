@@ -109,14 +109,19 @@ export async function fetchJSON<T>(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const res = await fetch(url, {
+    const res = await fetch('/api/addon', {
+      method: 'POST',
+      body: JSON.stringify({ url }),
       signal: controller.signal,
-      headers: { Accept: 'application/json' },
-      mode: 'cors',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
       credentials: 'omit',
       referrerPolicy: 'no-referrer',
     });
-    if (!res.ok) throw new HttpError(res.status, url);
+    if (!res.ok) {
+      const body = await res.json().catch(() => null) as { error?: string } | null;
+      if (body?.error) throw new Error(body.error);
+      throw new HttpError(res.status, url);
+    }
     const data = (await res.json()) as T;
     const entry: CacheEntry = { at: Date.now(), data };
     if (useCache) cache.set(url, entry);
@@ -129,7 +134,7 @@ export async function fetchJSON<T>(
       throw new Error('La conexión tardó demasiado. Revisa tu red e inténtalo de nuevo.');
     }
     if (err instanceof TypeError) {
-      throw new Error('No se pudo conectar. Puede que el addon esté caído o bloquee CORS.');
+      throw new Error('No se pudo conectar con el backend. Comprueba que el servidor de Nébula esté activo.');
     }
     throw err;
   } finally {

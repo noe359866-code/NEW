@@ -3,7 +3,7 @@
    - Navegación: red primero, caché como respaldo.
    - Respuestas de addons/imágenes: caché primero + revalidación en segundo plano. */
 
-const VERSION = 'nebula-v1';
+const VERSION = 'nebula-v2';
 const SHELL = `${VERSION}-shell`;
 const RUNTIME = `${VERSION}-runtime`;
 const PRECACHE = ['/', '/index.html', '/manifest.webmanifest', '/icon.svg'];
