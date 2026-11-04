@@ -84,9 +84,9 @@ export const CINEMETA_MANIFEST: Manifest = {
   behaviorHints: { adult: false },
 };
 
-export function builtinAddon(): InstalledAddon {
+export function builtinAddon(url: string = CINEMETA_URL): InstalledAddon {
   return {
-    transportUrl: CINEMETA_URL,
+    transportUrl: url,
     manifest: CINEMETA_MANIFEST,
     enabled: true,
     addedAt: 0,
@@ -94,15 +94,18 @@ export function builtinAddon(): InstalledAddon {
   };
 }
 
-export function ensureBuiltin(addons: InstalledAddon[]): InstalledAddon[] {
-  const rest = addons.filter((a) => a.transportUrl !== CINEMETA_URL);
-  const existing = addons.find((a) => a.transportUrl === CINEMETA_URL);
+export function ensureBuiltin(
+  addons: InstalledAddon[],
+  url: string = CINEMETA_URL,
+): InstalledAddon[] {
+  const existing = addons.find((addon) => addon.transportUrl === url);
+  const rest = addons.filter((addon) => !addon.builtin && addon.transportUrl !== url);
   return [
     {
-      ...builtinAddon(),
-      ...existing,
-      builtin: true,
+      ...builtinAddon(url),
       enabled: existing ? existing.enabled : true,
+      addedAt: existing?.addedAt ?? 0,
+      builtin: true,
     },
     ...rest,
   ];

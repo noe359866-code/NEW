@@ -1,8 +1,78 @@
+import { KEYS, readJSON, writeJSON } from './storage';
 import type { Manifest, MetaPreview, Stream } from './types';
 
 const TIMEOUT_MS = 14000;
-const cache = new Map<string, { at: number; data: unknown }>();
 const CACHE_TTL = 1000 * 60 * 10;
+const PERSIST_TTL = 1000 * 60 * 60 * 24 * 7;
+const PERSIST_LIMIT = 80;
+const PERSIST_MAX_CHARS = 250_000;
+
+interface CacheEntry {
+  at: number;
+  data: unknown;
+}
+
+interface LocalSettings {
+  offlineOnly?: boolean;
+  persistCache?: boolean;
+  cinemetaUrl?: string;
+}
+
+const cache = new Map<string, CacheEntry>();
+
+function localSettings(): LocalSettings {
+  return readJSON<LocalSettings>(KEYS.settings, {});
+}
+
+/** Modo "solo datos guardados": ni una petición a servidores externos. */
+export function isOfflineMode(): boolean {
+  if (localSettings().offlineOnly === true) return true;
+  return typeof navigator !== 'undefined' && navigator.onLine === false;
+}
+
+function readPersisted(url: string): CacheEntry | undefined {
+  if (localSettings().persistCache === false) return undefined;
+  const store = readJSON<Record<string, CacheEntry>>(KEYS.responseCache, {});
+  const hit = store[url];
+  if (!hit) return undefined;
+  if (Date.now() - hit.at > PERSIST_TTL) return undefined;
+  return hit;
+}
+
+function writePersisted(url: string, entry: CacheEntry): void {
+  if (localSettings().persistCache === false) return;
+  try {
+    if (JSON.stringify(entry.data).length > PERSIST_MAX_CHARS) return;
+    const store = readJSON<Record<string, CacheEntry>>(KEYS.responseCache, {});
+    store[url] = entry;
+    const fresh = Object.entries(store)
+      .filter(([, value]) => Date.now() - value.at <= PERSIST_TTL)
+      .sort((a, b) => b[1].at - a[1].at)
+      .slice(0, PERSIST_LIMIT);
+    writeJSON(KEYS.responseCache, Object.fromEntries(fresh));
+  } catch {
+    /* sin espacio: seguimos en memoria */
+  }
+}
+
+export function cacheInfo(): { count: number; kb: number } {
+  const store = readJSON<Record<string, CacheEntry>>(KEYS.responseCache, {});
+  const count = Object.keys(store).length;
+  return { count, kb: Math.round(JSON.stringify(store).length / 1024) };
+}
+
+export function clearResponseCache(): number {
+  cache.clear();
+  const { count } = cacheInfo();
+  writeJSON(KEYS.responseCache, {});
+  return count;
+}
+
+export async function clearServiceWorkerCache(): Promise<void> {
+  if (typeof caches === 'undefined') return;
+  const keys = await caches.keys();
+  await Promise.all(keys.map((key) => caches.delete(key)));
+}
 
 export class HttpError extends Error {
   status: number;
@@ -14,11 +84,26 @@ export class HttpError extends Error {
   }
 }
 
-export async function fetchJSON<T>(url: string, opts: { cache?: boolean } = {}): Promise<T> {
+export async function fetchJSON<T>(
+  url: string,
+  opts: { cache?: boolean; persist?: boolean } = {},
+): Promise<T> {
   const useCache = opts.cache !== false;
+  const persist = opts.persist !== false && useCache;
+
   if (useCache) {
     const hit = cache.get(url);
     if (hit && Date.now() - hit.at < CACHE_TTL) return hit.data as T;
+  }
+
+  const stored = persist ? readPersisted(url) : undefined;
+
+  if (isOfflineMode()) {
+    const fallback = stored || (useCache ? cache.get(url) : undefined);
+    if (fallback) return fallback.data as T;
+    throw new Error(
+      'Modo solo-local: no hay datos guardados para esto. Desactívalo en Addons → Datos o conéctate para llenar la caché.',
+    );
   }
 
   const controller = new AbortController();
@@ -33,9 +118,13 @@ export async function fetchJSON<T>(url: string, opts: { cache?: boolean } = {}):
     });
     if (!res.ok) throw new HttpError(res.status, url);
     const data = (await res.json()) as T;
-    if (useCache) cache.set(url, { at: Date.now(), data });
+    const entry: CacheEntry = { at: Date.now(), data };
+    if (useCache) cache.set(url, entry);
+    if (persist) writePersisted(url, entry);
     return data;
   } catch (err) {
+    // Sin red (o servidor caído): tiramos de la última copia guardada.
+    if (stored) return stored.data as T;
     if (err instanceof DOMException && err.name === 'AbortError') {
       throw new Error('La conexión tardó demasiado. Revisa tu red e inténtalo de nuevo.');
     }

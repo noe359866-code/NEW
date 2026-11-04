@@ -27,8 +27,11 @@ protocolo de Stremio.
   historial, **exploración por género** y **"Cargar más"** en catálogos paginables.
 - **Gestor de addons con salud**: latencia real de cada manifest, aviso de addons caídos o lentos,
   instalación masiva (varias URLs a la vez) y soporte de enlaces `stremio://`.
-- **PWA instalable**: manifest, `apple-mobile-web-app-capable`, `viewport-fit=cover` y
-  `safe-area-inset` para el notch.
+- **PWA instalable y offline**: service worker propio (mismo origen, sin CDN) que cachea el shell,
+  las respuestas de los addons y las imágenes; la app abre y navega sin red.
+- **Sin servidores propios ni terceros**: cero backend, cero analítica, cero fuentes web, cero
+  recursos de CDN. Cinemeta se puede apuntar a tu propia instancia y hay modo "solo datos
+  guardados" que corta toda petición externa.
 - Enlaces profundos: `?addon=https://…/manifest.json` instala un addon al abrir la app.
 
 ## Cómo funciona
@@ -43,6 +46,32 @@ Navegador (móvil)
 Todo se resuelve en el cliente: no hay backend ni base de datos. Tus addons y tu lista viven en
 `localStorage`.
 
+## Sin servidores externos
+
+Nébula es una **app estática**: no hay backend de Nébula, ni cuentas, ni analítica, ni llamadas a
+CDN. Todo lo que necesita para arrancar (HTML, JS, CSS, iconos SVG, tipografía del sistema) viaja
+con la app y se guarda en el dispositivo gracias al service worker.
+
+Tres controles en **Addons → Datos y privacidad**:
+
+| Control | Qué hace |
+| --- | --- |
+| **Solo datos guardados** | Bloquea cualquier petición de red. La app usa únicamente lo que ya está en caché local. |
+| **Caché local** | Catálogos y metadatos se guardan 7 días en el dispositivo (hasta 80 respuestas, 250 KB por respuesta). |
+| **Servidor de Cinemeta** | Por defecto el público de Stremio; puedes apuntarlo a tu instancia autoalojada. |
+
+Y para que el servidor de la app también sea tuyo:
+
+```bash
+docker compose up -d --build   # http://localhost:8080
+```
+
+El `Dockerfile` compila y sirve con nginx: no hay procesos ni servicios de terceros.
+
+**El límite honesto**: una app no puede inventar contenido. Catálogos, metadatos, imágenes y
+fuentes vienen necesariamente de los addons que configures. Si quieres que ningún tercero
+intervenga, autoaloja Cinemeta y tus addons en tu red, apunta ahí y activa el modo solo-local.
+
 ## Desarrollo
 
 ```bash
@@ -50,6 +79,7 @@ npm install
 npm run dev      # http://localhost:3000
 npm run build    # typecheck + build de producción
 npm run preview  # sirve dist/
+docker compose up -d --build   # autoalojado en http://localhost:8080
 ```
 
 Requisitos: Node 18+.

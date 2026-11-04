@@ -15,9 +15,10 @@ import {
 } from './components/icons';
 import { Toast } from './components/ui';
 import { CINEMETA_URL, ensureBuiltin, fetchManifest, type ShelfConfig } from './lib/addons';
+import { DEFAULT_SETTINGS, loadSettings, type AppSettings } from './lib/settings';
 import { useStoredState } from './lib/hooks';
-import { KEYS } from './lib/storage';
-import { typeLabel } from './lib/api';
+import { KEYS, readJSON } from './lib/storage';
+import { normalizeAddonUrl, typeLabel } from './lib/api';
 import type {
   InstalledAddon,
   LibraryItem,
@@ -56,8 +57,21 @@ const TABS: Array<{ id: Tab; label: string; icon: typeof HomeIcon }> = [
 let didStartupRefresh = false;
 
 export default function App() {
+  const [settings, setSettings] = useStoredState<AppSettings>(KEYS.settings, loadSettings());
+  const cinemetaUrl = settings.cinemetaUrl || DEFAULT_SETTINGS.cinemetaUrl;
+  const cinemetaUrlRef = useRef(cinemetaUrl);
+  cinemetaUrlRef.current = cinemetaUrl;
+
+  const withBuiltin = useCallback(
+    (list: InstalledAddon[]) => ensureBuiltin(list, cinemetaUrlRef.current),
+    [],
+  );
+
   const [storedAddons, setStoredAddons] = useStoredState<InstalledAddon[]>(KEYS.addons, []);
-  const addons = useMemo(() => ensureBuiltin(storedAddons), [storedAddons]);
+  const addons = useMemo(
+    () => ensureBuiltin(storedAddons, cinemetaUrl),
+    [storedAddons, cinemetaUrl],
+  );
   const addonsRef = useRef(addons);
   addonsRef.current = addons;
 
@@ -84,10 +98,15 @@ export default function App() {
 
   // Persistimos Cinemeta como addon integrado la primera vez.
   useEffect(() => {
-    if (!storedAddons.some((addon) => addon.transportUrl === CINEMETA_URL)) {
+    if (!storedAddons.some((addon) => addon.transportUrl === cinemetaUrl)) {
       setStoredAddons(() => addons);
     }
-  }, [storedAddons, addons, setStoredAddons]);
+  }, [storedAddons, addons, setStoredAddons, cinemetaUrl]);
+
+  // Guardamos los ajustes por defecto para que el resto del código los lea sin ambigüedad.
+  useEffect(() => {
+    if (readJSON(KEYS.settings, null) === null) setSettings(() => loadSettings());
+  }, [setSettings]);
 
   // Refresco silencioso de manifests al abrir (catálogos nuevos, versiones…).
   useEffect(() => {
@@ -106,7 +125,7 @@ export default function App() {
       }
       if (!updates.size) return;
       setStoredAddons((prev) =>
-        ensureBuiltin(
+        withBuiltin(
           prev.map((addon) =>
             updates.has(addon.transportUrl)
               ? { ...addon, manifest: updates.get(addon.transportUrl)! }
@@ -126,7 +145,7 @@ export default function App() {
       try {
         const addon = await fetchManifest(deepAddon);
         setStoredAddons((prev) =>
-          ensureBuiltin(
+          withBuiltin(
             prev.some((item) => item.transportUrl === addon.transportUrl)
               ? prev
               : [...prev, addon],
@@ -177,16 +196,16 @@ export default function App() {
       if (addonsRef.current.some((item) => item.transportUrl === addon.transportUrl)) {
         throw new Error('Ese addon ya está instalado.');
       }
-      setStoredAddons((prev) => ensureBuiltin([...prev, addon]));
+      setStoredAddons((prev) => withBuiltin([...prev, addon]));
     },
-    [setStoredAddons],
+    [setStoredAddons, withBuiltin],
   );
 
   const removeAddon = useCallback(
     (url: string) => {
-      setStoredAddons((prev) => ensureBuiltin(prev.filter((addon) => addon.transportUrl !== url)));
+      setStoredAddons((prev) => withBuiltin(prev.filter((addon) => addon.transportUrl !== url)));
     },
-    [setStoredAddons],
+    [setStoredAddons, withBuiltin],
   );
 
   const toggleAddon = useCallback(
@@ -210,7 +229,7 @@ export default function App() {
       if (result.status === 'fulfilled') updates.set(result.value.url, result.value.manifest);
     }
     setStoredAddons((prev) =>
-      ensureBuiltin(
+      withBuiltin(
         prev.map((addon) =>
           updates.has(addon.transportUrl)
             ? { ...addon, manifest: updates.get(addon.transportUrl)! }
@@ -221,7 +240,7 @@ export default function App() {
     if (updates.size !== addonsRef.current.length) {
       throw new Error('Algún addon no respondió');
     }
-  }, [setStoredAddons]);
+  }, [setStoredAddons, withBuiltin]);
 
   const toggleLibrary = useCallback(
     (meta: MetaPreview) => {
@@ -299,7 +318,7 @@ export default function App() {
 
   const openGenre = useCallback(
     (genre: string) => {
-      const cinemeta = addonsRef.current.find((addon) => addon.transportUrl === CINEMETA_URL);
+      const cinemeta = addonsRef.current.find((addon) => addon.builtin);
       const catalog = cinemeta?.manifest.catalogs.find(
         (item) => item.type === 'movie' && item.id === 'top',
       );
@@ -314,6 +333,56 @@ export default function App() {
       });
     },
     [push],
+  );
+
+  const updateSettings = useCallback(
+    (patch: Partial<AppSettings>) => {
+      setSettings((prev) => ({ ...prev, ...patch }));
+    },
+    [setSettings],
+  );
+
+  const changeCinemetaUrl = useCallback(
+    async (raw: string) => {
+      let next = raw.trim() || CINEMETA_URL;
+      try {
+        next = normalizeAddonUrl(next);
+      } catch {
+        /* dejamos el texto tal cual para que el usuario lo corrija */
+      }
+      if (next === cinemetaUrlRef.current) {
+        notify('Ese servidor ya está en uso', 'ok');
+        return;
+      }
+
+      setSettings((prev) => ({ ...prev, cinemetaUrl: next }));
+      setStoredAddons((prev) => {
+        const wasEnabled = prev.find((addon) => addon.builtin)?.enabled ?? true;
+        return ensureBuiltin(
+          prev.filter((addon) => !addon.builtin && addon.transportUrl !== next),
+          next,
+        ).map((addon) => (addon.builtin ? { ...addon, enabled: wasEnabled } : addon));
+      });
+
+      // Validamos el servidor de inmediato para no dejar al usuario a ciegas.
+      try {
+        const fresh = await fetchManifest(next);
+        setStoredAddons((prev) =>
+          prev.map((addon) =>
+            addon.builtin && addon.transportUrl === next
+              ? { ...addon, manifest: fresh.manifest }
+              : addon,
+          ),
+        );
+        notify('Cinemeta conectado', 'ok');
+      } catch (err) {
+        notify(
+          `Se guardó, pero no responde: ${err instanceof Error ? err.message : 'error de red'}`,
+          'error',
+        );
+      }
+    },
+    [notify, setSettings, setStoredAddons],
   );
 
   const changeTab = useCallback(
@@ -406,6 +475,9 @@ export default function App() {
       return (
         <AddonsView
           addons={addons}
+          settings={settings}
+          onSettings={updateSettings}
+          onCinemetaUrl={changeCinemetaUrl}
           onInstall={installAddon}
           onRemove={removeAddon}
           onToggle={toggleAddon}

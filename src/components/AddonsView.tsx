@@ -1,7 +1,15 @@
-import { useState } from 'react';
-import { clearApiCache, normalizeAddonUrl, splitAddonUrls } from '../lib/api';
-import { SUGGESTED_ADDONS, checkAddonsHealth, supportsResource } from '../lib/addons';
+import { useEffect, useState } from 'react';
+import {
+  cacheInfo,
+  clearApiCache,
+  clearResponseCache,
+  clearServiceWorkerCache,
+  normalizeAddonUrl,
+  splitAddonUrls,
+} from '../lib/api';
+import { CINEMETA_URL, SUGGESTED_ADDONS, checkAddonsHealth, supportsResource } from '../lib/addons';
 import type { AddonHealth } from '../lib/addons';
+import type { AppSettings } from '../lib/settings';
 import type { InstalledAddon } from '../lib/types';
 import {
   CheckIcon,
@@ -17,6 +25,9 @@ import { EmptyState, Toggle } from './ui';
 
 interface AddonsViewProps {
   addons: InstalledAddon[];
+  settings: AppSettings;
+  onSettings: (patch: Partial<AppSettings>) => void;
+  onCinemetaUrl: (url: string) => void;
   onInstall: (url: string) => Promise<void>;
   onRemove: (url: string) => void;
   onToggle: (url: string, enabled: boolean) => void;
@@ -32,6 +43,9 @@ interface BulkResult {
 
 export default function AddonsView({
   addons,
+  settings,
+  onSettings,
+  onCinemetaUrl,
   onInstall,
   onRemove,
   onToggle,
@@ -45,6 +59,19 @@ export default function AddonsView({
   const [error, setError] = useState<string | null>(null);
   const [bulk, setBulk] = useState<BulkResult[] | null>(null);
   const [health, setHealth] = useState<Record<string, AddonHealth>>({});
+  const [cinemeta, setCinemeta] = useState(settings.cinemetaUrl);
+  const [cache, setCache] = useState(() => cacheInfo());
+
+  useEffect(() => {
+    setCinemeta(settings.cinemetaUrl);
+  }, [settings.cinemetaUrl]);
+
+  const wipeCache = async () => {
+    const count = clearResponseCache();
+    await clearServiceWorkerCache();
+    setCache(cacheInfo());
+    notify(count ? `${count} respuestas guardadas borradas` : 'No había datos guardados', 'ok');
+  };
 
   const installedUrls = new Set(addons.map((addon) => addon.transportUrl));
   const enabledCount = addons.filter((addon) => addon.enabled).length;
@@ -341,13 +368,83 @@ export default function AddonsView({
         </ul>
       </section>
 
+      <section className="addon-section">
+        <div className="addon-section-head">
+          <h2>Datos y privacidad</h2>
+        </div>
+        <div className="panel">
+          <div className="panel-row">
+            <div className="panel-text">
+              <div className="panel-title">Solo datos guardados</div>
+              <p className="panel-desc">
+                Corta cualquier petición a servidores externos: solo verás catálogos y metadatos que
+                ya estén en este dispositivo.
+              </p>
+            </div>
+            <Toggle
+              checked={settings.offlineOnly}
+              onChange={(value) => onSettings({ offlineOnly: value })}
+              label="Modo solo datos guardados"
+            />
+          </div>
+
+          <div className="panel-row">
+            <div className="panel-text">
+              <div className="panel-title">Caché local</div>
+              <p className="panel-desc">
+                {cache.count} respuestas · {cache.kb} KB · se guardan 7 días y sirven sin conexión.
+              </p>
+            </div>
+            <button type="button" className="link-btn" onClick={() => void wipeCache()}>
+              Borrar
+            </button>
+          </div>
+
+          <div className="panel-row panel-row--stack">
+            <div className="panel-text">
+              <div className="panel-title">Servidor de Cinemeta</div>
+              <p className="panel-desc">
+                Público por defecto. Cámbialo por tu propia instancia si no quieres depender de
+                terceros.
+              </p>
+            </div>
+            <form
+              className="panel-form"
+              onSubmit={(event) => {
+                event.preventDefault();
+                onCinemetaUrl(cinemeta);
+              }}
+            >
+              <input
+                value={cinemeta}
+                onChange={(event) => setCinemeta(event.target.value)}
+                placeholder={CINEMETA_URL}
+                inputMode="url"
+                autoCapitalize="none"
+                autoComplete="off"
+                spellCheck={false}
+              />
+              <button type="submit" className="btn btn--ghost btn--mini">
+                Aplicar
+              </button>
+            </form>
+          </div>
+
+          <p className="hint">
+            Nébula es una app estática: sin backend propio, sin analítica y sin recursos de
+            terceros (tipografía del sistema e iconos SVG incluidos). Con tu Cinemeta y tus addons
+            autoalojados, ningún servidor ajeno interviene.
+          </p>
+        </div>
+      </section>
+
       <section className="addon-section addon-section--about">
         <h2>Acerca de</h2>
         <p className="muted small">
           Nébula es un cliente móvil del protocolo de addons de Stremio con estética inspirada en
           Apple TV. No incluye contenido propio: todo proviene de los addons que activas.
         </p>
-        <p className="muted small">Hecho con cariño para tu bolsillo · v1.1.0</p>
+        <p className="muted small">Hecho con cariño para tu bolsillo · v1.2.0</p>
       </section>
     </div>
   );

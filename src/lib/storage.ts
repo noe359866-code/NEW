@@ -32,4 +32,6 @@ export const KEYS = {
   recent: 'recent-searches',
   lastTab: 'last-tab',
   recentlyOpened: 'recently-opened',
+  settings: 'settings',
+  responseCache: 'response-cache',
 };

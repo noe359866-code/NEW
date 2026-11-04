@@ -1,0 +1,7 @@
+services:
+  nebula:
+    build: .
+    container_name: nebula
+    ports:
+      - '8080:8080'
+    restart: unless-stopped
