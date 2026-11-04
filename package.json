@@ -1,30 +1,24 @@
 {
-  "name": "nexoplay-stremio-addon",
-  "version": "1.1.0",
-  "description": "Nexo Play - Tu Cine a tu alcance - Stremio Addon para streaming de peliculas, series y anime con Vimeus API",
-  "main": "addon.js",
+  "name": "nebula-tv",
+  "private": true,
+  "version": "1.2.0",
+  "type": "module",
+  "description": "Nébula — reproductor móvil con estética Apple TV, Cinemeta y addons de Stremio",
   "scripts": {
-    "start": "node addon.js",
-    "dev": "nodemon addon.js"
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "axios": "^1.6.2",
-    "express": "^4.18.2",
-    "stremio-addon-sdk": "^1.6.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
-  },
-  "keywords": [
-    "stremio",
-    "addon",
-    "hls",
-    "m3u8",
-    "streaming",
-    "vimeus",
-    "proxy",
-    "nexoplay"
-  ],
-  "author": "Nexo Play",
-  "license": "MIT"
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
 }

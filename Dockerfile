@@ -1,27 +1,15 @@
-# Nexo Play - Stremio Addon Dockerfile
-# Usa Node.js oficial como base
-
-FROM node:18-alpine
-
-# Configurar directorio de trabajo
+# Build + servidor estático propio: no hay backend ni servicios de Nébula.
+FROM node:20-alpine AS build
 WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY tsconfig.json vite.config.ts index.html ./
+COPY public ./public
+COPY src ./src
+RUN npm run build
 
-# Copiar archivos de dependencias
-COPY package*.json ./
-
-# Instalar dependencias
-RUN npm ci --only=production
-
-# Copiar archivos de la aplicación
-COPY . .
-
-# Exponer puerto
-EXPOSE 3000
-
-# Configurar variables de entorno
-ENV NODE_ENV=production
-ENV PORT=3000
-ENV PROXY_BASE_URL=http://localhost:3000
-
-# Comando de inicio
-CMD ["node", "addon.js"]
+FROM nginx:1.27-alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://127.0.0.1:8080/ >/dev/null || exit 1

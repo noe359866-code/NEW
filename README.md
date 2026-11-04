@@ -1,337 +1,131 @@
-# Nexo Play - Stremio Addon
+# Nébula ✦
 
-> **Tu Cine a tu alcance**
+Cliente **móvil** de cine y series con estética inspirada en **Apple TV**, construido sobre el
+ecosistema de **Stremio**. Viene con **Cinemeta ya activado** y acepta cualquier addon que hable el
+protocolo de Stremio.
 
-Addon para [Stremio](https://www.stremio.com/) que proporciona streaming de películas y series mediante proxy inverso para manifiestos HLS/M3U8.
-
-## ✨ Características
-
-- 🎬 **Soporte para películas, series y anime** con ID de IMDb (prefijo `tt`)
-- 🔄 **Proxy inverso** para manifiestos .m3u8 de Vimeus
-- 📡 **Simulación de cabeceras HTTP** requeridas por Vimeus:
-  - `User-Agent`: Navegador moderno
-  - `Referer`: https://vimeus.com/
-  - `Origin`: https://vimeus.com
-- 🔧 **Reescritura de URLs** de segmentos (.ts, .m4s) para pasar por el proxy
-- 🏷️ **Inyección de etiqueta `#PLAYLIST-TITLE`** con formato personalizado
-- 💨 **Streaming de segmentos** con flujo continuo (responseType: 'stream' y .pipe()) para no saturar memoria RAM
-- 📝 **Formato de títulos personalizado**:
-  - Series/Anime: `Nexo Playes [Nombre] T[Temporada]-EPI[Episodio]`
-  - Películas: `Nexo Playes [Nombre de la película]`
-- 🔑 **Integración con API de Vimeus** usando view_key para obtener URLs de embed
-
-## 📦 Instalación
-
-### Requisitos
-
-- [Node.js](https://nodejs.org/) 16+ (recomendado 18+)
-- [npm](https://www.npmjs.com/) o [yarn](https://yarnpkg.com/)
-- [Stremio](https://www.stremio.com/) instalado
-
-### Pasos
-
-1. **Clonar el repositorio**
-   ```bash
-   git clone https://github.com/noe359866-code/NEW.git nexoplay-addon
-   cd nexoplay-addon
-   ```
-
-2. **Instalar dependencias**
-   ```bash
-   npm install
-   ```
-
-3. **Configurar variables de entorno (opcional)**
-   
-   Crear un archivo `.env` o exportar variables:
-   ```bash
-   export PORT=3000
-   export PROXY_BASE_URL=http://localhost:3000
-   ```
-   
-   | Variable | Descripción | Valor por defecto |
-   |----------|-------------|------------------|
-   | `PORT` | Puerto del servidor proxy | 3000 |
-   | `PROXY_BASE_URL` | URL base del proxy | http://localhost:3000 |
-   | `NEXOPLAY_PORT` | Alternativa a PORT | 3000 |
-   | `NEXOPLAY_BASE_URL` | Alternativa a PROXY_BASE_URL | http://localhost:3000 |
-   | `VIMEUS_VIEW_KEY` | View Key de Vimeus para embeds | `KgY3ACTXKP1F-sv8M6TEKIxqWToi6pyhFkLI1qDkUmA` |
-   | `VIMEUS_BASE_URL` | URL base de Vimeus | `https://vimeus.com` |
-
-4. **Iniciar el addon**
-   ```bash
-   npm start
-   ```
-   
-   O para desarrollo con auto-reload:
-   ```bash
-   npm run dev
-   ```
-
-5. **Configurar en Stremio**
-   
-   - Abrir Stremio
-   - Ir a "Addons" (o "Complementos" en español)
-   - Hacer clic en "Install from URL" (o "Instalar desde URL")
-   - Ingresar la URL del manifest: `http://tuservidor:3000/manifest.json`
-   - Hacer clic en "Install" (o "Instalar")
-
-## ⚙️ Configuración de Vimeus
-
-El addon está configurado para trabajar con **Vimeus** usando su API de embeds.
-
-### View Key
-El addon requiere una **view_key** de Vimeus para generar URLs de embed válidas. 
-Por defecto, usa la view_key proporcionada en la documentación:
-```
-KgY3ACTXKP1F-sv8M6TEKIxqWToi6pyhFkLI1qDkUmA
-```
-
-Puedes cambiarla configurando la variable de entorno:
-```bash
-export VIMEUS_VIEW_KEY=tu_view_key_aqui
-```
-
-O en el archivo `.env`:
-```
-VIMEUS_VIEW_KEY=tu_view_key_aqui
-```
-
-### Endpoints de Vimeus utilizados
-
-El addon construye automáticamente las URLs de embed según el tipo de contenido:
-
-- **Películas**: `${VIMEUS_BASE_URL}/e/movie?imdb={id}&view_key=${VIMEUS_VIEW_KEY}`
-- **Series**: `${VIMEUS_BASE_URL}/e/serie?imdb={id}&se={season}&ep={episode}&view_key=${VIMEUS_VIEW_KEY}`
-- **Anime**: `${VIMEUS_BASE_URL}/e/anime?imdb={id}&se={season}&ep={episode}&view_key=${VIMEUS_VIEW_KEY}`
-
-## 🎯 Uso
-
-### Formato de IDs
-
-El addon soporta tres formatos de IDs basados en IMDb:
-
-#### Películas
-```
-tt1234567
-```
-Ejemplo: `tt1375666` → "Nexo Playes El Origen"
-
-#### Series
-```
-tt0452046:1:1
-```
-- `tt0452046`: ID de IMDb de la serie
-- `1`: Temporada
-- `1`: Episodio
-
-Ejemplo: `tt0452046:1:1` → "Nexo Playes Mentes Criminales T1-EPI1"
-
-#### Anime
-```
-tt0423731:1:1
-```
-- `tt0423731`: ID de IMDb del anime
-- `1`: Temporada/Parte
-- `1`: Episodio
-
-Ejemplo: `tt0423731:1:1` → "Nexo Playes Attack on Titan T1-EPI1"
-
-### Ejemplos de búsqueda en Stremio
-
-| Tipo | ID | Título resultante |
-|------|-----|-------------------|
-| Película | `tt0111161` | Nexo Playes Matrix |
-| Película | `tt1375666` | Nexo Playes El Origen |
-| Serie | `tt0452046:1:1` | Nexo Playes Mentes Criminales T1-EPI1 |
-| Serie | `tt0944947:8:10` | Nexo Playes Juego de Tronos T8-EPI10 |
-| Anime | `tt0423731:1:1` | Nexo Playes Attack on Titan T1-EPI1 |
-
-## 🏗️ Arquitectura
-
-### Componentes principales
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        Stremio Client                         │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      Nexo Play Addon                          │
-│  ┌─────────────────────────────────────────────────────────┐│
-│  │  Stream Handler                                             ││
-│  │  - Recibe: type, id (ej: tt0452046:1:1)                   ││
-│  │  - Formatea título                                         ││
-│  │  - Devuelve URL del proxy                                  ││
-│  └─────────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      Proxy Server                              │
-│  ┌───────────────────────┐  ┌─────────────────────────────┐  │
-│  │  /proxy/manifest       │  │  /proxy/segment               │  │
-│  │  - Obtiene M3U8 de      │  │  - Proxy de segmentos .ts    │  │
-│  │    Vimeus               │  │  - Streaming con .pipe()     │  │
-│  │  - Inyecta PLAYLIST-    │  │  - Sin saturación de RAM     │  │
-│  │    TITLE                │  │                             │  │
-│  │  - Reescribe URLs de    │  │                             │  │
-│  │    segmentos            │  │                             │  │
-│  └───────────────────────┘  └─────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                        Vimeus Server                           │
-│  - Proveedor de contenido HLS/M3U8                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Flujo de datos
-
-1. **Stremio** solicita streams para un ID (ej: `tt0452046:1:1`)
-2. **Stream Handler** del addon:
-   - Parse el ID
-   - Obtiene el nombre de la base de datos
-   - Formatea el título: `Nexo Playes Mentes Criminales T1-EPI1`
-   - Devuelve URL: `http://localhost:3000/proxy/manifest?url=...&title=...`
-3. **Stremio** solicita el manifiesto al proxy
-4. **Proxy /proxy/manifest**:
-   - Descarga el M3U8 de Vimeus con cabeceras correctas
-   - Inyecta `#PLAYLIST-TITLE:Nexo Playes Mentes Criminales T1-EPI1`
-   - Reescribe URLs de segmentos: `/proxy/segment?url=...`
-   - Devuelve el M3U8 modificado
-5. **Stremio** solicita segmentos al proxy
-6. **Proxy /proxy/segment**:
-   - Descarga el segmento de Vimeus con streaming
-   - Usa `.pipe()` para transmitir sin cargar en memoria
-   - Devuelve el segmento al cliente
-
-## 🔧 Configuración Avanzada
-
-### Usar una API real de IMDb
-
-Actualmente, el addon usa una base de datos simulada de títulos. Para usar una API real:
-
-1. **Registrarse en [OMDb API](http://www.omdbapi.com/)** para obtener una API key
-2. **Modificar el Stream Handler** en `addon.js`:
-
-```javascript
-// Reemplazar la función getIMDbName con una llamada a la API
-async function getIMDbName(imdbId) {
-  try {
-    const response = await axios.get(`http://www.omdbapi.com/?i=${imdbId}&apikey=YOUR_API_KEY`)
-    return response.data.Title
-  } catch (error) {
-    console.error('Error fetching from OMDb:', error.message)
-    return 'Contenido'
-  }
-}
-```
-
-### Desplegar en producción
-
-Para desplegar el addon en un servidor:
-
-1. **Usar PM2 para gestión de procesos**
-   ```bash
-   npm install -g pm2
-   pm2 start addon.js --name nexoplay-addon
-   pm2 save
-   pm2 startup
-   ```
-
-2. **Configurar Nginx como reverse proxy (opcional)**
-   ```nginx
-   server {
-       listen 80;
-       server_name nexoplay.yourdomain.com;
-       
-       location / {
-           proxy_pass http://localhost:3000;
-           proxy_http_version 1.1;
-           proxy_set_header Upgrade $http_upgrade;
-           proxy_set_header Connection 'upgrade';
-           proxy_set_header Host $host;
-           proxy_cache_bypass $http_upgrade;
-       }
-   }
-   ```
-
-3. **Usar HTTPS con Let's Encrypt**
-   ```bash
-   sudo apt install certbot python3-certbot-nginx
-   sudo certbot --nginx -d nexoplay.yourdomain.com
-   ```
-
-4. **Configurar en Stremio**
-   Usar la URL: `https://nexoplay.yourdomain.com/manifest.json`
-
-## 📊 Endpoints del Proxy
-
-| Endpoint | Método | Descripción | Parámetros |
-|----------|--------|-------------|-------------|
-| `/manifest.json` | GET | Devuelve el manifest del addon | - |
-| `/proxy/manifest` | GET | Procesa manifiestos M3U8 | `url` (requerido), `title` (opcional) |
-| `/proxy/segment` | GET | Proxy de segmentos de video | `url` (requerido) |
-
-## 🎨 Formato de Títulos
-
-El addon formatea automáticamente los títulos según el tipo de contenido:
-
-### Series
-```
-Nexo Playes [Nombre de la Serie] T[Temporada]-EPI[Episodio]
-```
-
-Ejemplos:
-- `Nexo Playes Mentes Criminales T1-EPI1`
-- `Nexo Playes Juego de Tronos T8-EPI10`
-- `Nexo Playes Breaking Bad T5-EPI16`
-
-### Películas
-```
-Nexo Playes [Nombre de la Película]
-```
-
-Ejemplos:
-- `Nexo Playes El Origen`
-- `Nexo Playes Matrix`
-- `Nexo Playes El Padrino`
-
-## 🛠️ Tecnologías Utilizadas
-
-- **[Node.js](https://nodejs.org/)** - Entorno de ejecución JavaScript
-- **[Express](https://expressjs.com/)** - Framework para servidor HTTP
-- **[Axios](https://axios-http.com/)** - Cliente HTTP para requests
-- **[Stremio Addon SDK](https://github.com/Stremio/stremio-addon-sdk)** - SDK oficial de Stremio
-- **[HLS/M3U8](https://developer.apple.com/streaming/fps/)** - Protocolo de streaming
-
-## 📜 Licencia
-
-MIT License - Ver archivo [LICENSE](LICENSE) para más detalles.
-
-## 🤝 Contribuir
-
-Las contribuciones son bienvenidas. Por favor, abre un Issue o envía un Pull Request.
-
-## 📞 Soporte
-
-Si tienes problemas o preguntas:
-
-1. Verifica que el servidor proxy esté en ejecución
-2. Revisa los logs de la consola
-3. Asegúrate de que las URLs estén correctamente configuradas
-4. Abre un Issue en el repositorio
-
-## 📝 Notas
-
-- Este addon está diseñado para trabajar con **Vimeus** como proveedor de contenido
-- Las URLs de Vimeus deben ser accesibles desde el servidor donde se ejecuta el proxy
-- El addon simula las cabeceras requeridas por Vimeus para evitar bloqueos
-- El streaming de segmentos usa `.pipe()` para evitar saturación de memoria RAM
+> Solo móvil: la interfaz está diseñada para pantallas de teléfono (retrato). En escritorio se
+> muestra dentro de un marco de teléfono como referencia de diseño.
 
 ---
 
-**© 2024 Nexo Play - Tu Cine a tu alcance**
+## Qué incluye
+
+- **Apple TV vibes**: ambiente difuminado que cambia según el título, vidrio esmerilado, carteles
+  redondeados, pestañas tipo tvOS, tipografía del sistema (SF Pro), animaciones de foco y hoja de
+  detalle a pantalla completa.
+- **Cinemeta integrado**: catálogos de películas y series populares, géneros, búsqueda y metadatos
+  completos (sinopsis, reparto, dirección, duración, nota IMDb, logo y fondo).
+- **Protocolo de addons de Stremio**: instala por URL (`manifest.json`), lee `resources` con
+  `types`/`idPrefixes`, consume `/catalog`, `/meta` y `/stream`, agrega resultados de todos los
+  addons activos y los etiqueta por addon.
+- **Fuentes agregadas** con detección de calidad (4K · 1080p · 720p · SD · CAM), seeders, tamaño,
+  enlaces `http`, `magnet`, `infoHash`, `ytId` y `externalUrl`; copia el magnet con un toque.
+- **Series**: temporadas agrupadas, lista de episodios con sinopsis y salto directo a fuentes del
+  episodio (`tt123:1:2`).
+- **Mi lista** local, **"Continuar viendo"** con lo último que abriste, **búsqueda global** con
+  historial, **exploración por género** y **"Cargar más"** en catálogos paginables.
+- **Gestor de addons con salud**: latencia real de cada manifest, aviso de addons caídos o lentos,
+  instalación masiva (varias URLs a la vez) y soporte de enlaces `stremio://`.
+- **PWA instalable y offline**: service worker propio (mismo origen, sin CDN) que cachea el shell,
+  las respuestas de los addons y las imágenes; la app abre y navega sin red.
+- **Sin servidores propios ni terceros**: cero backend, cero analítica, cero fuentes web, cero
+  recursos de CDN. Cinemeta se puede apuntar a tu propia instancia y hay modo "solo datos
+  guardados" que corta toda petición externa.
+- Enlaces profundos: `?addon=https://…/manifest.json` instala un addon al abrir la app.
+
+## Cómo funciona
+
+```
+Navegador (móvil)
+   └── Nébula (React + Vite)
+         ├── Cinemeta  https://v3-cinemeta.strem.io   → catálogos + metadatos
+         └── Addons    manifest.json / catalog / meta / stream  → fuentes
+```
+
+Todo se resuelve en el cliente: no hay backend ni base de datos. Tus addons y tu lista viven en
+`localStorage`.
+
+## Sin servidores externos
+
+Nébula es una **app estática**: no hay backend de Nébula, ni cuentas, ni analítica, ni llamadas a
+CDN. Todo lo que necesita para arrancar (HTML, JS, CSS, iconos SVG, tipografía del sistema) viaja
+con la app y se guarda en el dispositivo gracias al service worker.
+
+Tres controles en **Addons → Datos y privacidad**:
+
+| Control | Qué hace |
+| --- | --- |
+| **Solo datos guardados** | Bloquea cualquier petición de red. La app usa únicamente lo que ya está en caché local. |
+| **Caché local** | Catálogos y metadatos se guardan 7 días en el dispositivo (hasta 80 respuestas, 250 KB por respuesta). |
+| **Servidor de Cinemeta** | Por defecto el público de Stremio; puedes apuntarlo a tu instancia autoalojada. |
+
+Y para que el servidor de la app también sea tuyo:
+
+```bash
+docker compose up -d --build   # http://localhost:8080
+```
+
+El `Dockerfile` compila y sirve con nginx: no hay procesos ni servicios de terceros.
+
+**El límite honesto**: una app no puede inventar contenido. Catálogos, metadatos, imágenes y
+fuentes vienen necesariamente de los addons que configures. Si quieres que ningún tercero
+intervenga, autoaloja Cinemeta y tus addons en tu red, apunta ahí y activa el modo solo-local.
+
+## Desarrollo
+
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # typecheck + build de producción
+npm run preview  # sirve dist/
+docker compose up -d --build   # autoalojado en http://localhost:8080
+```
+
+Requisitos: Node 18+.
+
+## Estructura
+
+```
+src/
+  App.tsx                 navegación, pila de pantallas, addons, lista y toasts
+  lib/
+    addons.ts             protocolo Stremio: manifests, catálogos, meta, streams, búsqueda
+    api.ts                fetch con timeout/caché, URLs de imágenes, magnet, calidad
+    types.ts              tipos del protocolo
+    storage.ts, hooks.ts  persistencia y utilidades de React
+  components/
+    Home.tsx              hero + estanterías + géneros
+    Detail.tsx            ficha, reparto, temporadas y episodios
+    Streams.tsx           fuentes agregadas con filtros de calidad
+    SearchView.tsx        búsqueda multi-addon
+    LibraryView.tsx       Mi lista
+    AddonsView.tsx        instalar, activar, eliminar addons + sugeridos
+    GridView.tsx          "ver todo" con paginación
+    ui.tsx, icons.tsx     piezas de interfaz e iconografía
+  styles.css              sistema visual (tvOS)
+```
+
+## Añadir addons
+
+1. Abre la pestaña **Addons**.
+2. Pega la URL del addon (por ejemplo `https://torrentio.strem.fun/manifest.json`) o toca uno de
+   los **sugeridos** (Torrentio, OpenSubtitles v3, WatchHub).
+3. Actívalo o desactívalo con el interruptor; los addons integrados no se pueden eliminar.
+4. Toca **Salud** para medir la latencia de cada addon y detectar los que estén caídos.
+
+Si un addon exige configuración previa (por ejemplo filtros de Torrentio), usa la URL que genera su
+página de configuración: ya incluye los ajustes.
+
+## Notas
+
+- Algunos addons no envían cabeceras CORS; en ese caso Nébula muestra el error y puedes probar con
+  otro addon o abrir su enlace directamente.
+- Los `magnet` se copian al portapapeles porque un navegador móvil no puede abrirlos; pégalos en tu
+  cliente de torrents.
+- **Nébula no aloja ni distribuye contenido.** Los enlaces provienen de los addons que tú decides
+  activar. Respeta las leyes de tu país.
+
+## Licencia
+
+MIT.
