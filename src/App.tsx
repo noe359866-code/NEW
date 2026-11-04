@@ -23,6 +23,7 @@ import type {
   LibraryItem,
   ManifestCatalog,
   MetaPreview,
+  RecentItem,
 } from './lib/types';
 
 type Tab = 'home' | 'search' | 'library' | 'addons';
@@ -61,6 +62,7 @@ export default function App() {
   addonsRef.current = addons;
 
   const [library, setLibrary] = useStoredState<LibraryItem[]>(KEYS.library, []);
+  const [recent, setRecent] = useStoredState<RecentItem[]>(KEYS.recentlyOpened, []);
   const [tab, setTab] = useStoredState<Tab>(KEYS.lastTab, 'home');
   const [stack, setStack] = useState<Route[]>([]);
   const stackRef = useRef(stack);
@@ -262,8 +264,24 @@ export default function App() {
         title: meta.name,
         subtitle: [typeLabel(meta.type), label].filter(Boolean).join(' · '),
       });
+      // "Continuar viendo": guardamos lo último que se abrió, sin duplicados.
+      setRecent((prev) =>
+        [
+          {
+            id: meta.id,
+            type: meta.type,
+            name: meta.name,
+            poster: meta.poster,
+            logo: meta.logo,
+            hint: label || typeLabel(meta.type),
+            addedAt: Date.now(),
+            openedAt: Date.now(),
+          },
+          ...prev.filter((item) => !(item.id === meta.id && item.type === meta.type)),
+        ].slice(0, 12),
+      );
     },
-    [push],
+    [push, setRecent],
   );
 
   const openShelf = useCallback(
@@ -401,6 +419,7 @@ export default function App() {
       <Home
         addons={addons}
         library={library}
+        recent={recent}
         onOpenDetail={openDetail}
         onSeeAll={openShelf}
         onGenre={openGenre}

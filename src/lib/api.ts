@@ -156,6 +156,17 @@ export function plainText(text?: string): string {
 export function normalizeAddonUrl(input: string): string {
   let value = input.trim();
   if (!value) throw new Error('Escribe la URL del addon.');
+
+  // Enlaces compartidos desde Stremio: stremio://host/manifest.json
+  if (/^stremio:\/\//i.test(value)) {
+    try {
+      value = decodeURIComponent(value.replace(/^stremio:\/\//i, ''));
+    } catch {
+      value = value.replace(/^stremio:\/\//i, '');
+    }
+    value = value.replace(/^addon\//i, '');
+  }
+
   if (!/^https?:\/\//i.test(value)) value = `https://${value}`;
   value = value.replace(/\/manifest\.json\/?$/i, '');
   value = value.replace(/\/+$/, '');
@@ -167,6 +178,18 @@ export function normalizeAddonUrl(input: string): string {
   }
   if (!/^https?:$/.test(parsed.protocol)) throw new Error('Solo se admiten enlaces http(s).');
   return value;
+}
+
+/** Acepta una lista pegada (una URL por línea, o separadas por comas/espacios). */
+export function splitAddonUrls(input: string): string[] {
+  return Array.from(
+    new Set(
+      input
+        .split(/[\s,]+/)
+        .map((value) => value.trim())
+        .filter(Boolean),
+    ),
+  );
 }
 
 export function validateManifest(manifest: unknown): Manifest {

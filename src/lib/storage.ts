@@ -31,4 +31,5 @@ export const KEYS = {
   library: 'library',
   recent: 'recent-searches',
   lastTab: 'last-tab',
+  recentlyOpened: 'recently-opened',
 };

@@ -305,6 +305,42 @@ export async function fetchManifest(url: string): Promise<InstalledAddon> {
   return { transportUrl, manifest, enabled: true, addedAt: Date.now() };
 }
 
+export interface AddonHealth {
+  status: 'ok' | 'slow' | 'error';
+  ms: number;
+  checkedAt: number;
+  error?: string;
+}
+
+/** Mide la latencia real del manifest y clasifica el estado del addon. */
+export async function pingAddon(transportUrl: string): Promise<AddonHealth> {
+  const started = performance.now();
+  try {
+    const manifest = validateManifest(
+      await fetchJSON<unknown>(`${transportUrl}/manifest.json`, { cache: false }),
+    );
+    const ms = Math.round(performance.now() - started);
+    if (!manifest.name) throw new Error('Manifest inválido');
+    return { status: ms > 2200 ? 'slow' : 'ok', ms, checkedAt: Date.now() };
+  } catch (err) {
+    return {
+      status: 'error',
+      ms: Math.round(performance.now() - started),
+      checkedAt: Date.now(),
+      error: err instanceof Error ? err.message : 'Sin respuesta',
+    };
+  }
+}
+
+export async function checkAddonsHealth(
+  addons: InstalledAddon[],
+): Promise<Record<string, AddonHealth>> {
+  const entries = await Promise.all(
+    addons.map(async (addon) => [addon.transportUrl, await pingAddon(addon.transportUrl)] as const),
+  );
+  return Object.fromEntries(entries);
+}
+
 export interface SuggestedAddon {
   name: string;
   description: string;

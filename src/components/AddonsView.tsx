@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { clearApiCache, normalizeAddonUrl } from '../lib/api';
-import { SUGGESTED_ADDONS, supportsResource } from '../lib/addons';
+import { clearApiCache, normalizeAddonUrl, splitAddonUrls } from '../lib/api';
+import { SUGGESTED_ADDONS, checkAddonsHealth, supportsResource } from '../lib/addons';
+import type { AddonHealth } from '../lib/addons';
 import type { InstalledAddon } from '../lib/types';
 import {
   CheckIcon,
@@ -10,6 +11,7 @@ import {
   PuzzleIcon,
   SparkIcon,
   TrashIcon,
+  WarningIcon,
 } from './icons';
 import { EmptyState, Toggle } from './ui';
 
@@ -20,6 +22,12 @@ interface AddonsViewProps {
   onToggle: (url: string, enabled: boolean) => void;
   onRefresh: () => Promise<void>;
   notify: (message: string, tone?: 'error' | 'ok') => void;
+}
+
+interface BulkResult {
+  url: string;
+  ok: boolean;
+  message: string;
 }
 
 export default function AddonsView({
@@ -33,29 +41,74 @@ export default function AddonsView({
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [checking, setChecking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [bulk, setBulk] = useState<BulkResult[] | null>(null);
+  const [health, setHealth] = useState<Record<string, AddonHealth>>({});
 
   const installedUrls = new Set(addons.map((addon) => addon.transportUrl));
+  const enabledCount = addons.filter((addon) => addon.enabled).length;
 
-  const install = async (rawUrl: string, source: 'manual' | 'suggested') => {
-    setError(null);
-    setBusy(true);
+  const installOne = async (rawUrl: string): Promise<BulkResult> => {
     try {
       const url = normalizeAddonUrl(rawUrl);
       if (installedUrls.has(url)) {
-        notify('Ese addon ya está instalado', 'error');
-        return;
+        return { url, ok: false, message: 'Ya estaba instalado' };
       }
       await onInstall(url);
-      setInput('');
-      notify(source === 'manual' ? 'Addon instalado' : 'Addon añadido a tu lista', 'ok');
+      return { url, ok: true, message: 'Instalado' };
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'No se pudo instalar el addon';
-      setError(message);
-      if (source === 'manual') notify(message, 'error');
-    } finally {
-      setBusy(false);
+      return {
+        url: rawUrl,
+        ok: false,
+        message: err instanceof Error ? err.message : 'No se pudo instalar',
+      };
     }
+  };
+
+  const install = async (rawInput: string, source: 'manual' | 'suggested') => {
+    const urls = splitAddonUrls(rawInput);
+    if (!urls.length) {
+      setError('Escribe al menos una URL.');
+      return;
+    }
+    setError(null);
+    setBusy(true);
+    setBulk(null);
+
+    if (urls.length === 1 && source === 'suggested') {
+      const [result] = [await installOne(urls[0])];
+      setBusy(false);
+      if (result.ok) notify('Addon añadido a tu lista', 'ok');
+      else notify(result.message, 'error');
+      return;
+    }
+
+    const results: BulkResult[] = [];
+    for (const url of urls) {
+      results.push(await installOne(url));
+    }
+    setBusy(false);
+
+    if (results.length === 1) {
+      const [result] = results;
+      if (result.ok) {
+        setInput('');
+        notify('Addon instalado', 'ok');
+      } else {
+        setError(result.message);
+        notify(result.message, 'error');
+      }
+      return;
+    }
+
+    setBulk(results);
+    const okCount = results.filter((result) => result.ok).length;
+    if (okCount) setInput('');
+    notify(
+      `${okCount} de ${results.length} addons instalados`,
+      okCount ? 'ok' : 'error',
+    );
   };
 
   const refresh = async () => {
@@ -63,6 +116,7 @@ export default function AddonsView({
     try {
       await onRefresh();
       clearApiCache();
+      setHealth({});
       notify('Manifests actualizados', 'ok');
     } catch {
       notify('Algunos addons no respondieron', 'error');
@@ -71,7 +125,18 @@ export default function AddonsView({
     }
   };
 
-  const enabledCount = addons.filter((addon) => addon.enabled).length;
+  const checkHealth = async () => {
+    setChecking(true);
+    try {
+      const result = await checkAddonsHealth(addons);
+      setHealth(result);
+      const down = Object.values(result).filter((item) => item.status === 'error').length;
+      if (down) notify(`${down} addon${down === 1 ? '' : 's'} sin respuesta`, 'error');
+      else notify('Todos los addons responden', 'ok');
+    } finally {
+      setChecking(false);
+    }
+  };
 
   return (
     <div className="screen screen--tab addons">
@@ -83,51 +148,75 @@ export default function AddonsView({
       </div>
 
       <section className="addon-add">
-        <label htmlFor="addon-url">Instalar desde URL</label>
+        <label htmlFor="addon-url">Instalar addons</label>
         <form
           onSubmit={(event) => {
             event.preventDefault();
             void install(input, 'manual');
           }}
         >
-          <input
+          <textarea
             id="addon-url"
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            placeholder="https://…/manifest.json"
+            placeholder={'https://…/manifest.json\nUna URL por línea'}
+            rows={2}
             autoComplete="off"
             autoCapitalize="none"
             spellCheck={false}
             inputMode="url"
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+                event.preventDefault();
+                void install(input, 'manual');
+              }
+            }}
           />
           <button type="submit" className="btn btn--light" disabled={busy || !input.trim()}>
-            {busy ? 'Añadiendo…' : 'Instalar'}
+            {busy ? 'Añadiendo…' : input.trim().split(/\s+/).filter(Boolean).length > 1 ? 'Instalar todo' : 'Instalar'}
           </button>
         </form>
         {error ? <p className="form-error">{error}</p> : null}
         <p className="hint">
-          Pega el enlace del manifest o la URL de configuración del addon. También puedes abrir
-          Nébula con <code>?addon=URL</code>.
+          Acepta el manifest, la URL de configuración del addon y enlaces <code>stremio://</code>.
+          Puedes pegar varias URLs a la vez (una por línea) para instalarlas todas.
         </p>
+        {bulk ? (
+          <ul className="bulk-results">
+            {bulk.map((result) => (
+              <li key={result.url} className={result.ok ? 'is-ok' : 'is-bad'}>
+                {result.ok ? <CheckIcon width={13} height={13} /> : <WarningIcon width={13} height={13} />}
+                <span className="bulk-url">{result.url.replace(/^https?:\/\//, '')}</span>
+                <span className="bulk-msg">{result.message}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </section>
 
       <section className="addon-section">
         <div className="addon-section-head">
           <h2>Instalados</h2>
-          <button
-            type="button"
-            className="link-btn"
-            onClick={() => void refresh()}
-            disabled={refreshing}
-          >
-            {refreshing ? 'Actualizando…' : 'Actualizar'}
-          </button>
+          <div className="section-actions">
+            <button type="button" className="link-btn" onClick={() => void checkHealth()} disabled={checking}>
+              {checking ? 'Comprobando…' : 'Salud'}
+            </button>
+            <button
+              type="button"
+              className="link-btn"
+              onClick={() => void refresh()}
+              disabled={refreshing}
+            >
+              {refreshing ? 'Actualizando…' : 'Actualizar'}
+            </button>
+          </div>
         </div>
 
         <ul className="addon-list">
           {addons.map((addon) => {
             const hasCatalog = (addon.manifest.catalogs || []).length > 0;
             const hasStream = supportsResource(addon.manifest, 'stream');
+            const status = health[addon.transportUrl];
             return (
               <li key={addon.transportUrl} className={`addon-row ${addon.enabled ? '' : 'is-off'}`}>
                 <div className="addon-badge">
@@ -142,15 +231,22 @@ export default function AddonsView({
                     {addon.manifest.name}
                     {addon.builtin ? <span className="tag">Integrado</span> : null}
                   </div>
-                  <p className="addon-desc">
-                    {addon.manifest.description || 'Sin descripción.'}
-                  </p>
+                  <p className="addon-desc">{addon.manifest.description || 'Sin descripción.'}</p>
                   <div className="addon-tags">
                     <span>v{addon.manifest.version}</span>
                     {hasCatalog ? <span>catálogos</span> : null}
                     {hasStream ? <span>streams</span> : null}
                     {addon.manifest.types?.length ? (
                       <span>{addon.manifest.types.slice(0, 3).join(' · ')}</span>
+                    ) : null}
+                    {status ? (
+                      <span
+                        className={`health-pill health-pill--${status.status}`}
+                        title={status.error || `${status.ms} ms`}
+                      >
+                        <i className="health-dot" />
+                        {status.status === 'error' ? 'caído' : `${status.ms} ms`}
+                      </span>
                     ) : null}
                   </div>
                   <div className="addon-links">
@@ -251,7 +347,7 @@ export default function AddonsView({
           Nébula es un cliente móvil del protocolo de addons de Stremio con estética inspirada en
           Apple TV. No incluye contenido propio: todo proviene de los addons que activas.
         </p>
-        <p className="muted small">Hecho con cariño para tu bolsillo · v1.0.0</p>
+        <p className="muted small">Hecho con cariño para tu bolsillo · v1.1.0</p>
       </section>
     </div>
   );

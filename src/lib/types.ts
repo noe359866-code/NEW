@@ -126,6 +126,11 @@ export interface LibraryItem {
   addedAt: number;
 }
 
+export interface RecentItem extends LibraryItem {
+  hint?: string;
+  openedAt: number;
+}
+
 export interface CatalogResult {
   metas: MetaPreview[];
   cacheMaxAge?: number;

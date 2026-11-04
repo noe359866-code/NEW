@@ -23,8 +23,10 @@ protocolo de Stremio.
   enlaces `http`, `magnet`, `infoHash`, `ytId` y `externalUrl`; copia el magnet con un toque.
 - **Series**: temporadas agrupadas, lista de episodios con sinopsis y salto directo a fuentes del
   episodio (`tt123:1:2`).
-- **Mi lista** local, **búsqueda global** con historial, **exploración por género** y
-  **"Cargar más"** en catálogos paginables.
+- **Mi lista** local, **"Continuar viendo"** con lo último que abriste, **búsqueda global** con
+  historial, **exploración por género** y **"Cargar más"** en catálogos paginables.
+- **Gestor de addons con salud**: latencia real de cada manifest, aviso de addons caídos o lentos,
+  instalación masiva (varias URLs a la vez) y soporte de enlaces `stremio://`.
 - **PWA instalable**: manifest, `apple-mobile-web-app-capable`, `viewport-fit=cover` y
   `safe-area-inset` para el notch.
 - Enlaces profundos: `?addon=https://…/manifest.json` instala un addon al abrir la app.
@@ -80,6 +82,7 @@ src/
 2. Pega la URL del addon (por ejemplo `https://torrentio.strem.fun/manifest.json`) o toca uno de
    los **sugeridos** (Torrentio, OpenSubtitles v3, WatchHub).
 3. Actívalo o desactívalo con el interruptor; los addons integrados no se pueden eliminar.
+4. Toca **Salud** para medir la latencia de cada addon y detectar los que estén caídos.
 
 Si un addon exige configuración previa (por ejemplo filtros de Torrentio), usa la URL que genera su
 página de configuración: ya incluye los ajustes.

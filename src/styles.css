@@ -1362,7 +1362,8 @@ a {
   gap: 8px;
 }
 
-.addon-add input {
+.addon-add input,
+.addon-add textarea {
   flex: 1;
   min-width: 0;
   padding: 11px 12px;
@@ -1376,7 +1377,17 @@ a {
   user-select: text;
 }
 
-.addon-add input:focus {
+.addon-add textarea {
+  flex: 1;
+  min-height: 64px;
+  max-height: 150px;
+  resize: vertical;
+  line-height: 1.45;
+  font-size: 12.2px;
+}
+
+.addon-add input:focus,
+.addon-add textarea:focus {
   border-color: rgba(10, 132, 255, 0.7);
   box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.16);
 }
@@ -1391,6 +1402,93 @@ a {
   margin: 8px 0 0;
   color: #ff8f88;
   font-size: 11.8px;
+}
+
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.section-actions .link-btn {
+  padding: 0;
+}
+
+.bulk-results {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bulk-results li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 10.9px;
+  line-height: 1.3;
+}
+
+.bulk-results li.is-ok {
+  color: #8ef0ab;
+}
+
+.bulk-results li.is-bad {
+  color: #ff9d96;
+}
+
+.bulk-url {
+  flex: 1;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.62);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bulk-msg {
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.health-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 9.8px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.health-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.health-pill--ok {
+  color: #8ef0ab;
+  background: rgba(48, 209, 88, 0.12);
+}
+
+.health-pill--slow {
+  color: #ffcf80;
+  background: rgba(255, 159, 10, 0.12);
+}
+
+.health-pill--error {
+  color: #ff9d96;
+  background: rgba(255, 69, 58, 0.14);
 }
 
 .hint {

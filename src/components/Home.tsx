@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { backdropFor, cleanStreamTitle, logoFor, posterFor, typeLabel } from '../lib/api';
 import { GENRES, loadCatalog, shelvesFor, type ShelfConfig } from '../lib/addons';
-import type { InstalledAddon, LibraryItem, MetaPreview } from '../lib/types';
+import type { InstalledAddon, LibraryItem, MetaPreview, RecentItem } from '../lib/types';
 import { PlayIcon, PlusIcon, StarIcon, TvIcon, FilmIcon, SparkIcon } from './icons';
 import { Chip, EmptyState, ErrorState, Poster, SectionHeader, SkeletonRail } from './ui';
 
 interface HomeProps {
   addons: InstalledAddon[];
   library: LibraryItem[];
+  recent: RecentItem[];
   onOpenDetail: (meta: MetaPreview) => void;
   onSeeAll: (shelf: ShelfConfig) => void;
   onGenre: (genre: string) => void;
@@ -23,6 +24,7 @@ type ShelfState = MetaPreview[] | typeof LOADING | typeof FAILED;
 export default function Home({
   addons,
   library,
+  recent,
   onOpenDetail,
   onSeeAll,
   onGenre,
@@ -129,6 +131,26 @@ export default function Home({
           message="No pudimos cargar los catálogos. Revisa tu conexión o desactiva addons que no respondan."
           onRetry={() => setNonce((n) => n + 1)}
         />
+      ) : null}
+
+      {recent.length > 0 ? (
+        <section className="shelf">
+          <SectionHeader title="Continuar viendo" subtitle="Abierto hace poco" />
+          <div className="rail">
+            {recent.slice(0, 12).map((item) => (
+              <button
+                type="button"
+                key={`${item.type}:${item.id}`}
+                className="card"
+                onClick={() => onOpenDetail({ ...item } as MetaPreview)}
+              >
+                <Poster meta={item} />
+                <span className="card-title">{item.name}</span>
+                <span className="card-sub">{item.hint || typeLabel(item.type)}</span>
+              </button>
+            ))}
+          </div>
+        </section>
       ) : null}
 
       {library.length > 0 ? (
