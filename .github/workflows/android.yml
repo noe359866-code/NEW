@@ -28,7 +28,7 @@ jobs:
       - name: Compilar APK y prueba de instrumentación
         working-directory: android
         run: |
-          if ./gradlew --no-daemon assembleDebug assembleDebugAndroidTest > ../gradle.log 2>&1; then
+          if ./gradlew --no-daemon :app:assembleDebug :app:assembleDebugAndroidTest > ../gradle.log 2>&1; then
             cat ../gradle.log
           else
             cat ../gradle.log
@@ -49,7 +49,7 @@ jobs:
           target: google_apis
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: cd android && ./gradlew --no-daemon connectedDebugAndroidTest
+          script: cd android && ./gradlew --no-daemon :app:connectedDebugAndroidTest
       - name: Guardar APK de prueba
         uses: actions/upload-artifact@v4
         with:
