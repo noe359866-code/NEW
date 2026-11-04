@@ -56,7 +56,9 @@ async function fetchAddon(initialUrl, { lookup = dns.lookup, request = null, sig
       const transport = request || (url.protocol === 'https:' ? https.request : http.request);
       const req = transport(url, {
         method: 'GET', signal, headers: { accept: 'application/json', 'user-agent': 'Nebula/1.2 addon-client' },
-        lookup: (_host, _options, callback) => callback(null, address.address, address.family),
+        lookup: (_host, options, callback) => options.all
+          ? callback(null, [address])
+          : callback(null, address.address, address.family),
       }, (res) => {
         if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
           res.resume();

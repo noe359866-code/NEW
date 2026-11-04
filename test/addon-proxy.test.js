@@ -14,7 +14,19 @@ const port = upstream.address().port;
 // Conexión local inyectada solo para el test; la resolución de producción no permite loopback.
 const api = http.createServer(createAddonHandler({
   lookup: async () => [{ address: '93.184.216.34', family: 4 }],
-  request: (url, options, callback) => http.request({ ...options, hostname: '127.0.0.1', port, path: url.pathname + url.search, lookup: undefined }, callback),
+  request: (url, options, callback) => {
+    // Node 20+ puede solicitar todas las direcciones para autoSelectFamily.
+    options.lookup('addon.example', { all: true }, (error, addresses) => {
+      assert.ifError(error);
+      assert.deepEqual(addresses, [{ address: '93.184.216.34', family: 4 }]);
+    });
+    options.lookup('addon.example', { all: false }, (error, address, family) => {
+      assert.ifError(error);
+      assert.equal(address, '93.184.216.34');
+      assert.equal(family, 4);
+    });
+    return http.request({ ...options, hostname: '127.0.0.1', port, path: url.pathname + url.search, lookup: undefined }, callback);
+  },
 }));
 await new Promise((resolve) => api.listen(0, '127.0.0.1', resolve));
 after(() => { api.close(); upstream.close(); });
