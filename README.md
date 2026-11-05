@@ -34,6 +34,19 @@ protocolo de Stremio.
   guardados" que corta toda petición externa.
 - Enlaces profundos: `?addon=https://…/manifest.json` instala un addon al abrir la app.
 
+## Plugin de Nuvio (extra)
+
+La carpeta [`nuvio-plugin/`](nuvio-plugin/README.md) contiene un repositorio de plugins para
+[Nuvio](https://nuvio.wiki/integrations/plugins) con siete scrapers en español (DonTorrent,
+MejorTorrent, EliteTorrent, DivxTotal, TorrentLandia, WolfMax4K y SinSitio), escritos tras inspeccionar
+cada sitio en noviembre de 2026. Cada provider es un único archivo CommonJS sin dependencias; se
+compila con `npm run build` dentro de esa carpeta y se instala en Nuvio pegando la URL de su
+`manifest.json`.
+
+- Dossier de investigación: [`nuvio-plugin/docs/research.md`](nuvio-plugin/docs/research.md)
+- Panel interactivo (estado de los sitios + decodificador de acortadores):
+  [`nuvio-plugin/docs/index.html`](nuvio-plugin/docs/index.html)
+
 ## Cómo funciona
 
 ```
