@@ -107,7 +107,8 @@ function buildCoreBundle(core) {
     'makeStream', 'finalizeStreams', 'torrentToMagnet', 'mapLimit', 'languageLabel',
     'decodeShortLink', 'decodeShortLinkOrUrl', 'createDonEngine',
     'looksLikeTorrentBytes', 'findDownloadLinks', 'findInfoHashes', 'mimeLooksTorrent',
-    'resolveTorrentOrMagnet', 'originOf'
+    'resolveTorrentOrMagnet', 'originOf',
+    'isChallengeHtml', 'cloudflareSettings', 'browserHeaders', 'hasCloudflareSession'
   ];
   const source = [
     "'use strict';",

@@ -400,3 +400,75 @@ test('los tres providers nuevos exportan onSettings y sobreviven sin red', async
     assert.equal((await provider.getStreams('31199', 'movie', null, null)).length, 0);
   }
 });
+
+/* ------------------------------------------------------------------ */
+/* Sesión de Cloudflare (cfCookie + userAgent)                        */
+/* ------------------------------------------------------------------ */
+
+test('Cloudflare: con cfCookie el provider manda la cookie y parsea la ficha', async () => {
+  const fetchImpl = mockFetch([
+    ['api.themoviedb.org/3/movie/1275779', tmdbMovie('1275779', 'The Mongoose', '2026')],
+    ['en.torrentgalaxy-official.is/movies?keyword=', TGX_SEARCH_MOVIE],
+    ['en.torrentgalaxy-official.is/movies/the-mongoose-2026', TGX_DETAIL_MOVIE]
+  ]);
+
+  const provider = loadProvider('torrentgalaxy', {
+    fetch: fetchImpl,
+    settings: { cfCookie: 'cf_clearance=abc123; __cf_bm=xyz', userAgent: 'Mozilla/5.0 (iPhone) TestBrowser/1.0' }
+  });
+
+  const streams = await provider.getStreams('1275779', 'movie', null, null);
+  assert.equal(streams.length, 2);
+
+  const siteCalls = fetchImpl.calls.filter((call) => call.url.includes('torrentgalaxy-official'));
+  assert.ok(siteCalls.length >= 2);
+  for (const call of siteCalls) {
+    assert.equal(call.headers.Cookie, 'cf_clearance=abc123; __cf_bm=xyz');
+    assert.equal(call.headers['User-Agent'], 'Mozilla/5.0 (iPhone) TestBrowser/1.0');
+  }
+});
+
+test('Cloudflare: cf_clearance pelado se normaliza y sin ajustes no se manda Cookie', async () => {
+  const withCookie = loadProvider('grantorrent', {
+    fetch: mockFetch([
+      ['api.themoviedb.org/3/movie/1275779', tmdbMovie('1275779', 'La mangosta', '2026')],
+      ['grantorrent.fyi/?s=', GT_SEARCH]
+    ]),
+    settings: { cfCookie: 'solo-el-valor' }
+  });
+  await withCookie.getStreams('1275779', 'movie', null, null);
+
+  const plain = loadProvider('grantorrent', {
+    fetch: mockFetch([
+      ['api.themoviedb.org/3/movie/1275779', tmdbMovie('1275779', 'La mangosta', '2026')],
+      ['grantorrent.fyi/?s=', GT_SEARCH]
+    ])
+  });
+  const fetchImpl = mockFetch([
+    ['api.themoviedb.org/3/movie/1275779', tmdbMovie('1275779', 'La mangosta', '2026')],
+    ['grantorrent.fyi/?s=', GT_SEARCH]
+  ]);
+  const fresh = loadProvider('grantorrent', { fetch: fetchImpl });
+  await fresh.getStreams('1275779', 'movie', null, null);
+  const siteCall = fetchImpl.calls.find((call) => call.url.includes('grantorrent.fyi'));
+  assert.equal(siteCall.headers.Cookie, undefined);
+  assert.ok(plain);
+});
+
+test('Cloudflare: la cookie viaja también en la cadena de /enlaces/', async () => {
+  const torrent = makeTorrent('Gran.Torrent.1080p.mkv', 1000);
+  const fetchImpl = mockFetch([
+    ['api.themoviedb.org/3/movie/1275779', tmdbMovie('1275779', 'La mangosta', '2026')],
+    ['grantorrent.fyi/?s=', GT_SEARCH],
+    ['grantorrent.fyi/peliculas/la-mangosta/', GT_DETAIL_MOVIE],
+    ['grantorrent.fyi/enlaces/', GT_SHORT_PAGE],
+    ['filess.top/es/mczlwfzdtb/download', { __binary: true, bytes: torrent.bytes }],
+    ['filess.top/', GT_HOST_PAGE]
+  ]);
+
+  const provider = loadProvider('grantorrent', { fetch: fetchImpl, settings: { cfCookie: 'cf_clearance=zzz' } });
+  const streams = await provider.getStreams('1275779', 'movie', null, null);
+  assert.ok(streams.length >= 1);
+  const hostCall = fetchImpl.calls.find((call) => call.url.includes('/enlaces/'));
+  assert.equal(hostCall.headers.Cookie, 'cf_clearance=zzz');
+});

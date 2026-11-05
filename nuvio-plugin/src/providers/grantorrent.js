@@ -30,11 +30,9 @@ var GT_HOSTS = [
   'https://grantorrent.ch'
 ];
 
-var GT_CHALLENGE = /just a moment|performing security verification|cf-chl|cdn-cgi\/challenge|attention required|enable javascript and cookies/i;
-
-function gtIsChallenge(html) {
-  if (!html) return true;
-  return GT_CHALLENGE.test(String(html).slice(0, 4000));
+/** Petición al sitio con la sesión de Cloudflare del usuario, si existe. */
+function gtGet(url, extra) {
+  return getText(url, { timeout: 16000, headers: browserHeaders(extra) });
 }
 
 /** Idioma de una fila de la tabla de enlaces. */
@@ -89,9 +87,9 @@ function gtParseCards(html, baseUrl) {
 
 function gtSearch(host, term) {
   var url = host + '/?s=' + encodeURIComponent(String(term).replace(/\s+/g, '+'));
-  return getText(url, { timeout: 16000 }).then(function (html) {
-    if (gtIsChallenge(html)) {
-      log('grantorrent', 'desafío de Cloudflare en la búsqueda');
+  return gtGet(url).then(function (html) {
+    if (isChallengeHtml(html)) {
+      log('grantorrent', 'desafío de Cloudflare en la búsqueda' + (hasCloudflareSession() ? ' (cookie caducada)' : ' (sin cfCookie)'));
       return [];
     }
     return gtParseCards(html, host);
@@ -179,8 +177,8 @@ function gtEpisodeLinks(html, baseUrl, season, episode) {
 
 /** `/enlaces/<code>/` → página del host → .torrent → magnet */
 function gtResolveShort(shortUrl, referer) {
-  return getText(shortUrl, { timeout: 16000, headers: { Referer: referer } }).then(function (html) {
-    if (!html || gtIsChallenge(html)) return null;
+  return gtGet(shortUrl, { Referer: referer }).then(function (html) {
+    if (isChallengeHtml(html)) return null;
     var candidates = [];
     var re = /<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi;
     var match;
@@ -202,7 +200,7 @@ function gtResolveShort(shortUrl, referer) {
       if (index >= candidates.length || index >= 4) return Promise.resolve(null);
       var url = candidates[index++];
       return resolveTorrentOrMagnet(url, {
-        headers: { Referer: shortUrl, 'User-Agent': UA },
+        headers: browserHeaders({ Referer: shortUrl }),
         timeout: 18000,
         maxDepth: 2
       }).then(function (torrent) {
@@ -214,8 +212,8 @@ function gtResolveShort(shortUrl, referer) {
 }
 
 function gtStreamsFromPage(pageUrl, referer, info, label) {
-  return getText(pageUrl, { timeout: 16000 }).then(function (html) {
-    if (!html || gtIsChallenge(html)) return [];
+  return gtGet(pageUrl).then(function (html) {
+    if (isChallengeHtml(html)) return [];
     var page = gtPageInfo(html, label || info.title);
     var rows = gtParseLinkRows(html, pageUrl);
 
@@ -324,8 +322,8 @@ function gtGetStreams(tmdbId, mediaType, season, episode) {
             .then(function (streams) {
               if (streams.length) return streams;
               // si la ficha es de temporada, se buscan los enlaces de episodio dentro
-              return getText(candidate.url, { timeout: 16000 }).then(function (html) {
-                if (!html || gtIsChallenge(html)) return [];
+              return gtGet(candidate.url).then(function (html) {
+                if (isChallengeHtml(html)) return [];
                 var links = gtEpisodeLinks(html, candidate.url, info.season, info.episode);
                 if (!links.length) return [];
                 return gtStreamsFromPage(links[0].url, candidate.url, info, links[0].label);
@@ -359,7 +357,9 @@ function onSettings() {
     { type: 'select', key: 'maxResults', label: 'Máximo de fuentes', defaultValue: '8', options: [
       { value: '4', label: '4' }, { value: '6', label: '6' }, { value: '8', label: '8' }, { value: '12', label: '12' }
     ] },
-    { type: 'text', key: 'baseUrl', label: 'Dominio actual (opcional)', placeholder: 'https://grantorrent.fyi' }
+    { type: 'text', key: 'baseUrl', label: 'Dominio actual (opcional)', placeholder: 'https://grantorrent.fyi' },
+    { type: 'text', key: 'cfCookie', label: 'Cookie de Cloudflare (opcional)', placeholder: 'cf_clearance=…' },
+    { type: 'text', key: 'userAgent', label: 'User-Agent del navegador (opcional)', placeholder: 'Mozilla/5.0 …' }
   ]);
 }
 

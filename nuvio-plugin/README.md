@@ -14,8 +14,9 @@ providers/<id>.js            # bundles listos para producción (1 archivo por si
 src/core/*.js                # núcleo compartido (00-util … 80-shortlink)
 src/providers/<id>.js        # fuente delgada de cada sitio (marcador /*__CORE__*/)
 build.js                     # concatenación + validación del manifiesto
-tests/                       # 49 pruebas con fixtures HTML reales y red simulada
+tests/                       # 52 pruebas con fixtures HTML reales y red simulada
 tools/live-check.js          # prueba contra los sitios reales (necesita red)
+tools/probe.js               # sondeo de una URL: Cloudflare + magnet/.torrent/enlaces
 docs/                        # dossier de investigación + panel interactivo
 ```
 
@@ -41,8 +42,8 @@ docs/                        # dossier de investigación + panel interactivo
 | `wolfmax4k` | WolfMax4K → WolfTorrent | `wolftorrent.com` | `/api/descargas` → Enlacito → `var link_out` (Base64 o AES-CBC) → `.torrent`. **Cloudflare Turnstile** desde oct-2026 |
 | `sinsitio` | SinSitio | `www.sinsitio.site` | DLE `?do=search` → ficha → `ddlUrl.php?url=<base64>` → `.torrent` |
 | `subtorrents` | SubTorrents | `www1.subtorrents.zip` | `?s=` → ficha → `.torrent` directo o `enlace-protegido.com/s.php?i=` (Base64 ×5 + ROT13); series por episodio `4x1` |
-| `torrentgalaxy` | TorrentGalaxy | `en.torrentgalaxy-official.is` | `/movies?keyword=` → `/movies/<slug>-<año>` → tabla 🧲 con **magnet por release** (calidad, tamaño, seeders); respaldo VidSrc con el `tmdbId` |
-| `grantorrent` | GranTorrent | `grantorrent.fyi` | `?s=` → `/peliculas/<slug>/` o `/episodios/<slug>-<n>x<m>/` → tabla «Obtener torrent / Descarga» → `/enlaces/<code>/` → host de ficheros («Espere por favor») → `.torrent` → infohash |
+| `torrentgalaxy` | TorrentGalaxy | `en.torrentgalaxy-official.is` | `/movies?keyword=` → `/movies/<slug>-<año>` → tabla 🧲 con **magnet por release** (calidad, tamaño, seeders); respaldo VidSrc con el `tmdbId`. Acepta `cfCookie`/`userAgent` |
+| `grantorrent` | GranTorrent | `grantorrent.fyi` | `?s=` → `/peliculas/<slug>/` o `/episodios/<slug>-<n>x<m>/` → tabla «Obtener torrent / Descarga» → `/enlaces/<code>/` → host de ficheros («Espere por favor») → `.torrent` → infohash. Acepta `cfCookie`/`userAgent` |
 | `cinecalidad` | Cinecalidad | `www.cinecalidad.am` | `?s=` → `/ver-pelicula/<slug>/` o `/ver-el-episodio/<slug>-<n>x<m>/` → magnets directos y `acortalink.net/s.php?i=<Base64>`; los hosts Mega/1fichier se descartan por no ser reproducibles |
 
 Todos los providers comprueban varios dominios en orden y se quedan con el primero que responde
@@ -87,6 +88,24 @@ Todos exponen `onSettings()` (`hasSettings: true` en el manifiesto) con:
 - `baseUrl`: dominio manual — TorrentLandia, GranTorrent y Cinecalidad.
 - `preferredLanguage`: `any` / `castellano` / `latino` — GranTorrent.
 - `includeVidsrc`: reproductor HTTP de respaldo cuando no hay magnets — TorrentGalaxy.
+- `cfCookie`: cookie `cf_clearance` (+ `__cf_bm`) copiada de tu navegador ya verificado — TorrentGalaxy y GranTorrent.
+- `userAgent`: User-Agent de ese mismo navegador — TorrentGalaxy y GranTorrent.
+
+### Qué hacer con Cloudflare
+
+TorrentGalaxy y GranTorrent se sirven detrás de Cloudflare. Un plugin de Nuvio no puede resolver el
+desafío «Just a moment…» (no hay navegador), así que **por defecto los dos devuelven `[]`** cuando el
+sitio lo pide. Si quieres que funcionen, pásales la sesión que tu navegador ya negoció:
+
+1. Abre el sitio en el navegador y supera la verificación (suele ser automático).
+2. DevTools → *Application/Storage → Cookies* → copia `cf_clearance` (y `__cf_bm` si está):
+   `cf_clearance=eyJ...; __cf_bm=0.abc...`
+3. Pega esa cadena en el ajuste **Cookie de Cloudflare** del provider. Copia también el
+   **User-Agent** exacto de ese navegador: Cloudflare liga la cookie al UA.
+4. Las cookies caducan (horas o días). Cuando vuelvan a salir vacíos los resultados, repite el paso 2.
+
+El plugin detecta el caso y escribe en el log `desafío de Cloudflare … (sin cfCookie)` o
+`(cookie caducada)` para que se distinga de «el sitio no tiene ese título».
 
 Los ajustes llegan como `SCRAPER_SETTINGS` (clave → valor en texto) y se leen con el helper
 `settings()` del núcleo, con validación de rangos y valores.
@@ -96,7 +115,7 @@ Los ajustes llegan como `SCRAPER_SETTINGS` (clave → valor en texto) y se leen 
 ```bash
 cd nuvio-plugin
 npm run build      # regenera providers/*.js a partir de src/ y valida manifest.json
-npm test           # 49 pruebas: núcleo + providers con red simulada
+npm test           # 52 pruebas: núcleo + providers con red simulada
 npm run check      # build + test
 ```
 
@@ -104,6 +123,18 @@ Las pruebas usan fixtures HTML capturados de los sitios reales (incluidas las ca
 con Python contra el sitio en vivo (por ejemplo el infohash
 `6D6FE32F4A7540CFD698C387A9F91084F16C70E3` de un `.torrent` real de EliteTorrent). No hay llamadas
 de red: `fetch` está simulado.
+
+Sonda un sitio concreto y di qué ve el parser (útil cuando cambian el HTML o Cloudflare aprieta):
+
+```bash
+node tools/probe.js "https://grantorrent.fyi/peliculas/la-mangosta/"
+node tools/probe.js "https://en.torrentgalaxy-official.is/movies?keyword=mongoose" --full
+CF_COOKIE='cf_clearance=…; __cf_bm=…' UA='Mozilla/5.0 …' \
+  node tools/probe.js "https://grantorrent.fyi/?s=mangosta"
+```
+
+Imprime estado, URL final, si es el desafío de Cloudflare, y los magnets, `.torrent`, infohashes y
+enlaces de descarga encontrados (`--save` guarda el HTML como fixture).
 
 Contra los sitios reales:
 
@@ -152,10 +183,11 @@ node tools/live-check.js --site elitetorrent --type movie --id 1 --title "Reache
 - **Cloudflare Turnstile** (WolfTorrent desde octubre de 2026) no se puede resolver desde un plugin:
   no hay navegador ni cookies de sesión válidas. El provider detecta el desafío, registra el motivo y
   devuelve `[]` en vez de fallar. Si el sitio lo retira, vuelve a funcionar sin cambios.
-- **Cloudflare** es el límite real de TorrentGalaxy y GranTorrent: desde el sandbox de desarrollo no
-  hay salida a internet, así que los parsers se validaron con fixtures construidos a partir del HTML
-  servido a navegadores reales (búsqueda, fichas, tablas de enlaces y página del host). Si el sitio
-  responde con el desafío, el provider registra el motivo y devuelve `[]`.
+- **Cloudflare** es el límite real de TorrentGalaxy y GranTorrent: el plugin no puede resolver el
+  desafío, solo reutilizar tu sesión (`cfCookie` + `userAgent`). Sin ella devuelve `[]` —nunca una
+  excepción— y lo registra en el log. Los parsers se validaron con fixtures construidos a partir del
+  HTML servido a navegadores reales (búsqueda, fichas, tablas de enlaces y página del host);
+  `tools/probe.js` permite revalidarlos contra el sitio en vivo en cuanto haya red.
 - **TorrentLandia** no tiene dominio operativo: `torrentlandia.site` no resuelve y ningún TLD alternativo
   responde. Se entrega desactivado y con `baseUrl` configurable, pero su parser no se pudo validar
   contra HTML real.

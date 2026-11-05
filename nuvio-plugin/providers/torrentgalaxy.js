@@ -697,6 +697,74 @@ function metaContent(html, property) {
   return tag ? attrOf(tag[0], 'content') : null;
 }
 
+/* ===== core/15-cloudflare.js ===== */
+/* ------------------------------------------------------------------
+ * Nébula Scrapers · core/cloudflare
+ * Ayudas para los sitios que se sirven detrás de Cloudflare
+ * (TorrentGalaxy y GranTorrent, entre otros).
+ *
+ * Un plugin no puede resolver el desafío «Just a moment…»: no hay
+ * navegador ni espacio para ejecutar el reto JS. Lo que sí puede hacer
+ * es reutilizar la sesión ya verificada del usuario:
+ *
+ *   SCRAPER_SETTINGS = { cfCookie: 'cf_clearance=…; __cf_bm=…',
+ *                        userAgent: 'Mozilla/5.0 …' }
+ *
+ * Ese par cookie+UA es el que el navegador ya negoció, así que las
+ * peticiones del plugin pasan como tráfico normal. Si no hay cookie,
+ * los providers siguen funcionando: devuelven [] cuando aparece el
+ * desafío en vez de fallar.
+ * ------------------------------------------------------------------ */
+
+var CLOUDFLARE_CHALLENGE_RE = /just a moment|performing security verification|checking your browser|cf-chl|cdn-cgi\/challenge|attention required|enable javascript and cookies|verifying you are human|ddos-guard/i;
+
+/** ¿El HTML es la pantalla de verificación en lugar del sitio? */
+function isChallengeHtml(html) {
+  if (!html) return true;
+  var sample = String(html).slice(0, 4000);
+  if (!sample.trim()) return true;
+  // un 200 con la portada del sitio nunca trae estos marcadores
+  return CLOUDFLARE_CHALLENGE_RE.test(sample);
+}
+
+/** Ajustes de sesión del usuario (cookie de Cloudflare y User-Agent). */
+function cloudflareSettings() {
+  return settings({ cfCookie: '', userAgent: '' });
+}
+
+/**
+ * Cabeceras con la sesión del usuario cuando existe.
+ * @param {object} extra cabeceras adicionales (Referer, Accept…)
+ */
+function browserHeaders(extra) {
+  var conf = cloudflareSettings();
+  var headers = {};
+  if (extra) {
+    for (var key in extra) {
+      if (Object.prototype.hasOwnProperty.call(extra, key)) headers[key] = extra[key];
+    }
+  }
+
+  var ua = String(conf.userAgent == null ? '' : conf.userAgent).trim();
+  if (ua) headers['User-Agent'] = ua;
+
+  var cookie = String(conf.cfCookie == null ? '' : conf.cfCookie).trim();
+  if (cookie) {
+    // acepta tanto "cf_clearance=abc" como el valor pelado de cf_clearance
+    if (cookie.indexOf('=') === -1) cookie = 'cf_clearance=' + cookie;
+    headers.Cookie = cookie;
+    if (!headers.Referer && !headers.referer) headers.Referer = 'https://www.google.com/';
+  }
+
+  return headers;
+}
+
+/** Texto del ajuste `cfCookie` (para decidir si merece la pena reintentar). */
+function hasCloudflareSession() {
+  var conf = cloudflareSettings();
+  return String(conf.cfCookie || '').trim().length > 0;
+}
+
 /* ===== core/20-hash.js ===== */
 /* ------------------------------------------------------------------
  * Nébula Scrapers · core/hash
@@ -1788,7 +1856,7 @@ function findDownloadLinks(html, baseUrl) {
     if (!href) continue;
     if (/^magnet:/i.test(href)) push(href);
     else if (/\.torrent(\?|$)/i.test(href)) push(absoluteUrl(href, baseUrl));
-    else if (/(?:^|\/)(?:download|descargar|bajar)(?:[/?]|$)/i.test(href)) push(absoluteUrl(href, baseUrl));
+    else if (/(?:^|\/)(?:download|descargar|bajar|enlaces?)(?:[/?]|$)/i.test(href)) push(absoluteUrl(href, baseUrl));
     else if (/[?&](?:download|dl)=/i.test(href)) push(absoluteUrl(href, baseUrl));
   }
 
@@ -1934,12 +2002,9 @@ var TGX_HOSTS = [
   'https://torrentgalaxy-official.is'
 ];
 
-var TGX_CHALLENGE = /just a moment|performing security verification|cf-chl|cdn-cgi\/challenge|attention required|enable javascript and cookies/i;
-var TGX_EMPTY = /nothing found|no results|0 (?:of|torrents)|sin resultados|no torrents/i;
-
-function tgxIsChallenge(html) {
-  if (!html) return true;
-  return TGX_CHALLENGE.test(String(html).slice(0, 4000));
+/** Todas las peticiones del sitio llevan la sesión de Cloudflare del usuario, si la hay. */
+function tgxGet(url, extra) {
+  return getText(url, { timeout: 15000, headers: browserHeaders(extra) });
 }
 
 function tgxLanguage(text) {
@@ -2001,17 +2066,17 @@ function tgxParseRows(html, baseUrl) {
 function tgxSearch(host, term, wantSeries) {
   var path = wantSeries ? '/series' : '/movies';
   var url = host + path + '?keyword=' + encodeURIComponent(term);
-  return getText(url, { timeout: 15000 }).then(function (html) {
-    if (tgxIsChallenge(html)) {
-      log('torrentgalaxy', 'desafío de Cloudflare en ' + url);
+  return tgxGet(url).then(function (html) {
+    if (isChallengeHtml(html)) {
+      log('torrentgalaxy', 'desafío de Cloudflare en ' + url + (hasCloudflareSession() ? ' (cookie caducada)' : ' (sin cfCookie)'));
       return [];
     }
     var items = tgxParseRows(html, host);
     if (items.length) return items;
     // respaldo: el buscador global
-    return getText(host + '/search/?q=' + encodeURIComponent(term), { timeout: 15000 })
+    return tgxGet(host + '/search/?q=' + encodeURIComponent(term))
       .then(function (searchHtml) {
-        if (tgxIsChallenge(searchHtml)) return [];
+        if (isChallengeHtml(searchHtml)) return [];
         return tgxParseRows(searchHtml, host);
       });
   });
@@ -2076,8 +2141,8 @@ function tgxVidsrcStream(tmdbId, info) {
 }
 
 function tgxStreamsFromPage(candidate, info) {
-  return getText(candidate.url, { timeout: 16000 }).then(function (html) {
-    if (!html || tgxIsChallenge(html)) return [];
+  return tgxGet(candidate.url).then(function (html) {
+    if (isChallengeHtml(html)) return [];
 
     var h1 = /<h1[^>]*>([\s\S]*?)<\/h1>/i.exec(html);
     var pageTitle = h1 ? stripTags(h1[1]) : candidate.title;
@@ -2112,7 +2177,7 @@ function tgxStreamsFromPage(candidate, info) {
         language: language,
         provider: 'torrentgalaxy',
         type: 'torrent',
-        headers: { Referer: candidate.url }
+        headers: browserHeaders({ Referer: candidate.url })
       });
     }).filter(Boolean);
 
@@ -2122,7 +2187,7 @@ function tgxStreamsFromPage(candidate, info) {
         return !/^https?:\/\/(?:[^/]*\.)?(?:sharethis|facebook|twitter|reddit|whatsapp|telegram)\./i.test(link);
       }).slice(0, 3);
       return mapLimit(links, 2, function (link) {
-        return resolveTorrentOrMagnet(link, { headers: { Referer: candidate.url, 'User-Agent': UA } })
+        return resolveTorrentOrMagnet(link, { headers: browserHeaders({ Referer: candidate.url }) })
           .then(function (torrent) {
             if (!torrent) return null;
             return makeStream({

@@ -25,12 +25,9 @@ var TGX_HOSTS = [
   'https://torrentgalaxy-official.is'
 ];
 
-var TGX_CHALLENGE = /just a moment|performing security verification|cf-chl|cdn-cgi\/challenge|attention required|enable javascript and cookies/i;
-var TGX_EMPTY = /nothing found|no results|0 (?:of|torrents)|sin resultados|no torrents/i;
-
-function tgxIsChallenge(html) {
-  if (!html) return true;
-  return TGX_CHALLENGE.test(String(html).slice(0, 4000));
+/** Todas las peticiones del sitio llevan la sesión de Cloudflare del usuario, si la hay. */
+function tgxGet(url, extra) {
+  return getText(url, { timeout: 15000, headers: browserHeaders(extra) });
 }
 
 function tgxLanguage(text) {
@@ -92,17 +89,17 @@ function tgxParseRows(html, baseUrl) {
 function tgxSearch(host, term, wantSeries) {
   var path = wantSeries ? '/series' : '/movies';
   var url = host + path + '?keyword=' + encodeURIComponent(term);
-  return getText(url, { timeout: 15000 }).then(function (html) {
-    if (tgxIsChallenge(html)) {
-      log('torrentgalaxy', 'desafío de Cloudflare en ' + url);
+  return tgxGet(url).then(function (html) {
+    if (isChallengeHtml(html)) {
+      log('torrentgalaxy', 'desafío de Cloudflare en ' + url + (hasCloudflareSession() ? ' (cookie caducada)' : ' (sin cfCookie)'));
       return [];
     }
     var items = tgxParseRows(html, host);
     if (items.length) return items;
     // respaldo: el buscador global
-    return getText(host + '/search/?q=' + encodeURIComponent(term), { timeout: 15000 })
+    return tgxGet(host + '/search/?q=' + encodeURIComponent(term))
       .then(function (searchHtml) {
-        if (tgxIsChallenge(searchHtml)) return [];
+        if (isChallengeHtml(searchHtml)) return [];
         return tgxParseRows(searchHtml, host);
       });
   });
@@ -167,8 +164,8 @@ function tgxVidsrcStream(tmdbId, info) {
 }
 
 function tgxStreamsFromPage(candidate, info) {
-  return getText(candidate.url, { timeout: 16000 }).then(function (html) {
-    if (!html || tgxIsChallenge(html)) return [];
+  return tgxGet(candidate.url).then(function (html) {
+    if (isChallengeHtml(html)) return [];
 
     var h1 = /<h1[^>]*>([\s\S]*?)<\/h1>/i.exec(html);
     var pageTitle = h1 ? stripTags(h1[1]) : candidate.title;
@@ -203,7 +200,7 @@ function tgxStreamsFromPage(candidate, info) {
         language: language,
         provider: 'torrentgalaxy',
         type: 'torrent',
-        headers: { Referer: candidate.url }
+        headers: browserHeaders({ Referer: candidate.url })
       });
     }).filter(Boolean);
 
@@ -213,7 +210,7 @@ function tgxStreamsFromPage(candidate, info) {
         return !/^https?:\/\/(?:[^/]*\.)?(?:sharethis|facebook|twitter|reddit|whatsapp|telegram)\./i.test(link);
       }).slice(0, 3);
       return mapLimit(links, 2, function (link) {
-        return resolveTorrentOrMagnet(link, { headers: { Referer: candidate.url, 'User-Agent': UA } })
+        return resolveTorrentOrMagnet(link, { headers: browserHeaders({ Referer: candidate.url }) })
           .then(function (torrent) {
             if (!torrent) return null;
             return makeStream({

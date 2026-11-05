@@ -70,7 +70,7 @@ function mockFetch(routes, options = {}) {
   const calls = [];
   const fn = async (url, init = {}) => {
     const target = String(url);
-    calls.push({ url: target, method: init.method || 'GET', body: init.body });
+    calls.push({ url: target, method: init.method || 'GET', body: init.body, headers: init.headers || {} });
     for (const [matcher, handler] of routes) {
       const matches = typeof matcher === 'string' ? target.indexOf(matcher) !== -1 : matcher.test(target);
       if (!matches) continue;

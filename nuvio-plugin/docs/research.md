@@ -223,3 +223,24 @@ Once sitios: los siete del encargo original, **SubTorrents**, y los tres de la s
   `.torrent` o un magnet, esa es la fuente. Las muestras capturadas el 5-nov-2026 decodifican a
   `Salted__…` (carga AES con contraseña), por eso existe la vía de respaldo.
 - Calidad/idioma: `Audio:` de la ficha → `Latino` por defecto; `Calidad:` → `Dual 1080p`, `Full HD`.
+
+---
+
+## Sesión de Cloudflare (transversal a los sitios ⚠️)
+
+- `src/core/15-cloudflare.js` centraliza lo único que un plugin puede hacer frente a un challenge:
+  - `isChallengeHtml(html)`: reconoce «Just a moment…», «Performing security verification»,
+    «Checking your browser», `cf-chl`, `cdn-cgi/challenge`, «Attention Required», «Enable JavaScript
+    and cookies» y DDoS-Guard. Un HTML vacío también cuenta como bloqueo.
+  - `browserHeaders(extra)`: añade `Cookie: cf_clearance=…; __cf_bm=…` y el `User-Agent` exacto del
+    navegador del usuario (ajustes `cfCookie` y `userAgent`) a **todas** las peticiones del provider,
+    incluida la cadena `/enlaces/<code>/` → host de ficheros.
+  - `hasCloudflareSession()`: distingue en el log «sin cfCookie» de «cookie caducada».
+- Copiar la sesión: DevTools → Application → Cookies → `cf_clearance` (y `__cf_bm`), y el UA de ese
+  mismo navegador. Cloudflare liga la cookie al UA y a la IP; caduca en horas o días.
+- `tools/probe.js` (nuevo) permite comprobarlo sin móvil: imprime estado, URL final, si es el desafío,
+  y los magnets / `.torrent` / infohashes / enlaces de descarga que ve el parser. Con
+  `CF_COOKIE='…' UA='…' node tools/probe.js <url>` usa la misma sesión que el provider.
+- Comprobado en este entorno (5-nov-2026): `en.torrentgalaxy-official.is` sirve el desafío a clientes
+  automatizados (también a proxys de lectura tipo r.jina.ai o microlink), mientras
+  `www.cinecalidad.am` y `grantorrent.fyi` sí entregan el HTML completo a un `fetch` normal.

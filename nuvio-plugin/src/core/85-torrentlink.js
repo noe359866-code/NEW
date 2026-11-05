@@ -48,7 +48,7 @@ function findDownloadLinks(html, baseUrl) {
     if (!href) continue;
     if (/^magnet:/i.test(href)) push(href);
     else if (/\.torrent(\?|$)/i.test(href)) push(absoluteUrl(href, baseUrl));
-    else if (/(?:^|\/)(?:download|descargar|bajar)(?:[/?]|$)/i.test(href)) push(absoluteUrl(href, baseUrl));
+    else if (/(?:^|\/)(?:download|descargar|bajar|enlaces?)(?:[/?]|$)/i.test(href)) push(absoluteUrl(href, baseUrl));
     else if (/[?&](?:download|dl)=/i.test(href)) push(absoluteUrl(href, baseUrl));
   }
 
