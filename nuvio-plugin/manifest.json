@@ -1,7 +1,7 @@
 {
   "name": "Nébula ES",
   "version": "1.0.0",
-  "description": "Scrapers en español para Nuvio: DonTorrent, MejorTorrent, EliteTorrent, DivxTotal, TorrentLandia, WolfMax4K y SinSitio.",
+  "description": "Scrapers en español para Nuvio: DonTorrent, MejorTorrent, EliteTorrent, DivxTotal, TorrentLandia, WolfMax4K, SinSitio y SubTorrents.",
   "author": "Nébula",
   "scrapers": [
     {
@@ -10,12 +10,19 @@
       "description": "DonTorrent (dontorrent.tips): castellano, series por episodio y películas. Descargas con proof-of-work SHA-256 resueltas en el dispositivo.",
       "version": "1.0.0",
       "author": "Nébula",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/dontorrent.js",
       "enabled": true,
       "hasSettings": true,
-      "contentLanguage": ["es"],
-      "formats": ["torrent"],
+      "contentLanguage": [
+        "es"
+      ],
+      "formats": [
+        "torrent"
+      ],
       "logo": ""
     },
     {
@@ -24,12 +31,19 @@
       "description": "MejorTorrent (www47.mejortorrent.eu): mismo motor que DonTorrent con dominios rotatorios y catálogo propio.",
       "version": "1.0.0",
       "author": "Nébula",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/mejortorrent.js",
       "enabled": true,
       "hasSettings": true,
-      "contentLanguage": ["es"],
-      "formats": ["torrent"],
+      "contentLanguage": [
+        "es"
+      ],
+      "formats": [
+        "torrent"
+      ],
       "logo": ""
     },
     {
@@ -38,12 +52,19 @@
       "description": "EliteTorrent (elitetorrent.com): castellano, latino y VOSE. Enlaces acortame-esto decodificados (Base64 ×N + ROT13).",
       "version": "1.0.0",
       "author": "Nébula",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/elitetorrent.js",
       "enabled": true,
       "hasSettings": true,
-      "contentLanguage": ["es"],
-      "formats": ["torrent"],
+      "contentLanguage": [
+        "es"
+      ],
+      "formats": [
+        "torrent"
+      ],
       "logo": ""
     },
     {
@@ -52,12 +73,19 @@
       "description": "DivxTotal (divxtotal.foo): películas SD/HD/DVD-R/4K y series con enlaces download_tt.php en Base64.",
       "version": "1.0.0",
       "author": "Nébula",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/divxtotal.js",
       "enabled": true,
       "hasSettings": true,
-      "contentLanguage": ["es"],
-      "formats": ["torrent"],
+      "contentLanguage": [
+        "es"
+      ],
+      "formats": [
+        "torrent"
+      ],
       "logo": ""
     },
     {
@@ -66,12 +94,19 @@
       "description": "TorrentLandia (torrentlandia.site): dominio caído en noviembre de 2026. Desactivado por defecto; acepta un dominio nuevo desde sus ajustes.",
       "version": "1.0.0",
       "author": "Nébula",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/torrentlandia.js",
       "enabled": false,
       "hasSettings": true,
-      "contentLanguage": ["es"],
-      "formats": ["torrent"],
+      "contentLanguage": [
+        "es"
+      ],
+      "formats": [
+        "torrent"
+      ],
       "logo": ""
     },
     {
@@ -80,12 +115,19 @@
       "description": "WolfMax4K → WolfTorrent (wolftorrent.com): 4K/1080p/720p. Descarga con Enlacito + AES-256-CBC; Turnstile puede bloquearla.",
       "version": "1.0.0",
       "author": "Nébula",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/wolfmax4k.js",
       "enabled": true,
       "hasSettings": true,
-      "contentLanguage": ["es"],
-      "formats": ["torrent"],
+      "contentLanguage": [
+        "es"
+      ],
+      "formats": [
+        "torrent"
+      ],
       "logo": ""
     },
     {
@@ -94,12 +136,40 @@
       "description": "SinSitio (sinsitio.site): estrenos, cine clásico, series y documentales en castellano/latino vía ddlUrl.php.",
       "version": "1.0.0",
       "author": "Nébula",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/sinsitio.js",
       "enabled": true,
       "hasSettings": true,
-      "contentLanguage": ["es"],
-      "formats": ["torrent"],
+      "contentLanguage": [
+        "es"
+      ],
+      "formats": [
+        "torrent"
+      ],
+      "logo": ""
+    },
+    {
+      "id": "subtorrents",
+      "name": "SubTorrents",
+      "description": "SubTorrents (www1.subtorrents.zip): cine y series en VOSE/subtitulado al español. Usa el .torrent directo o resuelve enlace-protegido.com.",
+      "version": "1.0.0",
+      "author": "Nébula",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/subtorrents.js",
+      "enabled": true,
+      "hasSettings": true,
+      "contentLanguage": [
+        "es"
+      ],
+      "formats": [
+        "torrent"
+      ],
       "logo": ""
     }
   ]

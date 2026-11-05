@@ -175,3 +175,27 @@ test('settings mezcla valores por defecto con SCRAPER_SETTINGS', () => {
 function pick(parsed) {
   return { season: parsed.season, episode: parsed.episode };
 }
+
+test('decodeShortLink: enlaces reales de SubTorrents (enlace-protegido.com)', () => {
+  const movie = 'VjJ0YWEyRXlTbk5oTTJ4WVZrWndUbHBXVW5ObFJteFlUVmhhYkZKWWFEQldNakExWVZVeGRGVnVRbGhpUjFKWVdsWmFjMWRHY0VoTlZURnBWa1ZXTlZZeGFISk9WMDVYWWtSV1RsZEhVbUZaYkZaaFpGWnJlVTFWWkdsaE0yUTFXVlZrZDJKR1dYZGpSRVphVFZkU1lWcEhjM2hqVmtaWllrVTVhRlpIWjNwV1JFSk9UbFpPUjJKSVVtdE5NVXBVV1d4a1UyTkdaSE5hUkU1clVsUldWbFpzVWxkVVZsVjVZVVJPV2sxcVJraFpiWGgzVjBVMVZWWnJlRlpsYkZveFZqRmplRll5U2toVWJsSlRZbFJST1E9PQ==';
+  const episode = 'VjJ0YWEyRXlTbk5oTTJ4WVZrWndUbHBXVW5ObFJteFlUVmhhYkZKWWFEQldNakExWVZVeGRGVnVRbGhpUjFKWVdsWmFjMWRHY0VoTlZURnBWa1ZXTlZZeGFISk9WMDVYWWtSV1RsZEhVbUZaYkZaaFpGWnJlVTFWWkdsaE0yUTFXVlZrZDJKR1dYZGpSRVphVFZkU1lWcEhjM2hqVmtaWllrVTVhRlpIWnpCV1JsWk9UbFpLZEZSdVVrOVhSMUp5VmpCV2QyTXhVbk5WYkVwT1ZsaG9WVmxWYUd0aGJVcFdWMjVXV0dKSFRYaFViRll3VmtVMVdFNVdjR2xXYkhCNlYxUkplRkl5U201UVZEQTk=';
+
+  assert.equal(
+    core.decodeShortLink(movie),
+    'https://www1.subtorrents.zip/wp-content/uploads/2026/08/Toy-Story-559-(central).torrent'
+  );
+  assert.equal(
+    core.decodeShortLink(episode),
+    'https://www1.subtorrents.zip/wp-content/uploads/2026/10/Reacher545-(central).torrent'
+  );
+});
+
+test('decodeShortLinkOrUrl: acepta el enlace completo, no solo el parámetro', () => {
+  const href = 'https://enlace-protegido.com/s.php?i=VjJ0YWEyRXlTbk5oTTJ4WVZrWndUbHBXVW5ObFJteFlUVmhhYkZKWWFEQldNakExWVZVeGRGVnVRbGhpUjFKWVdsWmFjMWRHY0VoTlZURnBWa1ZXTlZZeGFISk9WMDVYWWtSV1RsZEhVbUZaYkZaaFpGWnJlVTFWWkdsaE0yUTFXVlZrZDJKR1dYZGpSRVphVFZkU1lWcEhjM2hqVmtaWllrVTVhRlpIWjNwV1JFSk9UbFpPUjJKSVVtdE5NVXBVV1d4a1UyTkdaSE5hUkU1clVsUldWbFpzVWxkVVZsVjVZVVJPV2sxcVJraFpiWGgzVjBVMVZWWnJlRlpsYkZveFZqRmplRll5U2toVWJsSlRZbFJST1E9PQ==';
+  assert.equal(
+    core.decodeShortLinkOrUrl(href),
+    'https://www1.subtorrents.zip/wp-content/uploads/2026/08/Toy-Story-559-(central).torrent'
+  );
+  const direct = 'https://divxtotal.foo/wp-content/uploads/2026/11/reacher20-(central).torrent';
+  assert.equal(core.decodeShortLinkOrUrl(direct), direct);
+});

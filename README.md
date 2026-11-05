@@ -37,9 +37,9 @@ protocolo de Stremio.
 ## Plugin de Nuvio (extra)
 
 La carpeta [`nuvio-plugin/`](nuvio-plugin/README.md) contiene un repositorio de plugins para
-[Nuvio](https://nuvio.wiki/integrations/plugins) con siete scrapers en español (DonTorrent,
-MejorTorrent, EliteTorrent, DivxTotal, TorrentLandia, WolfMax4K y SinSitio), escritos tras inspeccionar
-cada sitio en noviembre de 2026. Cada provider es un único archivo CommonJS sin dependencias; se
+[Nuvio](https://nuvio.wiki/integrations/plugins) con ocho scrapers en español (DonTorrent,
+MejorTorrent, EliteTorrent, DivxTotal, TorrentLandia, WolfMax4K, SinSitio y SubTorrents), escritos tras
+inspeccionar cada sitio en noviembre de 2026. Cada provider es un único archivo CommonJS sin dependencias; se
 compila con `npm run build` dentro de esa carpeta y se instala en Nuvio pegando la URL de su
 `manifest.json`.
 

@@ -47,9 +47,26 @@ function decodeShortLink(raw) {
   return null;
 }
 
-/** Variante tolerante para parámetros donde la URL puede venir en claro. */
+/** Extrae el parámetro ofuscado (`i`, `u` o `url`) de un enlace completo. */
+function shortParamOf(value) {
+  var match = /[?&](?:i|u|url)=([^&#]+)/i.exec(String(value == null ? '' : value));
+  return match ? match[1] : null;
+}
+
+/**
+ * Variante tolerante: acepta el valor pelado o el enlace completo
+ * (`acortame-esto.com/s.php?i=…`, `download_tt.php?u=…`, `ddlUrl.php?url=…`),
+ * y devuelve las URLs que ya vienen en claro.
+ */
 function decodeShortLinkOrUrl(raw) {
   var direct = String(raw == null ? '' : raw).trim();
+  if (!direct) return null;
+  var param = shortParamOf(direct);
+  if (param) {
+    var decoded = decodeShortLink(param);
+    if (decoded) return decoded;
+    if (looksLikeTarget(param)) return param;
+  }
   if (looksLikeTarget(direct)) return direct;
   return decodeShortLink(direct);
 }

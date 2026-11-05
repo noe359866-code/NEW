@@ -6,6 +6,8 @@ Python antes de portar la lógica a JavaScript.
 
 Leyenda: ✅ comprobado en vivo · ⚠️ parcial / no verificable · ❌ sin servicio
 
+Ocho sitios: los siete del encargo original más **SubTorrents**, añadido después.
+
 ---
 
 ## 1. DonTorrent — `dontorrent.tips` ✅
@@ -119,3 +121,24 @@ Leyenda: ✅ comprobado en vivo · ⚠️ parcial / no verificable · ❌ sin se
   falta leer el HTML con selectores.
 - Jackett no incluye `Wolfmax4K.cs` en la rama principal; solo en forks, y describe el diseño antiguo.
 - `fetch_page` no ejecuta JavaScript: Turnstile y los `var link_out` generados en cliente no aparecen.
+
+## 8. SubTorrents — `www1.subtorrents.zip` ✅
+
+- WordPress con tema propio, catálogo centrado en **versión original subtitulada al español**.
+- Búsqueda de películas: `GET /peliculas-subtituladas/?s=<término>`; devuelve una tabla
+  `Título (con bandera de idioma) | Fecha dd-mm-yyyy | Género | Calidad`.
+- Búsqueda de series: `GET /series-2/?s=<término>`; las fichas viven en `/series/<slug>/`.
+- Ficha de película (`/peliculas/<slug>/`): metadatos (`Calidad`, `Audio`, `Idioma`, `Año`) y dos
+  opciones de descarga:
+  1. `https://enlace-protegido.com/s.php?i=<ofuscado>`
+  2. `.torrent` directo en `/wp-content/uploads/<año>/<mes>/<slug>-(central).torrent`
+- Ficha de serie: una tabla por temporada; cada fila es un episodio etiquetado `Título 4x1`, `4x2`…
+  y solo ofrece el acortador.
+- Cadena del acortador (comprobada con el payload real de "Toy Story 5" y de "Reacher 4x1"):
+  **cinco capas de Base64 y un ROT13 al final**:
+  `VjJ0YWEy…` → `b64 ×5` → `uggcf://jjj1.fhogbeeragf.mvc/…` → `ROT13` →
+  `https://www1.subtorrents.zip/wp-content/uploads/2026/08/Toy-Story-559-(central).torrent`.
+  El decodificador del núcleo acepta también el enlace completo y no solo el parámetro `i`.
+- Como la ficha trae el `.torrent` directo y el acortador a la vez, el provider resuelve ambos y
+  deduplica por infohash: es una prueba real de que la deduplicación funciona.
+- Otros hosts probados: `subtorrents.zip` y `www2.subtorrents.zip` (mismo sitio, por si cae el `www1`).

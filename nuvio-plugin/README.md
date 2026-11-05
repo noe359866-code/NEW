@@ -1,6 +1,6 @@
 # Nuvio · Scrapers en español
 
-Repositorio de plugins para [Nuvio](https://nuvio.wiki/integrations/plugins) con siete scrapers
+Repositorio de plugins para [Nuvio](https://nuvio.wiki/integrations/plugins) con ocho scrapers
 escritos a mano a partir de la inspección real de cada sitio (noviembre de 2026), no de recetas
 antiguas de blogs.
 
@@ -29,7 +29,7 @@ docs/                        # dossier de investigación + panel interactivo
 4. Activa los scrapers que quieras. Nuvio solo permite instalar plugins por sideload; cada uno se
    ejecuta aislado en QuickJS, sin acceso a Node, `Buffer` ni almacenamiento.
 
-## Los siete sitios
+## Los ocho sitios
 
 | id | Sitio | Dominio comprobado (nov 2026) | Cómo se obtiene la fuente |
 |----|-------|-------------------------------|---------------------------|
@@ -40,6 +40,7 @@ docs/                        # dossier de investigación + panel interactivo
 | `torrentlandia` | TorrentLandia | sin dominio activo | Se envía **desactivado**; acepta un `baseUrl` manual si el sitio reaparece |
 | `wolfmax4k` | WolfMax4K → WolfTorrent | `wolftorrent.com` | `/api/descargas` → Enlacito → `var link_out` (Base64 o AES-CBC) → `.torrent`. **Cloudflare Turnstile** desde oct-2026 |
 | `sinsitio` | SinSitio | `www.sinsitio.site` | DLE `?do=search` → ficha → `ddlUrl.php?url=<base64>` → `.torrent` |
+| `subtorrents` | SubTorrents | `www1.subtorrents.zip` | `?s=` → ficha → `.torrent` directo o `enlace-protegido.com/s.php?i=` (Base64 ×5 + ROT13); series por episodio `4x1` |
 
 Todos los providers comprueban varios dominios en orden y se quedan con el primero que responde
 (menos TorrentLandia, que no tiene ninguno vivo).
@@ -92,7 +93,7 @@ npm test           # 32 pruebas: núcleo + providers con red simulada
 npm run check      # build + test
 ```
 
-Las pruebas usan fixtures HTML capturados de los sitios reales y cadenas de descifrado verificadas
+Las pruebas usan fixtures HTML capturados de los sitios reales (incluidas las cadenas reales de SubTorrents) y cadenas de descifrado verificadas
 con Python contra el sitio en vivo (por ejemplo el infohash
 `6D6FE32F4A7540CFD698C387A9F91084F16C70E3` de un `.torrent` real de EliteTorrent). No hay llamadas
 de red: `fetch` está simulado.
@@ -114,7 +115,7 @@ node tools/live-check.js --site elitetorrent --type movie --id 1 --title "Reache
   streams y decodificador de acortadores (hasta 10 capas de Base64 + ROT13).
 - **Build**: `build.js` concatena `src/core/*.js` en orden alfabético dentro de cada provider (en el
   marcador `/*__CORE__*/`), envuelve todo en un IIFE con `'use strict'` y escribe
-  `providers/<id>.js` (~58–68 KB). También valida ids únicos, existencia de archivos y tamaño < 5 MB.
+  `providers/<id>.js` (~60–71 KB). También valida ids únicos, existencia de archivos y tamaño < 5 MB.
 - **Compatibilidad QuickJS**: sin ESM, sin `Buffer`, sin `XMLHttpRequest`; solo `fetch`, `URL`,
   `TextDecoder`, `atob/btoa`, `Promise`, `setTimeout`. `require()` se evita por completo.
 
@@ -137,6 +138,7 @@ node tools/live-check.js --site elitetorrent --type movie --id 1 --title "Reache
 ## Documentación adicional
 
 - `docs/research.md`: dossier por sitio (endpoints, selectores, cadenas de descifrado, fechas de
-  comprobación y callejones sin salida).
+  comprobación y callejones sin salida), incluido SubTorrents y el orden real de la cadena
+  (Base64 ×5 + ROT13).
 - `docs/index.html`: panel interactivo con el estado de los siete sitios, la tubería de descarga y un
   decodificador de acortadores que funciona sin conexión.

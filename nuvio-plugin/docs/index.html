@@ -84,9 +84,9 @@
       <code>.torrent</code> y convertida en magnet con el infohash verdadero.
     </p>
     <div class="stats">
-      <div class="stat"><b>7</b><span>sitios</span></div>
-      <div class="stat"><b>32 / 32</b><span>pruebas</span></div>
-      <div class="stat"><b>58–68 KB</b><span>por bundle</span></div>
+      <div class="stat"><b>8</b><span>sitios</span></div>
+      <div class="stat"><b>37 / 37</b><span>pruebas</span></div>
+      <div class="stat"><b>60–71 KB</b><span>por bundle</span></div>
       <div class="stat"><b>0</b><span>dependencias</span></div>
     </div>
   </header>
@@ -98,7 +98,7 @@
   <section class="panel">
     <p class="note" style="margin-top:0">
       EliteTorrent usa <code>acortame-esto.com/s.php?i=…</code>, DivxTotal <code>download_tt.php?u=…</code> y
-      SinSitio <code>ddlUrl.php?url=…</code>. La cadena real es <b>Base64 + ROT13 por capas</b> (hasta diez).
+      SinSitio <code>ddlUrl.php?url=…</code>. La cadena real es <b>cinco capas de Base64 y un ROT13 final</b> (hasta diez capas admitidas).
       Esta herramienta reproduce el mismo algoritmo del núcleo, en tu navegador y sin conexión.
     </p>
     <textarea id="input" spellcheck="false" placeholder="Pega un enlace de descarga, el valor de i=/u=/url= o el Base64 en bruto…"></textarea>
@@ -106,7 +106,7 @@
       <button id="decode">Decodificar</button>
       <button class="ghost" data-sample="elite">Ejemplo EliteTorrent (→ magnet)</button>
       <button class="ghost" data-sample="divx">Ejemplo DivxTotal (→ .torrent)</button>
-      <button class="ghost" data-sample="sinsitio">Ejemplo SinSitio (→ .torrent)</button>
+      <button class="ghost" data-sample="subtorrents">Ejemplo SubTorrents (→ .torrent)</button>
     </div>
     <div class="layers" id="out"></div>
   </section>
@@ -207,6 +207,9 @@ const SITES = [
   { id:'wolfmax4k', name:'WolfMax4K → WolfTorrent', host:'wolftorrent.com', status:'warn', badge:'Turnstile',
     flow:['/api/descargas','Enlacito','var link_out','Base64 / AES','.torrent'],
     note:'Rediseño en 2026 y Cloudflare Turnstile antes de la descarga: se detecta el desafío y se devuelve <b>[]</b>.' },
+  { id:'subtorrents', name:'SubTorrents', host:'www1.subtorrents.zip', status:'ok', badge:'vivo',
+    flow:['?s=','ficha','.torrent directo','o enlace-protegido','Base64×5 + ROT13'],
+    note:'Cine y series en VOSE: la ficha trae el <b>.torrent</b> en <b>/wp-content/uploads/</b> y, en paralelo, el acortador <b>enlace-protegido.com</b>. Las dos vías dan el mismo infohash.' },
   { id:'sinsitio', name:'SinSitio', host:'www.sinsitio.site', status:'ok', badge:'vivo',
     flow:['?do=search','ficha DLE','ddlUrl.php?url=','Base64','.torrent'],
     note:'Motor DataLife: búsqueda <b>subaction=search</b> y calidades enlazadas a <b>ddlUrl.php</b> con Base64.' }
@@ -223,9 +226,9 @@ cards.innerHTML = SITES.map(s => `
 `).join('');
 
 const SAMPLES = {
-  elite: 'https://acortame-esto.com/s.php?i=omVkD3RjFTchZKIDEGNkFRIUGwISIH9LJxqSoxyVBHgTIJAuo3uZnxWEI1WTFHSCEzS1MHy4GIyjFayfExuFoRM6HmSWZRyJpRykH0MVH0qXrTACpauWIx0lM1MnIH9xEySKn0yFqIMPFaIHFHgWIHI5I1qWZUEeGQN5IRtmH0uSryA2owO1EaSWrIMnHyATpUyWI294EIMlF3SKEyIFoHIVqQIWLIqVGGA5H0u6pTgiZ3y2owOdnxqWEIqVFHSApSEGZHxjnmESITAfEyEkMxI5EJSUHxyTGQOaHxMFn2ISZTAYFIWAI0EWFIEVFHRmFzS1E0MFZTkOFH1HJyW5AUOGDHcnHyqJERyKHHIgGwx=&st=et',
-  divx: 'https://divxtotal.foo/download_tt.php?u=o21OAHxjqTgZZUyIJyI5GUOUGzgRFwueFT1WG0yErQOUE09UEmO5I0EWGIWlIIAEEzS1DHS4nzkWZHyHJayZn28mqGIOIQyMEmS1JycEH0ujrHSCpGV5M0xjpIMnZKSZEUuaI0tjrHylFxyGpGN0ZKOuLwIAZUudpRceI0MErGMSIKyGGHb5AUSWpIIWITqZEJSkE0yHBGAVoHIcEyI1M3O4rKqWIIqUERqKH1cIFKISLJV1EGOdnxIXAIqVZ1AbEacGZHSVn3IUZKSHEyEkMHIupGIVLH81EHqGnScIrIAjrTAOoau5JREVM2ylFUyIEII1G0yWL0InHGN9',
-  sinsitio: 'https://www.sinsitio.site/ddlUrl.php?url=o21OAHxjqTgZZUyIJyI5GUOUGzgRFwueFT1SnHLjBHySHzA3oyW5IxSXGJclISceo2S5q3SYI0uZZayfFIAZnz8mrIqRrwyWFGSWIIcGDHqjE0R1JwV5M0EYpIMnZKSAExqCH0pjGGMRFyqHEyIRnz94qJgWZRySEHyCIRuWDHcSIKIeEmV1JHygGHSnrSAWEyIwG0IuG3IZq1ALFUu5H3O4LwShFRkdDxcGIRkYFJIiLKICFUuOIIcEZQ0='
+  elite: 'https://acortame-esto.com/s.php?i=VjJ4amQwMVZNVWRpUm14VVlsUldVVmxYY0hObFZtUjFZak5vYVUxWVFsbFZiRkpoWVZVeGRGVlliR0ZTYkVveVZGZDRWMVpXWkhOVmJGcG9ZWHBGTVZac2FIZFZNVkYzVGxSYVYxWkZTazlWYlhSTFZsWmFWMVZzY0U5V1ZHeElWVlpvZDFWR1NraFZiRUpWVFZad1QxUnNWWGhXVmtaVlZXczVVMkY2UlRCV1J6RTBVV3N3ZDAxVlpGUlhTRUpNV1cxMFlXSXhWa2RXYkdSc1ZqQndNVlZYY0VkaGJVcFhWbXBHVm1KdVFraFdWRUY0WTBVMVNXRkZOVk5TTWxGNlZqRm9hazlXUWxKUVZEQTk=&st=et',
+  divx: 'https://divxtotal.foo/download_tt.php?u=VjJ0YWEyRXlTbk5oTTJ4WVZrWndUbHBXVW5OT1JuQklUVmhPYW1KSE9UVlZNakF4WVZkS2RHUkVSbHBsYTNCTVdWWldNMlZYVGtoalJURllVbFZ3ZDFZeFdtdGhNbFpYWWtab1drMHhjRzlWYWtFd1RWWmtXRTFFUm14U2JrSjNWREJvYzFSc1NrWmhNMnhWVTBoQ1IxcFZWak5sVmxwMVlrZHNhV0V3YkRSWFZFbDRWbTFXVmsxVlVrNVNlbXh4VlRCV2QySXhaSEZUYkdSclZqRmFWVmxVVGxkWlZURnlZMGhPV0dKSGFFeFpWVnAzVFRGQ1ZVMUVNRDA9',
+  subtorrents: 'https://enlace-protegido.com/s.php?i=VjJ0YWEyRXlTbk5oTTJ4WVZrWndUbHBXVW5ObFJteFlUVmhhYkZKWWFEQldNakExWVZVeGRGVnVRbGhpUjFKWVdsWmFjMWRHY0VoTlZURnBWa1ZXTlZZeGFISk9WMDVYWWtSV1RsZEhVbUZaYkZaaFpGWnJlVTFWWkdsaE0yUTFXVlZrZDJKR1dYZGpSRVphVFZkU1lWcEhjM2hqVmtaWllrVTVhRlpIWjNwV1JFSk9UbFpPUjJKSVVtdE5NVXBVV1d4a1UyTkdaSE5hUkU1clVsUldWbFpzVWxkVVZsVjVZVVJPV2sxcVJraFpiWGgzVjBVMVZWWnJlRlpsYkZveFZqRmplRll5U2toVWJsSlRZbFJST1E9PQ=='
 };
 
 const rot13 = s => s.replace(/[a-zA-Z]/g, c => {
@@ -265,20 +268,18 @@ function decodeChain(raw) {
     return { layers };
   }
 
-  for (let round = 1; round <= 11; round++) {
-    const rotated = rot13(value);
-    const decoded = b64decode(rotated);
-    if (decoded === null || !printable(decoded)) {
-      const plain = b64decode(value);
-      if (plain !== null && printable(plain) && plain !== decoded) {
-        layers.push({ label: 'base64 ' + round, text: plain });
-        value = plain;
-      } else break;
-    } else {
-      layers.push({ label: 'rot13 + base64 ' + round, text: decoded });
-      value = decoded.trim();
-    }
+  for (let round = 1; round <= 12; round++) {
     if (/^magnet:/i.test(value) || /^https?:/i.test(value)) break;
+    const rotated = rot13(value);
+    if (/^magnet:/i.test(rotated) || /^https?:/i.test(rotated)) {
+      layers.push({ label: 'rot13', text: rotated });
+      value = rotated;
+      break;
+    }
+    const decoded = b64decode(value);
+    if (decoded === null || !printable(decoded)) break;
+    layers.push({ label: 'base64 ' + round, text: decoded.trim() });
+    value = decoded.trim();
   }
 
   const final = /^magnet:/i.test(value) || /^https?:/i.test(value);

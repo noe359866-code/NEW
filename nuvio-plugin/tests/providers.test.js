@@ -326,7 +326,7 @@ test('WolfMax4K: si aparece Turnstile devuelve lista vacía sin romper', async (
 
 test('red caída: cualquier provider devuelve [] sin lanzar', async () => {
   const fetchImpl = mockFetch([], { fallback: () => ({}) });
-  for (const id of ['dontorrent', 'mejortorrent', 'elitetorrent', 'divxtotal', 'sinsitio', 'wolfmax4k', 'torrentlandia']) {
+  for (const id of ['dontorrent', 'mejortorrent', 'elitetorrent', 'divxtotal', 'sinsitio', 'wolfmax4k', 'torrentlandia', 'subtorrents']) {
     const provider = loadProvider(id, { fetch: fetchImpl });
     const streams = await provider.getStreams('31199', 'movie', null, null);
     assert.equal(streams.length, 0, `${id} debe devolver [] cuando no hay red`);
@@ -352,4 +352,112 @@ test('resultados duplicados se deduplican por infohash', async () => {
   const streams = await provider.getStreams('550', 'movie', null, null);
   const hashes = streams.map((stream) => stream.infoHash);
   assert.equal(new Set(hashes).size, hashes.length);
+});
+
+/* ------------------------------------------------------------------ */
+/* SubTorrents (www1.subtorrents.zip) · capturado el 5-nov-2026       */
+/* ------------------------------------------------------------------ */
+
+const SUB_SHORT_MOVIE = 'VjJ0YWEyRXlTbk5oTTJ4WVZrWndUbHBXVW5ObFJteFlUVmhhYkZKWWFEQldNakExWVZVeGRGVnVRbGhpUjFKWVdsWmFjMWRHY0VoTlZURnBWa1ZXTlZZeGFISk9WMDVYWWtSV1RsZEhVbUZaYkZaaFpGWnJlVTFWWkdsaE0yUTFXVlZrZDJKR1dYZGpSRVphVFZkU1lWcEhjM2hqVmtaWllrVTVhRlpIWjNwV1JFSk9UbFpPUjJKSVVtdE5NVXBVV1d4a1UyTkdaSE5hUkU1clVsUldWbFpzVWxkVVZsVjVZVVJPV2sxcVJraFpiWGgzVjBVMVZWWnJlRlpsYkZveFZqRmplRll5U2toVWJsSlRZbFJST1E9PQ==';
+const SUB_TORRENT_URL = 'https://www1.subtorrents.zip/wp-content/uploads/2026/08/Toy-Story-559-(central).torrent';
+
+const SUB_SHORT_EP1 = 'VjJ0YWEyRXlTbk5oTTJ4WVZrWndUbHBXVW5ObFJteFlUVmhhYkZKWWFEQldNakExWVZVeGRGVnVRbGhpUjFKWVdsWmFjMWRHY0VoTlZURnBWa1ZXTlZZeGFISk9WMDVYWWtSV1RsZEhVbUZaYkZaaFpGWnJlVTFWWkdsaE0yUTFXVlZrZDJKR1dYZGpSRVphVFZkU1lWcEhjM2hqVmtaWllrVTVhRlpIWnpCV1JsWk9UbFpLZEZSdVVrOVhSMUp5VmpCV2QyTXhVbk5WYkVwT1ZsaG9WVmxWYUd0aGJVcFdWMjVXV0dKSFRYaFViRll3VmtVMVdFNVdjR2xXYkhCNlYxUkplRkl5U201UVZEQTk=';
+const SUB_EP1_URL = 'https://www1.subtorrents.zip/wp-content/uploads/2026/10/Reacher545-(central).torrent';
+const SUB_SHORT_EP2 = 'VjJ0YWEyRXlTbk5oTTJ4WVZrWndUbHBXVW5ObFJteFlUVmhhYkZKWWFEQldNakExWVZVeGRGVnVRbGhpUjFKWVdsWmFjMWRHY0VoTlZURnBWa1ZXTlZZeGFISk9WMDVYWWtSV1RsZEhVbUZaYkZaaFpGWnJlVTFWWkdsaE0yUTFXVlZrZDJKR1dYZGpSRVphVFZkU1lWcEhjM2hqVmtaWllrVTVhRlpIWnpCV1JsWk9UbFpLZEZSdVVrOVhSMUp5VmpCV2QyTXhVbk5WYkVwT1lUTm9WVmxWYUd0aGJVcFdWMjVXV0dKSFRYaFViRll3VmtVMVdFNVdjR2xXYkhCNlYxUkplRkl5U201UVZEQTk=';
+const SUB_EP2_URL = 'https://www1.subtorrents.zip/wp-content/uploads/2026/10/Reacher546-(central).torrent';
+
+const SUB_MOVIE_SEARCH = `
+<table class="tablapeliculas"><tbody>
+  <tr>
+    <td><img src="https://www1.subtorrents.zip/wp-content/themes/SubTorrent/css/images/idioma/2.png" alt="Idioma">
+      <a href="https://www1.subtorrents.zip/peliculas/toy-story-5/" title="Toy Story 5">Toy Story 5</a></td>
+    <td>14-08-2026</td>
+    <td></td>
+    <td>HQ-TS</td>
+  </tr>
+</tbody></table>`;
+
+const SUB_MOVIE_DETAIL = `
+<h1>Toy Story 5</h1>
+<ul class="ficha">
+  <li>Calidad <span>HQ-TS</span></li>
+  <li>Audio <span>Ac3</span></li>
+  <li>Idioma Inglés <img src="https://www1.subtorrents.zip/wp-content/themes/SubTorrent/css/images/idioma/2.png"></li>
+</ul>
+<p><a href="https://enlace-protegido.com/s.php?i=${SUB_SHORT_MOVIE}">Opcion 1: Descargar Torrent</a></p>
+<p><a href="${SUB_TORRENT_URL}">Opcion 2: Descargar Torrent</a></p>
+<p>Año 2026 · Tamaño 1,4 GB</p>`;
+
+const SUB_SERIES_SEARCH = `
+<table class="tablaseries"><tbody>
+  <tr>
+    <td><img src="https://www1.subtorrents.zip/wp-content/themes/SubTorrent/css/images/idioma/2.png" alt="Idioma">
+      <a href="https://www1.subtorrents.zip/series/reacher/" title="Reacher">Reacher</a></td>
+    <td>2022</td><td>Accion</td><td>720p</td>
+  </tr>
+</tbody></table>`;
+
+const SUB_SERIES_DETAIL = `
+<h1>Reacher</h1>
+<h3>Temporada 4</h3>
+<table><tbody>
+  <tr>
+    <td><img src="https://www1.subtorrents.zip/wp-content/themes/SubTorrent/css/images/idioma/2.png">
+      <a href="https://enlace-protegido.com/s.php?i=${SUB_SHORT_EP1}" title="Reacher 4x1">Reacher 4x1</a></td>
+    <td><a href="https://enlace-protegido.com/s.php?i=${SUB_SHORT_EP1}"><img src="/icono_bittorrent.png"></a></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="https://www1.subtorrents.zip/wp-content/themes/SubTorrent/css/images/idioma/2.png">
+      <a href="https://enlace-protegido.com/s.php?i=${SUB_SHORT_EP2}" title="Reacher 4x2">Reacher 4x2</a></td>
+    <td><a href="https://enlace-protegido.com/s.php?i=${SUB_SHORT_EP2}"><img src="/icono_bittorrent.png"></a></td>
+    <td></td>
+  </tr>
+</tbody></table>`;
+
+test('SubTorrents: .torrent directo y acortador enlace-protegido dan la misma fuente', async () => {
+  const torrent = makeTorrent('Toy.Story.5.HQ-TS.mkv', 1400000000);
+  const fetchImpl = mockFetch([
+    ['api.themoviedb.org/3/movie/1084244', tmdbMovie('1084244', 'Toy Story 5', '2026')],
+    ['subtorrents.zip/peliculas-subtituladas/?s=', SUB_MOVIE_SEARCH],
+    ['subtorrents.zip/peliculas/toy-story-5/', SUB_MOVIE_DETAIL],
+    [SUB_TORRENT_URL, { __binary: true, bytes: torrent.bytes }]
+  ]);
+
+  const provider = loadProvider('subtorrents', { fetch: fetchImpl });
+  const streams = await provider.getStreams('1084244', 'movie', null, null);
+
+  assert.equal(streams.length, 1, 'las dos vías deben deduplicarse por infohash');
+  assert.equal(streams[0].infoHash, torrent.infoHash);
+  assert.equal(streams[0].provider, 'subtorrents');
+  assert.match(streams[0].language, /VOSE/);
+});
+
+test('SubTorrents: serie elige el episodio 4x2 y decodifica el acortador', async () => {
+  const ep2 = makeTorrent('Reacher.S04E02.720p.mkv', 1300000000);
+  const fetchImpl = mockFetch([
+    ['api.themoviedb.org/3/tv/108978', tmdbTv('108978', 'Reacher', '2022')],
+    ['subtorrents.zip/series-2/?s=', SUB_SERIES_SEARCH],
+    ['subtorrents.zip/series/reacher/', SUB_SERIES_DETAIL],
+    [SUB_EP2_URL, { __binary: true, bytes: ep2.bytes }],
+    [SUB_EP1_URL, { __binary: true, bytes: makeTorrent('Reacher.S04E01.720p.mkv', 1200000000).bytes }]
+  ]);
+
+  const provider = loadProvider('subtorrents', { fetch: fetchImpl });
+  const streams = await provider.getStreams('108978', 'tv', 4, 2);
+
+  assert.equal(streams.length, 1);
+  assert.equal(streams[0].infoHash, ep2.infoHash);
+  assert.match(streams[0].title, /S04E02|4x2/);
+  assert.ok(!fetchImpl.calls.some((call) => call.url === SUB_EP1_URL), 'no debe descargar el episodio 1');
+});
+
+test('SubTorrents: un término que no coincide no devuelve nada', async () => {
+  const fetchImpl = mockFetch([
+    ['api.themoviedb.org/3/movie/1084244', tmdbMovie('1084244', 'Otra Película', '2026')],
+    ['subtorrents.zip/peliculas-subtituladas/?s=', SUB_MOVIE_SEARCH]
+  ]);
+  const provider = loadProvider('subtorrents', { fetch: fetchImpl });
+  const streams = await provider.getStreams('1084244', 'movie', null, null);
+  assert.equal(streams.length, 0);
 });
