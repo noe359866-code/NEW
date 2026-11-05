@@ -1,24 +1,21 @@
 {
-  "name": "nebula-tv",
+  "name": "nebula-es-nuvio-plugin",
+  "version": "1.1.0",
   "private": true,
-  "version": "1.2.0",
-  "type": "module",
-  "description": "Nébula — reproductor móvil con estética Apple TV, Cinemeta y addons de Stremio",
+  "type": "commonjs",
+  "description": "Scrapers para Nuvio: DonTorrent, MejorTorrent, EliteTorrent, DivxTotal, TorrentLandia, WolfMax4K, SinSitio, SubTorrents, TorrentGalaxy, GranTorrent y Cinecalidad.",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview --host 0.0.0.0",
-    "typecheck": "tsc --noEmit"
+    "build": "node build.js",
+    "test": "node --test tests/*.test.js",
+    "check": "node build.js && node --test tests/*.test.js",
+    "live": "node tools/live-check.js",
+    "probe": "node tools/probe.js"
   },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+  "engines": {
+    "node": ">=18"
   },
+  "license": "MIT",
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.3",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.10"
+    "crypto-js": "^4.2.0"
   }
 }

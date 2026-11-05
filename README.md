@@ -1,144 +1,206 @@
-# Nébula ✦
+# Nuvio · Scrapers en español
 
-Cliente **móvil** de cine y series con estética inspirada en **Apple TV**, construido sobre el
-ecosistema de **Stremio**. Viene con **Cinemeta ya activado** y acepta cualquier addon que hable el
-protocolo de Stremio.
+Repositorio de plugins para [Nuvio](https://nuvio.wiki/integrations/plugins) con once scrapers
+escritos a mano a partir de la inspección real de cada sitio (noviembre de 2026), no de recetas
+antiguas de blogs.
 
-> Solo móvil: la interfaz está diseñada para pantallas de teléfono (retrato). En escritorio se
-> muestra dentro de un marco de teléfono como referencia de diseño.
-
----
-
-## Qué incluye
-
-- **Apple TV vibes**: ambiente difuminado que cambia según el título, vidrio esmerilado, carteles
-  redondeados, pestañas tipo tvOS, tipografía del sistema (SF Pro), animaciones de foco y hoja de
-  detalle a pantalla completa.
-- **Cinemeta integrado**: catálogos de películas y series populares, géneros, búsqueda y metadatos
-  completos (sinopsis, reparto, dirección, duración, nota IMDb, logo y fondo).
-- **Protocolo de addons de Stremio**: instala por URL (`manifest.json`), lee `resources` con
-  `types`/`idPrefixes`, consume `/catalog`, `/meta` y `/stream`, agrega resultados de todos los
-  addons activos y los etiqueta por addon.
-- **Fuentes agregadas** con detección de calidad (4K · 1080p · 720p · SD · CAM), seeders, tamaño,
-  enlaces `http`, `magnet`, `infoHash`, `ytId` y `externalUrl`; copia el magnet con un toque.
-- **Series**: temporadas agrupadas, lista de episodios con sinopsis y salto directo a fuentes del
-  episodio (`tt123:1:2`).
-- **Mi lista** local, **"Continuar viendo"** con lo último que abriste, **búsqueda global** con
-  historial, **exploración por género** y **"Cargar más"** en catálogos paginables.
-- **Gestor de addons con salud**: latencia real de cada manifest, aviso de addons caídos o lentos,
-  instalación masiva (varias URLs a la vez) y soporte de enlaces `stremio://`.
-- **PWA instalable y offline**: service worker propio (mismo origen, sin CDN) que cachea el shell,
-  las respuestas de los addons y las imágenes; la app abre y navega sin red.
-- **Sin servidores propios ni terceros**: cero backend, cero analítica, cero fuentes web, cero
-  recursos de CDN. Cinemeta se puede apuntar a tu propia instancia y hay modo "solo datos
-  guardados" que corta toda petición externa.
-- Enlaces profundos: `?addon=https://…/manifest.json` instala un addon al abrir la app.
-
-## Plugin de Nuvio (extra)
-
-La carpeta [`nuvio-plugin/`](nuvio-plugin/README.md) contiene un repositorio de plugins para
-[Nuvio](https://nuvio.wiki/integrations/plugins) con once scrapers (DonTorrent, MejorTorrent,
-EliteTorrent, DivxTotal, TorrentLandia, WolfMax4K, SinSitio, SubTorrents, **TorrentGalaxy**,
-**GranTorrent** y **Cinecalidad**), escritos tras inspeccionar cada sitio en noviembre de 2026. Cada
-provider es un único archivo CommonJS sin dependencias; se compila con `npm run build` dentro de esa
-carpeta y se instala en Nuvio pegando la URL de su `manifest.json`.
-
-- Dossier de investigación: [`nuvio-plugin/docs/research.md`](nuvio-plugin/docs/research.md)
-- Panel interactivo (estado de los sitios + decodificador de acortadores):
-  [`nuvio-plugin/docs/index.html`](nuvio-plugin/docs/index.html)
-
-## Cómo funciona
+Cada scraper es un **único archivo CommonJS** autocontenido, sin dependencias externas: dentro se
+inyecta un núcleo común (texto, HTTP, SHA-1/SHA-256, bencode, magnet, TMDB, descifrado de
+acortadores) y el provider solo añade la lógica del sitio.
 
 ```
-Navegador (móvil)
-   └── Nébula (React + Vite)
-         ├── Cinemeta  https://v3-cinemeta.strem.io   → catálogos + metadatos
-         └── Addons    manifest.json / catalog / meta / stream  → fuentes
+manifest.json                # índice que Nuvio descarga cada 6 h
+providers/<id>.js            # bundles listos para producción (1 archivo por sitio)
+src/core/*.js                # núcleo compartido (00-util … 85-torrentlink)
+src/providers/<id>.js        # fuente delgada de cada sitio (marcador /*__CORE__*/)
+build.js                     # concatenación + validación del manifiesto
+tests/                       # 52 pruebas con fixtures HTML reales y red simulada
+tools/live-check.js          # prueba contra los sitios reales (necesita red)
+tools/probe.js               # sondeo de una URL: Cloudflare + magnet/.torrent/enlaces
+docs/                        # dossier de investigación + panel interactivo
 ```
 
-Todo se resuelve en el cliente: no hay backend ni base de datos. Tus addons y tu lista viven en
-`localStorage`.
+## Instalación en Nuvio
 
-## Sin servidores externos
+1. Publica este repositorio en GitHub. El `manifest.json` vive en la raíz.
+2. Nuvio → **Ajustes → Contenido y descubrimiento → Plugins → Añadir repositorio**.
+3. Pega la URL del `manifest.json`:
+   `https://raw.githubusercontent.com/<usuario>/<repo>/main/manifest.json`
+4. Activa los scrapers que quieras. Nuvio solo permite instalar plugins por sideload; cada uno se
+   ejecuta aislado en QuickJS, sin acceso a Node, `Buffer` ni almacenamiento.
 
-Nébula es una **app estática**: no hay backend de Nébula, ni cuentas, ni analítica, ni llamadas a
-CDN. Todo lo que necesita para arrancar (HTML, JS, CSS, iconos SVG, tipografía del sistema) viaja
-con la app y se guarda en el dispositivo gracias al service worker.
+## Los once sitios
 
-Tres controles en **Addons → Datos y privacidad**:
+| id | Sitio | Dominio comprobado (nov 2026) | Cómo se obtiene la fuente |
+|----|-------|-------------------------------|---------------------------|
+| `dontorrent` | DonTorrent | `dontorrent.tips` | `POST /buscar` → ficha → `a.protected-download` → **proof-of-work SHA-256** (`/api_validate_pow.php`) → `.torrent` → infohash → magnet |
+| `mejortorrent` | MejorTorrent | `www47.mejortorrent.eu` | Mismo software que DonTorrent (mismo PoW y mismas rutas) |
+| `elitetorrent` | EliteTorrent | `www.elitetorrent.com` | `GET /?s=` → `acortame-esto.com/s.php?i=…` → Base64 ×N + ROT13 → `.torrent` o magnet |
+| `divxtotal` | DivxTotal | `divxtotal.foo` | `GET /?s=` → ficha → `download_tt.php?u=<base64(URL .torrent)>` (y variante `short-info.link`) |
+| `torrentlandia` | TorrentLandia | sin dominio activo | Se envía **desactivado**; acepta un `baseUrl` manual si el sitio reaparece |
+| `wolfmax4k` | WolfMax4K → WolfTorrent | `wolftorrent.com` | `/api/descargas` → Enlacito → `var link_out` (Base64 o AES-CBC) → `.torrent`. **Cloudflare Turnstile** desde oct-2026 |
+| `sinsitio` | SinSitio | `www.sinsitio.site` | DLE `?do=search` → ficha → `ddlUrl.php?url=<base64>` → `.torrent` |
+| `subtorrents` | SubTorrents | `www1.subtorrents.zip` | `?s=` → ficha → `.torrent` directo o `enlace-protegido.com/s.php?i=` (Base64 ×5 + ROT13); series por episodio `4x1` |
+| `torrentgalaxy` | TorrentGalaxy | `en.torrentgalaxy-official.is` | `/movies?keyword=` → `/movies/<slug>-<año>` → tabla 🧲 con **magnet por release** (calidad, tamaño, seeders); respaldo VidSrc con el `tmdbId`. Acepta `cfCookie`/`userAgent` |
+| `grantorrent` | GranTorrent | `grantorrent.fyi` | `?s=` → `/peliculas/<slug>/` o `/episodios/<slug>-<n>x<m>/` → tabla «Obtener torrent / Descarga» → `/enlaces/<code>/` → host de ficheros («Espere por favor») → `.torrent` → infohash. Acepta `cfCookie`/`userAgent` |
+| `cinecalidad` | Cinecalidad | `www.cinecalidad.am` | `?s=` → `/ver-pelicula/<slug>/` o `/ver-el-episodio/<slug>-<n>x<m>/` → magnets directos y `acortalink.net/s.php?i=<Base64>`; los hosts Mega/1fichier se descartan por no ser reproducibles |
 
-| Control | Qué hace |
-| --- | --- |
-| **Solo datos guardados** | Bloquea cualquier petición de red. La app usa únicamente lo que ya está en caché local. |
-| **Caché local** | Catálogos y metadatos se guardan 7 días en el dispositivo (hasta 80 respuestas, 250 KB por respuesta). |
-| **Servidor de Cinemeta** | Por defecto el público de Stremio; puedes apuntarlo a tu instancia autoalojada. |
+Todos los providers comprueban varios dominios en orden y se quedan con el primero que responde
+(menos TorrentLandia, que no tiene ninguno vivo). GranTorrent rota de dominio a menudo
+(`.fyi`, `.zip`, `.lol`, `.wf`, `.bz`, `.si`, `.re`, `.ch`) y Cinecalidad arrastra su histórico
+(`.am`, `.org`, `.ro`, `.is`): ambos aceptan además un `baseUrl` manual.
 
-Y para que el servidor de la app también sea tuyo:
+## Qué devuelve cada fuente
+
+Objetos de stream que Nuvio entiende:
+
+```js
+{
+  name: 'DonTorrent',
+  title: 'Reacher · T1E2 · 1080p',
+  url: 'magnet:?xt=urn:btih:<sha1(info)>',
+  quality: '1080p',           // normalizada a 2160p/1080p/720p/480p/SD
+  size: '1.35 GB',
+  language: 'Castellano',
+  provider: 'dontorrent',
+  type: 'torrent',
+  infoHash: '…',
+  headers: { Referer: 'https://dontorrent.tips/pelicula/…' }
+}
+```
+
+Los `.torrent` se descargan en memoria, se parsean con bencode y se convierten en magnet con el
+**infohash real** (SHA-1 del diccionario `info`), así que funcionan con cualquier cliente y no
+dependen de que el enlace siga vivo. Los ficheros descargados nunca superan el límite de 1 MiB que
+impone Nuvio; si el `.torrent` es mayor, se descarta.
+
+Idioma: se detecta de las banderas/etiquetas de cada ficha (Castellano, Latino, VOSE, VO) y se
+descarta el audio original en inglés cuando el sitio lo distingue. EliteTorrent tiene un ajuste para
+incluir o no VOSE.
+
+## Ajustes por provider
+
+Todos exponen `onSettings()` (`hasSettings: true` en el manifiesto) con:
+
+- `maxResults`: número máximo de fuentes (4–12) — todos.
+- `includeVose`: incluir inglés subtitulado — EliteTorrent.
+- `baseUrl`: dominio manual — TorrentLandia, GranTorrent y Cinecalidad.
+- `preferredLanguage`: `any` / `castellano` / `latino` — GranTorrent.
+- `includeVidsrc`: reproductor HTTP de respaldo cuando no hay magnets — TorrentGalaxy.
+- `cfCookie`: cookie `cf_clearance` (+ `__cf_bm`) copiada de tu navegador ya verificado — TorrentGalaxy y GranTorrent.
+- `userAgent`: User-Agent de ese mismo navegador — TorrentGalaxy y GranTorrent.
+
+### Qué hacer con Cloudflare
+
+TorrentGalaxy y GranTorrent se sirven detrás de Cloudflare. Un plugin de Nuvio no puede resolver el
+desafío «Just a moment…» (no hay navegador), así que **por defecto los dos devuelven `[]`** cuando el
+sitio lo pide. Si quieres que funcionen, pásales la sesión que tu navegador ya negoció:
+
+1. Abre el sitio en el navegador y supera la verificación (suele ser automático).
+2. DevTools → *Application/Storage → Cookies* → copia `cf_clearance` (y `__cf_bm` si está):
+   `cf_clearance=eyJ...; __cf_bm=0.abc...`
+3. Pega esa cadena en el ajuste **Cookie de Cloudflare** del provider. Copia también el
+   **User-Agent** exacto de ese navegador: Cloudflare liga la cookie al UA.
+4. Las cookies caducan (horas o días). Cuando vuelvan a salir vacíos los resultados, repite el paso 2.
+
+El plugin detecta el caso y escribe en el log `desafío de Cloudflare … (sin cfCookie)` o
+`(cookie caducada)` para que se distinga de «el sitio no tiene ese título».
+
+Los ajustes llegan como `SCRAPER_SETTINGS` (clave → valor en texto) y se leen con el helper
+`settings()` del núcleo, con validación de rangos y valores.
+
+## Construir y probar
 
 ```bash
-docker compose up -d --build   # http://localhost:8080
+npm run build      # regenera providers/*.js a partir de src/ y valida manifest.json
+npm test           # 52 pruebas: núcleo + providers con red simulada
+npm run check      # build + test
 ```
 
-El `Dockerfile` compila y sirve con nginx: no hay procesos ni servicios de terceros.
+Las pruebas usan fixtures HTML capturados de los sitios reales (incluidas las cadenas reales de SubTorrents) y cadenas de descifrado verificadas
+con Python contra el sitio en vivo (por ejemplo el infohash
+`6D6FE32F4A7540CFD698C387A9F91084F16C70E3` de un `.torrent` real de EliteTorrent). No hay llamadas
+de red: `fetch` está simulado.
 
-**El límite honesto**: una app no puede inventar contenido. Catálogos, metadatos, imágenes y
-fuentes vienen necesariamente de los addons que configures. Si quieres que ningún tercero
-intervenga, autoaloja Cinemeta y tus addons en tu red, apunta ahí y activa el modo solo-local.
-
-## Desarrollo
+Sonda un sitio concreto y di qué ve el parser (útil cuando cambian el HTML o Cloudflare aprieta):
 
 ```bash
-npm install
-npm run dev      # http://localhost:3000
-npm run build    # typecheck + build de producción
-npm run preview  # sirve dist/
-docker compose up -d --build   # autoalojado en http://localhost:8080
+node tools/probe.js "https://grantorrent.fyi/peliculas/la-mangosta/"
+node tools/probe.js "https://en.torrentgalaxy-official.is/movies?keyword=mongoose" --full
+CF_COOKIE='cf_clearance=…; __cf_bm=…' UA='Mozilla/5.0 …' \
+  node tools/probe.js "https://grantorrent.fyi/?s=mangosta"
 ```
 
-Requisitos: Node 18+.
+Imprime estado, URL final, si es el desafío de Cloudflare, y los magnets, `.torrent`, infohashes y
+enlaces de descarga encontrados (`--save` guarda el HTML como fixture).
 
-## Estructura
+Contra los sitios reales:
 
-```
-src/
-  App.tsx                 navegación, pila de pantallas, addons, lista y toasts
-  lib/
-    addons.ts             protocolo Stremio: manifests, catálogos, meta, streams, búsqueda
-    api.ts                fetch con timeout/caché, URLs de imágenes, magnet, calidad
-    types.ts              tipos del protocolo
-    storage.ts, hooks.ts  persistencia y utilidades de React
-  components/
-    Home.tsx              hero + estanterías + géneros
-    Detail.tsx            ficha, reparto, temporadas y episodios
-    Streams.tsx           fuentes agregadas con filtros de calidad
-    SearchView.tsx        búsqueda multi-addon
-    LibraryView.tsx       Mi lista
-    AddonsView.tsx        instalar, activar, eliminar addons + sugeridos
-    GridView.tsx          "ver todo" con paginación
-    ui.tsx, icons.tsx     piezas de interfaz e iconografía
-  styles.css              sistema visual (tvOS)
+```bash
+TMDB_API_KEY=tu_clave node tools/live-check.js --site divxtotal --type movie --id 31199
+TMDB_API_KEY=tu_clave node tools/live-check.js --all --type tv --id 94997 --season 1 --episode 2
+# sin clave TMDB puedes simular el título:
+node tools/live-check.js --site elitetorrent --type movie --id 1 --title "Reacher" --year 2022
 ```
 
-## Añadir addons
+## Cómo funciona por dentro
 
-1. Abre la pestaña **Addons**.
-2. Pega la URL del addon (por ejemplo `https://torrentio.strem.fun/manifest.json`) o toca uno de
-   los **sugeridos** (Torrentio, OpenSubtitles v3, WatchHub).
-3. Actívalo o desactívalo con el interruptor; los addons integrados no se pueden eliminar.
-4. Toca **Salud** para medir la latencia de cada addon y detectar los que estén caídos.
+- **Núcleo** (`src/core/`): normalización de texto y títulos, HTML sin DOM, `request()` que nunca
+  lanza (12 s, reintento, cookies por host), SHA-1/SHA-256 en JS puro (QuickJS no trae `crypto`),
+  bencode, magnet, TMDB (API oficial con respaldo por scraping de la web), deduplicación/orden de
+  streams y decodificador de acortadores (hasta 10 capas de Base64 + ROT13).
+- **Build**: `build.js` concatena `src/core/*.js` en orden alfabético dentro de cada provider (en el
+  marcador `/*__CORE__*/`), envuelve todo en un IIFE con `'use strict'` y escribe
+  `providers/<id>.js` (~60–71 KB). También valida ids únicos, existencia de archivos y tamaño < 5 MB.
+- **Compatibilidad QuickJS**: sin ESM, sin `Buffer`, sin `XMLHttpRequest`; solo `fetch`, `URL`,
+  `TextDecoder`, `atob/btoa`, `Promise`, `setTimeout`. `require()` se evita por completo.
 
-Si un addon exige configuración previa (por ejemplo filtros de Torrentio), usa la URL que genera su
-página de configuración: ya incluye los ajustes.
+## Los tres nuevos (noviembre 2026)
 
-## Notas
+- **TorrentGalaxy** (`en.torrentgalaxy-official.is`): catálogo en inglés, sin cuenta y con magnets
+  abiertos. La ficha `/movies/<slug>-<año>` trae una tabla con un magnet por release (4K, 1080p,
+  720p, …) con tamaño y seeders: se entrega tal cual, sin descargar nada. El dominio vive detrás de
+  **Cloudflare**: cuando aparece la verificación («Just a moment…») el provider lo detecta y, si no
+  hay magnets, ofrece el reproductor **VidSrc** que monta la propia ficha con el `tmdbId`
+  (desactivable). El buscador acepta `?keyword=`, `?search=` y `/search/?q=`; el provider los prueba
+  en ese orden y, si no encuentra ficha, cae a `/movie/<tmdbId>` y `/tv/<tmdbId>`.
+- **GranTorrent** (`grantorrent.fyi`): castellano, latino y VOSE. Los enlaces «Obtener torrent» y
+  «Descarga» van a `/enlaces/<code>/`, que redirige a un host de ficheros (`filess.top` y similares)
+  con una pantalla «Espere por favor»; el núcleo sigue esa cadena (`resolveTorrentOrMagnet`), descarga
+  el `.torrent` y lo convierte en magnet con el infohash real. Las series se resuelven por la ficha
+  del episodio (`/episodios/<slug>-<n>x<m>/`), con la página de temporada como respaldo.
+- **Cinecalidad** (`www.cinecalidad.am`): latino (dual con audio original). Del bloque **DESCARGAR**
+  se aprovechan los magnets directos y los enlaces `uTorrent` protegidos con
+  `acortalink.net/s.php?i=<Base64>` — se decodifican con dos alfabetos (estándar y el propio del
+  acortador) y, si el resultado es una URL, se resuelve hasta el `.torrent`. Mega, Megaup, 1fichier y
+  Mediafire se descartan: son ficheros que Nuvio no puede reproducir. Los reproductores online
+  (`#playeroptionsul li[data-option]`) quedan fuera a propósito: sus embeds van cifrados y con captcha.
 
-- Algunos addons no envían cabeceras CORS; en ese caso Nébula muestra el error y puedes probar con
-  otro addon o abrir su enlace directamente.
-- Los `magnet` se copian al portapapeles porque un navegador móvil no puede abrirlos; pégalos en tu
-  cliente de torrents.
-- **Nébula no aloja ni distribuye contenido.** Los enlaces provienen de los addons que tú decides
-  activar. Respeta las leyes de tu país.
+## Limitaciones honestas
 
-## Licencia
+- **Cloudflare Turnstile** (WolfTorrent desde octubre de 2026) no se puede resolver desde un plugin:
+  no hay navegador ni cookies de sesión válidas. El provider detecta el desafío, registra el motivo y
+  devuelve `[]` en vez de fallar. Si el sitio lo retira, vuelve a funcionar sin cambios.
+- **Cloudflare** es el límite real de TorrentGalaxy y GranTorrent: el plugin no puede resolver el
+  desafío, solo reutilizar tu sesión (`cfCookie` + `userAgent`). Sin ella devuelve `[]` —nunca una
+  excepción— y lo registra en el log. Los parsers se validaron con fixtures construidos a partir del
+  HTML servido a navegadores reales (búsqueda, fichas, tablas de enlaces y página del host);
+  `tools/probe.js` permite revalidarlos contra el sitio en vivo en cuanto haya red.
+- **TorrentLandia** no tiene dominio operativo: `torrentlandia.site` no resuelve y ningún TLD alternativo
+  responde. Se entrega desactivado y con `baseUrl` configurable, pero su parser no se pudo validar
+  contra HTML real.
+- **DonTorrent/MejorTorrent** dependen de un PoW con dificultad 3 y de la sesión que abre la ficha: el
+  proveedor mantiene su propio tarro de cookies, pero un cambio en el endpoint o un bloqueo por IP
+  dejará el provider sin resultados (siempre devolviendo `[]`, nunca un error).
+- Los dominios cambian cada pocas semanas. Los providers prueban una lista corta de hosts conocidos;
+  para arreglarlo basta editar el array de hosts y volver a ejecutar `npm run build`.
+- Un plugin de Nuvio solo aporta fuentes: no descarga, no reproduce y no aloja contenido. Úsalo solo
+  donde sea legal hacerlo.
 
-MIT.
+## Documentación adicional
+
+- `docs/research.md`: dossier por sitio (endpoints, selectores, cadenas de descifrado, fechas de
+  comprobación y callejones sin salida), incluidos SubTorrents, TorrentGalaxy, GranTorrent y
+  Cinecalidad.
+- `docs/index.html`: panel interactivo con el estado de los siete sitios, la tubería de descarga y un
+  decodificador de acortadores que funciona sin conexión.
