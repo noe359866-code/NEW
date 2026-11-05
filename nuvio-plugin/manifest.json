@@ -1,7 +1,7 @@
 {
   "name": "Nébula ES",
-  "version": "1.0.0",
-  "description": "Scrapers en español para Nuvio: DonTorrent, MejorTorrent, EliteTorrent, DivxTotal, TorrentLandia, WolfMax4K, SinSitio y SubTorrents.",
+  "version": "1.1.0",
+  "description": "Scrapers para Nuvio: DonTorrent, MejorTorrent, EliteTorrent, DivxTotal, TorrentLandia, WolfMax4K, SinSitio, SubTorrents, TorrentGalaxy, GranTorrent y Cinecalidad.",
   "author": "Nébula",
   "scrapers": [
     {
@@ -162,6 +162,69 @@
         "tv"
       ],
       "filename": "providers/subtorrents.js",
+      "enabled": true,
+      "hasSettings": true,
+      "contentLanguage": [
+        "es"
+      ],
+      "formats": [
+        "torrent"
+      ],
+      "logo": ""
+    },
+    {
+      "id": "torrentgalaxy",
+      "name": "TorrentGalaxy",
+      "description": "TorrentGalaxy (en.torrentgalaxy-official.is): catálogo en inglés con magnets abiertos por release (4K/1080p/720p) y reproductor VidSrc de respaldo. Cloudflare puede pedir verificación.",
+      "version": "1.0.0",
+      "author": "Nébula",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/torrentgalaxy.js",
+      "enabled": true,
+      "hasSettings": true,
+      "contentLanguage": [
+        "en"
+      ],
+      "formats": [
+        "torrent"
+      ],
+      "logo": ""
+    },
+    {
+      "id": "grantorrent",
+      "name": "GranTorrent",
+      "description": "GranTorrent (grantorrent.fyi): castellano, latino y VOSE. Enlaces /enlaces/<code>/ → host de ficheros → .torrent → infohash real. Dominio rotatorio.",
+      "version": "1.0.0",
+      "author": "Nébula",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/grantorrent.js",
+      "enabled": true,
+      "hasSettings": true,
+      "contentLanguage": [
+        "es"
+      ],
+      "formats": [
+        "torrent"
+      ],
+      "logo": ""
+    },
+    {
+      "id": "cinecalidad",
+      "name": "Cinecalidad",
+      "description": "Cinecalidad (www.cinecalidad.am): cine y series en latino. Magnets directos y enlaces uTorrent protegidos con acortalink (Base64).",
+      "version": "1.0.0",
+      "author": "Nébula",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/cinecalidad.js",
       "enabled": true,
       "hasSettings": true,
       "contentLanguage": [

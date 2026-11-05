@@ -105,7 +105,9 @@ function buildCoreBundle(core) {
     'parseTorrent', 'buildMagnet', 'infoHashFromMagnet', 'magnetName',
     'resolveMedia', 'searchQueries', 'cleanContentId',
     'makeStream', 'finalizeStreams', 'torrentToMagnet', 'mapLimit', 'languageLabel',
-    'decodeShortLink', 'decodeShortLinkOrUrl', 'createDonEngine'
+    'decodeShortLink', 'decodeShortLinkOrUrl', 'createDonEngine',
+    'looksLikeTorrentBytes', 'findDownloadLinks', 'findInfoHashes', 'mimeLooksTorrent',
+    'resolveTorrentOrMagnet', 'originOf'
   ];
   const source = [
     "'use strict';",

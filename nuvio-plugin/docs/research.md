@@ -6,7 +6,8 @@ Python antes de portar la lógica a JavaScript.
 
 Leyenda: ✅ comprobado en vivo · ⚠️ parcial / no verificable · ❌ sin servicio
 
-Ocho sitios: los siete del encargo original más **SubTorrents**, añadido después.
+Once sitios: los siete del encargo original, **SubTorrents**, y los tres de la segunda tanda
+(**TorrentGalaxy**, **GranTorrent** y **Cinecalidad**).
 
 ---
 
@@ -142,3 +143,83 @@ Ocho sitios: los siete del encargo original más **SubTorrents**, añadido despu
 - Como la ficha trae el `.torrent` directo y el acortador a la vez, el provider resuelve ambos y
   deduplica por infohash: es una prueba real de que la deduplicación funciona.
 - Otros hosts probados: `subtorrents.zip` y `www2.subtorrents.zip` (mismo sitio, por si cae el `www1`).
+
+---
+
+## 9. TorrentGalaxy — `en.torrentgalaxy-official.is` ⚠️ Cloudflare
+
+- Qué es: la marca «TorrentGalaxy» reabierta como catálogo de películas y series en inglés. El
+  índice original (`torrentgalaxy.to`) cerró en 2025; este dominio se presenta como el oficial y es
+  el que llega en las listas de proxies de 2026. `torrentgalaxy-official.com` hace **301** a `.is`.
+- Estructura: navegación `Browse` → `/home`, `/movies`, `/series`; el listado se sirve como tarjetas
+  de TMDB con póster, nota, año y título; paginación `/movies?page=N`.
+- Ficha: `/movies/<slug>-<año>` (p. ej. `/movies/pain-hustlers-2023`) y `/series/<slug>-<año>`.
+  En la ficha conviven dos bloques:
+  1. `## 🔥Popular` (recomendados, ruido para el scraper),
+  2. **`🧲 Torrents N`** con la tabla real: por fila, nombre del release, calidad (2160p, 1080p,
+     720p), tamaño, seeders y un enlace 🧲 (`magnet:?xt=urn:btih:…`). Muchas fichas enlazan también
+     el `.torrent` del release.
+  3. Un reproductor **«▶ Stream VidSrc»** montado con el id de TMDB (`/embed/movie/<id>`,
+     `/embed/tv/<id>/<temporada>/<episodio>`).
+- Búsqueda: caja global con `?search=<término>` y ruta `/search/?q=<término>`; los listados aceptan
+  además `?keyword=<término>` (es la forma que usan los enlaces de «Browse by year»:
+  `/movies?keyword=2023`). `robots.txt` desautoriza `/?search=`, `/?quality=` y compañía, así que el
+  provider prefiere `/movies?keyword=` y `/series?keyword=`.
+- **Cloudflare**: el HTML servido a clientes automatizados es la página «Just a moment…» /
+  «Performing security verification»; `robots.txt` responde `Disallow: /`. Comprobado también con
+  proxys de lectura (r.jina.ai devuelve el desafío) y con `api.microlink.io` («uses antibot
+  protection»). El provider detecta ese HTML en las primeras 4 KB y devuelve `[]` sin lanzar; los
+  selectores se validaron sobre la versión renderizada (árbol de accesibilidad), no sobre el HTML
+  crudo.
+- Callejones sin salida: `/api/torrents`, `/api/movies`, `/api/search` y `/_next/static/...` no
+  existen: cualquier ruta desconocida devuelve la portada de «Popular» (soft-404), así que el parser
+  nunca se apoya en códigos de estado.
+
+## 10. GranTorrent — `grantorrent.fyi` ✅
+
+- WordPress con tema **DooPlay/PichoTorrent**. Marca «GranTorrent»; dominios históricos
+  `grantorrent.zip`, `gran-torrent.net`, `.lol`, `.wf`, `.bz`, `.si`, `.re`, `.ch` (rotan).
+- Búsqueda: `GET /?s=<término>`; las tarjetas traen póster (`image.tmdb.org`), nota, año y el título
+  dentro de `<h3>`/ancla larga. Los listados usan `/peliculas/` y `/series/`.
+- Series: `/series/<slug>/` → `/temporada/<slug>-temporada-<n>/` (ficha de temporada con la lista
+  `2 - 1`, `2 - 2`, …) → `/episodios/<slug>-<n>x<m>/` (ficha real del episodio).
+- Tabla de enlaces de una ficha (película o episodio): columnas
+  `Opciones | Calidad | Idioma | Tamaño | Clicks`. Dos familias de fila:
+  - icono `s2.googleusercontent.com/s2/favicons?domain=utorrent.com` + texto «Obtener torrent»,
+  - icono de un host externo (`free.7hd.club`, …) + texto «Descarga».
+  Calidades vistas: `4K UHDRip`, `BluRay-1080p`, `BluRay-720p`, `BluRay-Rip`, `HD 1080p`.
+  Idiomas: `Castellano`, `Español Latino`.
+- Descarga: ambas filas apuntan a `/enlaces/<code>/` (10 caracteres), que hace **302** a un host de
+  ficheros — comprobado con `daopocb6lt` → `filess.top/es/QCNuXssbOO9lazZ/file` y con `mczlwfzdtb`
+  → `filess.top/es/fA4naEokrsVfw0G/file`. La página del host muestra el nombre del `.torrent`
+  (`The-Mongoose-(BluRay-720p)-(dqLY).torrent`, 94,05 KB), un contador «Espere por favor 3Seconds» y
+  el botón de descarga. El provider sigue la cadena con `resolveTorrentOrMagnet` (máx. 2 saltos),
+  descarga el `.torrent`, lo parsea con bencode y entrega el magnet con su infohash real.
+- **Cloudflare** intermitente: la búsqueda llegó a responder con el desafío mientras las fichas se
+  servían completas. Se detecta y se devuelve `[]`.
+- Callejones sin salida: los «Descarga» de host externo (Mega/1fichier) no son torrents; se prueban
+  igual y, si no dan un `.torrent`, se descartan solos.
+
+## 11. Cinecalidad — `www.cinecalidad.am` ✅
+
+- WordPress con reproductor propio (DooPlay). Dominios: `.am` (actual), `.org`, `.ro`, `.is`.
+- Búsqueda: `GET /?s=<término>`; tarjetas `.ml-item` con póster de TMDB, título limpio en
+  `.in_title`, tipo (`Película`/`Series`) y calidad (`Dual 1080p`, `Full HD`).
+- Rutas: `/ver-pelicula/<slug>/`, `/ver-serie/<slug>/` (ficha de serie con la lista
+  `S1-E1 … S1-E5` → `/ver-el-episodio/<slug>-<n>x<m>/`) y `/ver-el-episodio/<slug>-<n>x<m>/`.
+- Ficha de película: sinopsis + `Títulos`, `TMDB`, `Género`, `Audio: Latino e idioma original`,
+  `Calidad: Dual 1080p`, reparto. Debajo, dos bloques:
+  - **VER ONLINE**: `#playeroptionsul li[data-option]` con `Vimeos`/`Hlswish` (embeds cifrados y con
+    captcha → fuera del alcance del plugin),
+  - **DESCARGAR**: filas por idioma/calidad con **magnets directos**
+    (`magnet:?xt=urn:btih:cbbc40761a1fe12d94e70ddde1def7dc180b1cd8&dn=Trackers.S01E02…`) y enlaces
+    `uTorrent…` a `https://acortalink.net/s.php?i=<Base64>`; además `Mega`, `Megaup`, `1fichier`,
+    `Mediafire` con la forma `?download=<Base64>` (Base64 de un token de 16 bytes, no de una URL: no
+    se puede abrir sin navegador).
+- `acortalink.net`: el mismo tipo de acortador que usan EliteTorrent y DivxTotal, pero con su propio
+  alfabeto Base64 (dígitos, minúsculas, mayúsculas, `+`, `/`) y apertura por JS ofuscado
+  (`rot13(atob(linkacorta.substring(30)))`, según el bypass `acortalink` de FastForward). El provider
+  prueba primero Base64 estándar y después la traducción de alfabeto; si el resultado es una URL, un
+  `.torrent` o un magnet, esa es la fuente. Las muestras capturadas el 5-nov-2026 decodifican a
+  `Salted__…` (carga AES con contraseña), por eso existe la vía de respaldo.
+- Calidad/idioma: `Audio:` de la ficha → `Latino` por defecto; `Calidad:` → `Dual 1080p`, `Full HD`.

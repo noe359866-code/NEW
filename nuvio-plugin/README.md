@@ -1,6 +1,6 @@
 # Nuvio · Scrapers en español
 
-Repositorio de plugins para [Nuvio](https://nuvio.wiki/integrations/plugins) con ocho scrapers
+Repositorio de plugins para [Nuvio](https://nuvio.wiki/integrations/plugins) con once scrapers
 escritos a mano a partir de la inspección real de cada sitio (noviembre de 2026), no de recetas
 antiguas de blogs.
 
@@ -14,7 +14,7 @@ providers/<id>.js            # bundles listos para producción (1 archivo por si
 src/core/*.js                # núcleo compartido (00-util … 80-shortlink)
 src/providers/<id>.js        # fuente delgada de cada sitio (marcador /*__CORE__*/)
 build.js                     # concatenación + validación del manifiesto
-tests/                       # 32 pruebas con fixtures HTML reales y red simulada
+tests/                       # 49 pruebas con fixtures HTML reales y red simulada
 tools/live-check.js          # prueba contra los sitios reales (necesita red)
 docs/                        # dossier de investigación + panel interactivo
 ```
@@ -29,7 +29,7 @@ docs/                        # dossier de investigación + panel interactivo
 4. Activa los scrapers que quieras. Nuvio solo permite instalar plugins por sideload; cada uno se
    ejecuta aislado en QuickJS, sin acceso a Node, `Buffer` ni almacenamiento.
 
-## Los ocho sitios
+## Los once sitios
 
 | id | Sitio | Dominio comprobado (nov 2026) | Cómo se obtiene la fuente |
 |----|-------|-------------------------------|---------------------------|
@@ -41,9 +41,14 @@ docs/                        # dossier de investigación + panel interactivo
 | `wolfmax4k` | WolfMax4K → WolfTorrent | `wolftorrent.com` | `/api/descargas` → Enlacito → `var link_out` (Base64 o AES-CBC) → `.torrent`. **Cloudflare Turnstile** desde oct-2026 |
 | `sinsitio` | SinSitio | `www.sinsitio.site` | DLE `?do=search` → ficha → `ddlUrl.php?url=<base64>` → `.torrent` |
 | `subtorrents` | SubTorrents | `www1.subtorrents.zip` | `?s=` → ficha → `.torrent` directo o `enlace-protegido.com/s.php?i=` (Base64 ×5 + ROT13); series por episodio `4x1` |
+| `torrentgalaxy` | TorrentGalaxy | `en.torrentgalaxy-official.is` | `/movies?keyword=` → `/movies/<slug>-<año>` → tabla 🧲 con **magnet por release** (calidad, tamaño, seeders); respaldo VidSrc con el `tmdbId` |
+| `grantorrent` | GranTorrent | `grantorrent.fyi` | `?s=` → `/peliculas/<slug>/` o `/episodios/<slug>-<n>x<m>/` → tabla «Obtener torrent / Descarga» → `/enlaces/<code>/` → host de ficheros («Espere por favor») → `.torrent` → infohash |
+| `cinecalidad` | Cinecalidad | `www.cinecalidad.am` | `?s=` → `/ver-pelicula/<slug>/` o `/ver-el-episodio/<slug>-<n>x<m>/` → magnets directos y `acortalink.net/s.php?i=<Base64>`; los hosts Mega/1fichier se descartan por no ser reproducibles |
 
 Todos los providers comprueban varios dominios en orden y se quedan con el primero que responde
-(menos TorrentLandia, que no tiene ninguno vivo).
+(menos TorrentLandia, que no tiene ninguno vivo). GranTorrent rota de dominio a menudo
+(`.fyi`, `.zip`, `.lol`, `.wf`, `.bz`, `.si`, `.re`, `.ch`) y Cinecalidad arrastra su histórico
+(`.am`, `.org`, `.ro`, `.is`): ambos aceptan además un `baseUrl` manual.
 
 ## Qué devuelve cada fuente
 
@@ -79,7 +84,9 @@ Todos exponen `onSettings()` (`hasSettings: true` en el manifiesto) con:
 
 - `maxResults`: número máximo de fuentes (4–12) — todos.
 - `includeVose`: incluir inglés subtitulado — EliteTorrent.
-- `baseUrl`: dominio manual — TorrentLandia.
+- `baseUrl`: dominio manual — TorrentLandia, GranTorrent y Cinecalidad.
+- `preferredLanguage`: `any` / `castellano` / `latino` — GranTorrent.
+- `includeVidsrc`: reproductor HTTP de respaldo cuando no hay magnets — TorrentGalaxy.
 
 Los ajustes llegan como `SCRAPER_SETTINGS` (clave → valor en texto) y se leen con el helper
 `settings()` del núcleo, con validación de rangos y valores.
@@ -89,7 +96,7 @@ Los ajustes llegan como `SCRAPER_SETTINGS` (clave → valor en texto) y se leen 
 ```bash
 cd nuvio-plugin
 npm run build      # regenera providers/*.js a partir de src/ y valida manifest.json
-npm test           # 32 pruebas: núcleo + providers con red simulada
+npm test           # 49 pruebas: núcleo + providers con red simulada
 npm run check      # build + test
 ```
 
@@ -119,11 +126,36 @@ node tools/live-check.js --site elitetorrent --type movie --id 1 --title "Reache
 - **Compatibilidad QuickJS**: sin ESM, sin `Buffer`, sin `XMLHttpRequest`; solo `fetch`, `URL`,
   `TextDecoder`, `atob/btoa`, `Promise`, `setTimeout`. `require()` se evita por completo.
 
+## Los tres nuevos (noviembre 2026)
+
+- **TorrentGalaxy** (`en.torrentgalaxy-official.is`): catálogo en inglés, sin cuenta y con magnets
+  abiertos. La ficha `/movies/<slug>-<año>` trae una tabla con un magnet por release (4K, 1080p,
+  720p, …) con tamaño y seeders: se entrega tal cual, sin descargar nada. El dominio vive detrás de
+  **Cloudflare**: cuando aparece la verificación («Just a moment…») el provider lo detecta y, si no
+  hay magnets, ofrece el reproductor **VidSrc** que monta la propia ficha con el `tmdbId`
+  (desactivable). El buscador acepta `?keyword=`, `?search=` y `/search/?q=`; el provider los prueba
+  en ese orden y, si no encuentra ficha, cae a `/movie/<tmdbId>` y `/tv/<tmdbId>`.
+- **GranTorrent** (`grantorrent.fyi`): castellano, latino y VOSE. Los enlaces «Obtener torrent» y
+  «Descarga» van a `/enlaces/<code>/`, que redirige a un host de ficheros (`filess.top` y similares)
+  con una pantalla «Espere por favor»; el núcleo sigue esa cadena (`resolveTorrentOrMagnet`), descarga
+  el `.torrent` y lo convierte en magnet con el infohash real. Las series se resuelven por la ficha
+  del episodio (`/episodios/<slug>-<n>x<m>/`), con la página de temporada como respaldo.
+- **Cinecalidad** (`www.cinecalidad.am`): latino (dual con audio original). Del bloque **DESCARGAR**
+  se aprovechan los magnets directos y los enlaces `uTorrent` protegidos con
+  `acortalink.net/s.php?i=<Base64>` — se decodifican con dos alfabetos (estándar y el propio del
+  acortador) y, si el resultado es una URL, se resuelve hasta el `.torrent`. Mega, Megaup, 1fichier y
+  Mediafire se descartan: son ficheros que Nuvio no puede reproducir. Los reproductores online
+  (`#playeroptionsul li[data-option]`) quedan fuera a propósito: sus embeds van cifrados y con captcha.
+
 ## Limitaciones honestas
 
 - **Cloudflare Turnstile** (WolfTorrent desde octubre de 2026) no se puede resolver desde un plugin:
   no hay navegador ni cookies de sesión válidas. El provider detecta el desafío, registra el motivo y
   devuelve `[]` en vez de fallar. Si el sitio lo retira, vuelve a funcionar sin cambios.
+- **Cloudflare** es el límite real de TorrentGalaxy y GranTorrent: desde el sandbox de desarrollo no
+  hay salida a internet, así que los parsers se validaron con fixtures construidos a partir del HTML
+  servido a navegadores reales (búsqueda, fichas, tablas de enlaces y página del host). Si el sitio
+  responde con el desafío, el provider registra el motivo y devuelve `[]`.
 - **TorrentLandia** no tiene dominio operativo: `torrentlandia.site` no resuelve y ningún TLD alternativo
   responde. Se entrega desactivado y con `baseUrl` configurable, pero su parser no se pudo validar
   contra HTML real.
@@ -138,7 +170,7 @@ node tools/live-check.js --site elitetorrent --type movie --id 1 --title "Reache
 ## Documentación adicional
 
 - `docs/research.md`: dossier por sitio (endpoints, selectores, cadenas de descifrado, fechas de
-  comprobación y callejones sin salida), incluido SubTorrents y el orden real de la cadena
-  (Base64 ×5 + ROT13).
+  comprobación y callejones sin salida), incluidos SubTorrents, TorrentGalaxy, GranTorrent y
+  Cinecalidad.
 - `docs/index.html`: panel interactivo con el estado de los siete sitios, la tubería de descarga y un
   decodificador de acortadores que funciona sin conexión.

@@ -77,16 +77,16 @@
 <div class="wrap">
   <header class="hero">
     <div class="eyebrow"><span class="dot"></span> Nuvio · plugins · noviembre 2026</div>
-    <h1>Siete scrapers en español,<br /><em>investigados abriendo cada sitio</em>.</h1>
+    <h1>Once scrapers,<br /><em>investigados abriendo cada sitio</em>.</h1>
     <p class="lede">
       Repositorio de plugins para Nuvio: manifiesto en la raíz y un único archivo CommonJS por sitio.
       Cada provider se escribió a partir del HTML real, con su cadena de descarga resuelta hasta el
       <code>.torrent</code> y convertida en magnet con el infohash verdadero.
     </p>
     <div class="stats">
-      <div class="stat"><b>8</b><span>sitios</span></div>
-      <div class="stat"><b>37 / 37</b><span>pruebas</span></div>
-      <div class="stat"><b>60–71 KB</b><span>por bundle</span></div>
+      <div class="stat"><b>11</b><span>sitios</span></div>
+      <div class="stat"><b>49 / 49</b><span>pruebas</span></div>
+      <div class="stat"><b>67–81 KB</b><span>por bundle</span></div>
       <div class="stat"><b>0</b><span>dependencias</span></div>
     </div>
   </header>
@@ -162,7 +162,9 @@
       <tbody>
         <tr><td class="mono">maxResults</td><td>Todos</td><td>Número máximo de fuentes devueltas (2–12).</td></tr>
         <tr><td class="mono">includeVose</td><td>EliteTorrent</td><td>Incluir o descartar el audio original subtitulado.</td></tr>
-        <tr><td class="mono">baseUrl</td><td>TorrentLandia</td><td>Dominio manual si el sitio reaparece con otro TLD.</td></tr>
+        <tr><td class="mono">baseUrl</td><td>TorrentLandia · GranTorrent · Cinecalidad</td><td>Dominio manual si el sitio reaparece con otro TLD.</td></tr>
+        <tr><td class="mono">preferredLanguage</td><td>GranTorrent</td><td>Filtrar por castellano o latino antes de resolver los enlaces.</td></tr>
+        <tr><td class="mono">includeVidsrc</td><td>TorrentGalaxy</td><td>Reproductor HTTP de respaldo cuando Cloudflare no deja ver los magnets.</td></tr>
       </tbody>
     </table>
   </section>
@@ -212,7 +214,16 @@ const SITES = [
     note:'Cine y series en VOSE: la ficha trae el <b>.torrent</b> en <b>/wp-content/uploads/</b> y, en paralelo, el acortador <b>enlace-protegido.com</b>. Las dos vías dan el mismo infohash.' },
   { id:'sinsitio', name:'SinSitio', host:'www.sinsitio.site', status:'ok', badge:'vivo',
     flow:['?do=search','ficha DLE','ddlUrl.php?url=','Base64','.torrent'],
-    note:'Motor DataLife: búsqueda <b>subaction=search</b> y calidades enlazadas a <b>ddlUrl.php</b> con Base64.' }
+    note:'Motor DataLife: búsqueda <b>subaction=search</b> y calidades enlazadas a <b>ddlUrl.php</b> con Base64.' },
+  { id:'torrentgalaxy', name:'TorrentGalaxy', host:'en.torrentgalaxy-official.is', status:'warn', badge:'Cloudflare',
+    flow:['/movies?keyword=','ficha /movies/<slug>-<año>','tabla 🧲','magnet por release','VidSrc'],
+    note:'Catálogo en inglés con magnets abiertos (calidad, tamaño y seeders por fila). El sitio sirve <b>«Just a moment…»</b> a clientes automatizados: se detecta y se devuelve <b>[]</b>, con VidSrc como respaldo.' },
+  { id:'grantorrent', name:'GranTorrent', host:'grantorrent.fyi', status:'warn', badge:'rota dominio',
+    flow:['?s=','/peliculas o /episodios','tabla Obtener torrent','/enlaces/<code>/','host de ficheros','.torrent → magnet'],
+    note:'Castellano, latino y VOSE. Los enlaces pasan por <b>/enlaces/<code>/</b> y un host tipo <b>filess.top</b> con «Espere por favor»; el provider sigue la cadena hasta el <b>.torrent</b>.' },
+  { id:'cinecalidad', name:'Cinecalidad', host:'www.cinecalidad.am', status:'ok', badge:'vivo',
+    flow:['?s=','/ver-pelicula o /ver-el-episodio','bloque DESCARGAR','magnet directo','acortalink Base64'],
+    note:'Latino dual. Magnets directos en la ficha y enlaces <b>uTorrent</b> con <b>acortalink.net</b>; Mega y 1fichier se descartan por no ser reproducibles.' }
 ];
 
 const cards = document.getElementById('cards');

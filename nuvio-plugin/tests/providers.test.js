@@ -147,7 +147,7 @@ const ENLACITO_PAGE = `
 
 test('manifest: todos los scrapers tienen archivo compilado y exportan getStreams', () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'manifest.json'), 'utf8'));
-  assert.ok(manifest.scrapers.length >= 7);
+  assert.ok(manifest.scrapers.length >= 11);
   for (const scraper of manifest.scrapers) {
     const file = path.join(ROOT, scraper.filename);
     assert.ok(fs.existsSync(file), `${scraper.id}: falta ${scraper.filename}`);
@@ -326,7 +326,7 @@ test('WolfMax4K: si aparece Turnstile devuelve lista vacía sin romper', async (
 
 test('red caída: cualquier provider devuelve [] sin lanzar', async () => {
   const fetchImpl = mockFetch([], { fallback: () => ({}) });
-  for (const id of ['dontorrent', 'mejortorrent', 'elitetorrent', 'divxtotal', 'sinsitio', 'wolfmax4k', 'torrentlandia', 'subtorrents']) {
+  for (const id of ['dontorrent', 'mejortorrent', 'elitetorrent', 'divxtotal', 'sinsitio', 'wolfmax4k', 'torrentlandia', 'subtorrents', 'torrentgalaxy', 'grantorrent', 'cinecalidad']) {
     const provider = loadProvider(id, { fetch: fetchImpl });
     const streams = await provider.getStreams('31199', 'movie', null, null);
     assert.equal(streams.length, 0, `${id} debe devolver [] cuando no hay red`);
