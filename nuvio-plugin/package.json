@@ -1,0 +1,20 @@
+{
+  "name": "nebula-es-nuvio-plugin",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "description": "Scrapers en español para Nuvio: DonTorrent, MejorTorrent, EliteTorrent, DivxTotal, TorrentLandia, WolfMax4K y SinSitio.",
+  "scripts": {
+    "build": "node build.js",
+    "test": "node --test tests/*.test.js",
+    "check": "node build.js && node --test tests/*.test.js",
+    "live": "node tools/live-check.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "crypto-js": "^4.2.0"
+  }
+}
