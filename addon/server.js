@@ -10,6 +10,7 @@ const manifest = require('../manifest.json');
 const { getDocument } = require('./documents');
 const { createVodResolver, toStremioStream } = require('./vod');
 const { createMetaResolver } = require('./meta');
+const { runDiagnostic } = require('./diag');
 const { PREFIX, SOURCE_IDS, SportsCatalog, resolveEntry } = require('../sports/sources');
 
 const PAGE_SIZE = 100;
@@ -119,6 +120,22 @@ function createHandler(options = {}) {
             .sort((a, b) => a.name.localeCompare(b.name, 'es'));
           return send(res, 200, { metas: filtered.slice(skip, skip + PAGE_SIZE).map(entry => toSportsMeta(entry, type)) });
         });
+      }
+
+      // Diagnóstico temporal (DIAG=1): responde por qué una fuente no da
+      // enlaces. No devuelve tokens, claves ni parámetros de consulta.
+      // Se puede desactivar con DIAG=0 en el entorno del servicio.
+      if (process.env.DIAG !== '0' && url.pathname === '/diag') {
+        const type = url.searchParams.get('type') || 'movie';
+        const id = url.searchParams.get('id') || '';
+        if (!id || id.length > 200) return send(res, 400, { error: 'Falta id' });
+        const season = Number(url.searchParams.get('season')) || null;
+        const episode = Number(url.searchParams.get('episode')) || null;
+        const providers = (url.searchParams.get('providers') || '').split(',').filter(Boolean);
+        const probeTitle = (url.searchParams.get('title') || '').replace(/[^\p{L}\p{N} .':-]/gu, '').slice(0, 80);
+        const report = await runDiagnostic({ type, id, season, episode, probeTitle: probeTitle || undefined,
+          providers: providers.length ? providers : undefined });
+        return send(res, 200, report);
       }
 
       // Nuvio nombra los anime con el tipo `anime`; la ruta es la misma.

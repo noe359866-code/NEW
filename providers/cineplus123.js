@@ -1103,9 +1103,11 @@ function titleFromHtml(html) {
   return clean ? { title: clean, year: year } : null;
 }
 
-function resolveImdb(id, isTv) {
-  var type = isTv ? 'series' : 'movie';
-  return request('https://v3-cinemeta.strem.io/meta/' + type + '/' + encodeURIComponent(id) + '.json', { timeout: 9000 })
+/** Cinemeta: metadatos de IMDb sin clave. Una sola tentativa: si el host no
+ * responde, la resolución sigue por la ficha pública de IMDb. */
+function cinemetaRequest(id, type) {
+  return request('https://v3-cinemeta.strem.io/meta/' + type + '/' + encodeURIComponent(id) + '.json',
+    { timeout: 7000, retries: 0 })
     .then(function (res) {
       if (!res || !res.ok) return null;
       var parsed = null;
@@ -1115,13 +1117,43 @@ function resolveImdb(id, isTv) {
       return {
         tmdbId: null,
         imdbId: id,
-        isTv: isTv || meta.type === 'series',
+        isTv: meta.type === 'series',
         title: meta.name || meta.original_name || '',
         originalTitle: meta.original_name || meta.name || '',
         year: meta.year ? parseInt(String(meta.year).slice(0, 4), 10) : null,
         titles: [meta.name, meta.original_name].filter(Boolean)
       };
-    });
+    }, function () { return null; });
+}
+
+/** Título deducido del slug de IMDb: /title/tt0816692/ → /title/tt0816692/interstellar.
+ * Evita quedarse sin ninguna consulta cuando Cinemeta y TMDB no responden. */
+function imdbSlugTitle(id) {
+  return request('https://www.imdb.com/title/' + encodeURIComponent(id) + '/',
+    { timeout: 8000, retries: 0, redirect: 'manual' }).then(function (res) {
+    var location = res && res.headers && res.headers.get ? res.headers.get('location') : '';
+    var match = /\/title\/tt\d{5,12}\/([a-z0-9-]{2,80})\/?/i.exec(location || '');
+    if (!match) return null;
+    var raw = match[1];
+    var state = /(\d{4})$/.exec(raw);
+    var title = raw.replace(/-\d{4}$/, '').replace(/-/g, ' ').trim();
+    if (!title || !/[a-z]/i.test(title)) return null;
+    title = title.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    return {
+      tmdbId: null, imdbId: id, isTv: null,
+      title: title, originalTitle: title,
+      year: state ? parseInt(state[1], 10) : null,
+      titles: [title]
+    };
+  }, function () { return null; });
+}
+
+function resolveImdb(id, isTv) {
+  var type = isTv ? 'series' : 'movie';
+  return cinemetaRequest(id, type).then(function (meta) {
+    if (meta && meta.title) return meta;
+    return imdbSlugTitle(id);
+  });
 }
 
 function resolveFromApi(id, mediaType) {
