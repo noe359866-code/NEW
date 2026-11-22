@@ -171,6 +171,19 @@ function getText(url, options) {
   });
 }
 
+/* Texto para documentos grandes y de confianza (mapas de IDs de anime).
+ * Mismo transporte, con un límite de lectura propio: si el cuerpo no cabe, la
+ * promesa queda vacía en lugar de crecer sin control. */
+function getTextLimited(url, maxBytes, options) {
+  var limit = Math.max(1024, Math.min(Number(maxBytes) || 65536, 4000000));
+  return request(url, options).then(function (res) {
+    if (!res.ok || !res.text) return '';
+    if (res.bytes && res.bytes.length > limit) return '';
+    if (res.text.length > limit) return '';
+    return res.text;
+  });
+}
+
 function getBytes(url, options) {
   return request(url, options).then(function (res) {
     if (!res.ok) return null;

@@ -15,6 +15,23 @@
 var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 var PLUGIN_TAG = 'nebula-es';
 
+/** Tipo de contenido según el ID que entregue el cliente (Nuvio usa tv/anime). */
+function isSeriesLikeType(value) {
+  var kind = String(value == null ? '' : value).trim().toLowerCase();
+  return kind === 'series' || kind === 'tv' || kind === 'show' || kind === 'anime';
+}
+
+
+/** Nombre de archivo sintético para que las insignias de calidad del cliente
+ * (resolución, códec, idioma) puedan leer la opción. No es una ruta real. */
+function syntheticFilename(title, quality, language) {
+  var base = norm(title).replace(/\s+/g, '.').slice(0, 90) || 'nebula';
+  var parts = [base];
+  if (language) parts.push(norm(language).replace(/\s+/g, '') || 'und');
+  if (quality && quality !== 'SD') parts.push(String(quality).toLowerCase());
+  return parts.join('.') + '.mp4';
+}
+
 function log() {
   try {
     var args = Array.prototype.slice.call(arguments);
@@ -644,6 +661,19 @@ function getText(url, options) {
   });
 }
 
+/* Texto para documentos grandes y de confianza (mapas de IDs de anime).
+ * Mismo transporte, con un límite de lectura propio: si el cuerpo no cabe, la
+ * promesa queda vacía en lugar de crecer sin control. */
+function getTextLimited(url, maxBytes, options) {
+  var limit = Math.max(1024, Math.min(Number(maxBytes) || 65536, 4000000));
+  return request(url, options).then(function (res) {
+    if (!res.ok || !res.text) return '';
+    if (res.bytes && res.bytes.length > limit) return '';
+    if (res.text.length > limit) return '';
+    return res.text;
+  });
+}
+
 function getBytes(url, options) {
   return request(url, options).then(function (res) {
     if (!res.ok) return null;
@@ -835,6 +865,203 @@ function sha256Hex(text) {
   return sha256Bytes(utf8ToBytes(value));
 }
 
+/* ===== core/40-ids.js ===== */
+/* ------------------------------------------------------------------
+ * Nébula Scrapers · core/ids
+ * Formas de ID que envían los clientes (Stremio, Nuvio) → metadatos.
+ *
+ * Nuvio nombra los mismos títulos de varias formas:
+ *   tt0944947:1:2      IMDb con temporada y episodio
+ *   tmdb:1399:1:2      TMDB con temporada y episodio (y tmdb-1399, tmdb_1399, 1399)
+ *   tvdb:121361:1:2    TheTVDB (no es consultable aquí: se convierte con Wikidata)
+ *   kitsu:7442:1       anime (Kitsu)
+ *   mal:21:1           anime (MyAnimeList)
+ *   anilist:16498:1    anime (AniList)
+ *   anidb:1:1          anime (AniDB)
+ * Un ID con URL, esquema o demasiados segmentos no es un identificador de
+ * catálogo y se rechaza antes de consultar ninguna fuente.
+ * ------------------------------------------------------------------ */
+
+var ID_KINDS = ['imdb', 'tmdb', 'tvdb', 'kitsu', 'mal', 'anilist', 'anidb'];
+var ANIME_KINDS = ['kitsu', 'mal', 'anilist', 'anidb'];
+
+/**
+ * @returns {{type:'movie'|'series', season:number|null, episode:number|null,
+ *            imdbId:string|null, tmdbId:string|null, tvdbId:string|null,
+ *            anime:{site:string,id:string}|null}|null}
+ */
+function normalizeContentId(type, raw) {
+  var kind = String(type || '').toLowerCase();
+  var text = String(raw == null ? '' : raw).trim();
+  if (!text || text.length > 200 || /[\/\\?#@\s]/.test(text)) return null;
+  if (kind !== 'movie' && kind !== 'series' && kind !== 'tv' && kind !== 'anime') return null;
+  var parts = text.split(':');
+  if (parts.length > 4) return null;
+  for (var i = 0; i < parts.length; i++) if (!parts[i]) return null;
+
+  var head = parts[0].toLowerCase();
+  var body = parts[1] || '';
+  var tail = parts.slice(2);
+  var result = {
+    type: kind === 'movie' ? 'movie' : 'series',
+    season: null, episode: null,
+    imdbId: null, tmdbId: null, tvdbId: null, anime: null
+  };
+
+  if (/^tt\d{5,12}$/.test(head)) {
+    result.imdbId = head;
+  } else if (parts.length > 1 && ID_KINDS.indexOf(head) !== -1) {
+    if (!/^\d{1,9}$/.test(body) || /^0+$/.test(body)) return null;
+    if (head === 'imdb') return null;
+    if (head === 'tmdb') result.tmdbId = body;
+    else if (head === 'tvdb') result.tvdbId = body;
+    else result.anime = { site: head, id: body };
+  } else if (/^\d{1,9}$/.test(head) && !/^0+$/.test(head)) {
+    result.tmdbId = head;
+  } else {
+    return null;
+  }
+
+  // Películas: sin temporada ni episodio. Series, TVDB y anime: exactamente
+  // dos segmentos (o ninguno para una película de anime).
+  if (result.type === 'movie') {
+    if (tail.length) return null;
+    return result;
+  }
+  // El cliente puede enviar el ID de contenido solo (la temporada y el
+  // episodio llegan como argumentos aparte) o con «:temporada:episodio».
+  if (!tail.length) return result;
+  if (tail.length !== 2) return null;
+  var season = Number(tail[0]);
+  var episode = Number(tail[1]);
+  if (!Number.isInteger(season) || !Number.isInteger(episode)) return null;
+  if (season < 1 || season > 999 || episode < 1 || episode > 9999) return null;
+  result.season = season;
+  result.episode = episode;
+  return result;
+}
+
+/** Edad mínima para mostrar: «tt0944947», «tmdb:1399», «kitsu:7442». */
+function contentIdLabel(parsed) {
+  if (!parsed) return '';
+  if (parsed.imdbId) return parsed.imdbId;
+  if (parsed.anime) return parsed.anime.site + ':' + parsed.anime.id;
+  if (parsed.tmdbId) return 'tmdb:' + parsed.tmdbId;
+  if (parsed.tvdbId) return 'tvdb:' + parsed.tvdbId;
+  return '';
+}
+
+/* ------------------------- Wikidata (sin clave) ------------------------- */
+
+/* Solo se consultan propiedades externas conocidas y el valor es siempre
+ * numérico, así que la consulta no incorpora texto del cliente. */
+function wikidataLookup(property, value) {
+  if (!/^P\d{1,6}$/.test(String(property)) || !/^\d{1,9}$/.test(String(value))) return Promise.resolve(null);
+  var query = 'SELECT ?imdb ?tmdb ?tvdb WHERE {' +
+    ' ?item wdt:' + property + ' "' + value + '" .' +
+    ' OPTIONAL { ?item wdt:P345 ?imdb }' +
+    ' OPTIONAL { ?item wdt:P4983 ?tmdb }' +
+    ' OPTIONAL { ?item wdt:P4835 ?tvdb }' +
+    '} LIMIT 1';
+  var url = 'https://query.wikidata.org/sparql?format=json&query=' + encodeURIComponent(query);
+  return getJson(url, { timeout: 9000, retries: 0, headers: { Accept: 'application/sparql-results+json' } })
+    .then(function (data) {
+      var rows = data && data.results && Array.isArray(data.results.bindings) ? data.results.bindings : [];
+      if (!rows.length) return null;
+      var row = rows[0];
+      function text(key) { return row[key] && typeof row[key].value === 'string' ? row[key].value : ''; }
+      var imdb = /^tt\d{5,12}$/i.test(text('imdb')) ? text('imdb').toLowerCase() : null;
+      var tmdb = /^\d{1,9}$/.test(text('tmdb')) ? text('tmdb') : null;
+      var tvdb = /^\d{1,9}$/.test(text('tvdb')) ? text('tvdb') : null;
+      if (!imdb && !tmdb && !tvdb) return null;
+      return { imdbId: imdb, tmdbId: tmdb, tvdbId: tvdb };
+    }, function () { return null; });
+}
+
+/* -------------------------- Anime (sin clave) -------------------------- */
+
+/* ani.zip reúne los IDs de cada anime (Kitsu, MAL, AniList, AniDB), sus
+ * títulos y los episodios. La respuesta puede ser muy grande, así que se lee
+ * con un límite de bytes propio; solo se usan títulos, año y si es película. */
+function aniZipLookup(site, id) {
+  var param = site === 'mal' ? 'mal_id' : site === 'kitsu' ? 'kitsu_id'
+    : site === 'anilist' ? 'anilist_id' : site === 'anidb' ? 'anidb_id' : '';
+  if (!param || !/^\d{1,9}$/.test(String(id))) return Promise.resolve(null);
+  var url = 'https://api.ani.zip/mappings?' + param + '=' + id;
+  return getTextLimited(url, 4000000, { timeout: 12000, retries: 0 }).then(function (text) {
+    if (!text) return null;
+    var data = null;
+    try { data = JSON.parse(text); } catch (e) { return null; }
+    if (!data || typeof data !== 'object') return null;
+    var titles = data.titles && typeof data.titles === 'object' ? data.titles : {};
+    var names = [];
+    var order = ['es', 'es-419', 'es-CA', 'en', 'x-jat', 'ja', 'pt-BR', 'fr', 'it'];
+    for (var i = 0; i < order.length; i++) {
+      if (typeof titles[order[i]] === 'string' && titles[order[i]]) names.push(titles[order[i]].trim());
+    }
+    var episodes = data.episodes && typeof data.episodes === 'object' ? data.episodes : {};
+    var first = episodes['1'] || episodes[1] || null;
+    var year = null;
+    if (first && typeof first.airDate === 'string') {
+      var match = /^(\d{4})/.exec(first.airDate);
+      if (match) year = parseInt(match[1], 10);
+    }
+    return {
+      titles: names.filter(function (value, index, all) { return value && all.indexOf(value) === index; }),
+      year: year,
+      isMovie: !first || !first.seasonNumber,
+      tvdbId: first && /^\d{1,9}$/.test(String(first.tvdbShowId || '')) ? String(first.tvdbShowId) : null
+    };
+  }, function () { return null; });
+}
+
+/**
+ * Metadatos buscables para un ID de anime. `isTv` se decide por los episodios
+ * publicados; el número de episodio lo aporta el cliente y estos sitios usan
+ * numeración continua, así que no se recalcula.
+ */
+function resolveAnimeMedia(parsed) {
+  if (!parsed || !parsed.anime) return Promise.resolve(null);
+  return aniZipLookup(parsed.anime.site, parsed.anime.id).then(function (info) {
+    if (!info || !info.titles.length) return null;
+    var isTv = info.isMovie !== true;
+    var pending = info.tvdbId && isTv ? wikidataLookup('P4835', info.tvdbId) : Promise.resolve(null);
+    return pending.then(function (ids) {
+      var extra = ids || {};
+      return {
+        id: contentIdLabel(parsed),
+        tmdbId: extra.tmdbId || null,
+        imdbId: extra.imdbId || null,
+        isTv: isTv,
+        season: isTv ? parsed.season : null,
+        episode: isTv ? parsed.episode : null,
+        title: info.titles[0],
+        originalTitle: info.titles[0],
+        year: info.year || null,
+        titles: info.titles,
+        seasons: []
+      };
+    });
+  });
+}
+
+/**
+ * Punto único que usan los providers: convierte el ID ya normalizado en los
+ * metadatos que necesitan las búsquedas, sea IMDb, TMDB, TVDB o anime.
+ */
+function resolveRequestMedia(parsed) {
+  if (!parsed) return Promise.resolve(null);
+  if (parsed.anime) return resolveAnimeMedia(parsed);
+  if (parsed.tvdbId) {
+    return wikidataLookup('P4835', parsed.tvdbId).then(function (ids) {
+      var target = ids && (ids.imdbId || ids.tmdbId);
+      if (!target) return null;
+      return resolveMedia(target, 'series', parsed.season, parsed.episode);
+    });
+  }
+  return resolveMedia(contentIdLabel(parsed), parsed.type, parsed.season, parsed.episode);
+}
+
 /* ===== core/50-tmdb.js ===== */
 /* ------------------------------------------------------------------
  * Nébula Scrapers · core/tmdb
@@ -960,23 +1187,87 @@ function mergeImdbMetadata(imdb, tmdb, imdbId) {
   };
 }
 
+function webResult(id, type, title, year, imdbId) {
+  if (!title) return null;
+  return {
+    tmdbId: String(id),
+    imdbId: imdbId || null,
+    isTv: type === 'tv',
+    title: title,
+    originalTitle: title,
+    year: year || null,
+    titles: [title],
+    seasons: []
+  };
+}
+
+/* Sin TMDB_API_KEY la página pública suele bloquear al servidor. Primero se
+ * intenta la redirección corta, que expone el título en la URL
+ * (/movie/157336-interstellar), y después Wikidata, que no pide clave. */
+function slugTitle(slug) {
+  // El slug de TMDB empieza por el propio ID («157336-interstellar»): se quita
+  // para no buscar «157336 Interstellar».
+  var text = String(slug || '').replace(/^\d+-/, '').replace(/-\d{3,}$/, '').replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, function (c) { return c.toUpperCase(); }).trim();
+  return text && /[a-z]/i.test(text) && text.length <= 160 ? text : '';
+}
+
 function resolveFromWeb(id, mediaType) {
   var type = mediaType === 'tv' ? 'tv' : 'movie';
-  return getText('https://www.themoviedb.org/' + type + '/' + encodeURIComponent(id), { timeout: 9000 })
-    .then(function (html) {
-      if (!html) return null;
-      var info = titleFromHtml(html);
-      if (!info) return null;
-      return {
-        tmdbId: String(id),
-        imdbId: null,
-        isTv: type === 'tv',
-        title: info.title,
-        originalTitle: info.title,
-        year: info.year,
-        titles: [info.title]
-      };
+  var found = null;
+
+  function page() {
+    return getText('https://www.themoviedb.org/' + type + '/' + encodeURIComponent(id), { timeout: 9000 })
+      .then(function (html) {
+        if (!html) return null;
+        var info = titleFromHtml(html);
+        if (!info) return null;
+        var imdb = /\/(?:imdb|title)\/(tt\d{5,12})/i.exec(html);
+        return webResult(id, type, info.title, info.year, imdb ? imdb[1].toLowerCase() : null);
+      }, function () { return null; });
+  }
+
+  function redirectedSlug() {
+    // La ficha corta redirige a /movie/157336-interstellar.
+    return request('https://www.themoviedb.org/' + type + '/' + encodeURIComponent(id),
+      { timeout: 9000, retries: 0, redirect: 'manual' }).then(function (res) {
+      var location = res && res.headers && res.headers.get ? res.headers.get('location') : '';
+      var slug = /^https?:\/\/www\.themoviedb\.org\/(?:movie|tv)\/[0-9]+-([a-z0-9-]+)\/?$/i.exec(location || '');
+      var fromSlug = slug ? slugTitle(slug[1]) : '';
+      return fromSlug ? webResult(id, type, fromSlug, parseYear(location), null) : null;
+    }, function () { return null; });
+  }
+
+  function fromWikidata() {
+    // Wikidata solo aporta IDs; el título sale de IMDb o de TVMaze.
+    var property = type === 'tv' ? 'P4983' : 'P4947';
+    if (typeof wikidataLookup !== 'function') return Promise.resolve(null);
+    return Promise.resolve(wikidataLookup(property, id)).then(function (ids) {
+      if (!ids) return null;
+      if (ids.imdbId) {
+        return resolveImdb(ids.imdbId, type === 'tv').then(function (imdb) {
+          return imdb && imdb.title ? webResult(id, type, imdb.title, imdb.year, ids.imdbId) : null;
+        }, function () { return null; });
+      }
+      if (ids.tvdbId) {
+        return getJson('https://api.tvmaze.com/lookup/shows?thetvdb=' + ids.tvdbId, { timeout: 8000, retries: 0 })
+          .then(function (show) {
+            return show && show.name ? webResult(id, type, String(show.name).slice(0, 200), parseYear(show.premiered || ''), null) : null;
+          }, function () { return null; });
+      }
+      return null;
+    }, function () { return null; });
+  }
+
+  return page().then(function (result) {
+    if (result) { found = result; return null; }
+    return redirectedSlug().then(function (shortResult) {
+      if (shortResult) found = shortResult;
+      return null;
     });
+  }).then(function () {
+    return found || fromWikidata();
+  });
 }
 
 /**
@@ -987,7 +1278,9 @@ function resolveFromWeb(id, mediaType) {
  */
 function resolveMedia(rawId, mediaType, season, episode) {
   var id = cleanContentId(rawId);
-  var isTv = mediaType === 'tv' || mediaType === 'series' || season != null;
+  var isTv = typeof isSeriesLikeType === 'function'
+    ? isSeriesLikeType(mediaType) || season != null
+    : mediaType === 'tv' || mediaType === 'series' || season != null;
   var info = {
     id: id,
     tmdbId: /^\d+$/.test(id) ? id : null,
@@ -1063,7 +1356,19 @@ function makeStream(data) {
   if (data.language) stream.language = data.language;
   if (data.headers) stream.headers = data.headers;
   if (data.subtitles && data.subtitles.length) stream.subtitles = data.subtitles;
+  // El mismo reproductor sigue en el siguiente episodio y las insignias de
+  // Nuvio leen `filename`; ninguno de los dos cambia el enlace entregado.
+  stream.bingeGroup = data.bingeGroup || providerBingeGroup(data.provider, data.name);
+  stream.filename = data.filename || syntheticFilename(stream.title, stream.quality, data.language);
   return stream;
+}
+
+/** Agrupa las opciones del mismo reproductor para seguir la serie. */
+function providerBingeGroup(provider, name) {
+  var base = norm(String(provider || 'nebula'));
+  var extra = norm(String(name || ''));
+  if (extra && extra !== base && extra.indexOf(base) === -1) base = base + ' ' + extra;
+  return (base.replace(/\s+/g, '-') || 'nebula').slice(0, 60);
 }
 
 function finalizeStreams(label, streams, options) {
@@ -1271,17 +1576,31 @@ function aesPlayerLink(encoded, keyHex) {
   } catch (e) { return ''; }
 }
 
-/* Bounded proof of work for player data and Anubis; never runs unbounded. */
+/* Bounded proof of work for player data and Anubis; never runs unbounded.
+ * Anubis cuenta BITS iniciales a cero (difficulty 4 = 4 bits = primer nibble
+ * hexadecimal 0), no dígitos hexadecimales. Con un nibble se exigía 4 veces
+ * más trabajo y el reto se agotaba antes de resolverlo, de modo que ninguna
+ * fuente de FlixLatam/CinePlus podía devolver enlaces. */
+function powSatisfied(hash, bits) {
+  var fullBytes = Math.floor(bits / 8);
+  var restBits = bits % 8;
+  for (var i = 0; i < fullBytes; i++) {
+    if (parseInt(hash.substr(i * 2, 2), 16) !== 0) return false;
+  }
+  if (!restBits) return true;
+  var nibble = parseInt(hash.charAt(fullBytes * 2), 16);
+  return (nibble >> (4 - restBits)) === 0;
+}
+
 function solvePlayerPow(challenge, difficulty) {
-  var zeros = parseInt(difficulty, 10);
-  if (!challenge || String(challenge).length > 512 || !isFinite(zeros) || zeros < 0 || zeros > 4) return null;
+  var bits = parseInt(difficulty, 10);
+  if (!challenge || String(challenge).length > 512 || !isFinite(bits) || bits < 0 || bits > 24) return null;
   var budget = typeof HOSTED_MAX_POW_MS === 'number' ? Math.max(250, Math.min(HOSTED_MAX_POW_MS, 6000)) : 6000;
-  var prefix = new Array(zeros + 1).join('0');
   var started = Date.now();
-  for (var n = 0; n < 250000; n++) {
+  for (var n = 0; n < 2000000; n++) {
     if (n % 256 === 0 && Date.now() - started > budget) break;
     var hash = sha256Hex(challenge + n);
-    if (hash.slice(0, zeros) === prefix) return { nonce: n, hash: hash, elapsed: Math.max(1, Date.now() - started) };
+    if (powSatisfied(hash, bits)) return { nonce: n, hash: hash, elapsed: Math.max(1, Date.now() - started) };
   }
   return null;
 }
@@ -1340,9 +1659,13 @@ function pageRequest(url, referer) {
   });
 }
 
-function passAnubis(html, url, referer) {
+/* Anubis puede agravar el reto (más bits) cuando la IP del servidor es
+ * sospechosa. Se resuelven varios retos seguidos, con un máximo, y se
+ * reutiliza la cookie de la sesión. */
+function passAnubis(html, url, referer, round) {
   var m = /<script\b[^>]*\bid=["']anubis_challenge["'][^>]*>([\s\S]*?)<\/script>/i.exec(html || '');
   if (!m) return Promise.resolve(null);
+  if ((round || 0) >= 3) return Promise.resolve(null);
   var data;
   try { data = JSON.parse(m[1]); } catch (e) { return Promise.resolve(null); }
   var challenge = data && data.challenge;
@@ -1357,7 +1680,10 @@ function passAnubis(html, url, referer) {
     '&redir=' + encodeURIComponent(redirect) + '&elapsedTime=' + solved.elapsed;
   return pageRequest(pass, referer).then(function (result) {
     if (result.status < 200 || result.status >= 400) return null;
-    return pageRequest(url, referer);
+    return pageRequest(url, referer).then(function (next) {
+      if (next && next.text && /anubis_challenge/i.test(next.text)) return passAnubis(next.text, url, referer, (round || 0) + 1);
+      return next;
+    });
   });
 }
 
@@ -1612,7 +1938,7 @@ function latEpisodeUrl(html, candidate, info) {
 
 function latanimeGetStreams(tmdbId, mediaType, season, episode) {
   var conf = settings({ maxResults: '8' });
-  return resolveMedia(tmdbId, mediaType, season, episode).then(function (info) {
+  return requestMedia(tmdbId, mediaType, season, episode).then(function (info) {
     if (!info.title) return [];
     if (info.isTv && (!Number.isInteger(info.season) || info.season < 1 || !Number.isInteger(info.episode) || info.episode < 1)) return [];
     return latSearch(info).then(function (candidates) {
@@ -1640,6 +1966,32 @@ function latanimeGetStreams(tmdbId, mediaType, season, episode) {
   }).catch(function (error) { log('latanime', error && error.message || error); return []; });
 }
 
+
+/* El cliente puede enviar IMDb, TMDB, TVDB o un ID de anime (kitsu:, mal:,
+ * anilist:, anidb:). normalizeContentId + resolveRequestMedia aceptan todas
+ * esas formas; antes se descartaban y no se buscaba nada. */
+function requestMedia(rawId, mediaType, season, episode) {
+  var parsed = normalizeContentId(mediaType, rawId);
+  if (!parsed) return Promise.resolve(null);
+  // El episodio que cuenta es el del cliente, no el que se deduzca del ID.
+  var effective = parsed;
+  if (season != null || episode != null) {
+    effective = {};
+    for (var key in parsed) effective[key] = parsed[key];
+    effective.season = season == null ? parsed.season : parseInt(season, 10);
+    effective.episode = episode == null ? parsed.episode : parseInt(episode, 10);
+    if (effective.type !== 'movie' && (!Number.isInteger(effective.season) || !Number.isInteger(effective.episode))) {
+      return Promise.resolve(null);
+    }
+  }
+  return resolveRequestMedia(effective).catch(function () { return null; });
+}
+
+/** Solo metadatos: lo usa el endpoint /meta del addon; no busca fuentes. */
+function latanimeResolveMeta(rawId, mediaType, season, episode) {
+  return requestMedia(rawId, mediaType, season, episode);
+}
+
 function onSettings() {
   return Promise.resolve([
     { type: 'header', label: 'Latanime' },
@@ -1649,6 +2001,6 @@ function onSettings() {
     ] }
   ]);
 }
-module.exports = { getStreams: latanimeGetStreams, onSettings: onSettings };
+module.exports = { getStreams: latanimeGetStreams, resolveMeta: latanimeResolveMeta, onSettings: onSettings };
 
 })();

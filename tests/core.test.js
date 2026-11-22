@@ -96,5 +96,9 @@ test('data-player en Base64 y dataLink AES producen enlaces de reproductor, no e
   assert.equal(decoded.length, 1);
   assert.equal(decoded[0].url, 'https://player.example/embed/abc');
   assert.equal(decoded[0].language, 'Latino');
-  assert.equal(core.solvePlayerPow('challenge', 9), null);
+  // Anubis cuenta bits: dificultad 4 = 4 bits = primer nibble hexadecimal 0.
+  const solved = core.solvePlayerPow('challenge', 4);
+  assert.ok(solved && solved.hash[0] === '0');
+  assert.equal(core.sha256Hex('challenge' + solved.nonce), solved.hash);
+  assert.equal(core.solvePlayerPow('challenge', 40), null);
 });

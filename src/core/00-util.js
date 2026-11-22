@@ -7,6 +7,23 @@
 var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 var PLUGIN_TAG = 'nebula-es';
 
+/** Tipo de contenido según el ID que entregue el cliente (Nuvio usa tv/anime). */
+function isSeriesLikeType(value) {
+  var kind = String(value == null ? '' : value).trim().toLowerCase();
+  return kind === 'series' || kind === 'tv' || kind === 'show' || kind === 'anime';
+}
+
+
+/** Nombre de archivo sintético para que las insignias de calidad del cliente
+ * (resolución, códec, idioma) puedan leer la opción. No es una ruta real. */
+function syntheticFilename(title, quality, language) {
+  var base = norm(title).replace(/\s+/g, '.').slice(0, 90) || 'nebula';
+  var parts = [base];
+  if (language) parts.push(norm(language).replace(/\s+/g, '') || 'und');
+  if (quality && quality !== 'SD') parts.push(String(quality).toLowerCase());
+  return parts.join('.') + '.mp4';
+}
+
 function log() {
   try {
     var args = Array.prototype.slice.call(arguments);

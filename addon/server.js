@@ -9,6 +9,7 @@ const path = require('node:path');
 const manifest = require('../manifest.json');
 const { getDocument } = require('./documents');
 const { createVodResolver, toStremioStream } = require('./vod');
+const { createMetaResolver } = require('./meta');
 const { PREFIX, SOURCE_IDS, SportsCatalog, resolveEntry } = require('../sports/sources');
 
 const PAGE_SIZE = 100;
@@ -68,6 +69,11 @@ function createHandler(options = {}) {
     fetcher: options.fetcher,
     tmdbKey: options.tmdbKey == null ? (process.env.TMDB_API_KEY || '') : options.tmdbKey
   });
+  const resolveMeta = options.resolveMeta || createMetaResolver({
+    fetcher: options.fetcher,
+    loadProvider: options.loadProvider,
+    tmdbKey: options.tmdbKey == null ? (process.env.TMDB_API_KEY || '') : options.tmdbKey
+  });
   const maxConcurrent = Number.isInteger(options.maxConcurrent) && options.maxConcurrent > 0 ? options.maxConcurrent : 6;
   let active = 0;
 
@@ -115,7 +121,8 @@ function createHandler(options = {}) {
         });
       }
 
-      const item = /^\/(meta|stream)\/(movie|series|tv|channel)\/([^/]+)\.json$/i.exec(url.pathname);
+      // Nuvio nombra los anime con el tipo `anime`; la ruta es la misma.
+      const item = /^\/(meta|stream)\/(movie|series|tv|anime|channel)\/([^/]+)\.json$/i.exec(url.pathname);
       if (item) {
         let id;
         try { id = decodeURIComponent(item[3]); } catch { return send(res, 400, { error: 'Identificador inválido' }); }
@@ -134,7 +141,13 @@ function createHandler(options = {}) {
             const streams = await resolveEntry(entry, get);
             return send(res, 200, { streams: streams.map(stream => toSportsStream(entry, stream)).filter(Boolean) });
           }
-          if (resource === 'meta') return send(res, 200, { meta: null });
+          if (resource === 'meta') {
+            // Nuvio pide los metadatos con el ID exacto que después enviará a
+            // /stream. Se responde con el título y sus episodios, sin buscar
+            // fuentes ni abrir reproductores.
+            const meta = await resolveMeta(type, id).catch(() => null);
+            return send(res, 200, { meta: meta || null });
+          }
           // En Nuvio, tv también puede significar una serie TMDB. Los IDs
           // deportivos se distinguen antes por su prefijo propio.
           const streams = await resolveVod(type, id);

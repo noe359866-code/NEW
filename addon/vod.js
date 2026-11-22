@@ -49,18 +49,41 @@ function loadProvider(id, { fetcher = safeFetch, tmdbKey = '', settings = {}, on
 /** Acepta el ID completo de Stremio/Nuvio, no una URL ni un título libre. */
 function parseVodId(type, id) {
   const kind = String(type || '').toLowerCase();
-  if (!['movie', 'series', 'tv'].includes(kind)) return null;
-  const match = /^(tt\d{5,12}|tmdb[:_-][1-9]\d{0,11}|[1-9]\d{0,11})(?::(\d{1,4}):(\d{1,4}))?$/i.exec(String(id || ''));
-  if (!match) return null;
+  if (!['movie', 'series', 'tv', 'anime'].includes(kind)) return null;
+  const raw = String(id || '').trim();
+  if (!raw || raw.length > 200 || /[\/\\?#@\s]/.test(raw)) return null;
   const episodic = kind !== 'movie';
-  if (!episodic && match[2] != null) return null;
-  if (episodic && (match[2] == null || Number(match[2]) < 1 || Number(match[3]) < 1)) return null;
-  return {
-    id: match[1].toLowerCase(),
-    type: episodic ? 'series' : 'movie',
-    season: episodic ? Number(match[2]) : null,
-    episode: episodic ? Number(match[3]) : null
-  };
+
+  // El ID de contenido puede llevar prefijo con «:» (tmdb:1399) y después la
+  // temporada y el episodio: el prefijo se comprueba antes de partir por «:».
+  let contentId = '';
+  let rest = '';
+  // El lookahead no puede solaparse con el grupo que consume el separador.
+  const prefixed = /^(tt\d{5,12}|(?:(?:tmdb|tvdb|kitsu|mal|anilist|anidb)[:_-][1-9][0-9]{0,8}))(?=$|:)/i.exec(raw);
+  if (prefixed) {
+    contentId = prefixed[1].toLowerCase();
+    rest = raw.slice(prefixed[0].length);
+  } else {
+    const numeric = /^([1-9]\d{0,8})(?=$|:)/.exec(raw);
+    if (!numeric) return null;
+    contentId = numeric[1];
+    rest = raw.slice(numeric[0].length);
+  }
+  const tail = rest ? rest.slice(1).split(':') : [];
+
+  if (!episodic) {
+    if (tail.length) return null;
+    return { id: contentId, type: 'movie', season: null, episode: null };
+  }
+  // Un ID sin temporada/episodio identifica el título completo, pero no
+  // permite pedir fuentes: sin episodio no se adivina qué capítulo es.
+  if (!tail.length) return { id: contentId, type: 'series', season: null, episode: null, incomplete: true };
+  if (tail.length !== 2) return null;
+  const season = Number(tail[0]);
+  const episode = Number(tail[1]);
+  if (!Number.isInteger(season) || !Number.isInteger(episode)) return null;
+  if (season < 1 || season > 999 || episode < 1 || episode > 9999) return null;
+  return { id: contentId, type: 'series', season, episode };
 }
 
 function streamHeaders(raw) {
@@ -108,10 +131,27 @@ function toStremioStream(item) {
   const name = `Nébula · ${source}${quality}`;
   const title = [String(item.title || source).slice(0, 300), typeof item.language === 'string' ? item.language.slice(0, 40) : '']
     .filter(Boolean).join(' · ');
-  const hints = { notWebReady: true };
+  // `notWebReady` quitaba la reproducción web sin aportar nada al reproductor
+  // nativo. `bingeGroup` conserva el mismo reproductor en el episodio siguiente
+  // y `filename` alimenta las insignias de calidad de Nuvio.
+  const hints = {};
+  const binges = [];
+  const group = item.bingeGroup || source.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  if (Array.isArray(group)) binges.push(...group);
+  else if (typeof group === 'string') binges.push(group);
+  // Nuvio acepta una lista: la primera entrada decide el reproductor.
+  if (binges.length && binges.length <= 4 && binges.every(value => typeof value === 'string' && /^[a-z0-9._:-]{1,80}$/i.test(value))) {
+    hints.bingeGroup = binges.length === 1 ? binges[0] : binges;
+  }
+  if (typeof item.filename === 'string' && item.filename && item.filename.length <= 200) hints.filename = item.filename;
+  else if (item.quality || item.language) {
+    // Insignias de calidad del cliente: solo leen el nombre, no el archivo.
+    hints.filename = [String(item.title || source).slice(0, 120), item.language, item.quality].filter(Boolean).join(' ').slice(0, 200);
+  }
   const headers = streamHeaders(item.headers);
   if (Object.keys(headers).length) hints.proxyHeaders = { request: headers };
-  const stream = { name, title, description: title, url, behaviorHints: hints };
+  const stream = { name, title, description: title, url };
+  if (Object.keys(hints).length) stream.behaviorHints = hints;
   const subtitles = streamSubtitles(item.subtitles);
   if (subtitles.length) stream.subtitles = subtitles;
   return stream;
@@ -144,6 +184,9 @@ async function runVod(parsed, {
 } = {}) {
   const controller = new AbortController();
   const fetch = budgetFetcher(fetcher, controller.signal, maxRequests);
+  // Un ID de serie sin episodio solo identifica el título: no hay nada que
+  // resolver y evita abrir fichas de temporadas completas.
+  if (parsed.incomplete) return [];
   const groups = PROVIDERS.map(() => []);
   const tasks = PROVIDERS.map(async (id, index) => {
     try {
@@ -179,7 +222,7 @@ async function runVod(parsed, {
       const stream = toStremioStream(raw);
       if (!stream) continue;
       // El mismo medio puede necesitar cabeceras diferentes según el origen.
-      const key = stream.url + '\n' + JSON.stringify(stream.behaviorHints.proxyHeaders || {});
+      const key = stream.url + '\n' + JSON.stringify((stream.behaviorHints && stream.behaviorHints.proxyHeaders) || {});
       if (seen.has(key)) continue;
       seen.add(key);
       result.push(stream);
@@ -191,8 +234,10 @@ async function runVod(parsed, {
 function createVodResolver(options = {}) {
   const pending = new Map();
   return function resolve(type, id) {
+    // parseVodId acepta IMDb, TMDB (con prefijo o número) y los IDs de anime
+    // que usan los clientes (kitsu, mal, anilist, anidb) y TVDB.
     const parsed = parseVodId(type, id);
-    if (!parsed) return Promise.resolve([]);
+    if (!parsed || parsed.incomplete) return Promise.resolve([]);
     const key = [parsed.type, parsed.id, parsed.season, parsed.episode].join('|');
     if (pending.has(key)) return pending.get(key);
     // Solo se comparten búsquedas simultáneas: los enlaces pueden caducar.

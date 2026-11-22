@@ -169,17 +169,31 @@ function aesPlayerLink(encoded, keyHex) {
   } catch (e) { return ''; }
 }
 
-/* Bounded proof of work for player data and Anubis; never runs unbounded. */
+/* Bounded proof of work for player data and Anubis; never runs unbounded.
+ * Anubis cuenta BITS iniciales a cero (difficulty 4 = 4 bits = primer nibble
+ * hexadecimal 0), no dígitos hexadecimales. Con un nibble se exigía 4 veces
+ * más trabajo y el reto se agotaba antes de resolverlo, de modo que ninguna
+ * fuente de FlixLatam/CinePlus podía devolver enlaces. */
+function powSatisfied(hash, bits) {
+  var fullBytes = Math.floor(bits / 8);
+  var restBits = bits % 8;
+  for (var i = 0; i < fullBytes; i++) {
+    if (parseInt(hash.substr(i * 2, 2), 16) !== 0) return false;
+  }
+  if (!restBits) return true;
+  var nibble = parseInt(hash.charAt(fullBytes * 2), 16);
+  return (nibble >> (4 - restBits)) === 0;
+}
+
 function solvePlayerPow(challenge, difficulty) {
-  var zeros = parseInt(difficulty, 10);
-  if (!challenge || String(challenge).length > 512 || !isFinite(zeros) || zeros < 0 || zeros > 4) return null;
+  var bits = parseInt(difficulty, 10);
+  if (!challenge || String(challenge).length > 512 || !isFinite(bits) || bits < 0 || bits > 24) return null;
   var budget = typeof HOSTED_MAX_POW_MS === 'number' ? Math.max(250, Math.min(HOSTED_MAX_POW_MS, 6000)) : 6000;
-  var prefix = new Array(zeros + 1).join('0');
   var started = Date.now();
-  for (var n = 0; n < 250000; n++) {
+  for (var n = 0; n < 2000000; n++) {
     if (n % 256 === 0 && Date.now() - started > budget) break;
     var hash = sha256Hex(challenge + n);
-    if (hash.slice(0, zeros) === prefix) return { nonce: n, hash: hash, elapsed: Math.max(1, Date.now() - started) };
+    if (powSatisfied(hash, bits)) return { nonce: n, hash: hash, elapsed: Math.max(1, Date.now() - started) };
   }
   return null;
 }
@@ -238,9 +252,13 @@ function pageRequest(url, referer) {
   });
 }
 
-function passAnubis(html, url, referer) {
+/* Anubis puede agravar el reto (más bits) cuando la IP del servidor es
+ * sospechosa. Se resuelven varios retos seguidos, con un máximo, y se
+ * reutiliza la cookie de la sesión. */
+function passAnubis(html, url, referer, round) {
   var m = /<script\b[^>]*\bid=["']anubis_challenge["'][^>]*>([\s\S]*?)<\/script>/i.exec(html || '');
   if (!m) return Promise.resolve(null);
+  if ((round || 0) >= 3) return Promise.resolve(null);
   var data;
   try { data = JSON.parse(m[1]); } catch (e) { return Promise.resolve(null); }
   var challenge = data && data.challenge;
@@ -255,7 +273,10 @@ function passAnubis(html, url, referer) {
     '&redir=' + encodeURIComponent(redirect) + '&elapsedTime=' + solved.elapsed;
   return pageRequest(pass, referer).then(function (result) {
     if (result.status < 200 || result.status >= 400) return null;
-    return pageRequest(url, referer);
+    return pageRequest(url, referer).then(function (next) {
+      if (next && next.text && /anubis_challenge/i.test(next.text)) return passAnubis(next.text, url, referer, (round || 0) + 1);
+      return next;
+    });
   });
 }
 

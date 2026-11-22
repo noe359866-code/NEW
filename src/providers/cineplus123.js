@@ -320,7 +320,7 @@ function cineStream(info, item) {
 
 function cineplus123GetStreams(tmdbId, mediaType, season, episode) {
   var conf = settings({ maxResults: '8' });
-  return resolveMedia(tmdbId, mediaType, season, episode).then(function (info) {
+  return requestMedia(tmdbId, mediaType, season, episode).then(function (info) {
     if (!info.title) return [];
     if (info.isTv && (!Number.isInteger(info.season) || info.season < 1 || !Number.isInteger(info.episode) || info.episode < 1)) return [];
     var published = {};
@@ -359,6 +359,32 @@ function cineplus123GetStreams(tmdbId, mediaType, season, episode) {
   }).catch(function (error) { log('cineplus123', error && error.message || error); return []; });
 }
 
+
+/* El cliente puede enviar IMDb, TMDB, TVDB o un ID de anime (kitsu:, mal:,
+ * anilist:, anidb:). normalizeContentId + resolveRequestMedia aceptan todas
+ * esas formas; antes se descartaban y no se buscaba nada. */
+function requestMedia(rawId, mediaType, season, episode) {
+  var parsed = normalizeContentId(mediaType, rawId);
+  if (!parsed) return Promise.resolve(null);
+  // El episodio que cuenta es el del cliente, no el que se deduzca del ID.
+  var effective = parsed;
+  if (season != null || episode != null) {
+    effective = {};
+    for (var key in parsed) effective[key] = parsed[key];
+    effective.season = season == null ? parsed.season : parseInt(season, 10);
+    effective.episode = episode == null ? parsed.episode : parseInt(episode, 10);
+    if (effective.type !== 'movie' && (!Number.isInteger(effective.season) || !Number.isInteger(effective.episode))) {
+      return Promise.resolve(null);
+    }
+  }
+  return resolveRequestMedia(effective).catch(function () { return null; });
+}
+
+/** Solo metadatos: lo usa el endpoint /meta del addon; no busca fuentes. */
+function cineplusResolveMeta(rawId, mediaType, season, episode) {
+  return requestMedia(rawId, mediaType, season, episode);
+}
+
 function onSettings() {
   return Promise.resolve([
     { type: 'header', label: 'CinePlus123' },
@@ -368,4 +394,4 @@ function onSettings() {
     ] }
   ]);
 }
-module.exports = { getStreams: cineplus123GetStreams, onSettings: onSettings };
+module.exports = { getStreams: cineplus123GetStreams, resolveMeta: cineplusResolveMeta, onSettings: onSettings };

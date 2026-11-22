@@ -193,7 +193,7 @@ test('addon: manifest, catálogo, búsqueda, meta y stream; no existe endpoint d
     };
     const manifest = (await request('/manifest.json')).body;
     assert.deepEqual(manifest.resources.map(r => r.name), ['catalog', 'meta', 'stream']);
-    assert.deepEqual(manifest.types, ['movie', 'series', 'tv', 'channel']);
+    assert.deepEqual(manifest.types, ['movie', 'series', 'tv', 'anime', 'channel']);
     assert.equal(manifest.catalogs.length, 8);
 
     const all = (await request('/catalog/channel/nuvio-deportes.json')).body.metas;
@@ -216,7 +216,7 @@ test('addon: manifest, catálogo, búsqueda, meta y stream; no existe endpoint d
     const streams = (await request('/stream/channel/' + encodeURIComponent(id) + '.json')).body.streams;
     assert.equal(streams[0].url, 'https://messi.damitv.st/c/abc.m3u8?sig=123');
     assert.equal(streams[0].behaviorHints.proxyHeaders.request.Referer, 'https://damitv.st/');
-    assert.equal(streams[0].behaviorHints.notWebReady, true);
+    assert.equal(streams[0].behaviorHints.notWebReady, undefined);
     assert.ok(get.calls.filter(call => call.url.includes('/papi/api/streams')).length >= 2, 'renueva la API al reproducir');
 
     const tv = (await request('/stream/tv/' + encodeURIComponent('nebula-sport:tvenvivo:espn-2') + '.json')).body.streams;
