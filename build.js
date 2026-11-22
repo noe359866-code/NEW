@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 /**
- * Empaquetador de los providers de Nuvio.
+ * Empaquetador de los providers internos del addon.
  *
- * Nuvio descarga UN archivo por scraper y lo ejecuta en QuickJS dentro de un
- * IIFE, con `module` disponible. Por eso cada provider se genera como un
- * único archivo CommonJS autocontenido: se concatenan los módulos de
- * src/core/ en orden y se injertan en src/providers/<id>.js.
+ * Cada provider se genera como un único archivo CommonJS autocontenido: se
+ * concatenan los módulos de src/core/ y se injertan en src/providers/<id>.js.
+ * El servidor ejecuta los bundles para resolver las fuentes VOD.
  *
  * Uso: node build.js [id...]
  */
@@ -79,7 +78,7 @@ function build() {
   }
 
   buildCoreBundle(core);
-  validateManifest(built);
+  validateManifest();
 
   for (const item of built) {
     const kb = (item.bytes / 1024).toFixed(1);
@@ -95,20 +94,12 @@ function buildCoreBundle(core) {
   const dir = path.join(ROOT, 'tests', '.build');
   fs.mkdirSync(dir, { recursive: true });
   const exported = [
-    'norm', 'tokenize', 'significantTokens', 'titleScore', 'decodeEntities', 'stripTags', 'attrOf',
-    'absoluteUrl', 'parseQuality', 'qualityRank', 'parseSize', 'formatSize', 'parseYear',
-    'parseSeasonEpisode', 'seasonCode', 'episodeCode', 'seasonEpisodeLabel', 'matchesEpisode',
-    'uniqueBy', 'sortByQuality', 'b64ToBytes', 'bytesToB64', 'bytesToText', 'bytesToHex',
-    'utf8ToBytes', 'rot13', 'settings',
-    'request', 'getText', 'getBytes', 'getJson', 'postForm', 'postJson', 'pickHost', 'metaContent',
-    'sha1Bytes', 'sha256Bytes', 'sha256Hex', 'sha1Hex',
-    'parseTorrent', 'buildMagnet', 'infoHashFromMagnet', 'magnetName',
-    'resolveMedia', 'searchQueries', 'cleanContentId',
-    'makeStream', 'finalizeStreams', 'torrentToMagnet', 'mapLimit', 'languageLabel',
-    'decodeShortLink', 'decodeShortLinkOrUrl', 'createDonEngine',
-    'looksLikeTorrentBytes', 'findDownloadLinks', 'findInfoHashes', 'mimeLooksTorrent',
-    'resolveTorrentOrMagnet', 'originOf',
-    'isChallengeHtml', 'cloudflareSettings', 'browserHeaders', 'hasCloudflareSession'
+    'norm', 'tokenize', 'titleScore', 'decodeEntities', 'stripTags', 'attrOf', 'absoluteUrl',
+    'parseQuality', 'qualityRank', 'parseYear', 'parseSeasonEpisode', 'seasonEpisodeLabel',
+    'b64ToBytes', 'bytesToB64', 'bytesToText', 'utf8ToBytes', 'settings', 'sha256Hex',
+    'resolveMedia', 'searchQueries', 'cleanContentId', 'makeStream', 'finalizeStreams', 'mapLimit',
+    'languageLabel', 'unescapePlayerText', 'publicHttpUrl', 'directMediaUrl', 'findDirectMedia',
+    'unpackPlayerScript', 'pagePlayerLinks', 'embed69Links', 'solvePlayerPow', 'resolveDirectPlayers'
   ];
   const source = [
     "'use strict';",
@@ -119,27 +110,25 @@ function buildCoreBundle(core) {
   fs.writeFileSync(path.join(dir, 'core.cjs'), source, 'utf8');
 }
 
-function validateManifest(built) {
-  if (!fs.existsSync(MANIFEST)) return;
+function validateManifest() {
   const manifest = JSON.parse(fs.readFileSync(MANIFEST, 'utf8'));
-  const ids = new Set();
   const errors = [];
+  const types = new Set(manifest.types || []);
+  const resources = new Set((manifest.resources || []).map(item => typeof item === 'string' ? item : item.name));
+  const ids = new Set();
 
-  if (!manifest.name || !manifest.version) errors.push('manifest: faltan name/version');
-  if (!Array.isArray(manifest.scrapers) || !manifest.scrapers.length) errors.push('manifest: scrapers vacío');
-
-  for (const scraper of manifest.scrapers || []) {
-    if (!scraper.id) errors.push('scraper sin id');
-    if (ids.has(scraper.id)) errors.push(`id duplicado: ${scraper.id}`);
-    ids.add(scraper.id);
-    for (const field of ['name', 'version', 'filename']) {
-      if (!scraper[field]) errors.push(`${scraper.id}: falta ${field}`);
-    }
-    if (scraper.filename && !scraper.filename.startsWith('http')) {
-      const target = path.join(ROOT, scraper.filename);
-      if (!fs.existsSync(target)) errors.push(`${scraper.id}: no existe ${scraper.filename} (compila antes)`);
-      else if (fs.statSync(target).size > 5 * 1024 * 1024) errors.push(`${scraper.id}: supera 5 MB`);
-    }
+  if (!manifest.id || !manifest.name || !manifest.version || !manifest.description) errors.push('faltan id, name, version o description');
+  for (const resource of ['catalog', 'meta', 'stream']) if (!resources.has(resource)) errors.push('falta resource: ' + resource);
+  if (!Array.isArray(manifest.catalogs) || !manifest.catalogs.length) errors.push('no hay catálogos');
+  for (const catalog of manifest.catalogs || []) {
+    if (!catalog.id || !catalog.name || !types.has(catalog.type)) errors.push('catálogo inválido: ' + catalog.id);
+    if (ids.has(catalog.id)) errors.push('catálogo duplicado: ' + catalog.id);
+    ids.add(catalog.id);
+  }
+  for (const id of ['flixlatam', 'latanime', 'cineplus123']) {
+    const target = path.join(OUT_DIR, id + '.js');
+    if (!fs.existsSync(target)) errors.push('falta el provider interno: ' + id);
+    else if (fs.statSync(target).size > 5 * 1024 * 1024) errors.push('provider demasiado grande: ' + id);
   }
 
   if (errors.length) {
@@ -147,7 +136,7 @@ function validateManifest(built) {
     for (const error of errors) console.error(' - ' + error);
     process.exit(1);
   }
-  console.log(`✓ manifest.json  ${manifest.scrapers.length} scrapers`);
+  console.log(`✓ manifest.json  ${manifest.catalogs.length} catálogos del addon`);
 }
 
 build();
