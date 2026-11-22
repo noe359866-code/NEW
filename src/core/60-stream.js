@@ -11,7 +11,19 @@ function makeStream(data) {
   if (data.language) stream.language = data.language;
   if (data.headers) stream.headers = data.headers;
   if (data.subtitles && data.subtitles.length) stream.subtitles = data.subtitles;
+  // El mismo reproductor sigue en el siguiente episodio y las insignias de
+  // Nuvio leen `filename`; ninguno de los dos cambia el enlace entregado.
+  stream.bingeGroup = data.bingeGroup || providerBingeGroup(data.provider, data.name);
+  stream.filename = data.filename || syntheticFilename(stream.title, stream.quality, data.language);
   return stream;
+}
+
+/** Agrupa las opciones del mismo reproductor para seguir la serie. */
+function providerBingeGroup(provider, name) {
+  var base = norm(String(provider || 'nebula'));
+  var extra = norm(String(name || ''));
+  if (extra && extra !== base && extra.indexOf(base) === -1) base = base + ' ' + extra;
+  return (base.replace(/\s+/g, '-') || 'nebula').slice(0, 60);
 }
 
 function finalizeStreams(label, streams, options) {

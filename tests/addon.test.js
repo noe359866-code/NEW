@@ -74,10 +74,16 @@ test('parsea IDs de película y episodios sin adivinar temporadas ni aceptar URL
   assert.deepEqual(parseVodId('tv', 'tt1234567:1:5'), { id: 'tt1234567', type: 'series', season: 1, episode: 5 });
   assert.deepEqual(parseVodId('series', '44:1:1'), { id: '44', type: 'series', season: 1, episode: 1 });
   for (const [type, id] of [
-    ['series', 'tmdb:44'], ['series', 'tt1234567:0:2'], ['series', 'tt1234567:1:0'],
+    ['series', 'tt1234567:0:2'], ['series', 'tt1234567:1:0'],
     ['movie', 'tt0816692:1:1'], ['channel', 'tt0816692'], ['movie', 'tt12'],
-    ['movie', 'https://example.com/video.mp4'], ['movie', 'tmdb:44:evil'], ['movie', '0']
+    ['movie', 'https://example.com/video.mp4'], ['movie', 'tmdb:44:evil'], ['movie', '0'],
+    ['series', 'tmdb:44:evil'], ['anime', 'kitsu:'],
   ]) assert.equal(parseVodId(type, id), null, `${type} ${id}`);
+  // Un ID de serie sin episodio identifica el título, pero no se buscan
+  // fuentes con él: `incomplete` lo corta en resolve().
+  assert.equal(parseVodId('series', 'tmdb:44').incomplete, true);
+  assert.deepEqual(parseVodId('anime', 'kitsu:7442:1:3'), { id: 'kitsu:7442', type: 'series', season: 1, episode: 3 });
+  assert.deepEqual(parseVodId('series', 'mal:21:2:10'), { id: 'mal:21', type: 'series', season: 2, episode: 10 });
 });
 
 test('adaptador de stream conserva las cabeceras seguras y rechaza páginas e IPs', () => {
@@ -91,7 +97,9 @@ test('adaptador de stream conserva las cabeceras seguras y rechaza páginas e IP
   assert.deepEqual(stream.behaviorHints.proxyHeaders.request, {
     Referer: 'https://player.example/e/1', Origin: 'https://player.example', 'User-Agent': 'Test', Cookie: 'a=b'
   });
-  assert.equal(stream.behaviorHints.notWebReady, true);
+  assert.equal(stream.behaviorHints.notWebReady, undefined);
+  assert.ok(stream.behaviorHints.bingeGroup);
+  assert.match(stream.behaviorHints.filename, /1080p/);
   assert.equal(toStremioStream({ url: 'https://player.example/embed?id=a.mp4' }), null);
   assert.equal(toStremioStream({ url: 'http://127.0.0.1/private.mp4' }), null);
   assert.equal(toStremioStream({ url: 'https://ads.example/spot.mp4' }), null);
@@ -129,7 +137,7 @@ test('servidor unificado resuelve película IMDb y anime TMDB/IMDb en el mismo m
     assert.equal(movie[0].url, 'https://cdn.example/1080p/film.m3u8?sig=abc');
     assert.match(movie[0].name, /FlixLatam.*1080p/);
     assert.equal(movie[0].behaviorHints.proxyHeaders.request.Referer, 'https://player.example/e/film');
-    assert.equal(movie[0].behaviorHints.notWebReady, true);
+    assert.equal(movie[0].behaviorHints.notWebReady, undefined);
 
     for (const id of ['tmdb:44:2:1', 'tt1234567:2:1']) {
       const result = await json('/stream/series/' + encodeURIComponent(id) + '.json');
@@ -254,7 +262,7 @@ test('el addon expone CinePlus123 en su stream de película con cabeceras Vidara
     assert.match(streams[0].name, /CinePlus123/);
     assert.match(streams[0].description, /LATINO HD.*Latino/);
     assert.equal(streams[0].url, 'https://cdn.example/cine/film.m3u8?token=secret');
-    assert.equal(streams[0].behaviorHints.notWebReady, true);
+    assert.equal(streams[0].behaviorHints.notWebReady, undefined);
     assert.equal(streams[0].behaviorHints.proxyHeaders.request.Referer, 'https://vidara.to/');
     assert.equal(streams[0].behaviorHints.proxyHeaders.request.Origin, 'https://vidara.to');
     assert.equal(streams[0].subtitles.length, 1);

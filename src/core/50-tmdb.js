@@ -122,23 +122,87 @@ function mergeImdbMetadata(imdb, tmdb, imdbId) {
   };
 }
 
+function webResult(id, type, title, year, imdbId) {
+  if (!title) return null;
+  return {
+    tmdbId: String(id),
+    imdbId: imdbId || null,
+    isTv: type === 'tv',
+    title: title,
+    originalTitle: title,
+    year: year || null,
+    titles: [title],
+    seasons: []
+  };
+}
+
+/* Sin TMDB_API_KEY la página pública suele bloquear al servidor. Primero se
+ * intenta la redirección corta, que expone el título en la URL
+ * (/movie/157336-interstellar), y después Wikidata, que no pide clave. */
+function slugTitle(slug) {
+  // El slug de TMDB empieza por el propio ID («157336-interstellar»): se quita
+  // para no buscar «157336 Interstellar».
+  var text = String(slug || '').replace(/^\d+-/, '').replace(/-\d{3,}$/, '').replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, function (c) { return c.toUpperCase(); }).trim();
+  return text && /[a-z]/i.test(text) && text.length <= 160 ? text : '';
+}
+
 function resolveFromWeb(id, mediaType) {
   var type = mediaType === 'tv' ? 'tv' : 'movie';
-  return getText('https://www.themoviedb.org/' + type + '/' + encodeURIComponent(id), { timeout: 9000 })
-    .then(function (html) {
-      if (!html) return null;
-      var info = titleFromHtml(html);
-      if (!info) return null;
-      return {
-        tmdbId: String(id),
-        imdbId: null,
-        isTv: type === 'tv',
-        title: info.title,
-        originalTitle: info.title,
-        year: info.year,
-        titles: [info.title]
-      };
+  var found = null;
+
+  function page() {
+    return getText('https://www.themoviedb.org/' + type + '/' + encodeURIComponent(id), { timeout: 9000 })
+      .then(function (html) {
+        if (!html) return null;
+        var info = titleFromHtml(html);
+        if (!info) return null;
+        var imdb = /\/(?:imdb|title)\/(tt\d{5,12})/i.exec(html);
+        return webResult(id, type, info.title, info.year, imdb ? imdb[1].toLowerCase() : null);
+      }, function () { return null; });
+  }
+
+  function redirectedSlug() {
+    // La ficha corta redirige a /movie/157336-interstellar.
+    return request('https://www.themoviedb.org/' + type + '/' + encodeURIComponent(id),
+      { timeout: 9000, retries: 0, redirect: 'manual' }).then(function (res) {
+      var location = res && res.headers && res.headers.get ? res.headers.get('location') : '';
+      var slug = /^https?:\/\/www\.themoviedb\.org\/(?:movie|tv)\/[0-9]+-([a-z0-9-]+)\/?$/i.exec(location || '');
+      var fromSlug = slug ? slugTitle(slug[1]) : '';
+      return fromSlug ? webResult(id, type, fromSlug, parseYear(location), null) : null;
+    }, function () { return null; });
+  }
+
+  function fromWikidata() {
+    // Wikidata solo aporta IDs; el título sale de IMDb o de TVMaze.
+    var property = type === 'tv' ? 'P4983' : 'P4947';
+    if (typeof wikidataLookup !== 'function') return Promise.resolve(null);
+    return Promise.resolve(wikidataLookup(property, id)).then(function (ids) {
+      if (!ids) return null;
+      if (ids.imdbId) {
+        return resolveImdb(ids.imdbId, type === 'tv').then(function (imdb) {
+          return imdb && imdb.title ? webResult(id, type, imdb.title, imdb.year, ids.imdbId) : null;
+        }, function () { return null; });
+      }
+      if (ids.tvdbId) {
+        return getJson('https://api.tvmaze.com/lookup/shows?thetvdb=' + ids.tvdbId, { timeout: 8000, retries: 0 })
+          .then(function (show) {
+            return show && show.name ? webResult(id, type, String(show.name).slice(0, 200), parseYear(show.premiered || ''), null) : null;
+          }, function () { return null; });
+      }
+      return null;
+    }, function () { return null; });
+  }
+
+  return page().then(function (result) {
+    if (result) { found = result; return null; }
+    return redirectedSlug().then(function (shortResult) {
+      if (shortResult) found = shortResult;
+      return null;
     });
+  }).then(function () {
+    return found || fromWikidata();
+  });
 }
 
 /**
@@ -149,7 +213,9 @@ function resolveFromWeb(id, mediaType) {
  */
 function resolveMedia(rawId, mediaType, season, episode) {
   var id = cleanContentId(rawId);
-  var isTv = mediaType === 'tv' || mediaType === 'series' || season != null;
+  var isTv = typeof isSeriesLikeType === 'function'
+    ? isSeriesLikeType(mediaType) || season != null
+    : mediaType === 'tv' || mediaType === 'series' || season != null;
   var info = {
     id: id,
     tmdbId: /^\d+$/.test(id) ? id : null,
