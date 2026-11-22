@@ -1,21 +1,21 @@
 {
-  "name": "nebula-es-nuvio-plugin",
-  "version": "1.1.0",
+  "name": "nebula-es-addon",
+  "version": "3.0.0",
   "private": true,
   "type": "commonjs",
-  "description": "Scrapers para Nuvio: DonTorrent, MejorTorrent, EliteTorrent, DivxTotal, TorrentLandia, WolfMax4K, SinSitio, SubTorrents, TorrentGalaxy, GranTorrent y Cinecalidad.",
+  "description": "Addon unificado para Nuvio y Stremio: cine, anime y deportes en vivo sin retransmisión.",
   "scripts": {
+    "start": "node addon/server.js",
     "build": "node build.js",
-    "test": "node --test tests/*.test.js",
-    "check": "node build.js && node --test tests/*.test.js",
-    "live": "node tools/live-check.js",
-    "probe": "node tools/probe.js"
+    "test": "node build.js && node --test tests/*.test.js",
+    "check": "npm test",
+    "live": "node tools/live-check.js"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20.3.0 <25"
   },
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "crypto-js": "^4.2.0"
   }
 }

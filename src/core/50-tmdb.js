@@ -38,14 +38,9 @@ function titleFromHtml(html) {
   return clean ? { title: clean, year: year } : null;
 }
 
-function resolveImdb(id) {
-  var isTv = false;
-  return request('https://v3-cinemeta.strem.io/meta/movie/' + encodeURIComponent(id) + '.json', { timeout: 9000 })
-    .then(function (movieRes) {
-      if (movieRes.ok && movieRes.text && movieRes.text.indexOf('"meta"') !== -1) return movieRes;
-      isTv = true;
-      return request('https://v3-cinemeta.strem.io/meta/series/' + encodeURIComponent(id) + '.json', { timeout: 9000 });
-    })
+function resolveImdb(id, isTv) {
+  var type = isTv ? 'series' : 'movie';
+  return request('https://v3-cinemeta.strem.io/meta/' + type + '/' + encodeURIComponent(id) + '.json', { timeout: 9000 })
     .then(function (res) {
       if (!res || !res.ok) return null;
       var parsed = null;
@@ -91,9 +86,40 @@ function resolveFromApi(id, mediaType) {
       year: date ? parseInt(String(date).slice(0, 4), 10) : null,
       titles: [title, original, alt].filter(function (value, index, arr) {
         return value && arr.indexOf(value) === index;
-      })
+      }),
+      seasons: type === 'tv' && Array.isArray(primary.seasons) ? primary.seasons : []
     };
   });
+}
+
+/* Para IDs IMDb, TMDB añade títulos localizados y los recuentos de las
+ * temporadas, necesarios para algunos animes con numeración continua. */
+function resolveImdbFromApi(imdbId, isTv) {
+  var key = tmdbApiKey();
+  if (!key) return Promise.resolve(null);
+  var url = 'https://api.themoviedb.org/3/find/' + encodeURIComponent(imdbId) +
+    '?api_key=' + encodeURIComponent(key) + '&external_source=imdb_id';
+  return getJson(url, { timeout: 9000, retries: 0 }).then(function (result) {
+    var matches = result && result[isTv ? 'tv_results' : 'movie_results'];
+    var id = Array.isArray(matches) && matches[0] && String(matches[0].id || '');
+    if (!id || !/^\d+$/.test(id)) return null;
+    return resolveFromApi(id, isTv ? 'tv' : 'movie');
+  });
+}
+
+function mergeImdbMetadata(imdb, tmdb, imdbId) {
+  if (!tmdb) return imdb;
+  var titles = (tmdb.titles || []).concat(imdb && imdb.titles || []);
+  return {
+    tmdbId: tmdb.tmdbId,
+    imdbId: imdbId,
+    isTv: tmdb.isTv,
+    title: tmdb.title || imdb && imdb.title || '',
+    originalTitle: tmdb.originalTitle || imdb && imdb.originalTitle || '',
+    year: tmdb.year || imdb && imdb.year || null,
+    titles: titles.filter(function (value, index, all) { return value && all.indexOf(value) === index; }),
+    seasons: tmdb.seasons || []
+  };
 }
 
 function resolveFromWeb(id, mediaType) {
@@ -134,12 +160,14 @@ function resolveMedia(rawId, mediaType, season, episode) {
     title: '',
     originalTitle: '',
     year: null,
-    titles: []
+    titles: [],
+    seasons: []
   };
 
   var resolver;
   if (info.imdbId) {
-    resolver = resolveImdb(info.imdbId);
+    resolver = Promise.all([resolveImdb(info.imdbId, info.isTv), resolveImdbFromApi(info.imdbId, info.isTv)])
+      .then(function (results) { return mergeImdbMetadata(results[0], results[1], info.imdbId); });
   } else if (info.tmdbId) {
     resolver = resolveFromApi(info.tmdbId, isTv ? 'tv' : 'movie').then(function (result) {
       if (result) return result;
@@ -155,6 +183,7 @@ function resolveMedia(rawId, mediaType, season, episode) {
     info.originalTitle = meta.originalTitle || meta.title || '';
     info.year = meta.year || null;
     info.titles = meta.titles && meta.titles.length ? meta.titles : [info.title].filter(Boolean);
+    info.seasons = Array.isArray(meta.seasons) ? meta.seasons : [];
     if (meta.imdbId) info.imdbId = meta.imdbId;
     if (meta.tmdbId) info.tmdbId = meta.tmdbId;
     if (meta.isTv != null) info.isTv = meta.isTv;
@@ -169,6 +198,9 @@ function searchQueries(info) {
   var year = info.year ? String(info.year) : '';
   if (info.title) list.push(info.title);
   if (info.originalTitle && info.originalTitle !== info.title) list.push(info.originalTitle);
+  if (Array.isArray(info.titles)) {
+    for (var i = 0; i < info.titles.length; i++) if (info.titles[i]) list.push(info.titles[i]);
+  }
   if (year && info.title) list.push(info.title + ' ' + year);
   if (info.title) {
     // el título sin artículos suele ayudar en buscadores simples

@@ -1,100 +1,100 @@
 #!/usr/bin/env node
-/**
- * Prueba real contra los sitios (necesita red y, idealmente, una clave TMDB).
- *
- *   TMDB_API_KEY=tu_clave node tools/live-check.js --site dontorrent --type movie --id 31199
- *   TMDB_API_KEY=tu_clave node tools/live-check.js --all --type tv --id 94997 --season 1 --episode 2
- *
- * Nuvio inyecta TMDB_API_KEY como global; aquí se toma del entorno.
- */
+/** Comprueba los bundles VOD contra los sitios, sin descargar medios. */
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const vm = require('vm');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const { safeFetch } = require('../addon/fetch');
+const { PROVIDERS } = require('../addon/vod');
 
 const ROOT = path.join(__dirname, '..');
 
 function parseArgs(argv) {
   const args = { type: 'movie', season: null, episode: null };
+  const fields = new Set(['--site', '--type', '--id', '--season', '--episode', '--settings', '--title', '--year', '--season-counts']);
   for (let i = 0; i < argv.length; i++) {
     const token = argv[i];
     if (token === '--all') args.all = true;
-    else if (token === '--site') args.site = argv[++i];
-    else if (token === '--type') args.type = argv[++i];
-    else if (token === '--id') args.id = argv[++i];
-    else if (token === '--season') args.season = Number(argv[++i]);
-    else if (token === '--episode') args.episode = Number(argv[++i]);
-    else if (token === '--settings') args.settings = JSON.parse(argv[++i]);
-    else if (token === '--title') args.title = argv[++i];
-    else if (token === '--year') args.year = argv[++i];
     else if (token === '--help' || token === '-h') args.help = true;
+    else if (fields.has(token)) {
+      if (!argv[i + 1] || argv[i + 1].startsWith('--')) throw new Error(`Falta el valor de ${token}`);
+      const value = argv[++i];
+      if (token === '--season' || token === '--episode') args[token.slice(2)] = Number(value);
+      else if (token === '--settings') args.settings = JSON.parse(value);
+      else if (token === '--season-counts') args.seasonCounts = value.split(',').map(Number);
+      else args[token.slice(2)] = value;
+    } else throw new Error(`Opción desconocida: ${token}`);
   }
   return args;
 }
 
-function usage() {
-  console.log(`Uso:
-  node tools/live-check.js --site <id> --id <tmdbId> [--type movie|tv] [--season N --episode N]
-  node tools/live-check.js --all --id <tmdbId> [--type movie|tv]
-
-Opciones:
-  --settings '{"maxResults":"4"}'   ajustes equivalentes a SCRAPER_SETTINGS
-  --title "Reacher" --year 2022     simula TMDB (útil sin TMDB_API_KEY)
-Variables:
-  TMDB_API_KEY   clave de TMDB (Nuvio la inyecta como global; aquí del entorno)
-`);
+function validateArgs(args) {
+  if (args.help) return;
+  if (!args.id || (!args.site && !args.all) || (args.site && args.all)) throw new Error('Indica --id y exactamente uno de --site o --all');
+  if (!/^(?:\d+|tmdb[:_-]\d+|tt\d{5,})$/i.test(args.id)) throw new Error('--id debe ser un identificador TMDB o IMDb');
+  if (!['movie', 'tv'].includes(args.type)) throw new Error('--type debe ser movie o tv');
+  if (args.type === 'tv' && (!Number.isInteger(args.season) || args.season < 1 || !Number.isInteger(args.episode) || args.episode < 1)) {
+    throw new Error('Para TV indica --season y --episode, enteros mayores que cero');
+  }
+  if (args.settings && (typeof args.settings !== 'object' || Array.isArray(args.settings))) throw new Error('--settings debe ser un objeto JSON');
+  if (args.seasonCounts && args.seasonCounts.some(count => !Number.isInteger(count) || count < 1)) throw new Error('--season-counts debe ser una lista de enteros positivos');
 }
 
-function tmdbStubFetch(title, year, type) {
+function usage() {
+  console.log(`Uso:
+  node tools/live-check.js --site flixlatam --id 157336 --type movie
+  node tools/live-check.js --site latanime --id 37854 --type tv --season 1 --episode 1
+  node tools/live-check.js --site cineplus123 --id 157336 --type movie --title "Interstellar" --year 2014
+  node tools/live-check.js --all --id 157336 --title "Interstellar"
+
+--site flixlatam|latanime|cineplus123   proveedor; --all prueba los tres
+--settings '{"maxResults":"4"}'  ajustes de Nuvio
+--title "Título"             simula los metadatos TMDB/IMDb, no el sitio
+--year 2014                  año para la simulación de metadatos
+--season-counts 12,10        episodios previos por temporada (con --title)
+TMDB_API_KEY                 clave de TMDB; sin ella se intenta la web pública
+
+La herramienta analiza páginas y muestra enlaces hallados; no solicita ni
+verifica las playlists, segmentos o vídeos, y no demuestra reproducción.`);
+}
+
+function tmdbStubFetch(title, year, type, fetcher, seasonCounts = []) {
   return async (url, init) => {
-    const target = String(url);
-    if (target.includes('api.themoviedb.org')) {
-      const payload = type === 'tv'
-        ? { name: title, original_name: title, first_air_date: `${year || ''}-01-01`, id: 1 }
-        : { title, original_title: title, release_date: `${year || ''}-01-01`, id: 1 };
-      return new Response(JSON.stringify(payload), {
-        status: 200,
-        headers: { 'content-type': 'application/json' }
+    const target = new URL(String(url));
+    if (target.hostname === 'v3-cinemeta.strem.io') {
+      return new Response(JSON.stringify({ meta: { name: title, original_name: title, type: type === 'tv' ? 'series' : 'movie', year: year || '' } }), {
+        status: 200, headers: { 'content-type': 'application/json' }
       });
     }
-    if (target.includes('themoviedb.org')) {
-      return new Response('<html><body></body></html>', { status: 200 });
+    if (target.hostname === 'api.themoviedb.org') {
+      const date = year ? `${year}-01-01` : '';
+      const payload = type === 'tv'
+        ? { name: title, original_name: title, first_air_date: date,
+            seasons: seasonCounts.map((count, index) => ({ season_number: index + 1, episode_count: count })) }
+        : { title, original_title: title, release_date: date };
+      return new Response(JSON.stringify(payload), { status: 200, headers: { 'content-type': 'application/json' } });
     }
-    return fetch(url, init);
+    return fetcher(url, init);
   };
 }
 
-function loadProvider(id, settings, stub) {
+function loadProvider(id, { settings = {}, fetcher, tmdbKey = '' } = {}) {
   const file = path.join(ROOT, 'providers', `${id}.js`);
   const code = fs.readFileSync(file, 'utf8');
   const module = { exports: {} };
   const sandbox = {
-    module,
-    exports: module.exports,
-    console,
-    fetch: stub || ((...args) => fetch(...args)),
-    TMDB_API_KEY: process.env.TMDB_API_KEY || '',
-    SCRAPER_SETTINGS: settings || {},
-    URL,
-    URLSearchParams,
-    TextDecoder,
-    TextEncoder,
-    AbortController,
-    setTimeout,
-    clearTimeout,
-    Promise,
-    Uint8Array,
-    Date,
-    JSON,
-    Math,
-    RegExp,
-    Error,
-    isFinite,
-    parseInt,
-    parseFloat,
-    decodeURIComponent,
-    encodeURIComponent
+    module, exports: module.exports, console,
+    fetch: fetcher || safeFetch,
+    TMDB_API_KEY: tmdbKey,
+    SCRAPER_SETTINGS: settings,
+    require(name) {
+      if (name === 'crypto-js') return require('crypto-js');
+      throw new Error('Módulo no permitido en Nuvio: ' + name);
+    },
+    URL, URLSearchParams, TextDecoder, TextEncoder, AbortController,
+    setTimeout, clearTimeout, Promise, Uint8Array, Date, JSON, Math, RegExp,
+    Error, isFinite, parseInt, parseFloat, decodeURIComponent, encodeURIComponent
   };
   sandbox.globalThis = sandbox;
   vm.createContext(sandbox);
@@ -102,51 +102,57 @@ function loadProvider(id, settings, stub) {
   return module.exports;
 }
 
-async function main() {
-  const args = parseArgs(process.argv.slice(2));
-  if (args.help || !args.id || (!args.site && !args.all)) {
-    usage();
-    process.exit(args.help ? 0 : 1);
-  }
-
-  if (!process.env.TMDB_API_KEY) {
-    console.warn('⚠ Sin TMDB_API_KEY: los providers intentarán leer themoviedb.org como respaldo.\n');
-  }
-
-  const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'manifest.json'), 'utf8'));
-  const targets = args.all
-    ? manifest.scrapers.map((scraper) => scraper.id)
-    : [args.site];
-
-  for (const id of targets) {
-    if (!manifest.scrapers.some((scraper) => scraper.id === id)) {
-      console.error(`✗ ${id}: no está en manifest.json`);
-      continue;
-    }
-    const stub = args.title ? tmdbStubFetch(args.title, args.year, args.type) : null;
-    const provider = loadProvider(id, args.settings, stub);
-    const started = Date.now();
-    process.stdout.write(`→ ${id} … `);
-    let streams = [];
-    try {
-      streams = await provider.getStreams(args.id, args.type, args.season, args.episode);
-    } catch (error) {
-      console.log(`ERROR ${error && error.message}`);
-      continue;
-    }
-    const elapsed = Date.now() - started;
-    console.log(`${streams.length} fuente(s) en ${elapsed} ms`);
-    streams.slice(0, 6).forEach((stream, index) => {
-      console.log(`   ${index + 1}. [${stream.quality}] ${stream.title}`);
-      console.log(`      ${String(stream.url).slice(0, 120)}${String(stream.url).length > 120 ? '…' : ''}`);
-      if (stream.infoHash) console.log(`      infohash ${stream.infoHash}`);
-    });
-    if (!streams.length) console.log('   (sin resultados: dominio caído, captcha o título no encontrado)');
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-  }
+function displayUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return parsed.origin + parsed.pathname + (parsed.search ? '?[oculto]' : '');
+  } catch { return '[URL inválida]'; }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+async function main(argv = process.argv.slice(2)) {
+  let args;
+  try { args = parseArgs(argv); validateArgs(args); } catch (error) {
+    console.error('Error:', error.message); usage(); return 1;
+  }
+  if (args.help) { usage(); return 0; }
+
+  if (args.title) console.log('Metadatos simulados; las peticiones al sitio y los reproductores son reales.');
+  else if (!process.env.TMDB_API_KEY && !/^tt/i.test(args.id)) console.warn('Sin TMDB_API_KEY: se intentará obtener el título desde la web pública de TMDB.');
+
+  const targets = args.all ? PROVIDERS : [args.site];
+  if (targets.some(id => !PROVIDERS.includes(id))) {
+    console.error('El proveedor no existe en el addon.'); return 1;
+  }
+
+  let connectionFailed = false;
+  for (const id of targets) {
+    const stats = { requests: 0, success: 0, failures: 0 };
+    const networkFetch = async (url, init) => {
+      stats.requests++;
+      try {
+        const response = await safeFetch(url, init);
+        if (response.ok || (response.status >= 300 && response.status < 400)) stats.success++;
+        else stats.failures++;
+        return response;
+      } catch (error) { stats.failures++; throw error; }
+    };
+    const fetcher = args.title ? tmdbStubFetch(args.title, args.year, args.type, networkFetch, args.seasonCounts) : networkFetch;
+    const provider = loadProvider(id, { settings: args.settings, fetcher, tmdbKey: args.title ? 'metadatos-simulados' : (process.env.TMDB_API_KEY || '') });
+    const started = Date.now();
+    const streams = await provider.getStreams(args.id, args.type, args.season, args.episode);
+    console.log(`\n${id}: ${streams.length} enlace(s), ${Date.now() - started} ms; peticiones reales: ${stats.requests}, fallidas: ${stats.failures}`);
+    for (const stream of streams.slice(0, 6)) {
+      console.log(`  [${stream.quality}] ${stream.title}\n  ${displayUrl(stream.url)}`);
+    }
+    if (!streams.length) console.log('  Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.');
+    if (stats.requests && !stats.success && stats.failures) connectionFailed = true;
+  }
+  console.log('\nNo se han probado ni descargado los medios.');
+  return connectionFailed ? 1 : 0;
+}
+
+if (require.main === module) {
+  main().then(code => { process.exitCode = code; }).catch(error => { console.error(error.message); process.exitCode = 1; });
+}
+
+module.exports = { parseArgs, validateArgs, tmdbStubFetch, loadProvider, displayUrl, main };

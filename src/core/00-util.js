@@ -67,6 +67,31 @@ function titleScore(candidate, wanted) {
   return coverage - Math.min(extra * 0.04, 0.2);
 }
 
+/* Una similitud parcial no basta: evita confundir secuelas y títulos parecidos.
+ * Solo se quitan marcas al final; las palabras dentro del título importan. */
+function titleIdentity(value, stripSeason) {
+  var title = norm(value).replace(/^(?:el|la|los|las|the)\s+/, '');
+  var previous;
+  do {
+    previous = title;
+    title = title.replace(/\s+(?:latino|latina|castellano|espanol|subtitulado|vose|dual)$/, '');
+    if (stripSeason) {
+      title = title.replace(/\s+(?:(?:s|t)\s*0*\d{1,2}|(?:temporada|season|temp)\s*0*\d{1,2}|0*\d{1,2}\s*(?:temporada|season))$/, '');
+    }
+  } while (title !== previous);
+  return title;
+}
+
+function sameCatalogTitle(candidate, info, stripSeason) {
+  var identity = titleIdentity(candidate, stripSeason);
+  if (!identity) return false;
+  var titles = info.titles && info.titles.length ? info.titles : [info.title, info.originalTitle];
+  for (var i = 0; i < titles.length; i++) {
+    if (identity === titleIdentity(titles[i], stripSeason)) return true;
+  }
+  return false;
+}
+
 function decodeEntities(text) {
   return String(text == null ? '' : text)
     .replace(/&#0*39;|&#x27;|&apos;|&rsquo;|&#8217;/gi, "'")
@@ -91,7 +116,7 @@ function stripTags(html) {
 
 /** Valor de un atributo dentro de una etiqueta HTML ya capturada. */
 function attrOf(tagHtml, name) {
-  var re = new RegExp(name + '\\s*=\\s*("([^"]*)"|\'([^\']*)\'|([^\\s>]+))', 'i');
+  var re = new RegExp('(?:^|[\\s<])' + name + '\\s*=\\s*("([^"]*)"|\'([^\']*)\'|([^\\s>]+))', 'i');
   var m = re.exec(tagHtml);
   if (!m) return null;
   return decodeEntities(m[2] != null ? m[2] : (m[3] != null ? m[3] : m[4]));

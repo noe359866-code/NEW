@@ -1,28 +1,11 @@
-/* ------------------------------------------------------------------
- * Nébula Scrapers · core/hash
- * SHA-1 y SHA-256 en JS puro (sin crypto de Node ni crypto.subtle).
- * - SHA-1: infohash BTIH del diccionario "info" de un .torrent
- * - SHA-256: proof-of-work de las descargas de DonTorrent/MejorTorrent
- * ------------------------------------------------------------------ */
-
-function rotl32(value, bits) {
-  return ((value << bits) | (value >>> (32 - bits))) >>> 0;
-}
+/* SHA-256 en JS puro para los desafíos de los reproductores; funciona en
+ * QuickJS sin depender de crypto de Node ni de crypto.subtle. */
 
 function rotr32(value, bits) {
   return ((value >>> bits) | (value << (32 - bits))) >>> 0;
 }
 
-function bytesToWords(bytes) {
-  var words = new Array(((bytes.length + 3) >> 2));
-  for (var i = 0; i < words.length; i++) words[i] = 0;
-  for (var j = 0; j < bytes.length; j++) {
-    words[j >> 2] |= bytes[j] << (24 - (j % 4) * 8);
-  }
-  return words;
-}
-
-function paddedWords(bytes, littleEndianLength) {
+function paddedWords(bytes) {
   var lengthBitsHigh = Math.floor((bytes.length * 8) / 4294967296);
   var lengthBitsLow = (bytes.length * 8) >>> 0;
   var total = (((bytes.length + 8) >> 6) + 1) << 4;
@@ -32,13 +15,8 @@ function paddedWords(bytes, littleEndianLength) {
     words[j >> 2] |= bytes[j] << (24 - (j % 4) * 8);
   }
   words[bytes.length >> 2] |= 0x80 << (24 - (bytes.length % 4) * 8);
-  if (littleEndianLength) {
-    words[total - 1] = lengthBitsLow;
-    words[total - 2] = lengthBitsHigh;
-  } else {
-    words[total - 1] = lengthBitsLow;
-    words[total - 2] = lengthBitsHigh;
-  }
+  words[total - 1] = lengthBitsLow;
+  words[total - 2] = lengthBitsHigh;
   return words;
 }
 
@@ -46,61 +24,6 @@ function wordsToHex(words) {
   var hex = '';
   for (var i = 0; i < words.length; i++) hex += ('00000000' + (words[i] >>> 0).toString(16)).slice(-8);
   return hex;
-}
-
-/** SHA-1 de un Uint8Array -> hex */
-function sha1Bytes(bytes) {
-  var data = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
-  var words = paddedWords(data, false);
-  var h0 = 0x67452301;
-  var h1 = 0xEFCDAB89;
-  var h2 = 0x98BADCFE;
-  var h3 = 0x10325476;
-  var h4 = 0xC3D2E1F0;
-  var w = new Array(80);
-
-  for (var block = 0; block < words.length; block += 16) {
-    for (var i = 0; i < 16; i++) w[i] = words[block + i] | 0;
-    for (var t = 16; t < 80; t++) w[t] = rotl32(w[t - 3] ^ w[t - 8] ^ w[t - 14] ^ w[t - 16], 1);
-
-    var a = h0;
-    var b = h1;
-    var c = h2;
-    var d = h3;
-    var e = h4;
-
-    for (var s = 0; s < 80; s++) {
-      var f;
-      var k;
-      if (s < 20) {
-        f = (b & c) | ((~b) & d);
-        k = 0x5A827999;
-      } else if (s < 40) {
-        f = b ^ c ^ d;
-        k = 0x6ED9EBA1;
-      } else if (s < 60) {
-        f = (b & c) | (b & d) | (c & d);
-        k = 0x8F1BBCDC;
-      } else {
-        f = b ^ c ^ d;
-        k = 0xCA62C1D6;
-      }
-      var temp = (rotl32(a, 5) + (f | 0) + e + k + w[s]) | 0;
-      e = d;
-      d = c;
-      c = rotl32(b, 30);
-      b = a;
-      a = temp;
-    }
-
-    h0 = (h0 + a) | 0;
-    h1 = (h1 + b) | 0;
-    h2 = (h2 + c) | 0;
-    h3 = (h3 + d) | 0;
-    h4 = (h4 + e) | 0;
-  }
-
-  return wordsToHex([h0, h1, h2, h3, h4]);
 }
 
 var SHA256_K = [
@@ -117,7 +40,7 @@ var SHA256_K = [
 /** SHA-256 de un Uint8Array -> hex */
 function sha256Bytes(bytes) {
   var data = bytes instanceof Uint8Array ? bytes : utf8ToBytes(bytes);
-  var words = paddedWords(data, false);
+  var words = paddedWords(data);
   var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
   var w = new Array(64);
 
@@ -170,9 +93,11 @@ function sha256Bytes(bytes) {
 }
 
 function sha256Hex(text) {
-  return sha256Bytes(utf8ToBytes(String(text == null ? '' : text)));
-}
-
-function sha1Hex(text) {
-  return sha1Bytes(utf8ToBytes(String(text == null ? '' : text)));
+  var value = String(text == null ? '' : text);
+  // El servidor Node puede inyectar su implementación nativa para acotar
+  // el tiempo de CPU. Los runtimes sin ella conservan el SHA-256 puro.
+  if (typeof HOSTED_SHA256_HEX === 'function') {
+    try { return HOSTED_SHA256_HEX(value); } catch (e) { /* usa el fallback */ }
+  }
+  return sha256Bytes(utf8ToBytes(value));
 }

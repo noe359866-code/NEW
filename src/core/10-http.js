@@ -48,9 +48,8 @@ function withTimeout(promise, ms) {
   return promise(null);
 }
 
-/* Tarro de cookies mínimo: algunos sitios (DonTorrent, MejorTorrent) atan
- * la descarga protegida a la sesión que abrió la ficha. Nuvio no garantiza
- * un cookie jar nativo, así que lo llevamos nosotros por host. */
+/* Algunos reproductores atan sus desafíos a la sesión que abrió la página.
+ * Nuvio no garantiza un cookie jar nativo, así que lo llevamos por host. */
 var COOKIE_JAR = {};
 
 function hostKeyOf(url) {
@@ -125,18 +124,26 @@ function request(url, options) {
       if (opts.redirect) init.redirect = opts.redirect;
 
       return fetch(url, init).then(function (response) {
-        absorbCookies(hostKey, response && response.headers);
         var status = response && typeof response.status === 'number' ? response.status : 0;
         var finalUrl = (response && response.url) || url;
-        if (!response || !response.ok) {
+        absorbCookies(hostKeyOf(finalUrl) || hostKey, response && response.headers);
+        // Algunos desafíos Anubis llegan con 403 o 503. Solo en páginas de
+        // reproductor conservamos el texto del error para reconocer el reto;
+        // no convertimos una respuesta fallida en éxito.
+        var challengeStatus = opts.pageOnly && (status === 403 || status === 503);
+        if (!response || (!response.ok && !challengeStatus)) {
           return { ok: false, status: status, url: finalUrl, bytes: new Uint8Array(0), text: '', headers: (response && response.headers) || {} };
+        }
+        var contentType = response.headers && response.headers.get ? String(response.headers.get('content-type') || '') : '';
+        if (opts.pageOnly && (directMediaUrl(finalUrl) || /^(?:video\/|audio\/|application\/(?:vnd\.apple\.mpegurl|x-mpegurl|octet-stream))/i.test(contentType))) {
+          return { ok: !!response.ok, status: status, url: finalUrl, isMedia: true, bytes: new Uint8Array(0), text: '', headers: response.headers || {} };
         }
         return response.arrayBuffer().then(function (buffer) {
           var bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
-          return { ok: true, status: status, url: finalUrl, bytes: bytes, text: bytesToText(bytes), headers: response.headers || {} };
+          return { ok: !!response.ok, status: status, url: finalUrl, bytes: bytes, text: bytesToText(bytes), headers: response.headers || {} };
         }, function () {
           return response.text().then(function (text) {
-            return { ok: true, status: status, url: finalUrl, bytes: utf8ToBytes(text), text: text, headers: response.headers || {} };
+            return { ok: !!response.ok, status: status, url: finalUrl, bytes: utf8ToBytes(text), text: text, headers: response.headers || {} };
           });
         });
       });
@@ -156,7 +163,8 @@ function request(url, options) {
 function getText(url, options) {
   return request(url, options).then(function (res) {
     if (!res.ok) {
-      log('http', res.status || res.error && res.error.message, url);
+      // El query puede contener claves de API o tokens temporales.
+      log('http', res.status || res.error && res.error.message, String(url).replace(/[?#].*$/, '?…'));
       return '';
     }
     return res.text;
