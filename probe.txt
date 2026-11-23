@@ -1,5 +1,5 @@
-SyntaxError: Bad control character in string literal in JSON at position 174 (line 1 column 175)
-    at JSON.parse (<anonymous>)
-    at round35 (/home/runner/work/NEW/NEW/tools/probe-sites.js:651:21)
-    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
-    at async main (/home/runner/work/NEW/NEW/tools/probe-sites.js:729:25)
+===== dlx media https://player.abyssplayer.com/K8R6OOjS7
+enlaces=6
+probando 360p https://8oekkfci14.sssrr.org/sora/81347747/3it1fTAX7yD4bCEfmF7g3/dnyY9I+sYjfBzFOM8HPMH3Pj9
+sin cabecera: status=403 type=text/html; charset=UTF-8 bytes=4544 ranges= head=<!DOCTYPE ht
+con Referer: status=404 type=text/html bytes=27150 ranges= head=<!doctype ht
