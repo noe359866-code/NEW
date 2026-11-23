@@ -1,49 +1,57 @@
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-fuegocine: 1 enlace(s), 8675 ms; peticiones reales: 7, fallidas: 1
+fuegocine: 1 enlace(s), 3308 ms; peticiones reales: 7, fallidas: 1
   [SD] La Odisea · Unlimplay
-  https://p3.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
+  https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-fuegocine: 1 enlace(s), 2449 ms; peticiones reales: 7, fallidas: 1
+fuegocine: 1 enlace(s), 2726 ms; peticiones reales: 7, fallidas: 1
   [SD] Odisea · Unlimplay
-  https://p3.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
+  https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-fuegocine: 1 enlace(s), 6712 ms; peticiones reales: 8, fallidas: 1
+fuegocine: 1 enlace(s), 5144 ms; peticiones reales: 8, fallidas: 1
   [2160p] VisionQuest · S01E02 · Unlimplay
   https://p5.vimeos.zip/hls2/02/00014/kr4k7o11ytq2_,n,h,.urlset/master.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-tioanime: 4 enlace(s), 1774 ms; peticiones reales: 11, fallidas: 1
+tioanime: 4 enlace(s), 1391 ms; peticiones reales: 11, fallidas: 1
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
   https://www.yourupload.com/embed/999_1.mp4
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
-  https://vidcache.net:8161/a202611228RkMk54Qs05/video.mp4
+  https://vidcache.net:8161/a20261122V364I4Qa07W/video.mp4
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
   https://www.yourupload.com/embed/2690_1.mp4
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
-  https://vidcache.net:8161/a202611222l780d1LheC/video.mp4
+  https://vidcache.net:8161/a20261122xTKyurr1dcn/video.mp4
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-kdrama: 2 enlace(s), 16061 ms; peticiones reales: 9, fallidas: 1
+kdrama: 8 enlace(s), 4480 ms; peticiones reales: 9, fallidas: 0
+  [2160p] Vincenzo · S01E01 · KatDrama
+  https://nc-fa2.tubi.video/c943391e-1899-4500-9796-6eaafef89771/2m7m5lrsmg.m3u8?[oculto]
+  [2160p] Vincenzo · S01E01 · KatDrama
+  https://nc-fa2.tubi.video/c943391e-1899-4500-9796-6eaafef89771/3g4yu9kwz7.m3u8?[oculto]
   [SD] Vincenzo · S01E01 · KatDrama
   https://d3sgzbosmwirao.cloudfront.net/video/a2333196b77e6066e0a49a83154cd27d3e33ea26d389bafdc8e5821646df8283/1/hls/h264_high.m3u8
-  [SD] Vincenzo · S01E01 · Vidly
-  https://radiosilhouette.live/file2/ZmZkNzZiNjcxYjZlZTZhNGYxYjg5NmVhODdhYjI1YjUxNzk0NTUyMTY0NDc0MDc1/master.m3u8
+  [SD] Vincenzo · S01E01 · KatDrama
+  https://nc-fa2.tubi.video/9e892a6c-6728-43c6-bd30-27ac95387c3e/91pn624aqx.m3u8?[oculto]
+  [SD] Vincenzo · S01E01 · KatDrama
+  https://nc-cf.tubi.video/9e892a6c-6728-43c6-bd30-27ac95387c3e/91pn624aqx.m3u8?[oculto]
+  [SD] Vincenzo · S01E01 · KatDrama
+  https://nc-fa2.tubi.video/9e892a6c-6728-43c6-bd30-27ac95387c3e/1nlxnirtrv.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-framextv: 4 enlace(s), 908 ms; peticiones reales: 1, fallidas: 0
+framextv: 4 enlace(s), 1194 ms; peticiones reales: 1, fallidas: 0
   [1080p] The Dark Knight · NetMirror
   https://vidsync-shard.vs-deals41.workers.dev/api/netmirror/master.m3u8?[oculto]
   [1080p] The Dark Knight · NetMirror
@@ -56,7 +64,7 @@ framextv: 4 enlace(s), 908 ms; peticiones reales: 1, fallidas: 0
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-kdrama: 6 enlace(s), 21633 ms; peticiones reales: 9, fallidas: 2
+kdrama: 6 enlace(s), 19097 ms; peticiones reales: 9, fallidas: 1
   [SD] The Dark Knight · KatDrama
   https://d3sgzbosmwirao.cloudfront.net/video/aa0b3b021e53c235ee41de99744cd679d219c3612a550b93f6fce9cd93808064/1/hls/h264_high.m3u8
   [SD] The Dark Knight · KatDrama
@@ -73,7 +81,7 @@ kdrama: 6 enlace(s), 21633 ms; peticiones reales: 9, fallidas: 2
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-framextv: 5 enlace(s), 919 ms; peticiones reales: 1, fallidas: 0
+framextv: 5 enlace(s), 931 ms; peticiones reales: 1, fallidas: 0
   [720p] Vincenzo · S01E01 · NetMirror
   https://vidsync-shard.vs-deals71.workers.dev/api/netmirror/master.m3u8?[oculto]
   [720p] Vincenzo · S01E01 · NetMirror
@@ -88,19 +96,19 @@ framextv: 5 enlace(s), 919 ms; peticiones reales: 1, fallidas: 0
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-pelishax: 0 enlace(s), 2061 ms; peticiones reales: 3, fallidas: 0
+pelishax: 0 enlace(s), 1177 ms; peticiones reales: 8, fallidas: 1
   Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-pelishax: 0 enlace(s), 1347 ms; peticiones reales: 2, fallidas: 0
+pelishax: 0 enlace(s), 1490 ms; peticiones reales: 3, fallidas: 0
   Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-homecine: 5 enlace(s), 3664 ms; peticiones reales: 8, fallidas: 0
+homecine: 5 enlace(s), 2629 ms; peticiones reales: 8, fallidas: 0
   [SD] The Matrix · Server Cload
   https://s40.fastream.to/hls2/13/00031/b37ax9xinv8g_,l,n,.urlset/master.m3u8?[oculto]
   [SD] The Matrix · Server Cload
@@ -115,8 +123,8 @@ homecine: 5 enlace(s), 3664 ms; peticiones reales: 8, fallidas: 0
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-frikiserie: 1 enlace(s), 1777 ms; peticiones reales: 3, fallidas: 0
-  [SD] Los Caballeros del Zodiaco · S01E01
+frikiserie: 1 enlace(s), 792 ms; peticiones reales: 3, fallidas: 0
+  [720p] Los Caballeros del Zodiaco · S01E01
   https://ok6-7.vkuser.net/video.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
