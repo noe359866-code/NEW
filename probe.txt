@@ -1,48 +1,12 @@
-
-===== dlx opts /wp-json/dooplayer/v2/43619/tv/3 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/3
-status=200 type=application/json; charset=UTF-8 bytes=31 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/3
---- json:
-   …{"embed_url":null,"type":false}…
-   …{"embed_url":null,"type":false}…
-
-===== dlx opts /wp-json/dooplayer/v2/43619/tv/4 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/4
-status=200 type=application/json; charset=UTF-8 bytes=31 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/4
---- json:
-   …{"embed_url":null,"type":false}…
-   …{"embed_url":null,"type":false}…
-
-===== dlx opts /wp-json/dooplayer/v2/43619/tv/5 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/5
-status=200 type=application/json; charset=UTF-8 bytes=31 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/5
---- json:
-   …{"embed_url":null,"type":false}…
-   …{"embed_url":null,"type":false}…
-
-===== dlx opts /wp-json/dooplayer/v2/43619/tv/6 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/6
-status=200 type=application/json; charset=UTF-8 bytes=31 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/6
---- json:
-   …{"embed_url":null,"type":false}…
-   …{"embed_url":null,"type":false}…
-
-===== dlx opts /wp-json/dooplayer/v2/43619/tv/7 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/7
-status=200 type=application/json; charset=UTF-8 bytes=31 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/7
---- json:
-   …{"embed_url":null,"type":false}…
-   …{"embed_url":null,"type":false}…
-
-===== dlx opts /wp-json/dooplayer/v2/43619/tv/8 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/8
-status=200 type=application/json; charset=UTF-8 bytes=31 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/8
---- json:
-   …{"embed_url":null,"type":false}…
-   …{"embed_url":null,"type":false}…
-
-===== dlx opts /wp-json/dooplayer/v2/43611/movie/3 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43611/movie/3
-status=200 type=application/json; charset=UTF-8 bytes=31 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43611/movie/3
---- json:
-   …{"embed_url":null,"type":false}…
-   …{"embed_url":null,"type":false}…
-
-===== dlx opts /wp-json/dooplayer/v2/43611/movie/4 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43611/movie/4
-status=200 type=application/json; charset=UTF-8 bytes=31 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43611/movie/4
---- json:
-   …{"embed_url":null,"type":false}…
-   …{"embed_url":null,"type":false}…
+===== dlx redirect /tv/1
+status=200 location=(ninguna)
+body="{\"embed_url\":\"https:\\/\\/playmogo.com\\/e\\/bmzfuwzlu7z5\",\"type\":\"iframe\"}"
+===== dlx redirect /tv/2
+status=200 location=(ninguna)
+body="{\"embed_url\":\"https:\\/\\/player.abyssplayer.com\\/WeCIsZdM2\",\"type\":\"iframe\"}"
+===== dlx redirect /movie/1
+status=200 location=(ninguna)
+body="{\"embed_url\":\"https:\\/\\/playmogo.com\\/e\\/bmzfuwzlu7z5\",\"type\":\"iframe\"}"
+===== dlx redirect /movie/2
+status=200 location=(ninguna)
+body="{\"embed_url\":\"https:\\/\\/player.abyssplayer.com\\/WeCIsZdM2\",\"type\":\"iframe\"}"
