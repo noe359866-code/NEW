@@ -683,7 +683,11 @@ async function round36() {
   const keyHex = C.MD5(uid + ':' + slug + ':' + md5).toString(C.enc.Hex);
   const dec = C.AES.decrypt({ ciphertext: C.enc.Hex.parse(Buffer.from(bytes).toString('hex')) },
     C.enc.Latin1.parse(keyHex), { iv: C.enc.Latin1.parse(keyHex.slice(0, 16)), mode: C.mode.CTR, padding: C.pad.NoPadding });
-  const plain = Buffer.from(dec.toString(C.enc.Latin1), 'latin1').toString('utf8');
+  // Se descifra con Node (no con la pasarela de CryptoJS) para tener los
+  // bytes exactos: la pasarela de texto corrompe los caracteres > 0x7f.
+  const key = Buffer.from(keyHex, 'latin1');
+  const decipher = require('crypto').createDecipheriv('aes-256-ctr', key, key.subarray(0, 16));
+  const plain = Buffer.concat([decipher.update(Buffer.from(bytes)), decipher.final()]).toString('utf8');
   // El sitio publica algún byte corrupto: se lee por expresiones regulares.
   const srcMatch = /\\"label\\":\\"([^\\]{1,20})\\"[^}]*?\\"size\\":(\d+)[^}]*?\\"res_id\\":(\d+)[^}]*?\\"path\\":\\"([^\\]{1,120})\\"/.exec(plain);
   if (!srcMatch) { console.log('===== dlx candidatos: sin fuente'); return; }
@@ -768,6 +772,7 @@ async function main() {
   if (only === 'dlx34') await round34();
   if (only === 'dlx35') await round35();
   if (only === 'dlx36') await round36();
+  if (only === 'dlx37') await round36();
 }
 
 if (require.main === module) {
