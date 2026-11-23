@@ -688,14 +688,15 @@ async function round36() {
   const key = Buffer.from(keyHex, 'latin1');
   const decipher = require('crypto').createDecipheriv('aes-256-ctr', key, key.subarray(0, 16));
   const plain = Buffer.concat([decipher.update(Buffer.from(bytes)), decipher.final()]).toString('utf8');
-  // El sitio publica algún byte corrupto: se lee por expresiones regulares.
-  const srcMatch = /\\"label\\":\\"([^\\]{1,20})\\"[^}]*?\\"size\\":(\d+)[^}]*?\\"res_id\\":(\d+)[^}]*?\\"path\\":\\"([^\\]{1,120})\\"/.exec(plain);
-  if (!srcMatch) { console.log('===== dlx candidatos: sin fuente'); return; }
-  const src = { label: srcMatch[1], size: srcMatch[2], res_id: srcMatch[3], path: srcMatch[4],
-    url: (/\\"label\\":\\"[^\\]{1,20}\\"[^}]*?\\"url\\":\\"([^\\]{1,120})\\"/.exec(plain) || [])[1] || '' };
+  console.log('===== dlx candidatos');
+  console.log('plain head: ' + JSON.stringify(plain.slice(0, 300)));
+  console.log('plain tail: ' + JSON.stringify(plain.slice(-200)));
+  const srcMatch = /label\\?":\\?"([^"\\]{1,20})\\?"[\s\S]{0,200}?res_id\\?":(\d)[\s\S]{0,300}?path\\?":\\?"([^"\\]{1,120})\\?"/.exec(plain);
+  if (!srcMatch) { console.log('sin fuente'); return; }
+  const src = { label: srcMatch[1], size: (/size\\?":(\d+)/.exec(plain) || [])[1], res_id: srcMatch[2], path: srcMatch[3],
+    url: (/url\\?":\\?"([^"\\]{1,120})\\?"/.exec(plain) || [])[1] || '' };
   const frist = /"fristDatas":\[([\s\S]*?)\]\}/.exec(plain);
   const fristUrls = frist ? [...frist[1].matchAll(/"url":"(https:\/\/[^"]+)"/g)].map(x => x[1]) : [];
-  console.log('===== dlx candidatos');
   console.log('source: ' + JSON.stringify({ label: src.label, size: src.size, res_id: src.res_id, path: src.path, sub: src.sub }));
   const candidates = [];
   if (fristUrls[0]) candidates.push(['fristDatas[0]', fristUrls[0]]);
@@ -773,6 +774,7 @@ async function main() {
   if (only === 'dlx35') await round35();
   if (only === 'dlx36') await round36();
   if (only === 'dlx37') await round36();
+  if (only === 'dlx38') await round36();
 }
 
 if (require.main === module) {
