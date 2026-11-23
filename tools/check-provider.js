@@ -24,6 +24,7 @@ function parse(argv) {
     if (token === '--title') { args.options.title = argv[++i]; continue; }
     if (token === '--year') { args.options.year = argv[++i]; continue; }
     if (token === '--season-counts') { args.options.seasonCounts = argv[++i].split(',').map(Number); continue; }
+    if (token === '--dump-page') { args.options.dumpPage = argv[++i]; continue; }
     // Permite un título distinto al del ID para forzar una búsqueda concreta.
     if (token === '--query') { args.options.query = argv[++i]; continue; }
     if (token === '--settings') { args.options.settings = JSON.parse(argv[++i]); continue; }
@@ -36,6 +37,24 @@ async function main(argv = process.argv.slice(2)) {
   const site = argv[0];
   if (!site) { console.error('Uso: node tools/check-provider.js <provider> <id> <movie|tv> [opciones]'); return 1; }
   const args = parse(argv);
+  // Diagnóstico: guarda el HTML de una URL concreta (ficha o reproductor) para
+  // revisar qué publica el sitio sin depender de la salida del proveedor.
+  if (args.options.dumpPage) {
+    const res = await safeFetch(args.options.dumpPage, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/131' } });
+    const html = await res.text();
+    console.log(`===== volcado ${args.options.dumpPage} (${res.status}, ${html.length} bytes)`);
+    const marks = /(?:<iframe|<video|<source|data-player|data-url|file\s*:|sources\s*:|"file"|m3u8)/gi;
+    let match;
+    const seen = new Set();
+    while ((match = marks.exec(html)) && seen.size < 12) {
+      const start = Math.max(0, match.index - 90);
+      const chunk = html.slice(start, match.index + 260).replace(/\s+/g, ' ');
+      if (seen.has(chunk.slice(0, 60))) continue;
+      seen.add(chunk.slice(0, 60));
+      console.log('  · ' + chunk);
+    }
+    return 0;
+  }
   const stats = { requests: 0, success: 0, failures: 0 };
   const networkFetch = async (url, init) => {
     stats.requests++;
