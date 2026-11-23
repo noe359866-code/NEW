@@ -215,15 +215,11 @@ function frikiserieOkru(videoId) {
     return { url: medias[0], quality: parseQuality(medias[0]), language: 'Latino',
       headers: { Referer: embed, 'User-Agent': UA, Origin: 'https://ok.ru' } };
   }
-  return request(embed, { timeout: 9000, retries: 0, pageOnly: true }).then(function (res) {
-    var direct = res.ok && res.text ? parse(res.text, embed) : null;
-    if (direct) return direct;
-    // La API interna del reproductor devuelve el mismo JSON, ya sin HTML.
-    return request('https://ok.ru/dk?cmd=videoPlayerMetadata&mid=' + videoId,
-      { timeout: 8000, retries: 0, pageOnly: true,
-        headers: { Referer: embed, 'User-Agent': UA } }).then(function (api) {
-      return api.ok && api.text ? parse(api.text, embed) : null;
-    }, function () { return null; });
+  // El reproductor publica los enlaces en data-options (JSON con entidades
+  // HTML): findDirectMedia descomprime y decodifica sin ejecutar scripts.
+  return request(embed, { timeout: 9000, retries: 0, pageOnly: true,
+    headers: { 'User-Agent': UA } }).then(function (res) {
+    return res.ok && res.text ? parse(res.text, embed) : null;
   }, function () { return null; });
 }
 

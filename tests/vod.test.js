@@ -292,12 +292,14 @@ test('FrikiSeries: catálogo en ng-state → ficha → MP4 de OK.ru', async () =
     ['api.themoviedb.org/3/tv/1259', tmdbTv(1259, 'Los Caballeros del Zodiaco')],
     ['frikiserie.com/', ngState(state)],
     ['frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986', ngState(state)],
-    ['ok.ru/videoembed/14398744169198', `<div id="videoPlayer" data-options="${'x'}"></div>
-      <script>var flashvars = {"metadata":{"videos":[{"name":"mobile","url":"https://vd.okcdn.ru/720.mp4?expires=1"}]},"hlsManifestUrl":"https://vd.okcdn.ru/hls/master.m3u8?expires=1"};</script>`]
+    // Formato real: JSON con entidades HTML dentro de data-options.
+    ['ok.ru/videoembed/14398744169198', `<div class="h-mod" data-module="OKVideo"
+      data-movie-id="14398744169198"
+      data-options="{&quot;flashvars&quot;:{&quot;metadata&quot;:{&quot;movie&quot;:{&quot;id&quot;:&quot;14398744169198&quot;},&quot;videos&quot;:[{&quot;name&quot;:&quot;mobile&quot;,&quot;url&quot;:&quot;https://vd.okcdn.ru/720.mp4?cmd=videoPlayerCdn\u0026expires=1&quot;}],&quot;hlsManifestUrl&quot;:&quot;https://ok6-7.vkuser.net/video.m3u8?cmd=videoPlayerCdn\u0026expires=1795501360418&quot;}}}"></div>`]
   ]);
   const streams = await loadProvider('frikiserie', { fetch }).getStreams('1259', 'tv', 1, 1);
   assert.equal(streams.length, 1);
-  assert.equal(streams[0].url, 'https://vd.okcdn.ru/hls/master.m3u8?expires=1');
+  assert.equal(streams[0].url, 'https://ok6-7.vkuser.net/video.m3u8?cmd=videoPlayerCdn&expires=1795501360418');
   assert.equal(streams[0].language, 'Latino');
   assert.equal(streams[0].provider, 'frikiserie');
   assert.equal(streams[0].headers.Origin, 'https://ok.ru');
