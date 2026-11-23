@@ -125,7 +125,7 @@ status=200 type=application/json bytes=389 final=https://vimeos.unlimplay.com/?i
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p3.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=mmVFhV2aYQydTMiq75Zp9taPurmzoiG31aGxQ0h88CQ&s=1795402302&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
+   "direct": "https://p3.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=6M78htz0AWDFqjoJLj2RdnyrD1bQD1O8uvSUUWVKJ6U&s=1795402680&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
    }
    }
    }
@@ -1479,6 +1479,113 @@ status=200 type=text/html; charset=utf-8 bytes=56105 final=https://vidly.pro/tv/
    $RC=function(a,b){if(b=document.getElementById(b))(a=document.getElementById(a))?(a.previousSibling.data="$~",$RB.push(a,b),2===$RB.length&&("number"!==typeof $RT?requestAnimationFrame($RV.bind(null,$RB)):(a=performance.now(),setTimeout($RV.bind(null,$RB),2300>a&&2E3<a?2300-a:$RT+300-a)))):b.parentN…
 --- hls: 0 líneas
 
+===== kd vid2 raw :: https://k-drama.in/vid2.php/117376/1/1?m=en
+status=200 type=text/html; charset=UTF-8 bytes=4581 final=https://k-drama.in/vid2.php/117376/1/1?m=en
+--- iframe: 1 líneas
+   <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://vidsync.pro"><title>Stream</title><style>html,body{margin:0;height:100%;background:#000;overflow:hidden}iframe{width:100%;height:100%;border:0;posi…
+
+===== fx graphql :: https://framextv.cc/assets/index-DvMX4GhI.js
+status=200 type=application/javascript bytes=888072 final=https://framextv.cc/assets/index-DvMX4GhI.js
+--- qp: 2 líneas
+   Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}/*`}">.`)}let u=Y(),d;if(t){let e=typeof t==`string`?Mc(t):t;Ec(c===`/`||e.pathname?.startsWith(c),`When overriding the location using \`<Routes location>\` or \`useRoutes(routes, location)\`, the location pathname must …
+   `;async function im(e,t){let n=new AbortController,r=setTimeout(()=>n.abort(),1e4);try{let i=await fetch(Qp,{method:`POST`,headers:{"Content-Type":`application/json`,Accept:`application/json`},body:JSON.stringify({query:e,variables:t}),signal:n.signal});if(clearTimeout(r),i.status===403||i.status===…
+
+===== kd movie detail :: https://k-drama.in/detail/movie/one-year-to-live-buy-a-man-1654940
+status=200 type=text/html; charset=UTF-8 bytes=113611 final=https://k-drama.in/detail/movie/one-year-to-live-buy-a-man-1654940
+--- fichas: 17 líneas
+   <link rel="canonical" href="https://k-drama.in/detail/movie/one-year-to-live-buy-a-man-1654940">
+   <a href="/watchlist"
+   <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
+   <a href="/watch/movie/one-year-to-live-buy-a-man-1654940" style="
+   <a href="/watch/movie/one-year-to-live-buy-a-man-1654940" style="
+   <a href="/detail/movie/in-the-land-of-women-13067" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/movie/our-friend-583903" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/movie/after-everything-448557" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/movie/ode-to-joy-501989" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/movie/the-good-house-633657" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/movie/how-to-please-a-woman-894686" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/movie/the-lonely-guy-27171" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/movie/now-is-good-90369" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/movie/someone-like-you-12658" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/movie/sidewalks-of-new-york-31016" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/movie/xx-xy-42383" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/movie/friends-with-kids-80038" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+--- episodios: 17 líneas
+   <title>Watch One Year to Live, Buy a Man (2026) Full Episodes Eng Sub / Hindi Dubbed Free HD | KatDrama (k-drama.in)</title>
+   <meta name="description" content="Stream One Year to Live, Buy a Man (2026) full episodes online free with verified English subtitles and Hindi dubbed dual audio on KatDrama (k-drama.in). Ranked best site to watch K-Dramas with 1080p fast servers.">
+   <meta name="keywords" content="one year to live, buy a man, watch one year to live, buy a man online, one year to live, buy a man eng sub, one year to live, buy a man full episodes, one year to live, buy a man kdrama, best k drama site, site to watch kdramas, k-drama.in, watch drama free">
+   <meta name="citation_title" content="Watch One Year to Live, Buy a Man (2026) Full Episodes Eng Sub / Hindi Dubbed Free HD | KatDrama (k-drama.in)">
+   <meta property="og:title" content="Watch One Year to Live, Buy a Man (2026) Full Episodes Eng Sub / Hindi Dubbed Free HD | KatDrama (k-drama.in)">
+   <meta property="og:description" content="Stream One Year to Live, Buy a Man (2026) full episodes online free with verified English subtitles and Hindi dubbed dual audio on KatDrama (k-drama.in). Ranked best site to watch K-Dramas with 1080p fast servers.">
+   <meta name="twitter:title" content="Watch One Year to Live, Buy a Man (2026) Full Episodes Eng Sub / Hindi Dubbed Free HD | KatDrama (k-drama.in)">
+   <meta name="twitter:description" content="Stream One Year to Live, Buy a Man (2026) full episodes online free with verified English subtitles and Hindi dubbed dual audio on KatDrama (k-drama.in). Ranked best site to watch K-Dramas with 1080p fast servers.">
+   var watchUrl = '/watch/' + slug + '-episode-1';
+   var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
+   if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
+   return {drama: m[1], episode: m[2] ? parseInt(m[2],10) : 0};
+   track('server_switch', {drama: p.drama, episode: p.episode, server: (srv.id||'').replace('btn-server-','')});
+   track('episode_click', {drama: q.drama, episode: q.episode, from_episode: parse(location.pathname).episode});
+   track('download_click', {drama: d.drama, episode: d.episode});
+   track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
+   <!-- Episodes Section -->
+
+===== kd movie watch :: https://k-drama.in/watch/movie-one-year-to-live-buy-a-man-1654940
+status=200 type=text/html; charset=UTF-8 bytes=143480 final=https://k-drama.in/watch/movie/one-year-to-live-buy-a-man-1654940
+--- iframe/embed: 10 líneas
+   document.querySelectorAll('iframe').forEach(function(f,i){
+   <iframe id="video-player-frame" src="https://k-drama.in/vid2.php/1654940/1/1?m=en" class="cineapse-player-iframe" allowfullscreen allow="autoplay; fullscreen; encrypted-media; picture-in-picture; accelerometer; gyroscope; clipboard-write; web-share" referrerpolicy="no-referrer-when-downgrade"></ifra…
+   <!-- Modal Iframe Body -->
+   <iframe id="download-modal-iframe"
+   class="watch-modal-iframe"
+   </iframe>
+   el.className = 'cineapse-player-iframe';
+   el.className = 'cineapse-player-iframe';
+   el = document.createElement('iframe');
+   el.className = 'cineapse-player-iframe';
+--- servers/ajax: 40 líneas
+   <meta name="description" content="Stream One Year to Live, Buy a Man (2026) free online in 1080p Ultra HD on KatDrama (k-drama.in) with fast Tokyo/Seoul multi-servers.">
+   <meta property="og:description" content="Stream One Year to Live, Buy a Man (2026) free online in 1080p Ultra HD on KatDrama (k-drama.in) with fast Tokyo/Seoul multi-servers.">
+   <meta name="twitter:description" content="Stream One Year to Live, Buy a Man (2026) free online in 1080p Ultra HD on KatDrama (k-drama.in) with fast Tokyo/Seoul multi-servers.">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   var srv = e.target.closest('.watch-server-btn');
+   track('server_switch', {drama: p.drama, episode: p.episode, server: (srv.id||'').replace('btn-server-','')});
+   <!-- Cinema Player Container (Cineapse Style) -->
+   <div class="cineapse-player-wrapper" style="aspect-ratio: 16 / 9; max-height: 780px; position: relative;">
+   <iframe id="video-player-frame" src="https://k-drama.in/vid2.php/1654940/1/1?m=en" class="cineapse-player-iframe" allowfullscreen allow="autoplay; fullscreen; encrypted-media; picture-in-picture; accelerometer; gyroscope; clipboard-write; web-share" referrerpolicy="no-referrer-when-downgrade"></ifra…
+   <!-- Player Controls Bar -->
+   <!-- Server Switcher Tabs -->
+   Select High-Speed Server:
+   .cineapse-player-wrapper .plyr{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:inherit}
+   .cineapse-player-wrapper .plyr__video-wrapper{height:100%;background:#000}
+   .cineapse-player-wrapper .plyr video{position:static;width:100%;height:100%;object-fit:contain}
+   .watch-container .watch-server-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(92px,1fr))!important;gap:10px!important}
+   .watch-container .watch-server-btn{position:relative;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;padding:18px 8px 12px!important;min-height:74px!important;min-width:0!important;overflow:hidden!important;border-radius:12px!impor…
+   .watch-container .watch-server-btn:hover{background:#181a20!important;border-color:rgba(255,255,255,.2)!important;transform:translateY(-1px)}
+   .watch-container .watch-server-btn .srv-num{font-size:1rem!important;font-weight:900!important;line-height:1.1!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis;max-width:100%;letter-spacing:.01em;color:#ffffff!important}
+   .watch-container .watch-server-btn .srv-q{display:inline-block!important;font-size:.56rem!important;font-weight:800!important;color:#9aa1aa!important;margin-top:6px!important;padding:2px 7px!important;border-radius:999px!important;background:rgba(255,255,255,.07)!important;white-space:nowrap!importa…
+   .watch-container .watch-server-btn.is-active .srv-q{background:rgba(0,0,0,.09)!important;color:#4a4a4a!important}
+   .watch-container .watch-server-btn.is-active{background:#ffffff!important;border-color:#ffffff!important}
+   .watch-container .watch-server-btn.is-active .srv-num{color:#000000!important}
+   .watch-container .watch-server-btn.is-active .srv-q{color:#5a5a5a!important}
+   .watch-container .watch-server-btn .srv-s{display:inline-block!important;font-size:.5rem!important;font-weight:800!important;letter-spacing:.09em;color:#8b929b!important;margin-top:4px!important;padding:2px 6px!important;border-radius:999px!important;background:rgba(255,255,255,.05)!important;white-…
+   .watch-container .watch-server-btn.is-active .srv-s{color:#4a4a4a!important;background:rgba(0,0,0,.06)!important}
+   <div class="watch-server-grid">
+   <button onclick="switchServer('kat2', 'https://k-drama.in/vid2.php/1654940/1/1?m=en', 'embed', '')" id="btn-server-kat2" class="watch-server-btn is-active">
+   <button onclick="switchServer('kat3', 'https://k-drama.in/vid2.php/1654940/1/1?m=orig&ol=ja', 'embed', '')" id="btn-server-kat3" class="watch-server-btn">
+   <button onclick="switchServer('server_vidly', 'https://vidly.pro/movie/1654940', 'embed', '')" id="btn-server-server_vidly" class="watch-server-btn">
+   <button onclick="switchServer('server1', 'https://embed.reelsdownload.online/player/1654940?key=k_3db7ca4f00d84e94c9d62159', 'embed', '')" id="btn-server-server1" class="watch-server-btn">
+   <button onclick="switchServer('server9', 'https://player.vidzee.wtf/embed/movie/1654940', 'embed', '')" id="btn-server-server9" class="watch-server-btn">
+   <button onclick="switchServer('server4', 'https://k-drama.in/mx1.php?type=movie&id=1654940&s=1&e=1', 'embed', '')" id="btn-server-server4" class="watch-server-btn">
+   <button onclick="switchServer('server5', 'https://k-drama.in/tubi2.php?id=1654940', 'embed', '')" id="btn-server-server5" class="watch-server-btn">
+   <button onclick="switchServer('server8', 'https://zxcstream.cc/player/movie/1654940', 'embed', '')" id="btn-server-server8" class="watch-server-btn">
+   <button onclick="switchServer('server10', 'https://framextv.xyz/embed/1654940', 'embed', '')" id="btn-server-server10" class="watch-server-btn">
+   <button onclick="switchServer('server11', 'https://k-drama.in/yoy4.php?id=1654940&s=1&e=1', 'embed', '')" id="btn-server-server11" class="watch-server-btn">
+   <button onclick="switchServer('server14', '/kk2.php/1654940/1/1', 'embed', '')" id="btn-server-server14" class="watch-server-btn">
+   if (!('IntersectionObserver' in window)) return;
+   // Dynamic Server Switching
+--- json-inline: 1 líneas
+   "url": "https://k-drama.in/detail/movie/one-year-to-live-buy-a-man-1654940"
+
 ===== kdesa movie :: https://kdesa.stream/media/tmdb-movie-1595124
 status=403 type=text/html; charset=UTF-8 bytes=5698 final=https://kdesa.stream/media/tmdb-movie-1595124
 --- iframe/embed: 0 líneas
@@ -1489,7 +1596,7 @@ status=403 type=text/html; charset=UTF-8 bytes=5698 final=https://kdesa.stream/m
    <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
 
 ===== kdesa tv :: https://kdesa.stream/media/tmdb-tv-1399-1-1
-status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/media/tmdb-tv-1399-1-1
+status=403 type=text/html; charset=UTF-8 bytes=5692 final=https://kdesa.stream/media/tmdb-tv-1399-1-1
 --- iframe/embed: 0 líneas
 --- servers/ajax: 0 líneas
 --- json-inline: 0 líneas
@@ -1500,11 +1607,10 @@ status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/m
 ===== kdesa búsqueda :: https://kdesa.stream/search?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/search?q=dune
 --- fichas: 0 líneas
---- episodios: 1 líneas
-   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
+--- episodios: 0 líneas
 
 ===== kdesa búsqueda :: https://kdesa.stream/?s=dune
-status=403 type=text/html; charset=UTF-8 bytes=5619 final=https://kdesa.stream/?s=dune
+status=403 type=text/html; charset=UTF-8 bytes=5641 final=https://kdesa.stream/?s=dune
 --- fichas: 0 líneas
 --- episodios: 1 líneas
    <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
@@ -1512,8 +1618,7 @@ status=403 type=text/html; charset=UTF-8 bytes=5619 final=https://kdesa.stream/?
 ===== kdesa búsqueda :: https://kdesa.stream/buscar?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/buscar?q=dune
 --- fichas: 0 líneas
---- episodios: 1 líneas
-   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
+--- episodios: 0 líneas
 
 ===== kdesa búsqueda :: https://kdesa.stream/api/search?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/api/search?q=dune
@@ -1524,4 +1629,5 @@ status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/a
 ===== kdesa home :: https://kdesa.stream/
 status=403 type=text/html; charset=UTF-8 bytes=5583 final=https://kdesa.stream/
 --- fichas: 0 líneas
---- episodios: 0 líneas
+--- episodios: 1 líneas
+   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
