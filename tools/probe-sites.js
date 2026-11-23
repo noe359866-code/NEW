@@ -59,6 +59,12 @@ async function main() {
     await probe('pelis24 search', 'https://ww1.pelis24.blog/search?q=interstellar', playerPatterns);
     await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
   }
+  if (only === 'all' || only === 'akas') {
+    for (const id of ['tt0417299', 'tt0944947', 'tt1375666']) {
+      await probe('imdb akas ' + id, 'https://www.imdb.com/title/' + id + '/releaseinfo/',
+        [['akas', 'aka|Also known as|España|Spain|Latinoam']]);
+    }
+  }
   if (only === 'all' || only === 'fuegocine12') {
     await probe('fc ficha tmdb', 'https://fuegocine.com/shows/details/avatar-la-leyenda-de-aang/33',
       [['tmdb', 'tmdb|moviedb'], ['año', '<h1|year|release']]);
