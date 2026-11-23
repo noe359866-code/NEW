@@ -364,6 +364,18 @@ async function round19() {
   }
 }
 
+/* Ronda 20: ¿cómo responde el buscador de PeliShax y sus fichas por id? */
+async function round20() {
+  await probeSnippets('pelishax search', 'https://pelishaxpro.com/search?q=The+Dark+Knight', [
+    ['movies links', 'href="/movies/[0-9]+"[^>]*>'],
+    ['cards', 'movie-card|card-title|search-result|class="[^"]*item[^"]*"'],
+    ['total', 'result|Total|no se encontr'],
+    ['forms', '<form[^>]*>|name="q"']
+  ], 240);
+  await probe('pelishax movie 155', 'https://pelishaxpro.com/movies/155', [['title', '<title>[^<]*'], ['servers', 'server-item']]);
+  await probe('pelishax movie 155 ddg', 'https://pelishaxpro.com/movies/155/the-dark-knight', [['title', '<title>[^<]*'], ['servers', 'server-item']]);
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -406,6 +418,7 @@ async function main() {
   if (only === 'all' || only === 'round17') await round17();
   if (only === 'all' || only === 'round18') await round18();
   if (only === 'all' || only === 'round19') await round19();
+  if (only === 'all' || only === 'round20') await round20();
 }
 
 if (require.main === module) {
