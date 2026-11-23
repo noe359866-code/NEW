@@ -477,6 +477,21 @@ async function round25() {
   ], 200);
 }
 
+/* Ronda 26: el AJAX de DooPlay de doramaslatinox devuelve el embed real. */
+async function round26() {
+  const B = 'https://doramaslatinox.com';
+  for (const nume of [1, 2, 3]) {
+    await probeSnippets('dlx ajax tv ' + nume,
+      B + '/wp-admin/admin-ajax.php?action=doo_player_ajax&post=43619&nume=' + nume + '&type=tv',
+      [['json', '.*']], 300);
+  }
+  await probeSnippets('dlx ajax movie 43611',
+    B + '/wp-admin/admin-ajax.php?action=doo_player_ajax&post=43611&nume=1&type=movie',
+    [['json', '.*']], 300);
+  // ¿El slug del episodio resuelve por id de TMDB? y ¿qué hosts usa?
+  await probeSnippets('dlx home hosts', B + '/', [['hosts', 'https?://[a-z0-9.-]+/(?:embed|e|v|player)/']], 200);
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -526,7 +541,8 @@ async function main() {
   if (only === 'all' || only === 'round24') await round24();
   // Solo esta ronda: útil mientras se investiga un sitio concreto.
   else if (only === 'round24only') await round24();
-  if (only === 'doramaslatinox' || only === 'dlx') await round25();
+  if (only === 'doramaslatinox' || only === 'dlx') { await round25(); await round26(); }
+  if (only === 'dlx26') await round26();
 }
 
 if (require.main === module) {
