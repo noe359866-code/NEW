@@ -59,6 +59,14 @@ async function main() {
     await probe('pelis24 search', 'https://ww1.pelis24.blog/search?q=interstellar', playerPatterns);
     await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
   }
+  if (only === 'all' || only === 'fuegocine7') {
+    for (const q of ['odisea', 'la%20odisea', 'visionquest']) {
+      await probe('fc search_elastic ' + q, 'https://fuegocine.com/search_elastic?s=' + q,
+        [['resultados', 'details|title|poster']]);
+    }
+    await probe('fc search_elastic POST', 'https://fuegocine.com/search_elastic?s=odisea',
+      [['resultados', 'details']]);
+  }
   if (only === 'all' || only === 'fuegocine6') {
     await probe('fc showSuggestions', 'https://fuegocine.com/',
       [['funcion', 'showSuggestions'], ['rutas', 'suggest|autocomplete|search_|ajax']]);
