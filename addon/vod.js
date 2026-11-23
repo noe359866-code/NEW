@@ -9,7 +9,7 @@ const { mediaUrl, safeUrl, isAdvertisementUrl } = require('../sports/http');
 
 // FlixLatam queda fuera de la lista por decisión del usuario (Embed69 devuelve
 // 403 a las IP del servidor y su PoW ya no es fiable). Sigue en el repositorio.
-const PROVIDERS = ['tioanime', 'fuegocine', 'latanime', 'cineplus123'];
+const PROVIDERS = ['tioanime', 'fuegocine', 'kdrama', 'framextv', 'latanime', 'cineplus123'];
 const TIME_BUDGET_MS = 30000;
 const REQUEST_BUDGET = 96;
 const PROVIDER_REQUEST_BUDGET = 32;

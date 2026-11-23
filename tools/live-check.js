@@ -46,9 +46,12 @@ function usage() {
   node tools/live-check.js --site flixlatam --id 157336 --type movie
   node tools/live-check.js --site latanime --id 37854 --type tv --season 1 --episode 1
   node tools/live-check.js --site cineplus123 --id 157336 --type movie --title "Interstellar" --year 2014
+  node tools/live-check.js --site kdrama --id 117376 --type tv --season 1 --episode 1 --title "Vincenzo" --year 2021
+  node tools/live-check.js --site framextv --id 155 --type movie --title "The Dark Knight" --year 2008
   node tools/live-check.js --all --id 157336 --title "Interstellar"
 
---site flixlatam|latanime|cineplus123   proveedor; --all prueba los tres
+--site flixlatam|latanime|cineplus123|kdrama|framextv|fuegocine|tioanime
+                              proveedor; --all prueba todos
 --settings '{"maxResults":"4"}'  ajustes de Nuvio
 --title "Título"             simula los metadatos TMDB/IMDb, no el sitio
 --year 2014                  año para la simulación de metadatos
