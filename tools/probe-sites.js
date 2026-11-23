@@ -59,6 +59,15 @@ async function main() {
     await probe('pelis24 search', 'https://ww1.pelis24.blog/search?q=interstellar', playerPatterns);
     await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
   }
+  if (only === 'all' || only === 'fuegocine4') {
+    await probe('fc show watch', 'https://fuegocine.com/shows/watch/visionquest/24',
+      [['iframe', 'iframe'], ['episodios', 'data-path|episode|Episodio']]);
+    await probe('fc sitemap', 'https://fuegocine.com/sitemap.xml', [['urls', 'movies/details|shows/details']]);
+    await probe('fc season raw', 'https://fuegocine.com/shows/visionquest/seasons/temporada-1/55',
+      [['data-path', 'data-path'], ['links', '/shows/watch|<a ']]);
+    await probe('fc search post-like', 'https://fuegocine.com/search?s=la%20odisea&type=movie',
+      [['resultados', '/movies/details|/shows/details']]);
+  }
   if (only === 'all' || only === 'fuegocine3') {
     await probe('fc search', 'https://fuegocine.com/search?s=odisea',
       [['tarjetas', '/movies/details|/shows/details|title=']]);
