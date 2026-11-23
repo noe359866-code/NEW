@@ -11,6 +11,88 @@ status=403 type=text/html; charset=UTF-8 bytes=5708 final=https://ww1.pelis24.bl
 --- servers/ajax: 0 líneas
 --- json-inline: 0 líneas
 
+===== fc search error :: https://fuegocine.com/search?s=odisea
+status=500 type=text/html; charset=UTF-8 bytes=1113975 final=https://fuegocine.com/search?s=odisea
+--- error: 6 líneas
+   InvalidArgumentException: View [pages.search] not found. in file /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/View/FileViewFinder.php on line 137
+   <pre>InvalidArgumentException: View [pages.search] not found. in file /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/View/FileViewFinder.php on line 137
+   function e(){return(e=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e}).apply(this,arguments)}var t="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"…
+   return c.createElement("span",{key:"line-".concat(r),className:"react-syntax-highlighter-line-number",style:"function"==typeof n?n(a):n},"".concat(a,"\n"))})}({lines:t.replace(/\n$/,"").split("\n"),style:a,startingLineNumber:o}))}function ai(e,t){return{type:"element",tagName:"span",properties:{key:…
+   return c.createElement(x,j,/*#__PURE__*/c.createElement(A,s,!h&&M,O({rows:B,stylesheet:a,useInlineStyles:f})))});Al.registerLanguage=sl.registerLanguage;var Il=Al;function Ll({highlight:e,row:t,frame:n,lineNumber:r}){const{url:a,clipboard:o}=Po({file:n.file,lineNumber:r});return c.createElement("spa…
+   InvalidArgumentException: View [pages.search] not found. in file /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/View/FileViewFinder.php on line 137
+
+===== fc movies page2 :: https://fuegocine.com/movies?page=2
+status=200 type=text/html; charset=UTF-8 bytes=32185 final=https://fuegocine.com/movies?page=2
+--- detalles: 10 líneas
+   <nav class="navigation pagination" role="navigation">
+   <a class="prev page-numbers" href="https://fuegocine.com/movies?page=1" title="pagination"><i class="fa fa-caret-left"></i></a>
+   <a class="page-numbers " href="https://fuegocine.com/movies?page=1" title="pagination">1</a>
+   <a class="page-numbers  active" href="https://fuegocine.com/movies?page=2" title="pagination">2</a>
+   <a class="page-numbers " href="https://fuegocine.com/movies?page=3" title="pagination">3</a>
+   <a class="page-numbers " href="https://fuegocine.com/movies?page=4" title="pagination">4</a>
+   <a class="page-numbers " href="https://fuegocine.com/movies?page=5" title="pagination">5</a>
+   <a class="page-numbers " href="https://fuegocine.com/movies?page=6" title="pagination">6</a>
+   <a class="page-numbers " href="https://fuegocine.com/movies?page=7" title="pagination">7</a>
+   <a class="next page-numbers" href="https://fuegocine.com/movies?page=17" title="pagination"><i class="fa fa-caret-right"></i></a>
+
+===== fc form :: https://fuegocine.com/
+status=200 type=text/html; charset=UTF-8 bytes=47243 final=https://fuegocine.com/
+--- navbar-form: 10 líneas
+   <meta name="theme-color" content="#ff0015">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="author" content="">
+   <meta name="description" content="Bienvenido a tu plataforma definitiva de entretenimiento. Explora la mayor cartelera de películas y series recientes con calidad prémium, reproducción fluida y una experiencia 100% libre de publicidad." />
+   <meta name="keywords" content="ver películas online, series en streaming, películas en máxima calidad, ver series gratis, estrenos de cine online, ver anime gratis, sin publicidad, 1080p, latino
+   <meta name="twitter:card" content="summary_large_image">
+   <meta name="twitter:image" content="https://fuegocine.com/upload/FuegoCine2Logo.png">
+   <form class="navbar-form navbar-left">
+   </form>
+   <input type="text" name="s" id="search_box" class="search-container-input" placeholder="Título" onkeyup="showSuggestions(this.value)" style="background: #000000;">
+
+===== fc api :: https://fuegocine.com/api/movies
+status=404 type=text/html; charset=UTF-8 bytes=13234 final=https://fuegocine.com/api/movies
+--- json: 40 líneas
+   <!DOCTYPE html>
+   <html lang="es">
+   <head>
+   <meta name="theme-color" content="#ff0015">
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="author" content="">
+   <title>Page Not Found | Fuego Cine 2.0</title>
+   <meta name="description" content="Bienvenido a tu plataforma definitiva de entretenimiento. Explora la mayor cartelera de películas y series recientes con calidad prémium, reproducción fluida y una experiencia 100% libre de publicidad." />
+   <meta name="keywords" content="ver películas online, series en streaming, películas en máxima calidad, ver series gratis, estrenos de cine online, ver anime gratis, sin publicidad, 1080p, latino
+   series y películas sin anuncios" />
+   <link rel="canonical" href="https://fuegocine.com/api/movies">
+   <meta property="og:type" content="movie" />
+   <meta property="og:title" content="Page Not Found | Fuego Cine 2.0" />
+   <meta property="og:description" content="Bienvenido a tu plataforma definitiva de entretenimiento. Explora la mayor cartelera de películas y series recientes con calidad prémium, reproducción fluida y una experiencia 100% libre de publicidad." />
+   <meta property="og:image" content="https://fuegocine.com/upload/FuegoCine2Logo.png" />
+   <meta property="og:url" content="https://fuegocine.com/api/movies" />
+   <meta property="og:image:width" content="1024" />
+   <meta property="og:image:height" content="1024" />
+   <meta name="twitter:card" content="summary_large_image">
+   <meta name="twitter:image" content="https://fuegocine.com/upload/FuegoCine2Logo.png">
+   <link rel="image_src" href="https://fuegocine.com/upload/FuegoCine2Logo.png">
+   <!-- Favicon -->
+   <link rel="icon" href="https://fuegocine.com/upload/FC2Icon.png">
+   <!-- LOAD LOCAL CSS -->
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/megamenu.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/ionicons.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/font-awesome.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/color-style/style-six.css" id="theme">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/responsive.css">
+   <!-- Splide Slider CSS -->
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/splide.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/jquery-eu-cookie-law-popup.css">
+   <!-- SweetAlert2 -->
+   <script src="https://fuegocine.com/site_assets/js/sweetalert2@11.js"></script>
+   <!-- Google Fonts -->
+   <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&display=swap" rel="stylesheet">
+   <style type="text/css">
+
 ===== fc show watch :: https://fuegocine.com/shows/watch/visionquest/24
 status=404 type=text/html; charset=UTF-8 bytes=13273 final=https://fuegocine.com/shows/watch/visionquest/24
 --- iframe: 0 líneas
@@ -52,11 +134,11 @@ status=200 type=text/html; charset=UTF-8 bytes=20378 final=https://fuegocine.com
    <a class="close" href="#" title="close"><i class="ion-close-round"></i></a>
 
 ===== fc search post-like :: https://fuegocine.com/search?s=la%20odisea&type=movie
-status=500 type=text/html; charset=UTF-8 bytes=1114079 final=https://fuegocine.com/search?s=la%20odisea&type=movie
+status=500 type=text/html; charset=UTF-8 bytes=1114073 final=https://fuegocine.com/search?s=la%20odisea&type=movie
 --- resultados: 0 líneas
 
 ===== fc search :: https://fuegocine.com/search?s=odisea
-status=500 type=text/html; charset=UTF-8 bytes=1113977 final=https://fuegocine.com/search?s=odisea
+status=500 type=text/html; charset=UTF-8 bytes=1113971 final=https://fuegocine.com/search?s=odisea
 --- tarjetas: 2 líneas
    function e(){return(e=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e}).apply(this,arguments)}var t="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"…
    return c.createElement(x,j,/*#__PURE__*/c.createElement(A,s,!h&&M,O({rows:B,stylesheet:a,useInlineStyles:f})))});Al.registerLanguage=sl.registerLanguage;var Il=Al;function Ll({highlight:e,row:t,frame:n,lineNumber:r}){const{url:a,clipboard:o}=Po({file:n.file,lineNumber:r});return c.createElement("spa…
@@ -69,7 +151,7 @@ status=200 type=text/html; charset=UTF-8 bytes=20378 final=https://fuegocine.com
    $("li[data-path]").click(function() {
 
 ===== fc abyss :: https://player.abyssplayer.com/KxBGoCWcV
-status=200 type=text/html; charset=utf-8 bytes=10614 final=https://player.abyssplayer.com/KxBGoCWcV
+status=200 type=text/html; charset=utf-8 bytes=10701 final=https://player.abyssplayer.com/KxBGoCWcV
 --- claves: 1 líneas
    <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>La Odisea (2026)</title><style>#overlay, html {background: #000;}#overlay,#playback {bottom: 0;position: absolute}#overlay, svg {cursor: pointer}* {margin: 0;padding: 0}html …
 
@@ -85,22 +167,22 @@ status=200 type=application/json bytes=389 final=https://vimeos.unlimplay.com/?i
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=DIUXd67LS4CpfkQIgasKvqjVEqt6QB_BjR-xAp288Ew&s=1795395313&e=43200&v=434459589&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
+   "direct": "https://p4.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=dbeYMIPjcX0ZFlmBBr7P9XiQRS0lo9tQQcGoR_-lPok&s=1795396197&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
    }
    }
    }
 
 ===== fc unlimplay embed :: https://unlimplay.com/f/embed/movie/1368337
-status=200 type=text/html; charset=utf-8 bytes=57341 final=https://unlimplay.com/f/embed/movie/1368337?_et=bb36e3c77b91c5858219e71115492708
+status=200 type=text/html; charset=utf-8 bytes=57606 final=https://unlimplay.com/f/embed/movie/1368337?_et=bc23d28febe24e7f28048e0fdd44ad01
 --- finalizePlayer: 5 líneas
-   <link rel="preconnect" href="https://p7.vimeos.zip" crossorigin>
+   <link rel="preconnect" href="https://p4.vimeos.zip" crossorigin>
    <!-- Fake verificador: visible mientras PHP procesa, se oculta al llegar finalizePlayer() -->
-   <script src="/assets/ulp/0a03c17d6f118a6e67f6.js" type="60621e4e70acd9f8f648fe29-text/javascript"></script><script type="60621e4e70acd9f8f648fe29-text/javascript">__ulpRun("0a03c17d6f118a6e67f6",["{\"latino\":{\"XMovie\":\"https://unlimplay.com/mf.php?man=xm-035DC8C1084744C6AB570AECCE0699D3&s=6826f1…
-   <script type="60621e4e70acd9f8f648fe29-text/javascript">try{window.ULP_ORIG=window.ULP_ORIG||{};var _o={"latino":{"vidara":"https://vidara.to/e/ic2DH3h8t3QR6"}};for(var _l in _o){ULP_ORIG[_l]=Object.assign(ULP_ORIG[_l]||{},_o[_l]);}}catch(e){}</script><script type="60621e4e70acd9f8f648fe29-text/java…
-   <script type="60621e4e70acd9f8f648fe29-text/javascript">(function(){var _wUrl="https:\/\/vimeos.unlimplay.com\/?id=1368337";var _proxy="https:\/\/vimeos.unlimplay.com\/stream.m3u8?url=";    fetch(_wUrl,{headers:{'Accept':'application/json'}})
+   <script src="/assets/ulp/0a03c17d6f118a6e67f6.js" type="a52f9c727aa5bef6b63bfd40-text/javascript"></script><script type="a52f9c727aa5bef6b63bfd40-text/javascript">__ulpRun("0a03c17d6f118a6e67f6",["{\"latino\":{\"XMovie\":\"https://unlimplay.com/mf.php?man=xm-035DC8C1084744C6AB570AECCE0699D3&s=6826f1…
+   <script type="a52f9c727aa5bef6b63bfd40-text/javascript">try{window.ULP_ORIG=window.ULP_ORIG||{};var _o={"latino":{"streamwish":"https://embedwish.com/e/oyr2nl0uuxar","vidhide":"https://morencius.com/v/rqkzgx2yzq23","vidara":"https://vidara.to/e/ic2DH3h8t3QR6"},"subtitulado":{"streamwish":"https://em…
+   <script type="a52f9c727aa5bef6b63bfd40-text/javascript">(function(){var _wUrl="https:\/\/vimeos.unlimplay.com\/?id=1368337";var _proxy="https:\/\/vimeos.unlimplay.com\/stream.m3u8?url=";    fetch(_wUrl,{headers:{'Accept':'application/json'}})
 
 ===== fuegocine home/form :: https://fuegocine.com/
-status=200 type=text/html; charset=UTF-8 bytes=49170 final=https://fuegocine.com/
+status=200 type=text/html; charset=UTF-8 bytes=47243 final=https://fuegocine.com/
 --- formularios: 1 líneas
    <form class="navbar-form navbar-left">
 
@@ -110,20 +192,21 @@ status=200 type=text/html; charset=UTF-8 bytes=20378 final=https://fuegocine.com
 
 ===== embed videro :: https://videro.my/e/ueuf2z2cltcp6sw
 status=403 type=text/html; charset=UTF-8 bytes=5653 final=https://videro.my/e/ueuf2z2cltcp6sw
---- m3u8/mp4: 0 líneas
+--- m3u8/mp4: 1 líneas
+   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
 
 ===== embed videro :: https://videro.my/e/ueuf2z2cltcp6sw
 ERROR Invalid regular expression: /sources|file|videoUrl|stream|eval(/i: Unterminated group
 
 ===== embed abyssplayer :: https://player.abyssplayer.com/KxBGoCWcV
-status=200 type=text/html; charset=utf-8 bytes=10614 final=https://player.abyssplayer.com/KxBGoCWcV
+status=200 type=text/html; charset=utf-8 bytes=10701 final=https://player.abyssplayer.com/KxBGoCWcV
 --- m3u8/mp4: 0 líneas
 
 ===== embed abyssplayer :: https://player.abyssplayer.com/KxBGoCWcV
 ERROR Invalid regular expression: /sources|file|videoUrl|stream|eval(/i: Unterminated group
 
 ===== embed unlimplay :: https://unlimplay.com/f/embed/movie/1368337
-status=200 type=text/html; charset=utf-8 bytes=57341 final=https://unlimplay.com/f/embed/movie/1368337?_et=bb36e3c77b91c5858219e71115492708
+status=200 type=text/html; charset=utf-8 bytes=57606 final=https://unlimplay.com/f/embed/movie/1368337?_et=bc23d28febe24e7f28048e0fdd44ad01
 --- m3u8/mp4: 13 líneas
    <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/hls.js@1.7.4/dist/hls.min.js" crossorigin>
    <!-- Botón Auto HLS -->
@@ -131,9 +214,9 @@ status=200 type=text/html; charset=utf-8 bytes=57341 final=https://unlimplay.com
    <span class="ca-tip">Auto HLS</span>
    .ulp-mode-hls #btn-auto-hls,.ulp-mode-iframe #btn-auto-hls,.ulp-mode-hls .drop-hls-item,.ulp-mode-iframe .drop-hls-item{display:none!important}
    .ulp-mode-hls .drop-hls-item+.drop-hls-sep,.ulp-mode-iframe .drop-hls-item+.drop-hls-sep,.drop-hls-sep.ulp-sep-off{display:none!important}</style>
-   <script src="/assets/ulp/0a03c17d6f118a6e67f6.js" type="93336d2bdffd586c9ffa3f42-text/javascript"></script><script type="93336d2bdffd586c9ffa3f42-text/javascript">__ulpRun("0a03c17d6f118a6e67f6",["{\"latino\":{\"XMovie\":\"https://unlimplay.com/mf.php?man=xm-035DC8C1084744C6AB570AECCE0699D3&s=6826f1…
-   <script type="93336d2bdffd586c9ffa3f42-text/javascript">try{window.ULP_ORIG=window.ULP_ORIG||{};var _o={"latino":{"vidara":"https://vidara.to/e/ic2DH3h8t3QR6"}};for(var _l in _o){ULP_ORIG[_l]=Object.assign(ULP_ORIG[_l]||{},_o[_l]);}}catch(e){}</script><script type="93336d2bdffd586c9ffa3f42-text/java…
-   <script type="93336d2bdffd586c9ffa3f42-text/javascript">(function(){var _wUrl="https:\/\/vimeos.unlimplay.com\/?id=1368337";var _proxy="https:\/\/vimeos.unlimplay.com\/stream.m3u8?url=";    fetch(_wUrl,{headers:{'Accept':'application/json'}})
+   <script src="/assets/ulp/0a03c17d6f118a6e67f6.js" type="73915462e4485197ecd850a6-text/javascript"></script><script type="73915462e4485197ecd850a6-text/javascript">__ulpRun("0a03c17d6f118a6e67f6",["{\"latino\":{\"XMovie\":\"https://unlimplay.com/mf.php?man=xm-035DC8C1084744C6AB570AECCE0699D3&s=6826f1…
+   <script type="73915462e4485197ecd850a6-text/javascript">try{window.ULP_ORIG=window.ULP_ORIG||{};var _o={"latino":{"streamwish":"https://embedwish.com/e/oyr2nl0uuxar","vidhide":"https://morencius.com/v/rqkzgx2yzq23","vidara":"https://vidara.to/e/ic2DH3h8t3QR6"},"subtitulado":{"streamwish":"https://em…
+   <script type="73915462e4485197ecd850a6-text/javascript">(function(){var _wUrl="https:\/\/vimeos.unlimplay.com\/?id=1368337";var _proxy="https:\/\/vimeos.unlimplay.com\/stream.m3u8?url=";    fetch(_wUrl,{headers:{'Accept':'application/json'}})
    // v3.9.18: el aviso sale recién cuando el video ya se está viendo (no mientras carga el HLS) y "Empezar de nuevo"
    // vale para toda la página: si el servidor falla y entra otro, o hls.js termina de cargar, ya no vuelve al minuto viejo.
    var guard = null; // {t, until}: después de reiniciar, nadie (hls.js, reintentos) puede volver a ese minuto
@@ -143,7 +226,7 @@ status=200 type=text/html; charset=utf-8 bytes=57341 final=https://unlimplay.com
 ERROR Invalid regular expression: /sources|file|videoUrl|stream|eval(/i: Unterminated group
 
 ===== fuegocine búsqueda 2 :: https://fuegocine.com/movies?keyword=odisea
-status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?keyword=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32154 final=https://fuegocine.com/movies?keyword=odisea
 --- status: 40 líneas
    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
    <link rel="canonical" href="https://fuegocine.com/movies">
@@ -187,7 +270,7 @@ status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com
    <option value="https://fuegocine.com/movies?genre_id=16" >Bélica</option>
 
 ===== fuegocine búsqueda 2 :: https://fuegocine.com/search?query=odisea
-status=500 type=text/html; charset=UTF-8 bytes=1099647 final=https://fuegocine.com/search?query=odisea
+status=500 type=text/html; charset=UTF-8 bytes=1099649 final=https://fuegocine.com/search?query=odisea
 --- status: 40 líneas
    ErrorException: Undefined array key &quot;s&quot; in file /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php on line 189
    #1 /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php(189): Illuminate\Foundation\Bootstrap\HandleExceptions-&gt;Illuminate\Foundation\Bootstrap\{closure}()
@@ -216,7 +299,7 @@ status=500 type=text/html; charset=UTF-8 bytes=1099647 final=https://fuegocine.c
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    ! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com
    */*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,BlinkMacS…
-   window.data = {"report":{"notifier":"Laravel Client","language":"PHP","framework_version":"10.42.0","language_version":"8.3.37","exception_class":"ErrorException","seen_at":1795395317,"message":"Undefined array key \u0022s\u0022","glows":[],"solutions":[],"documentation_links":[],"stacktrace":[{"fil…
+   window.data = {"report":{"notifier":"Laravel Client","language":"PHP","framework_version":"10.42.0","language_version":"8.3.37","exception_class":"ErrorException","seen_at":1795396200,"message":"Undefined array key \u0022s\u0022","glows":[],"solutions":[],"documentation_links":[],"stacktrace":[{"fil…
    <!-- The noscript representation is for HTTP client like Postman that have JS disabled. -->
    <pre>ErrorException: Undefined array key &quot;s&quot; in file /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php on line 189
    #1 /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php(189): Illuminate\Foundation\Bootstrap\HandleExceptions-&gt;Illuminate\Foundation\Bootstrap\{closure}()
@@ -231,7 +314,7 @@ status=500 type=text/html; charset=UTF-8 bytes=1099647 final=https://fuegocine.c
    #31 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}()
 
 ===== fuegocine búsqueda 2 :: https://fuegocine.com/movies?title=odisea
-status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?title=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32154 final=https://fuegocine.com/movies?title=odisea
 --- status: 40 líneas
    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
    <link rel="canonical" href="https://fuegocine.com/movies">
@@ -319,7 +402,7 @@ status=404 type=text/html; charset=UTF-8 bytes=13234 final=https://fuegocine.com
    <script src="https://fuegocine.com/site_assets/js/custom-main.js"></script>
 
 ===== fuegocine búsqueda 2 :: https://fuegocine.com/movies?search=la+odisea
-status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?search=la+odisea
+status=200 type=text/html; charset=UTF-8 bytes=32154 final=https://fuegocine.com/movies?search=la+odisea
 --- status: 40 líneas
    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
    <link rel="canonical" href="https://fuegocine.com/movies">
@@ -363,7 +446,7 @@ status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com
    <option value="https://fuegocine.com/movies?genre_id=16" >Bélica</option>
 
 ===== fuegocine watch :: https://fuegocine.com/movies/watch/la-odisea/227
-status=200 type=text/html; charset=UTF-8 bytes=42326 final=https://fuegocine.com/movies/watch/la-odisea/227
+status=200 type=text/html; charset=UTF-8 bytes=42392 final=https://fuegocine.com/movies/watch/la-odisea/227
 --- iframe/embed: 18 líneas
    .iframe-container {
    .iframe-container iframe {
@@ -434,8 +517,10 @@ status=200 type=text/html; charset=UTF-8 bytes=20901 final=https://fuegocine.com
 --- watch links: 0 líneas
 
 ===== fuegocine búsqueda :: https://fuegocine.com/movies?search=odisea
-status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?search=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32154 final=https://fuegocine.com/movies?search=odisea
 --- status/resultados: 18 líneas
+   <a href="https://fuegocine.com/movies/details/la-lista-de-schindler/347" title="La Lista de Schindler">
+   <a href="https://fuegocine.com/movies/details/el-proyecto-adam/346" title="El Proyecto Adam">
    <a href="https://fuegocine.com/movies/details/jack-y-jill/345" title="Jack y Jill">
    <a href="https://fuegocine.com/movies/details/del-cielo-al-infierno/344" title="Del Cielo al Infierno">
    <a href="https://fuegocine.com/movies/details/cuando-el-cielo-se-equivoca/343" title="Cuando el Cielo se Equivoca">
@@ -448,16 +533,16 @@ status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com
    <a href="https://fuegocine.com/movies/details/noroi-la-maldición/336" title="Noroi: La Maldición">
    <a href="https://fuegocine.com/movies/details/norbit/335" title="Norbit">
    <a href="https://fuegocine.com/movies/details/corazón-de-tinta/334" title="Corazón de Tinta">
+   <a href="https://fuegocine.com/movies/details/el-deshielo/329" title="El Deshielo">
    <a href="https://fuegocine.com/movies/details/dos-locas-en-fuga/328" title="Dos Locas en Fuga">
    <a href="https://fuegocine.com/movies/details/desde-la-oscuridad/327" title="Desde la Oscuridad">
    <a href="https://fuegocine.com/movies/details/f1-la-película/326" title="F1 La Película">
-   <a href="https://fuegocine.com/movies/details/la-vida-de-chuck/325" title="La Vida de Chuck">
-   <a href="https://fuegocine.com/movies/details/plan-de-escape/324" title="Plan de Escape">
-   <a href="https://fuegocine.com/movies/details/ghost-in-the-shell-la-vigilante-del-futuro/323" title="Ghost in the Shell: La Vigilante del Futuro">
 
 ===== fuegocine búsqueda :: https://fuegocine.com/movies?q=odisea
-status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?q=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32154 final=https://fuegocine.com/movies?q=odisea
 --- status/resultados: 18 líneas
+   <a href="https://fuegocine.com/movies/details/la-lista-de-schindler/347" title="La Lista de Schindler">
+   <a href="https://fuegocine.com/movies/details/el-proyecto-adam/346" title="El Proyecto Adam">
    <a href="https://fuegocine.com/movies/details/jack-y-jill/345" title="Jack y Jill">
    <a href="https://fuegocine.com/movies/details/del-cielo-al-infierno/344" title="Del Cielo al Infierno">
    <a href="https://fuegocine.com/movies/details/cuando-el-cielo-se-equivoca/343" title="Cuando el Cielo se Equivoca">
@@ -470,16 +555,16 @@ status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com
    <a href="https://fuegocine.com/movies/details/noroi-la-maldición/336" title="Noroi: La Maldición">
    <a href="https://fuegocine.com/movies/details/norbit/335" title="Norbit">
    <a href="https://fuegocine.com/movies/details/corazón-de-tinta/334" title="Corazón de Tinta">
+   <a href="https://fuegocine.com/movies/details/el-deshielo/329" title="El Deshielo">
    <a href="https://fuegocine.com/movies/details/dos-locas-en-fuga/328" title="Dos Locas en Fuga">
    <a href="https://fuegocine.com/movies/details/desde-la-oscuridad/327" title="Desde la Oscuridad">
    <a href="https://fuegocine.com/movies/details/f1-la-película/326" title="F1 La Película">
-   <a href="https://fuegocine.com/movies/details/la-vida-de-chuck/325" title="La Vida de Chuck">
-   <a href="https://fuegocine.com/movies/details/plan-de-escape/324" title="Plan de Escape">
-   <a href="https://fuegocine.com/movies/details/ghost-in-the-shell-la-vigilante-del-futuro/323" title="Ghost in the Shell: La Vigilante del Futuro">
 
 ===== fuegocine búsqueda :: https://fuegocine.com/movies?keyword=odisea
-status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?keyword=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32154 final=https://fuegocine.com/movies?keyword=odisea
 --- status/resultados: 18 líneas
+   <a href="https://fuegocine.com/movies/details/la-lista-de-schindler/347" title="La Lista de Schindler">
+   <a href="https://fuegocine.com/movies/details/el-proyecto-adam/346" title="El Proyecto Adam">
    <a href="https://fuegocine.com/movies/details/jack-y-jill/345" title="Jack y Jill">
    <a href="https://fuegocine.com/movies/details/del-cielo-al-infierno/344" title="Del Cielo al Infierno">
    <a href="https://fuegocine.com/movies/details/cuando-el-cielo-se-equivoca/343" title="Cuando el Cielo se Equivoca">
@@ -492,16 +577,16 @@ status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com
    <a href="https://fuegocine.com/movies/details/noroi-la-maldición/336" title="Noroi: La Maldición">
    <a href="https://fuegocine.com/movies/details/norbit/335" title="Norbit">
    <a href="https://fuegocine.com/movies/details/corazón-de-tinta/334" title="Corazón de Tinta">
+   <a href="https://fuegocine.com/movies/details/el-deshielo/329" title="El Deshielo">
    <a href="https://fuegocine.com/movies/details/dos-locas-en-fuga/328" title="Dos Locas en Fuga">
    <a href="https://fuegocine.com/movies/details/desde-la-oscuridad/327" title="Desde la Oscuridad">
    <a href="https://fuegocine.com/movies/details/f1-la-película/326" title="F1 La Película">
-   <a href="https://fuegocine.com/movies/details/la-vida-de-chuck/325" title="La Vida de Chuck">
-   <a href="https://fuegocine.com/movies/details/plan-de-escape/324" title="Plan de Escape">
-   <a href="https://fuegocine.com/movies/details/ghost-in-the-shell-la-vigilante-del-futuro/323" title="Ghost in the Shell: La Vigilante del Futuro">
 
 ===== fuegocine búsqueda :: https://fuegocine.com/movies?title=odisea
-status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?title=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32154 final=https://fuegocine.com/movies?title=odisea
 --- status/resultados: 18 líneas
+   <a href="https://fuegocine.com/movies/details/la-lista-de-schindler/347" title="La Lista de Schindler">
+   <a href="https://fuegocine.com/movies/details/el-proyecto-adam/346" title="El Proyecto Adam">
    <a href="https://fuegocine.com/movies/details/jack-y-jill/345" title="Jack y Jill">
    <a href="https://fuegocine.com/movies/details/del-cielo-al-infierno/344" title="Del Cielo al Infierno">
    <a href="https://fuegocine.com/movies/details/cuando-el-cielo-se-equivoca/343" title="Cuando el Cielo se Equivoca">
@@ -514,12 +599,10 @@ status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com
    <a href="https://fuegocine.com/movies/details/noroi-la-maldición/336" title="Noroi: La Maldición">
    <a href="https://fuegocine.com/movies/details/norbit/335" title="Norbit">
    <a href="https://fuegocine.com/movies/details/corazón-de-tinta/334" title="Corazón de Tinta">
+   <a href="https://fuegocine.com/movies/details/el-deshielo/329" title="El Deshielo">
    <a href="https://fuegocine.com/movies/details/dos-locas-en-fuga/328" title="Dos Locas en Fuga">
    <a href="https://fuegocine.com/movies/details/desde-la-oscuridad/327" title="Desde la Oscuridad">
    <a href="https://fuegocine.com/movies/details/f1-la-película/326" title="F1 La Película">
-   <a href="https://fuegocine.com/movies/details/la-vida-de-chuck/325" title="La Vida de Chuck">
-   <a href="https://fuegocine.com/movies/details/plan-de-escape/324" title="Plan de Escape">
-   <a href="https://fuegocine.com/movies/details/ghost-in-the-shell-la-vigilante-del-futuro/323" title="Ghost in the Shell: La Vigilante del Futuro">
 
 ===== fuegocine búsqueda :: https://fuegocine.com/api/search?q=odisea
 status=404 type=text/html; charset=UTF-8 bytes=13234 final=https://fuegocine.com/api/search?q=odisea
