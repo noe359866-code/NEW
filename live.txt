@@ -1,122 +1,65 @@
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-fuegocine: 1 enlace(s), 4058 ms; peticiones reales: 7, fallidas: 1
+fuegocine: 1 enlace(s), 27306 ms; peticiones reales: 7, fallidas: 1
   [SD] La Odisea · Unlimplay
   https://p4.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-fuegocine: 1 enlace(s), 4096 ms; peticiones reales: 7, fallidas: 1
+fuegocine: 1 enlace(s), 12811 ms; peticiones reales: 7, fallidas: 1
   [SD] Odisea · Unlimplay
-  https://p4.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
+  https://p3.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
+[nebula-es] http timeout 8000ms https://fuegocine.com/search_elastic?…
 
-fuegocine: 1 enlace(s), 5591 ms; peticiones reales: 8, fallidas: 1
-  [2160p] VisionQuest · S01E02 · Unlimplay
-  https://p6.vimeos.zip/hls2/02/00014/kr4k7o11ytq2_,n,h,.urlset/master.m3u8?[oculto]
-
-No se han probado ni descargado los medios.
-Metadatos simulados; las peticiones al sitio y los reproductores son reales.
-
-tioanime: 4 enlace(s), 3120 ms; peticiones reales: 11, fallidas: 1
-  [SD] Shingeki no Kyojin · S01E01 · YourUpload
-  https://www.yourupload.com/embed/999_1.mp4
-  [SD] Shingeki no Kyojin · S01E01 · YourUpload
-  https://vidcache.net:8161/a202611225OX3V7bj2eL/video.mp4
-  [SD] Shingeki no Kyojin · S01E01 · YourUpload
-  https://www.yourupload.com/embed/2690_1.mp4
-  [SD] Shingeki no Kyojin · S01E01 · YourUpload
-  https://vidcache.net:8161/a20261122fi826q0EX25/video.mp4
+fuegocine: 0 enlace(s), 47422 ms; peticiones reales: 11, fallidas: 4
+  Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
+  · ERR https://doramaslatinox.com/ (Solicitud cancelada)
+[nebula-es] http timeout 8000ms https://doramaslatinox.com/?…
+  · ERR https://doramaslatinox.com/ (Solicitud cancelada)
+[nebula-es] http timeout 8000ms https://doramaslatinox.com/?…
 
-kdrama: 8 enlace(s), 5558 ms; peticiones reales: 9, fallidas: 0
-  [2160p] Vincenzo · S01E01 · KatDrama
-  https://nc-fa2.tubi.video/c943391e-1899-4500-9796-6eaafef89771/2m7m5lrsmg.m3u8?[oculto]
-  [2160p] Vincenzo · S01E01 · KatDrama
-  https://nc-fa2.tubi.video/c943391e-1899-4500-9796-6eaafef89771/3g4yu9kwz7.m3u8?[oculto]
-  [SD] Vincenzo · S01E01 · KatDrama
-  https://d3sgzbosmwirao.cloudfront.net/video/a2333196b77e6066e0a49a83154cd27d3e33ea26d389bafdc8e5821646df8283/1/hls/h264_high.m3u8
-  [SD] Vincenzo · S01E01 · KatDrama
-  https://nc-fa2.tubi.video/9e892a6c-6728-43c6-bd30-27ac95387c3e/91pn624aqx.m3u8?[oculto]
-  [SD] Vincenzo · S01E01 · KatDrama
-  https://nc-cf.tubi.video/9e892a6c-6728-43c6-bd30-27ac95387c3e/91pn624aqx.m3u8?[oculto]
-  [SD] Vincenzo · S01E01 · KatDrama
-  https://nc-fa2.tubi.video/9e892a6c-6728-43c6-bd30-27ac95387c3e/1nlxnirtrv.m3u8?[oculto]
+doramaslatinox: 0 enlace(s), 16027 ms; peticiones reales: 2, fallidas: 2
+  Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
+[nebula-es] http 403 https://latanime.org/buscar?…
+[nebula-es] http 403 https://latanime.org/buscar?…
 
-framextv: 4 enlace(s), 661 ms; peticiones reales: 1, fallidas: 0
-  [1080p] The Dark Knight · NetMirror
-  https://vidsync-shard.vs-deals41.workers.dev/api/netmirror/master.m3u8?[oculto]
-  [1080p] The Dark Knight · NetMirror
-  https://vidsync-shard.vs-deals38.workers.dev/api/netmirror/master.m3u8?[oculto]
-  [720p] The Dark Knight · Server 4
-  https://img.hscow.com/hls_mps/19711468df4078c930e6ea1202b8f4ee16db6d08/720/index_287.m3u8
-  [480p] The Dark Knight · Server 4
-  https://img.hscow.com/hls_mps/19711468df4078c930e6ea1202b8f4ee16db6d08/480/index_287.m3u8
-
-No se han probado ni descargado los medios.
-Metadatos simulados; las peticiones al sitio y los reproductores son reales.
-
-kdrama: 6 enlace(s), 19715 ms; peticiones reales: 9, fallidas: 2
-  [SD] The Dark Knight · KatDrama
-  https://d3sgzbosmwirao.cloudfront.net/video/aa0b3b021e53c235ee41de99744cd679d219c3612a550b93f6fce9cd93808064/1/hls/h264_high.m3u8
-  [SD] The Dark Knight · KatDrama
-  https://nc-fa.tubi.video/53046ed8-a326-4fca-820e-355153590f5b/0u0dggzuy2.m3u8?[oculto]
-  [SD] The Dark Knight · KatDrama
-  https://nc-cf.tubi.video/53046ed8-a326-4fca-820e-355153590f5b/0u0dggzuy2.m3u8?[oculto]
-  [SD] The Dark Knight · KatDrama
-  https://nc-fa.tubi.video/53046ed8-a326-4fca-820e-355153590f5b/rsl3j94ykd.m3u8?[oculto]
-  [SD] The Dark Knight · KatDrama
-  https://nc-cf.tubi.video/53046ed8-a326-4fca-820e-355153590f5b/rsl3j94ykd.m3u8?[oculto]
-  [SD] The Dark Knight · Vidly
-  https://img.rousav.tech/media/de6e159f07462a0dda14/index.m3u8
-
-No se han probado ni descargado los medios.
-Metadatos simulados; las peticiones al sitio y los reproductores son reales.
-
-framextv: 5 enlace(s), 782 ms; peticiones reales: 1, fallidas: 0
-  [720p] Vincenzo · S01E01 · NetMirror
-  https://vidsync-shard.vs-deals71.workers.dev/api/netmirror/master.m3u8?[oculto]
-  [720p] Vincenzo · S01E01 · NetMirror
-  https://vidsync-shard.vs-deals70.workers.dev/api/netmirror/master.m3u8?[oculto]
-  [720p] Vincenzo · S01E01 · Castle
-  https://img.hscow.com/hls_mps/244368831/720/index_287.m3u8
-  [480p] Vincenzo · S01E01 · Castle
-  https://img.hscow.com/hls_mps/244368831/480/index_287.m3u8
-  [SD] Vincenzo · S01E01 · KissKH
-  https://vidsync-shard.vs-msmasumsarkar1.workers.dev/api/kisskh/master.m3u8?[oculto]
+latanime: 0 enlace(s), 1080 ms; peticiones reales: 2, fallidas: 2
+  Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
   · 200 https://pelishaxpro.com/movies/155
   · 200 https://pelishaxpro.com/movies/155
-  · 200 https://streamwish.to/e/6dz22bl4exq4
   · 200 https://filemoon.sx/e/d02q4wt2b80n
-  · 404 https://streamtape.com/e/rJv2zx284AsbQor
   · 200 https://ok.ru/videoembed/7652106504857
+  · 200 https://streamwish.to/e/6dz22bl4exq4
+  · 404 https://streamtape.com/e/rJv2zx284AsbQor
   · 301 https://vidhidevip.com/v/7edm3v3ca7mf
   · 200 https://streamwish.to/e/bx9im04137cn
 
-pelishax: 0 enlace(s), 1176 ms; peticiones reales: 8, fallidas: 1
+pelishax: 0 enlace(s), 5214 ms; peticiones reales: 8, fallidas: 1
   Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-pelishax: 0 enlace(s), 2540 ms; peticiones reales: 3, fallidas: 0
+pelishax: 0 enlace(s), 4385 ms; peticiones reales: 3, fallidas: 0
   Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-homecine: 5 enlace(s), 3928 ms; peticiones reales: 8, fallidas: 0
+homecine: 5 enlace(s), 4593 ms; peticiones reales: 8, fallidas: 0
   [1080p] The Matrix · Server Cload
   https://s40.fastream.to/hls2/21/00026/laerr1ukfafg_l/master.m3u8?[oculto]
   [720p] The Matrix · Server Cload
@@ -131,7 +74,7 @@ homecine: 5 enlace(s), 3928 ms; peticiones reales: 8, fallidas: 0
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-frikiserie: 1 enlace(s), 1242 ms; peticiones reales: 3, fallidas: 0
+frikiserie: 1 enlace(s), 2274 ms; peticiones reales: 3, fallidas: 0
   [SD] Los Caballeros del Zodiaco · S01E01
   https://ok6-7.vkuser.net/video.m3u8?[oculto]
 
