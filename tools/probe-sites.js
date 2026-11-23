@@ -59,6 +59,12 @@ async function main() {
     await probe('pelis24 search', 'https://ww1.pelis24.blog/search?q=interstellar', playerPatterns);
     await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
   }
+  if (only === 'all' || only === 'embed2') {
+    for (const url of ['https://embedorigin.cc/e/yc67a46nwbpn', 'https://embedorigin.cc/e/1fnkocttdniw',
+      'https://fcplayer2.blogspot.com/?url=U2FsdGVkX1']) {
+      await probe('embed', url, [['hls', '\\.m3u8|\\.mp4|file:|sources'], ['js', 'eval|atob|decrypt|packed']]);
+    }
+  }
   if (only === 'all' || only === 'akas') {
     for (const id of ['tt0417299', 'tt0944947', 'tt1375666']) {
       await probe('imdb akas ' + id, 'https://www.imdb.com/title/' + id + '/releaseinfo/',
