@@ -10,7 +10,7 @@
 | PeliShax | `pelishaxpro.com`: películas, series y anime por id de TMDB. Sus reproductores vienen declarados con `data-lang` (Latino, Castellano, Japonés). |
 | HomeCine | `www3.homecine.to`: catálogo en español. Cada pestaña de la ficha es un idioma (Latino, Castellano, Subtitulado) y su iframe es un reproductor fastream. |
 | FrikiSeries | `www.frikiserie.com`: series y películas clásicas dobladas al latino; sus reproductores son embeds de OK.ru. |
-| DoramasLatinox | `doramaslatinox.com`: doramas, series y películas asiáticas en audio latino. Sus reproductores se resuelven con la API v2 de su tema DooPlay. |
+| DoramasLatinox | `doramaslatinox.com`: doramas, series y películas asiáticas en audio latino. Sus reproductores se resuelven con la API v2 de su tema DooPlay; el de Abyss se descifra (AES-CTR), pero su CDN aún no entrega un medio directo. |
 | FlixLatam | En el repositorio, **desactivado**: Embed69 devuelve 403 a las IP del servidor. |
 | kdesa.stream | **No incluido**: Cloudflare responde «Just a moment…» (403) a todas las rutas desde el servidor, incluidas las de `/media/tmdb-*`. |
 | TVEnVivo, OnDemand y TheDaddy | Catálogos de canales y eventos deportivos y sus enlaces directos. |
