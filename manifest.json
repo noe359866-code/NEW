@@ -2,7 +2,7 @@
   "id": "org.nebula.es.unificado",
   "version": "3.1.0",
   "name": "Nébula ES · Cine, Anime y Deportes",
-  "description": "Fuentes directas de FlixLatam, Latanime y CinePlus123; deportes de TVEnVivo, OnDemand y TheDaddy. Sin proxy de vídeo.",
+  "description": "Fuentes directas de TioAnime, FuegoCine, Latanime y CinePlus123; deportes de TVEnVivo, OnDemand y TheDaddy. Sin proxy de vídeo.",
   "types": ["movie", "series", "tv", "anime", "channel"],
   "resources": [
     { "name": "catalog", "types": ["tv", "channel"] },
