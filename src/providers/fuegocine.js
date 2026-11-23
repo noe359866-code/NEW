@@ -106,7 +106,10 @@ function fuegoSearch(info) {
       }, function () { return page <= 2 ? pages(page + 1, empty) : null; });
   }
 
-  return suggest(0).then(function () { return pages(1, 0); }).then(function () {
+  return suggest(0).then(function () {
+    if (found.some(function (item) { return item.score >= 0.95; })) return null;
+    return pages(1, 0);
+  }).then(function () {
     return uniqueBy(found, function (item) { return item.url; })
       .sort(function (a, b) { return b.score - a.score; });
   });
@@ -177,14 +180,26 @@ function playerName(url) {
 }
 
 /** Unlimplay: su API JSON entrega HLS directo por idioma. */
-function unlimplayId(url) {
-  var match = /\/f\/embed\/(?:movie|tv|serie)\/(\d{1,9})/i.exec(String(url || ''));
-  return match ? match[1] : null;
+/** Unlimplay: /f/embed/movie/<id> o /f/embed/tv/<id>/<temporada>/<episodio>. */
+function unlimplayRef(url) {
+  var text = String(url || '');
+  var movie = /\/f\/embed\/movies?\/(\d{1,9})/i.exec(text);
+  if (movie) return { id: movie[1], season: 0, episode: 0 };
+  var show = /\/f\/embed\/(?:tv|series?|serie)\/(\d{1,9})(?:\/(\d{1,3})\/(\d{1,4}))?/i.exec(text);
+  if (!show) return null;
+  return { id: show[1], season: parseInt(show[2] || '0', 10), episode: parseInt(show[3] || '0', 10) };
 }
 
-function unlimplayStreams(id, referer) {
+function unlimplayId(url) {
+  var ref = unlimplayRef(url);
+  return ref ? ref.id : null;
+}
+
+function unlimplayStreams(id, referer, season, episode) {
   if (!id) return Promise.resolve([]);
-  return getJson('https://vimeos.unlimplay.com/?id=' + id, {
+  var endpoint = 'https://vimeos.unlimplay.com/?id=' + id +
+    (season ? '&s=' + season + '&e=' + episode : '');
+  return getJson(endpoint, {
     timeout: 8000, retries: 0, headers: { Accept: 'application/json' }
   }).then(function (data) {
     var embeds = data && data.embeds && typeof data.embeds === 'object' ? data.embeds : null;
@@ -246,7 +261,11 @@ function fuegoGetStreams(tmdbId, mediaType, season, episode) {
           var direct = players.filter(function (item) { return unlimplayId(item.url); });
           var rest = players.filter(function (item) { return !unlimplayId(item.url); });
           // Unlimplay: HLS directo desde su API, sin recorrer el iframe.
-          return unlimplayStreams(unlimplayId(direct[0] && direct[0].url), found.source).then(function (streams) {
+          var ref = unlimplayRef(direct[0] && direct[0].url);
+          var target = ref && ref.season ? ref :
+            (ref && info.isTv ? { id: ref.id, season: info.season, episode: info.episode } : ref);
+          return unlimplayStreams(target && target.id, found.source, target && target.season,
+            target && target.episode).then(function (streams) {
             if (!rest.length) return streams;
             return resolveDirectPlayers(rest.slice(0, 3), { maxDepth: 3, maxPages: 8 }).then(function (deep) {
               return streams.concat(deep);
