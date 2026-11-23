@@ -315,6 +315,19 @@ async function round16() {
   }
 }
 
+/* Ronda 17: bundle real de FrikiSeries y detalle de episodios de PeliShax. */
+async function round17() {
+  await probeSnippets('friki main bundle', 'https://www.frikiserie.com/main-SNXQBTSJ.js',
+    [['api hosts', 'https?://[a-z0-9.-]+\\.[a-z]{2,}(?::\\d+)?/(?:api|v1|api/v1)[a-zA-Z0-9/_-]*'],
+      ['rutas api', '"/(?:api|v1)/[a-zA-Z0-9/_$\\{\\}-]+"'],
+      ['json fields', '(?:video|capitulo|episodio|iframe|link|url)\\s*[:=]']], 260);
+  // PeliShax: el listado de capítulos trae la URL real del episodio.
+  await probeSnippets('pelishax episodios', 'https://pelishaxpro.com/series/575/1/1',
+    [['episode-item', 'episode-item[\\s\\S]{0,400}'], ['links', 'href="/[a-z]+/[0-9/]+"']], 420);
+  await probeSnippets('homecine serie tabs', 'https://www3.homecine.to/series/mouse',
+    [['tabs', '#tab\\d|les-content|season'], ['episodios', '/episodios?/|episode|capitulo']], 240);
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -354,6 +367,7 @@ async function main() {
   if (only === 'all' || only === 'players') await playersRaw();
   if (only === 'all' || only === 'friki-state') await frikiState();
   if (only === 'all' || only === 'round16') await round16();
+  if (only === 'all' || only === 'round17') await round17();
 }
 
 if (require.main === module) {
