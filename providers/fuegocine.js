@@ -1981,8 +1981,13 @@ function fuegoCards(html) {
     }
     title = String(title || '').trim();
     if (!title || title.length > 200) continue;
+    // El año, cuando la tarjeta lo muestra, va en el texto del propio enlace.
+    var inner = String(html || '').slice(match.index, match.index + 900);
+    inner = inner.slice(0, inner.indexOf('</a>') > 0 ? inner.indexOf('</a>') : 200);
+    var yearMatch = /\b(19\d{2}|20\d{2})\b/.exec(stripTags(inner));
     out.push({
       kind: match[1].toLowerCase(),
+      year: yearMatch ? parseInt(yearMatch[1], 10) : null,
       slug: match[2],
       id: match[3],
       title: title,
@@ -1990,6 +1995,22 @@ function fuegoCards(html) {
     });
   }
   return uniqueBy(out, function (item) { return item.kind + ':' + item.id; });
+}
+
+/** El catálogo está en español y los metadatos sin clave de TMDB llegan en
+ * inglés («Avatar: The Last Airbender» vs «Avatar: La Leyenda de Aang»). El
+ * primer bloque del título coincide y el año confirma que es la misma ficha;
+ * solo se acepta con esa doble condición y se marca el resultado como
+ * aproximado. */
+function fuegoTranslatedMatch(card, info) {
+  if (!info.year || card.year !== info.year) return false;
+  var wanted = significantTokens(info.title || '');
+  var candidate = significantTokens(card.title || '');
+  if (!wanted.length || !candidate.length) return false;
+  if (wanted[0] !== candidate[0]) return false;
+  // El título del sitio debe tener al menos dos palabras propias: con una
+  // sola («Avatar») coincidiría con cualquier secuela del mismo año.
+  return candidate.length >= 2;
 }
 
 function fuegoScore(card, info) {
@@ -2019,8 +2040,14 @@ function fuegoSearch(info) {
       // Nunca se acepta una ficha por venir de una sugerencia: el título tiene
       // que coincidir, o se acabaría devolviendo el medio equivocado.
       var score = fuegoScore(card, info);
+      var approximate = false;
+      if (score < 0.78 && fuegoTranslatedMatch(card, info)) {
+        score = 0.8;
+        approximate = true;
+      }
       if (score < 0.78) continue;
       card.score = score;
+      card.approximate = approximate;
       found.push(card);
     }
   }
@@ -2049,7 +2076,8 @@ function fuegoSearch(info) {
   }
 
   return suggest(0).then(function () {
-    if (found.some(function (item) { return item.score >= 0.95; })) return null;
+    // Basta con una coincidencia exacta o una aproximada confirmada por año.
+    if (found.some(function (item) { return item.score >= 0.95 || item.approximate; })) return null;
     return pages(1, 0);
   }).then(function () {
     return uniqueBy(found, function (item) { return item.url; })
@@ -2209,9 +2237,15 @@ function fuegoGetStreams(tmdbId, mediaType, season, episode) {
             (ref && info.isTv ? { id: ref.id, season: info.season, episode: info.episode } : ref);
           return unlimplayStreams(target && target.id, found.source, target && target.season,
             target && target.episode).then(function (streams) {
-            if (!rest.length) return streams;
+            var mark = function (list) {
+              return list.map(function (item) {
+                if (card.approximate) item.approximate = true;
+                return item;
+              });
+            };
+            if (!rest.length) return mark(streams);
             return resolveDirectPlayers(rest.slice(0, 3), { maxDepth: 3, maxPages: 8 }).then(function (deep) {
-              return streams.concat(deep);
+              return mark(streams.concat(deep));
             });
           });
         });
@@ -2221,9 +2255,12 @@ function fuegoGetStreams(tmdbId, mediaType, season, episode) {
       for (var i = 0; i < groups.length; i++) {
         var results = groups[i] || [];
         for (var j = 0; j < results.length; j++) {
+          // `approximate` viaja con cada enlace: la ficha puede haber cambiado.
           var item = results[j];
           var title = info.title + (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
             (item.name ? ' · ' + item.name : '');
+          // Aviso explícito: la ficha se emparejó por título traducido y año.
+          if (item.approximate) title += ' (título traducido)';
           streams.push(makeStream({ name: 'FuegoCine', title: title, provider: 'fuegocine', url: item.url,
             quality: parseQuality(title + ' ' + item.url), language: item.language || languageLabel(title),
             headers: item.headers, subtitles: item.subtitles }));

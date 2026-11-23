@@ -59,6 +59,29 @@ async function main() {
     await probe('pelis24 search', 'https://ww1.pelis24.blog/search?q=interstellar', playerPatterns);
     await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
   }
+  if (only === 'all' || only === 'year') {
+    await probe('fc ficha año', 'https://fuegocine.com/shows/details/avatar-la-leyenda-de-aang/33',
+      [['año', '\\b(?:19|20)\\d{2}\\b']]);
+    await probe('fc excelastic avatar', 'https://fuegocine.com/search_elastic?s=avatar', [['resultados', 'details|alt=']]);
+  }
+  if (only === 'all' || only === 'embed2') {
+    for (const url of ['https://embedorigin.cc/e/yc67a46nwbpn', 'https://embedorigin.cc/e/1fnkocttdniw',
+      'https://fcplayer2.blogspot.com/?url=U2FsdGVkX1']) {
+      await probe('embed', url, [['hls', '\\.m3u8|\\.mp4|file:|sources'], ['js', 'eval|atob|decrypt|packed']]);
+    }
+  }
+  if (only === 'all' || only === 'akas') {
+    for (const id of ['tt0417299', 'tt0944947', 'tt1375666']) {
+      await probe('imdb akas ' + id, 'https://www.imdb.com/title/' + id + '/releaseinfo/',
+        [['akas', 'aka|Also known as|España|Spain|Latinoam']]);
+    }
+  }
+  if (only === 'all' || only === 'fuegocine12') {
+    await probe('fc ficha tmdb', 'https://fuegocine.com/shows/details/avatar-la-leyenda-de-aang/33',
+      [['tmdb', 'tmdb|moviedb'], ['año', '<h1|year|release']]);
+    await probe('fc excelastic inglés', 'https://fuegocine.com/search_elastic?s=avatar%20the%20last%20airbender',
+      [['resultados', 'details|alt=']]);
+  }
   if (only === 'all' || only === 'fuegocine11') {
     // Catálogo: cómo se llama el sitio a los títulos populares (para el matcher).
     for (const page of [1, 2, 3]) {

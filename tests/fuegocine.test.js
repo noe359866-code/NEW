@@ -86,3 +86,24 @@ test('FuegoCine: usa /search_elastic y descarta las sugerencias de otro tipo', a
   assert.ok(!fetch.calls.some(c => c.url.includes('/shows/details/akira-serie')), 'no abre la serie homónima');
   assert.ok(!fetch.calls.some(c => c.url.includes('/search?s=')), 'no insiste con el buscador roto');
 });
+
+test('FuegoCine: empareja el título traducido solo con el año y lo avisa', async () => {
+  const fetch = mockFetch([
+    ['v3-cinemeta.strem.io/meta/series/tt0417299.json', { __json: { meta: { type: 'series', name: 'Avatar: The Last Airbender', year: '2005' } } }],
+    ['fuegocine.com/search_elastic?s=', [
+      '<a href="https://fuegocine.com/movies/details/avatar/80"><img alt="Avatar" title="Avatar"></a>',
+      '<a href="https://fuegocine.com/shows/details/avatar-la-leyenda-de-aang/33">' +
+        '<img alt="Avatar: La Leyenda de Aang" title="Avatar: La Leyenda de Aang"> 2005</a>'
+    ].join('')],
+    [/fuegocine\.com\/shows\/details\/avatar-la-leyenda-de-aang\/33/,
+      '<a href="https://fuegocine.com/shows/avatar-la-leyenda-de-aang/seasons/temporada-1-libro-agua/72" title="Temporada 1">'],
+    [/fuegocine\.com\/shows\/avatar-la-leyenda-de-aang\/seasons\//, '<a href="https://fuegocine.com/shows/avatar-la-leyenda-de-aang/01x01-aang/74" title="01x01 - Aang">'],
+    [/fuegocine\.com\/shows\/avatar-la-leyenda-de-aang\/01x01-aang\/74/, '<iframe src="https://unlimplay.com/f/embed/tv/246/1/1"></iframe>'],
+    ['vimeos.unlimplay.com/?id=246&season=1&episode=1', { __json: { embeds: { latino: { direct: 'https://p2.vimeos.zip/hls2/aang.m3u8' } } } }]
+  ]);
+  const streams = await loadProvider('fuegocine', { fetch, tmdbKey: '' }).getStreams('tt0417299', 'series', 1, 1);
+  assert.equal(streams.length, 1, JSON.stringify(streams.map(s => s.title)));
+  assert.equal(streams[0].url, 'https://p2.vimeos.zip/hls2/aang.m3u8');
+  assert.ok(/traducido/.test(streams[0].title), streams[0].title);
+  assert.ok(!fetch.calls.some(c => c.url.includes('/movies/details/avatar/80')), 'no confunde la película homónima');
+});
