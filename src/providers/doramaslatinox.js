@@ -54,7 +54,9 @@ function dlxCards(html) {
       title = alt ? alt[1].trim() : '';
     }
     if (!title || title.length > 200) continue;
-    out.push({ url: url, title: title, isMovie: /\/peliculas\//i.test(url), year: parseYear(block) });
+    var slug = /\/(?:series|peliculas)\/([a-z0-9-]{2,200})$/i.exec(url);
+    out.push({ url: url, title: title, isMovie: /\/peliculas\//i.test(url), year: parseYear(block),
+      slug: slug ? slug[1] : '' });
   }
   return uniqueBy(out, function (item) { return item.url; });
 }
@@ -95,6 +97,15 @@ function dlxSearch(info) {
     return uniqueBy(found, function (item) { return item.url; })
       .sort(function (a, b) { return b.score - a.score; });
   });
+}
+
+/** URL del episodio deducida del slug: /episodio/<slug>-<t>x<e>-episodio-<e>/
+ * Así no hace falta abrir la ficha (que en este sitio es muy lenta). */
+function dlxEpisodeGuess(candidate, info) {
+  if (!candidate || !candidate.slug || !info.isTv) return null;
+  var slug = candidate.slug;
+  return dlxSiteUrl(DLX_BASE + '/episodio/' + slug + '-' + info.season + 'x' + info.episode +
+    '-episodio-' + info.episode + '/', DLX_BASE + '/');
 }
 
 /** Enlace del episodio pedido dentro de la ficha de la serie. */
@@ -186,6 +197,24 @@ function doramaslatinoxGetStreams(tmdbId, mediaType, season, episode) {
         !Number.isInteger(info.episode) || info.episode < 1)) return [];
     return dlxSearch(info).then(function (candidates) {
       return mapLimit(candidates.slice(0, 2), 2, function (candidate) {
+        // Serie: la URL del episodio se deduce del slug y se pide directamente.
+        // La ficha solo se abre si esa URL no existe.
+        var guess = dlxEpisodeGuess(candidate, info);
+        if (guess) {
+          return dlxReadPage(guess).then(function (directPage) {
+            if (directPage && /dooplay_player_option/i.test(directPage.html)) {
+              return dlxResolve(directPage, info);
+            }
+            return dlxReadPage(candidate.url).then(function (page) {
+              if (!page) return [];
+              var fromList = dlxEpisodeUrl(page.html, info);
+              if (!fromList) return [];
+              return dlxReadPage(fromList).then(function (episodePage) {
+                return episodePage ? dlxResolve(episodePage, info) : [];
+              });
+            });
+          });
+        }
         return dlxReadPage(candidate.url).then(function (page) {
           if (!page) return [];
           if (!info.isTv) return dlxResolve(page, info);

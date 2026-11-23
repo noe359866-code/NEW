@@ -395,3 +395,17 @@ test('DoramasLatinox: sin botones de reproductor no inventa enlaces', async () =
   const streams = await loadProvider('doramaslatinox', { fetch }).getStreams('5', 'movie', null, null);
   assert.equal(streams.length, 0);
 });
+
+test('DoramasLatinox deduce el episodio desde el slug y no abre la ficha lenta', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/tv/999', tmdbTv(999, 'GIFT')],
+    ['doramaslatinox.com/?s=', '<div class="result-item"><article><div class="title"><a href="https://doramaslatinox.com/series/gift/">GIFT</a></div></article></div>'],
+    ['doramaslatinox.com/episodio/gift-1x2-episodio-2', `<li class='dooplay_player_option' data-type='tv' data-post='43619' data-nume='1'><span class='title'>DOO</span></li>`],
+    ['wp-json/dooplayer/v2/43619/tv/1', { __json: { embed_url: 'https://vidara.to/e/doo1' } }],
+    ['vidara.to/e/doo1', '<source src="https://cdn.example/gift.mp4">']
+  ]);
+  const streams = await loadProvider('doramaslatinox', { fetch }).getStreams('999', 'tv', 1, 2);
+  assert.equal(streams.length, 1);
+  assert.ok(fetch.calls.some(call => call.url.includes('/episodio/gift-1x2-episodio-2')));
+  assert.ok(!fetch.calls.some(call => /\/series\/gift\/?$/.test(call.url)), 'no abre la ficha de la serie');
+});
