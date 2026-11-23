@@ -1,7 +1,10 @@
-===== dlx sora selfcheck=false plain=/mp4/23103742/2/81347747?v=K8R6OOjS7
-sora/twice: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/sora/81347747/M2l0MWZUQVg3eUQ0YkNFZm1GN2czL2RueVk5SStzWWpmQnpG
-sora/once: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/sora/81347747/3it1fTAX7yD4bCEfmF7g3/dnyY9I+sYjfBzFOM8HPMH3Pj9W
-path.fd: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/6/0/9/5babbdf1a2549ec2f5b1a25e52902.81347747.2.fd
-sora/twice.fd: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/sora/81347747/M2l0MWZUQVg3eUQ0YkNFZm1GN2czL2RueVk5SStzWWpmQnpG
-sora/res/size/token: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/sora/2/81347747/M2l0MWZUQVg3eUQ0YkNFZm1GN2czL2RueVk5SStzWWpmQn
-mp4/token: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/mp4/81347747/M2l0MWZUQVg3eUQ0YkNFZm1GN2czL2RueVk5SStzWWpmQnpGT
+===== dlx ref https://uy8tgkg18.sssrr.org/sora/81347747/M2l0MWZUQVg3eUQ0YkNFZm1GN2czL2RueVk5SStzWWpmQnpGT004SFBNSD
+ref=https://player.abyssplayer.com/K8R6OOjS7 → 404 text/html len=
+ref=https://player.abyssplayer.com/K8R6OOjS7/ → 404 text/html len=
+ref=https://doramaslatinox.com/ → 403 text/html; charset=UTF-8 len=
+ref=https://abyss.to/ → 404 text/html len=
+ref=https://uy8tgkg18.sssrr.org/ → 403 text/html; charset=UTF-8 len=
+probe /sora/81347747 → 404 text/html
+probe /sora/81347747/ → 404 text/html
+probe /manifest/81347747 → 404 text/html
+probe /23103742/2 → 404 text/html
