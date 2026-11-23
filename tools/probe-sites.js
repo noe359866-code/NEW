@@ -293,6 +293,28 @@ async function frikiState() {
   }
 }
 
+/* Ronda 16: API de las tres fuentes nuevas y resolución de sus reproductores. */
+async function round16() {
+  // FrikiSeries es Angular: los capítulos llegan por API, no en el HTML.
+  await probeSnippets('friki bundle', 'https://www.frikiserie.com/', [['js', 'src="[^"]+\\.js"']], 120);
+  for (const name of ['main-4BWVI3NJ.js', 'main.js', 'polyfills.js']) {
+    await probeSnippets('friki js ' + name, 'https://www.frikiserie.com/' + name,
+      [['api', 'https?://[a-z0-9.-]+/(?:api|v1)[a-zA-Z0-9/_-]*|/api/[a-zA-Z0-9/_-]+'], ['video', 'videoembed|ok\\.ru|"video"']], 200);
+  }
+  // HomeCine: el reproductor es fastream.to por pestaña de idioma.
+  await probe('homecine fastream', 'https://fastream.to/embed-zkfc7qenyh7k.html',
+    [['iframe/embed', 'iframe|data-src|data-url'], ['hls/mp4', '\\.m3u8|\\.mp4'], ['json', '"file"|"src"|"sources"']]);
+  await probeSnippets('homecine tabs', 'https://www3.homecine.to/pequenos-secretos',
+    [['tabs', '#tab\\d|[0-9]{3,4}p - [A-Za-z]+']], 200);
+  // PeliShax: página de episodio y búsqueda.
+  await probe('pelishax search dune', 'https://pelishaxpro.com/search?q=dune',
+    [['fichas', 'href="/movies/\\d+"|href="/series/\\d+"'], ['json', '"url"|"title"']]);
+  for (const candidate of ['/series/575/1/1', '/series/575/season/1', '/episode/575/1/1', '/series/575/1']) {
+    await probe('pelishax episodio', 'https://pelishaxpro.com' + candidate,
+      [['servers', 'server-item|data-link'], ['episodios', 'episode|capitulo|temporada']]);
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -331,6 +353,7 @@ async function main() {
   if (only === 'all' || only === 'pelishax') await pelishax();
   if (only === 'all' || only === 'players') await playersRaw();
   if (only === 'all' || only === 'friki-state') await frikiState();
+  if (only === 'all' || only === 'round16') await round16();
 }
 
 if (require.main === module) {
