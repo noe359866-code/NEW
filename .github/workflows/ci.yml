@@ -99,14 +99,14 @@ jobs:
           path: .probe-assets/
           retention-days: 3
       - name: Publicar la sonda en la rama
-        if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]') || contains(github.event.head_commit.message, '[live]')) }}
+        if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]') || contains(github.event.head_commit.message, '[live]') || contains(github.event.head_commit.message, '[assets]')) }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git checkout -B "$GITHUB_REF_NAME"
-          git add -f probe.txt live.txt 2>/dev/null || git add -f probe.txt
           # El bundle del reproductor (si [assets]) se sube para analizarlo.
-          git add -f .probe-assets 2>/dev/null || true
+          git add -f probe.txt live.txt .probe-assets 2>/dev/null || true
+          git diff --cached --quiet && exit 0
           git commit -m 'sonda de fuentes [skip ci]' || true
           git push origin "HEAD:$GITHUB_REF_NAME" || true
       - name: Arrancar el addon y comprobar el manifiesto
