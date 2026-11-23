@@ -171,6 +171,47 @@ function wikidataLookup(property, value) {
   }, function () { return null; });
 }
 
+/* Títulos localizados de una ficha IMDb (labels y aliases de Wikidata).
+ * Cinemeta solo publica el título internacional ("Money Heist") y los sitios
+ * hispanos catalogan el suyo ("La casa de papel"): sin la clave de TMDB esta
+ * es la única fuente de títulos en español para los IDs tt… que envía
+ * Stremio. Se pide es|en y el español se coloca primero porque es el idioma
+ * del catálogo de estas fuentes. */
+function wikidataTitlesByImdb(imdbId) {
+  var id = /^tt\d{5,12}$/i.test(String(imdbId || '')) ? String(imdbId).toLowerCase() : '';
+  if (!id) return Promise.resolve(null);
+  return wikidataEntitySearch('P345', id).then(function (entity) {
+    if (!entity) return null;
+    var url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=' + entity +
+      '&props=labels|aliases&languages=es|en&format=json';
+    return getJson(url, { timeout: 8000, retries: 0, headers: { Accept: 'application/json' } })
+      .then(function (data) {
+        var record = data && data.entities && data.entities[entity];
+        var labels = record && record.labels;
+        var aliases = record && record.aliases;
+        var titles = [];
+        var esTitle = '';
+        function take(language, value) {
+          var text = typeof value === 'string' ? value.trim() : '';
+          if (!text || text.length > 160 || /[\x00-\x1f\x7f]/.test(text)) return;
+          if (language === 'es' && !esTitle) esTitle = text;
+          if (titles.indexOf(text) === -1 && titles.length < 8) titles.push(text);
+        }
+        // El label en español primero y después los alias: los buscadores
+        // prueban las variantes por este orden.
+        if (labels && labels.es) take('es', labels.es.value);
+        if (aliases && Array.isArray(aliases.es)) {
+          for (var i = 0; i < aliases.es.length; i++) take('es', aliases.es[i] && aliases.es[i].value);
+        }
+        if (labels && labels.en) take('en', labels.en.value);
+        if (aliases && Array.isArray(aliases.en)) {
+          for (var j = 0; j < aliases.en.length; j++) take('en', aliases.en[j] && aliases.en[j].value);
+        }
+        return titles.length ? { titles: titles, esTitle: esTitle } : null;
+      }, function () { return null; });
+  }, function () { return null; });
+}
+
 /* -------------------------- Anime (sin clave) -------------------------- */
 
 /* ani.zip reúne los IDs de cada anime (Kitsu, MAL, AniList, AniDB), sus

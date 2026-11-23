@@ -59,7 +59,9 @@ function cinemetaRequest(id, type) {
         isTv: meta.type === 'series',
         title: meta.name || meta.original_name || '',
         originalTitle: meta.original_name || meta.name || '',
-        year: meta.year ? parseInt(String(meta.year).slice(0, 4), 10) : null,
+        // Las series de Cinemeta no siempre traen `year`: el año sale de
+        // `releaseInfo` («2017–2021») para las búsquedas «título año».
+        year: meta.year ? parseInt(String(meta.year).slice(0, 4), 10) : parseYear(meta.releaseInfo || ''),
         titles: [meta.name, meta.original_name].filter(Boolean)
       };
     }, function () { return null; });
@@ -87,11 +89,47 @@ function imdbSlugTitle(id) {
   }, function () { return null; });
 }
 
+/**
+ * Cinemeta devuelve el título internacional ("Money Heist") y los sitios
+ * hispanos catalogan el suyo ("La casa de papel"). Con `TMDB_API_KEY` los
+ * títulos localizados salen de la API de TMDB; sin clave se piden a Wikidata,
+ * que sí responde a las IP de los servidores. El título en español se coloca
+ * primero: los buscadores de las fuentes prueban `title` antes que el resto
+ * y es el nombre que ve el cliente en las etiquetas.
+ */
+function withWikidataTitles(meta, imdbId, isTv) {
+  return wikidataTitlesByImdb(imdbId).then(function (found) {
+    if (!found) return meta;
+    if (!meta || !meta.title) {
+      return {
+        tmdbId: null,
+        imdbId: imdbId,
+        isTv: isTv,
+        title: found.esTitle || found.titles[0],
+        originalTitle: meta && meta.originalTitle || found.titles[found.titles.length - 1] || '',
+        year: meta && meta.year || null,
+        titles: found.titles,
+        seasons: meta && meta.seasons || []
+      };
+    }
+    var merged = found.titles.slice();
+    var known = meta.titles && meta.titles.length ? meta.titles : [meta.title, meta.originalTitle];
+    for (var i = 0; i < known.length; i++) {
+      if (known[i] && merged.indexOf(known[i]) === -1) merged.push(known[i]);
+    }
+    meta.titles = merged;
+    if (found.esTitle) meta.title = found.esTitle;
+    return meta;
+  }, function () { return meta; });
+}
+
 function resolveImdb(id, isTv) {
   var type = isTv ? 'series' : 'movie';
   return cinemetaRequest(id, type).then(function (meta) {
     if (meta && meta.title) return meta;
     return imdbSlugTitle(id);
+  }).then(function (meta) {
+    return withWikidataTitles(meta, id, isTv);
   });
 }
 

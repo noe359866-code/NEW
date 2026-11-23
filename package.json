@@ -1,6 +1,6 @@
 {
   "name": "nebula-es-addon",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "private": true,
   "type": "commonjs",
   "description": "Addon unificado para Nuvio y Stremio: cine, anime y deportes en vivo sin retransmisión.",
