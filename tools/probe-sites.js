@@ -91,6 +91,14 @@ async function fuegocine() {
   await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
 }
 
+async function round11() {
+  await probeSnippets('zxc bundle', 'https://zxcstream.cc/player/tv/117376/1/1', [['script', 'src="[^"]+\\.js"'], ['data', 'data-[a-z]+=']], 200);
+  await probeSnippets('vidzee', 'https://player.vidzee.wtf/embed/tv/117376/1/1', [['m3u8', 'm3u8'], ['script', 'src="[^"]+\\.js"']], 200);
+  await probeSnippets('reels data', 'https://embed.reelsdownload.online/player/117376/1/1?key=k_3db7ca4f00d84e94c9d62159',
+    [['config', 'var [a-z]+ ?=|window\\.__|sources'], ['script', 'src="[^"]+\\.js"']], 260);
+  await probe('wecollege', 'https://api.wecollege.net/', [['json', '.*']]);
+}
+
 async function round10() {
   await probeSnippets('vidsync shards', 'https://vidsync.pro/assets/index-DO1zww39.js',
     [['bs', 'function bs\\('], ['hosts', 'vidsync\\.[a-z]+'], ['api', 'api/core/streams']], 420);
@@ -207,6 +215,7 @@ async function main() {
   if (only === 'all' || only === 'round8') await round8();
   if (only === 'all' || only === 'round9') await round9();
   if (only === 'all' || only === 'round10') await round10();
+  if (only === 'all' || only === 'round11') await round11();
   if (only === 'all' || only === 'kdesa') await kdesa();
 }
 
