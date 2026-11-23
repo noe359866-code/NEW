@@ -125,13 +125,13 @@ status=200 type=application/json bytes=389 final=https://vimeos.unlimplay.com/?i
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p3.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=zq9uzhthOQ6ViYFDLE0inZ17k3qo0tOgB1E7j-uzUOw&s=1795407738&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
+   "direct": "https://p4.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=gKti5JPIcMzt7vMZ3HacMrsaZIkeGUTjiD-o5IkpXKw&s=1795408233&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
    }
    }
    }
 
 ===== k-drama home :: https://k-drama.in/
-status=200 type=text/html; charset=UTF-8 bytes=406680 final=https://k-drama.in/
+status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 17 líneas
@@ -228,7 +228,7 @@ status=200 type=text/html; charset=UTF-8 bytes=406680 final=https://k-drama.in/
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/search?q=squid
-status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/search?q=squid
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/search?q=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -297,7 +297,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/s
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/?s=squid
-status=200 type=text/html; charset=UTF-8 bytes=406680 final=https://k-drama.in/?s=squid
+status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/?s=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -366,7 +366,7 @@ status=200 type=text/html; charset=UTF-8 bytes=406680 final=https://k-drama.in/?
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/search?s=squid
-status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/search?s=squid
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/search?s=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -435,7 +435,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/s
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/buscar?q=squid
-status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/buscar?q=squid
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/buscar?q=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -504,7 +504,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/b
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/pelicula/interestelar
-status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/pelicula/interestelar
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/pelicula/interestelar
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -616,7 +616,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/p
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/movie/interestelar
-status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/movie/interestelar
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/movie/interestelar
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -728,7 +728,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/m
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/ver/interestelar
-status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/ver/interestelar
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/ver/interestelar
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -840,7 +840,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/v
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/serie/squid-game
-status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/serie/squid-game
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/serie/squid-game
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -1296,7 +1296,7 @@ status=200 type=text/html; charset=UTF-8 bytes=127954 final=https://k-drama.in/d
    <div class="ep-card"><a class="ep-card__link" href="/watch/tv/vincenzo-117376-episode-1" style="display:block;text-decoration:none;color:inherit;"><div class="ep-card__media"><img src="https://image.tmdb.org/t/p/w500/zsat0wHWuEBOU5OTGcVyMlROZNv.jpg" alt="Episode 1 - Episode 1" loading="lazy"><span c…
 
 ===== kd search api :: https://k-drama.in/api/search?q=vincenzo
-status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/api/search?q=vincenzo
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/api/search?q=vincenzo
 --- json: 40 líneas
    <!DOCTYPE html>
    <html lang="en">
@@ -1438,7 +1438,7 @@ status=200 type=text/html bytes=3193 final=https://framextv.cc/api
    } catch (e) {
 
 ===== kd search vincenzo :: https://k-drama.in/search?q=vincenzo
-status=200 type=text/html; charset=UTF-8 bytes=417778 final=https://k-drama.in/search?q=vincenzo
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/search?q=vincenzo
 --- vincenzo: 9 líneas
    "text": "KatDrama (https://k-drama.in) is recognized as the best site to watch K-Dramas online. It offers an extensive catalog of popular and ongoing Korean dramas (such as Queen of Tears, Crash Landing on You, The K2, Vincenzo, Lovely Runner, and Marry My Husband) in 1080p Ultra HD with verified En…
    <button onclick="setSearchTerm('Vincenzo')" style="
@@ -2000,7 +2000,7 @@ status=200 type=text/html; charset=utf-8 bytes=19926 final=https://embed.reelsdo
    …s/231-d674b1e36192340c.js" async=""></script><script src="/_next/static/chunks/259-299345dbf92299f1.js" async=""></script><script src="/_next/static/chunks/1223-ab91e720b90032b2.js" async=""></script><script src="/_next/static/chunks/app/layout-ca7906e9bae1a3a…
 
 ===== wecollege :: https://api.wecollege.net/
-status=403 type=text/html; charset=UTF-8 bytes=4916 final=https://api.wecollege.net/
+status=403 type=text/html; charset=UTF-8 bytes=4917 final=https://api.wecollege.net/
 --- json: 40 líneas
    <!DOCTYPE html>
    <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
@@ -2281,14 +2281,40 @@ status=200 type=application/javascript bytes=1991970 final=https://vidsync.pro/a
    …-deals7.workers.dev","https://vidsync-shard.vs-deals6.worker…
 
 ===== shard tv :: https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=tv&id=117376&season=1&episode=1
-status=200 type=application/json bytes=306161 final=https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=tv&id=117376&season=1&episode=1
+status=200 type=application/json bytes=306162 final=https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=tv&id=117376&season=1&episode=1
 --- json: 1 líneas
    {"sources":[{"id":"castle-5699276480732160-en-auto","url":"https://img.hscow.com/hls_mps/244368831/720/index_287.m3u8","rawUrl":"https://img1.hscow.com/hls_mps/244368831/720/index_287.m3u8?Expires=1795112459&KeyName=Signature&Signature=386pvYnT5j_y6ina8YKyBNUOxOFgtR2nx264XXIqs8QtvB5GQ5pEHMFteCL_nUvE…
 
 ===== shard movie :: https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=movie&id=1654940
-status=200 type=application/json bytes=17568 final=https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=movie&id=1654940
+status=200 type=application/json bytes=17567 final=https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=movie&id=1654940
 --- json: 1 líneas
    {"sources":[{"id":"netmirror-nf-81505776","url":"https://vidsync-shard.vs-deals54.workers.dev/api/netmirror/master.m3u8?cid=81505776&base=https%3A%2F%2Fs22.freecdn41.top%2Ffiles%2F81505776&ott=nf&quals=1080p%2C720p%2C480p&ext=.woff2&tracks=W3siYyI6ImRlIiwibCI6Ikdlcm1hbiIsIm8iOjAsInUiOiIvYS8wLzAubTN1…
+
+===== shard movie keys :: https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=movie&id=155
+status=200 type=application/json bytes=248567 final=https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=movie&id=155
+--- head:
+   …{"sources":[{"id":"castle-6148658229583872-hi-auto","url":"https://img.hscow.com/hls_mps/19711468df4078c930e6ea1202b8f4ee16db6d08/720/index_287.m3u8","rawUrl":"https://img1.hscow.com/hls_mps/19711468df4078c930e6ea1202b8f4ee16db6d08/720/index_287.m3u8?Expires=1795179850&KeyName=Signature&Signature=VpBiCDiDiyiMC4m-9kKo9xwnHBIXuJU97BZv005NVaP9MwWhoa9xFYnnURV0lQ3H-a7WzWCbhdHslMySp5mNCw==","directUrl":"https://img.hscow.com/hls_mps/19711468df4078c930e6ea1202b8f4ee16db6d08/720/index_287.m3u8","permanent_m3u8_url":"https://img.hscow.com/hls_mps/19711468df4078c930e6ea1202b8f4ee16db6d08/720/index_287.m3u8","fallbackProxyUrl":"https://vidsync-shard.vs-deals41.workers.dev/api/core/proxy?data=%7B%22url%…
+--- subtitles:
+   …abel":"Hindi","audioIndex":0,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackIndex":0,"original":false},{"language":"en","label":"English","index":1,"trackIndex":1,"original":true}],"subtitles":[{"id":"castle-sub-6148658229583872-0-0","url":"https://vidsync-shard.vs-deals41.workers.dev/api/subtitles/vtt?url=https%3A%2F%2Fimg1.fhxod.com%2Fsubtitle%2F19711468df4078c930e6ea1202b8f4ee16db6d08%2FEnglish.vtt&hdrs=%7B%22User-Agent%22%3A%22Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20Chrome%2F137.…
+   …el":"English","audioIndex":1,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackIndex":0,"original":false},{"language":"en","label":"English","index":1,"trackIndex":1,"original":true}],"subtitles":[{"id":"castle-sub-6148658229583872-1-0","url":"https://vidsync-shard.vs-deals41.workers.dev/api/subtitles/vtt?url=https%3A%2F%2Fimg1.fodcyy.com%2Fsubtitle%2F19711468df4078c930e6ea1202b8f4ee16db6d08%2FEnglish.vtt&hdrs=%7B%22User-Agent%22%3A%22Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20Chrome%2F137…
+   …"language":"hi","label":"Hindi","original":false,"uri":"https://s20.freecdn1.top/files/70079583/a/1/1.m3u8"}],"allAudioTracks":[{"language":"en","label":"English","original":true,"uri":"https://s20.freecdn1.top/files/70079583/a/0/0.m3u8"},{"language":"hi","label":"Hindi","original":false,"uri":"https://s20.freecdn1.top/files/70079583/a/1/1.m3u8"}],"subtitles":[{"id":"nm-sub-0","url":"https://vidsync-shard.vs-deals41.workers.dev/api/subtitles/vtt?url=https%3A%2F%2Fsubscdn.top%2Fsubs%2F70079583%2Fen.m3u8","language":"en","label":"English","format":"vtt","server":"NetMirror"}],"server":"NetMirror","provider":{"id":"netmirror","name":"NetMirror"},"netmirrorMeta":{"contentId":"70079583","seriesId…
+   …"language":"hi","label":"Hindi","original":false,"uri":"https://s20.freecdn1.top/files/70079583/a/1/1.m3u8"}],"allAudioTracks":[{"language":"en","label":"English","original":true,"uri":"https://s20.freecdn1.top/files/70079583/a/0/0.m3u8"},{"language":"hi","label":"Hindi","original":false,"uri":"https://s20.freecdn1.top/files/70079583/a/1/1.m3u8"}],"subtitles":[{"id":"nm-sub-0","url":"https://vidsync-shard.vs-deals38.workers.dev/api/subtitles/vtt?url=https%3A%2F%2Fsubscdn.top%2Fsubs%2F70079583%2Fen.m3u8","_raw":"https://subscdn.top/subs/70079583/en.m3u8","language":"en","label":"English","format":"vtt","server":"NetMirror"}],"server":"NetMirror","provider":{"id":"netmirror","name":"NetMirror"…
+   …abel":"Hindi","audioIndex":0,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackIndex":0,"original":false},{"language":"en","label":"English","index":1,"trackIndex":1,"original":true}],"subtitles":[{"id":"castle-sub-6148658229583872-0-0","url":"https://vidsync-shard.vs-deals41.workers.dev/api/subtitles/vtt?url=https%3A%2F%2Fimg1.fhxod.com%2Fsubtitle%2F19711468df4078c930e6ea1202b8f4ee16db6d08%2FEnglish.vtt&hdrs=%7B%22User-Agent%22%3A%22Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20Chrome%2F137.…
+   …el":"English","audioIndex":1,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackIndex":0,"original":false},{"language":"en","label":"English","index":1,"trackIndex":1,"original":true}],"subtitles":[{"id":"castle-sub-6148658229583872-1-0","url":"https://vidsync-shard.vs-deals41.workers.dev/api/subtitles/vtt?url=https%3A%2F%2Fimg1.fodcyy.com%2Fsubtitle%2F19711468df4078c930e6ea1202b8f4ee16db6d08%2FEnglish.vtt&hdrs=%7B%22User-Agent%22%3A%22Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20Chrome%2F137…
+--- audio:
+   …Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"type":"hls","quality":"Auto","availableQualities":["720p","480p","Auto"],"audio":"hi","audioLanguage":"hi","audioLabel":"Hindi","audioIndex":0,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackIndex":0,"original":false},{"language":"en","label":"English","index":1,"trackIndex":1,"original":true}],"subtitles":[{"id":"castle-sub-6148658229583872-0-0","url":"https://vidsync-shard.vs-deals41.workers.dev/api/subtitles/vtt?url=https%3A%2F%2Fimg1.fhxod.com%2Fsubtitle%2F19711468df40…
+   …rome/137.0.0.0","Referer":"https://api.hlowb.com/"},"type":"hls","quality":"Auto","availableQualities":["720p","480p","Auto"],"audio":"en","audioLanguage":"en","audioLabel":"English","audioIndex":1,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackIndex":0,"original":false},{"language":"en","label":"English","index":1,"trackIndex":1,"original":true}],"subtitles":[{"id":"castle-sub-6148658229583872-1-0","url":"https://vidsync-shard.vs-deals41.workers.dev/api/subtitles/vtt?url=https%3A%2F%2Fimg1.fodcyy.com%2Fsubtitle%2F19711468df4…
+   …cid=70079583&base=https%3A%2F%2Fs20.freecdn1.top%2Ffiles%2F70079583&ott=nf&quals=1080p%2C720p%2C480p&ext=.jpg&tracks=W3siYyI6ImVuIiwibCI6IkVuZ2xpc2giLCJvIjoxLCJ1IjoiL2EvMC8wLm0zdTgifSx7ImMiOiJoaSIsImwiOiJIaW5kaSIsIm8iOjAsInUiOiIvYS8xLzEubTN1OCJ9XQ","type":"hls","quality":"Auto","availableQualities":["1080p","720p","480p","Auto"],"durationSec":9129,"audioTracks":[{"language":"en","label":"English","original":true,"uri":"https://s20.freecdn1.top/files/70079583/a/0/0.m3u8"},{"language":"hi","label":"Hindi","original":false,"uri":"https://s20.freecdn1.top/files/70079583/a/1/1.m3u8"}],"allAudioTracks":[{"language":"en","label":"English","original":true,"uri":"https://s20.freecdn1.top/files/700795…
+   …cid=70079583&base=https%3A%2F%2Fs20.freecdn1.top%2Ffiles%2F70079583&ott=nf&quals=1080p%2C720p%2C480p&ext=.jpg&tracks=W3siYyI6ImVuIiwibCI6IkVuZ2xpc2giLCJvIjoxLCJ1IjoiL2EvMC8wLm0zdTgifSx7ImMiOiJoaSIsImwiOiJIaW5kaSIsIm8iOjAsInUiOiIvYS8xLzEubTN1OCJ9XQ","type":"hls","quality":"Auto","availableQualities":["1080p","720p","480p","Auto"],"durationSec":9129,"audioTracks":[{"language":"en","label":"English","original":true,"uri":"https://s20.freecdn1.top/files/70079583/a/0/0.m3u8"},{"language":"hi","label":"Hindi","original":false,"uri":"https://s20.freecdn1.top/files/70079583/a/1/1.m3u8"}],"allAudioTracks":[{"language":"en","label":"English","original":true,"uri":"https://s20.freecdn1.top/files/700795…
+   …Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"type":"hls","quality":"720p","availableQualities":["720p","480p","Auto"],"audio":"hi","audioLanguage":"hi","audioLabel":"Hindi","audioIndex":0,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackIndex":0,"original":false},{"language":"en","label":"English","index":1,"trackIndex":1,"original":true}],"subtitles":[{"id":"castle-sub-6148658229583872-0-0","url":"https://vidsync-shard.vs-deals41.workers.dev/api/subtitles/vtt?url=https%3A%2F%2Fimg1.fhxod.com%2Fsubtitle%2F19711468df40…
+   …rome/137.0.0.0","Referer":"https://api.hlowb.com/"},"type":"hls","quality":"720p","availableQualities":["720p","480p","Auto"],"audio":"en","audioLanguage":"en","audioLabel":"English","audioIndex":1,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackIndex":0,"original":false},{"language":"en","label":"English","index":1,"trackIndex":1,"original":true}],"subtitles":[{"id":"castle-sub-6148658229583872-1-0","url":"https://vidsync-shard.vs-deals41.workers.dev/api/subtitles/vtt?url=https%3A%2F%2Fimg1.fodcyy.com%2Fsubtitle%2F19711468df4…
+--- keys:
+   …,"layerName":"Layer 1: Permanent Google Cloud CDN","headers":{"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"streamHeaders":{"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"type":"hls","quality":"Auto","availableQualities":["720p","480p","Auto"],"audio":"hi","audioLanguage":"hi","audioLabel":"Hindi","audioIndex":0,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackInd…
+   …,"layerName":"Layer 1: Permanent Google Cloud CDN","headers":{"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"streamHeaders":{"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"type":"hls","quality":"Auto","availableQualities":["720p","480p","Auto"],"audio":"en","audioLanguage":"en","audioLabel":"English","audioIndex":1,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackI…
+   …XQ","directUrl":"https://vidsync-shard.vs-deals41.workers.dev/api/netmirror/master.m3u8?cid=70079583&base=https%3A%2F%2Fs20.freecdn1.top%2Ffiles%2F70079583&ott=nf&quals=1080p%2C720p%2C480p&ext=.jpg&tracks=W3siYyI6ImVuIiwibCI6IkVuZ2xpc2giLCJvIjoxLCJ1IjoiL2EvMC8wLm0zdTgifSx7ImMiOiJoaSIsImwiOiJIaW5kaSIsIm8iOjAsInUiOiIvYS8xLzEubTN1OCJ9XQ","type":"hls","quality":"Auto","availableQualities":["1080p","720p","480p","Auto"],"durationSec":9129,"audioTracks":[{"language":"en","label":"English","original":true,"uri":"https://s20.freecdn1.top/files/70079583/a/0/0.m3u8"},{"language":"hi","label":"Hindi","original":false,"uri":"https://s20.freecdn1.top/files/70079583/a/1/1.m3u8"}],"allAudioTracks":[{"langu…
+   …XQ","directUrl":"https://vidsync-shard.vs-deals38.workers.dev/api/netmirror/master.m3u8?cid=70079583&base=https%3A%2F%2Fs20.freecdn1.top%2Ffiles%2F70079583&ott=nf&quals=1080p%2C720p%2C480p&ext=.jpg&tracks=W3siYyI6ImVuIiwibCI6IkVuZ2xpc2giLCJvIjoxLCJ1IjoiL2EvMC8wLm0zdTgifSx7ImMiOiJoaSIsImwiOiJIaW5kaSIsIm8iOjAsInUiOiIvYS8xLzEubTN1OCJ9XQ","type":"hls","quality":"Auto","availableQualities":["1080p","720p","480p","Auto"],"durationSec":9129,"audioTracks":[{"language":"en","label":"English","original":true,"uri":"https://s20.freecdn1.top/files/70079583/a/0/0.m3u8"},{"language":"hi","label":"Hindi","original":false,"uri":"https://s20.freecdn1.top/files/70079583/a/1/1.m3u8"}],"allAudioTracks":[{"langu…
+   …,"layerName":"Layer 1: Permanent Google Cloud CDN","headers":{"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"streamHeaders":{"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"type":"hls","quality":"720p","availableQualities":["720p","480p","Auto"],"audio":"hi","audioLanguage":"hi","audioLabel":"Hindi","audioIndex":0,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackInd…
+   …,"layerName":"Layer 1: Permanent Google Cloud CDN","headers":{"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"streamHeaders":{"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"type":"hls","quality":"720p","availableQualities":["720p","480p","Auto"],"audio":"en","audioLanguage":"en","audioLabel":"English","audioIndex":1,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackI…
 
 ===== kdesa movie :: https://kdesa.stream/media/tmdb-movie-1595124
 status=403 type=text/html; charset=UTF-8 bytes=5698 final=https://kdesa.stream/media/tmdb-movie-1595124
@@ -2305,8 +2331,7 @@ status=403 type=text/html; charset=UTF-8 bytes=5692 final=https://kdesa.stream/m
 --- servers/ajax: 0 líneas
 --- json-inline: 0 líneas
 --- fichas: 0 líneas
---- episodios: 1 líneas
-   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
+--- episodios: 0 líneas
 
 ===== kdesa búsqueda :: https://kdesa.stream/search?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/search?q=dune
@@ -2322,8 +2347,7 @@ status=403 type=text/html; charset=UTF-8 bytes=5641 final=https://kdesa.stream/?
 ===== kdesa búsqueda :: https://kdesa.stream/buscar?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/buscar?q=dune
 --- fichas: 0 líneas
---- episodios: 1 líneas
-   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
+--- episodios: 0 líneas
 
 ===== kdesa búsqueda :: https://kdesa.stream/api/search?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/api/search?q=dune
