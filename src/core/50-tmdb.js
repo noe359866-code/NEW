@@ -49,8 +49,12 @@ function cinemetaRequest(id, type) {
       try { parsed = JSON.parse(res.text); } catch (e) { return null; }
       var meta = parsed && parsed.meta;
       if (!meta) return null;
+      // Cinemeta publica el id de TMDB: sirve para no depender de la página
+      // pública (que responde 403 al servidor) al resolver un título.
+      var tmdbId = /^\d{1,9}$/.test(String(meta.moviedb_id || meta.themoviedb_id || ''))
+        ? String(meta.moviedb_id || meta.themoviedb_id) : null;
       return {
-        tmdbId: null,
+        tmdbId: tmdbId,
         imdbId: id,
         isTv: meta.type === 'series',
         title: meta.name || meta.original_name || '',

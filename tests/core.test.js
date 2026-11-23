@@ -8,6 +8,26 @@ const path = require('node:path');
 const vm = require('node:vm');
 const core = require('./.build/core.cjs');
 
+// Los módulos del core leen `globalThis.fetch`; se sustituye solo en esta prueba.
+function mockFetch(routes) {
+  const calls = [];
+  const fn = async (url) => {
+    calls.push({ url: String(url) });
+    for (const [matcher, handler] of routes) {
+      const match = typeof matcher === 'string' ? String(url).includes(matcher) : matcher.test(String(url));
+      if (!match) continue;
+      const value = typeof handler === 'function' ? await handler(url) : handler;
+      if (value == null) continue;
+      const status = value.__response ? value.__response.status : 200;
+      const body = value.__json ? JSON.stringify(value.__json) : (value.__response ? '' : String(value));
+      return new Response(body, { status, headers: { 'content-type': 'application/json' } });
+    }
+    return new Response('', { status: 404 });
+  };
+  fn.calls = calls;
+  return fn;
+}
+
 function encryptLink(url, challenge, salt) {
   const key = crypto.createHash('sha256').update(challenge + salt).digest();
   const iv = Buffer.alloc(16, 7);
@@ -142,4 +162,21 @@ test('go_to_playerVast aporta los reproductores y descarta las descargas', () =>
   const links = core.pagePlayerLinks(html, 'https://embed69.org/f/tt1/');
   assert.deepEqual(links.map(item => item.url), ['https://p.example/e/1', 'https://p2.example/e/2']);
   assert.equal(links[0].name, 'Filemoon');
+});
+
+test('Cinemeta aporta el id de TMDB cuando el metadato lo incluye', async () => {
+  const fetch = mockFetch([
+    ['v3-cinemeta.strem.io/meta/series/tt0417299.json', { __json: { meta: {
+      type: 'series', name: 'Avatar: The Last Airbender', year: '2005', moviedb_id: 246 } } }],
+    ['api.themoviedb.org', { __response: { status: 403 } }]
+  ]);
+  const previous = globalThis.fetch;
+  globalThis.fetch = fetch;
+  let media;
+  try {
+    media = await core.resolveMedia('tt0417299', 'series', 3, 1);
+  } finally { globalThis.fetch = previous; }
+  assert.equal(media.tmdbId, '246');
+  assert.equal(media.title, 'Avatar: The Last Airbender');
+  assert.equal(media.isTv, true);
 });
