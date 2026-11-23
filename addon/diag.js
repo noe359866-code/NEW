@@ -42,20 +42,23 @@ function recorder() {
 
 /** Responde a los metadatos (Cinemeta/TMDB) con datos falsos para separar
  * «no se sabe el título» de «el sitio no da enlaces». Todo lo demás va real. */
-function metadataStub(title, year, fetcher) {
+function metadataStub(title, year, fetcher, type) {
+  const series = type === 'series' || type === 'tv' || type === 'anime';
   return async (url, init) => {
     let host = '';
     try { host = new URL(String(url)).hostname; } catch { /* ignora */ }
     if (host === 'v3-cinemeta.strem.io' || host === 'v2-cinemeta.strem.io') {
       if (!/\/meta\//.test(String(url))) return fetcher(url, init);
-      return new Response(JSON.stringify({ meta: { name: title, year: String(year), type: 'movie' } }), {
+      // El tipo importa: con `movie` fijo, una prueba de serie buscaba en el
+      // catálogo de películas y siempre daba cero.
+      return new Response(JSON.stringify({ meta: { name: title, year: String(year), type: series ? 'series' : 'movie' } }), {
         status: 200, headers: { 'content-type': 'application/json' }
       });
     }
     if (host === 'api.themoviedb.org') {
       return new Response(JSON.stringify({ title, name: title, original_title: title, original_name: title,
         release_date: year + '-01-01', first_air_date: year + '-01-01',
-        seasons: [{ season_number: 1, episode_count: 24 }] }), {
+        seasons: [{ season_number: 1, episode_count: 24 }], media_type: series ? 'tv' : 'movie' }), {
         status: 200, headers: { 'content-type': 'application/json' }
       });
     }
@@ -100,7 +103,7 @@ async function runDiagnostic({ type, id, season, episode, probeTitle, providers 
       const started = Date.now();
       try {
         const provider = loadProvider(providerId, {
-          fetcher: metadataStub(probe, 2014, fetcher), tmdbKey: '',
+          fetcher: metadataStub(probe, 2014, fetcher, type), tmdbKey: '',
           settings: { onBlocked: value => blocks.push({ url: cleanUrl(value.url), status: value.status }) }
         });
         const streams = await provider.getStreams(id, type, season, episode);
@@ -122,4 +125,4 @@ async function runDiagnostic({ type, id, season, episode, probeTitle, providers 
   return result;
 }
 
-module.exports = { runDiagnostic, cleanUrl };
+module.exports = { runDiagnostic, cleanUrl, metadataStub };
