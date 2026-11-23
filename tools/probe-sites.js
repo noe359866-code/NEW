@@ -407,27 +407,41 @@ async function round22() {
     [['url en tabla', 'https?[^"\'\\s]{0,120}\\.(?:m3u8|mp4)'], ['file', 'm3u8|master\\.']], 400);
 }
 
-/* Ronda 23: descomprimir el packer del reproductor y ver a qué apunta. */
-function unpackPacker(source) {
-  const m = /\}\s*\(\s*'((?:\\.|[^'\\])*)'\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*'((?:\\.|[^'\\])*)'\s*\.split\('\|'\)/.exec(source);
-  if (!m) return '';
-  const radix = Number(m[2]);
-  const words = m[4].split('|');
-  const body = m[1].replace(/\\'/g, "'").replace(/\\\\/g, '\\');
-  return body.replace(/\b[0-9A-Za-z]+\b/g, (token) => {
-    const n = parseInt(token, radix);
-    return Number.isFinite(n) && words[n] ? words[n] : token;
-  });
+/* Ronda 23: usar el descompresor real del addon sobre los hosts con packer. */
+function loadUnpacker() {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const vm = require('node:vm');
+  const file = fs.readFileSync(path.join(__dirname, '..', 'src', 'core', '70-direct.js'), 'utf8');
+  const pick = (name) => {
+    const start = file.indexOf('function ' + name + '(');
+    if (start === -1) return '';
+    let depth = 0, i = file.indexOf('{', start);
+    for (let j = i; j < file.length; j++) {
+      if (file[j] === '{') depth++;
+      else if (file[j] === '}') { depth--; if (!depth) return file.slice(start, j + 1); }
+    }
+    return '';
+  };
+  const sandbox = { console, URL, decodeURIComponent, String, RegExp };
+  sandbox.globalThis = sandbox;
+  vm.createContext(sandbox);
+  vm.runInContext(pick('unescapePlayerText') + '\n' + pick('unpackPlayerScript'), sandbox);
+  return sandbox.unpackPlayerScript;
 }
 
 async function round23() {
-  const res = await fetchRaw('https://vidhidevip.com/v/7edm3v3ca7mf');
-  const packed = /eval\(function\(p,a,c,k,e,d\)[\s\S]*?\.split\('\|'\)\)\)/.exec(res.text || '');
-  if (!packed) { console.log('===== vidhide unpack\nsin packer'); return; }
-  const out = unpackPacker(packed[0]);
-  console.log('===== vidhide unpack\\n' + out.slice(0, 3000));
-  const urls = out.match(/https?:[^"'\\s]{10,200}/g) || [];
-  console.log('--- urls:\n' + urls.slice(0, 10).map(u => '   ' + u).join('\n'));
+  const unpack = loadUnpacker();
+  for (const url of ['https://vidhidevip.com/v/7edm3v3ca7mf', 'https://filemoon.sx/e/d02q4wt2b80n',
+    'https://streamwish.to/e/6dz22bl4exq4', 'https://vidara.to/e/x']) {
+    const res = await fetchRaw(url);
+    const out = unpack(res.text || '') || '';
+    console.log('===== unpack ' + url);
+    console.log('status=' + res.status + ' bytes=' + (res.text || '').length + ' descomprimido=' + out.length);
+    const media = out.match(/https?:[^"'\\s]{10,220}\.(?:m3u8|mp4)[^"'\\s]{0,120}/g) || [];
+    console.log('--- media:\n' + (media.length ? media.slice(0, 6).map((u) => '   ' + u).join('\n') : '   (sin coincidencias)'));
+    console.log('--- muestra:\n' + out.slice(0, 700).replace(/\n/g, ' '));
+  }
 }
 
 async function playersRaw() {
