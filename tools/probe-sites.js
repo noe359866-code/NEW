@@ -66,6 +66,14 @@ async function fuegocine() {
   await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
 }
 
+async function round4() {
+  await probe('kd vid2 raw', 'https://k-drama.in/vid2.php/117376/1/1?m=en', [['iframe', '<iframe[^>]*>']]);
+  await probe('fx graphql', 'https://framextv.cc/assets/index-DvMX4GhI.js',
+    [['qp', 'https://[a-z0-9.-]+/graphql|Qp=`[^`]*`|graphql']]);
+  await probe('kd movie detail', 'https://k-drama.in/detail/movie/one-year-to-live-buy-a-man-1654940', LINKS);
+  await probe('kd movie watch', 'https://k-drama.in/watch/movie-one-year-to-live-buy-a-man-1654940', PLAYERS);
+}
+
 async function round3() {
   await probe('kd search vincenzo', 'https://k-drama.in/search?q=vincenzo',
     [['vincenzo', 'vincenzo'], ['api', '/api/[a-z]+']]);
@@ -123,6 +131,7 @@ async function main() {
   if (only === 'all' || only === 'framextv') await framextv();
   if (only === 'all' || only === 'round2') { await kDrama2(); await framextv2(); }
   if (only === 'all' || only === 'round3') await round3();
+  if (only === 'all' || only === 'round4') await round4();
   if (only === 'all' || only === 'kdesa') await kdesa();
 }
 
