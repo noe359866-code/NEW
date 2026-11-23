@@ -91,6 +91,12 @@ async function fuegocine() {
   await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
 }
 
+async function round7() {
+  await probeSnippets('vidsync script', 'https://vidsync.pro/embed/tv/117376/1/1?autoplay=1',
+    [['script', '<script'], ['fetch', 'fetch\\(|XMLHttpRequest|api'], ['key', 'file|source|stream']], 320);
+  await probeSnippets('vidlink', 'https://vidlink.pro/api/b/tv/117376/1/1?multiLang=0', [['json', '.*']], 320);
+}
+
 async function round6() {
   await probeSnippets('vidsync embed', 'https://vidsync.pro/embed/tv/117376/1/1?dublang=en&autoplay=1',
     [['iframe', '<iframe'], ['hls', 'm3u8'], ['json', '"file"|"source"|"url"'], ['api', 'fetch\\(|ajax|/api/']]);
@@ -177,6 +183,7 @@ async function main() {
   if (only === 'all' || only === 'round4') await round4();
   if (only === 'all' || only === 'round5') await round5();
   if (only === 'all' || only === 'round6') await round6();
+  if (only === 'all' || only === 'round7') await round7();
   if (only === 'all' || only === 'kdesa') await kdesa();
 }
 
