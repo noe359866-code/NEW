@@ -1,39 +1,45 @@
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
+[nebula-es] http timeout 8000ms https://fuegocine.com/search_elastic?…
+[nebula-es] http timeout 8000ms https://fuegocine.com/search_elastic?…
 
-fuegocine: 1 enlace(s), 4810 ms; peticiones reales: 7, fallidas: 1
+fuegocine: 1 enlace(s), 31550 ms; peticiones reales: 9, fallidas: 3
   [SD] La Odisea · Unlimplay
-  https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
+  https://p3.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
+[nebula-es] http timeout 8000ms https://fuegocine.com/search_elastic?…
 
-fuegocine: 1 enlace(s), 2646 ms; peticiones reales: 7, fallidas: 1
-  [SD] Odisea · Unlimplay
-  https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
+fuegocine: 0 enlace(s), 9542 ms; peticiones reales: 4, fallidas: 1
+  Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
+[nebula-es] http timeout 8000ms https://fuegocine.com/shows/visionquest/01x02-teseo/50
 
-fuegocine: 1 enlace(s), 4430 ms; peticiones reales: 8, fallidas: 1
-  [2160p] VisionQuest · S01E02 · Unlimplay
-  https://p5.vimeos.zip/hls2/02/00014/kr4k7o11ytq2_,n,h,.urlset/master.m3u8?[oculto]
+fuegocine: 0 enlace(s), 22899 ms; peticiones reales: 4, fallidas: 1
+  Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
+Metadatos simulados; las peticiones al sitio y los reproductores son reales.
+El proveedor no existe en el addon.
+Metadatos simulados; las peticiones al sitio y los reproductores son reales.
+El proveedor no existe en el addon.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
   · 200 https://doramaslatinox.com/
+  · 200 https://doramaslatinox.com/episodio/gift-1x2-episodio-2
+  · 200 https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/1
+  · 403 https://playmogo.com/e/bmzfuwzlu7z5
   · 200 https://doramaslatinox.com/episodio/gift-1x1-episodio-1
   · 200 https://doramaslatinox.com/episodio/gift-1x2-episodio-2
-  · 200 https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/2
-  · 200 https://doramaslatinox.com/episodio/gift-1x2-episodio-2
-  · 200 https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/2
   · 200 https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/1
   · 403 https://playmogo.com/e/bmzfuwzlu7z5
+  · 200 https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/2
   · 200 https://player.abyssplayer.com/WeCIsZdM2
-  · 200 https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/1
-  · 403 https://playmogo.com/e/bmzfuwzlu7z5
+  · 200 https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/2
   · 200 https://player.abyssplayer.com/WeCIsZdM2
 
-doramaslatinox: 0 enlace(s), 3491 ms; peticiones reales: 12, fallidas: 2
+doramaslatinox: 0 enlace(s), 13645 ms; peticiones reales: 12, fallidas: 2
   Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
@@ -41,7 +47,7 @@ Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 [nebula-es] http 403 https://latanime.org/buscar?…
 [nebula-es] http 403 https://latanime.org/buscar?…
 
-latanime: 0 enlace(s), 236 ms; peticiones reales: 2, fallidas: 2
+latanime: 0 enlace(s), 286 ms; peticiones reales: 2, fallidas: 2
   Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
@@ -50,24 +56,24 @@ Metadatos simulados; las peticiones al sitio y los reproductores son reales.
   · 200 https://pelishaxpro.com/movies/155
   · 200 https://streamwish.to/e/6dz22bl4exq4
   · 200 https://filemoon.sx/e/d02q4wt2b80n
-  · 200 https://ok.ru/videoembed/7652106504857
   · 404 https://streamtape.com/e/rJv2zx284AsbQor
   · 301 https://vidhidevip.com/v/7edm3v3ca7mf
   · 200 https://streamwish.to/e/bx9im04137cn
+  · 200 https://ok.ru/videoembed/7652106504857
 
-pelishax: 0 enlace(s), 1915 ms; peticiones reales: 8, fallidas: 1
+pelishax: 0 enlace(s), 2270 ms; peticiones reales: 8, fallidas: 1
   Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-pelishax: 0 enlace(s), 221 ms; peticiones reales: 3, fallidas: 0
+pelishax: 0 enlace(s), 1892 ms; peticiones reales: 3, fallidas: 0
   Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-homecine: 5 enlace(s), 2986 ms; peticiones reales: 8, fallidas: 0
+homecine: 5 enlace(s), 3839 ms; peticiones reales: 8, fallidas: 0
   [1080p] The Matrix · Server Cload
   https://s40.fastream.to/hls2/21/00026/laerr1ukfafg_l/master.m3u8?[oculto]
   [720p] The Matrix · Server Cload
@@ -82,7 +88,7 @@ homecine: 5 enlace(s), 2986 ms; peticiones reales: 8, fallidas: 0
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-frikiserie: 1 enlace(s), 1212 ms; peticiones reales: 3, fallidas: 0
+frikiserie: 1 enlace(s), 1318 ms; peticiones reales: 3, fallidas: 0
   [SD] Los Caballeros del Zodiaco · S01E01
   https://ok6-7.vkuser.net/video.m3u8?[oculto]
 
