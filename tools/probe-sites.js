@@ -328,6 +328,23 @@ async function round17() {
     [['tabs', '#tab\\d|les-content|season'], ['episodios', '/episodios?/|episode|capitulo']], 240);
 }
 
+/* Ronda 18: confirmar el modelo final de las tres fuentes nuevas. */
+async function round18() {
+  // PeliShax: la ficha de episodio debe traer los mismos server-item.
+  await probe('pelishax tv episodio', 'https://pelishaxpro.com/tv/247718/1/1',
+    [['servers', 'server-item|data-link|data-lang'], ['fichas', 'href="/movies/\\d+"']]);
+  // HomeCine: episodio con su lista de pestañas de idioma.
+  await probe('homecine episodio', 'https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1',
+    [['tabs', '#tab\\d|les-content'], ['iframes', '<IFRAME[^>]*>|<iframe[^>]*>'], ['hls/mp4', '\\.m3u8|\\.mp4']]);
+  // FrikiSeries: los capítulos viven en el estado de la ficha.
+  await probeSnippets('friki ficha estado', 'https://www.frikiserie.com/ver-serie/marco',
+    [['video', '"video"[^,]{0,200}'], ['capitulos', '"(?:capitulos|episodios|lista|videos)"[^[]{0,80}'],
+      ['okru', 'ok\\.ru[^"\\\s]{0,60}']], 300);
+  // ¿Se puede resolver un embed de OK.ru a un enlace directo?
+  await probe('okru embed', 'https://ok.ru/videoembed/14398744169198',
+    [['hls/mp4', '\\.m3u8|\\.mp4'], ['json', '"videoUrl"|"hlsMasterPlaylistUrl"|"metadata"']]);
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -368,6 +385,7 @@ async function main() {
   if (only === 'all' || only === 'friki-state') await frikiState();
   if (only === 'all' || only === 'round16') await round16();
   if (only === 'all' || only === 'round17') await round17();
+  if (only === 'all' || only === 'round18') await round18();
 }
 
 if (require.main === module) {
