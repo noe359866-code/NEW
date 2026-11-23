@@ -77,7 +77,7 @@ function dlxSearch(info) {
     if (index >= queries.length ||
         found.some(function (item) { return item.score >= 0.95; })) return Promise.resolve(found);
     var url = DLX_BASE + '/?s=' + encodeURIComponent(queries[index++]);
-    return getText(url, { timeout: 8000, retries: 0 }).then(function (html) {
+    return getText(url, { timeout: 12000, retries: 0 }).then(function (html) {
       var cards = dlxCards(html);
       for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
@@ -162,7 +162,7 @@ function dlxPlayer(dlx, referer) {
 }
 
 function dlxReadPage(url) {
-  return request(url, { timeout: 9000, retries: 0, pageOnly: true,
+  return request(url, { timeout: 12000, retries: 0, pageOnly: true,
     headers: { Referer: DLX_BASE + '/' } }).then(function (res) {
     if (!res.ok || !res.text) return null;
     return { url: res.url || url, html: res.text };
