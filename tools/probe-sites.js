@@ -771,6 +771,67 @@ async function round39() {
   }
 }
 
+/* Ronda 41: variantes de la ruta /sora/ con Referer (Cloudflare ya deja pasar). */
+async function round41() {
+  const C = require('crypto-js');
+  const crypto = require('crypto');
+  const B = 'https://player.abyssplayer.com/K8R6OOjS7';
+  const res = await fetchRaw(B);
+  const m = /datas\s*=\s*"([A-Za-z0-9+/=]{20,})"/.exec(res.body);
+  if (!m) return;
+  const payload = Buffer.from(m[1], 'base64').toString('latin1');
+  const slug = /"slug"\s*:\s*"([^"]{1,40})"/.exec(payload)[1];
+  const md5 = /"md5_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload)[1];
+  const uid = /"user_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload)[1];
+  const at = payload.indexOf('"media":"');
+  let media = payload.slice(at + 9); media = media.slice(0, media.lastIndexOf('"'));
+  const bytes = [];
+  for (let i = 0; i < media.length; i++) {
+    if (media[i] !== '\\') { bytes.push(media.charCodeAt(i) & 0xff); continue; }
+    const n = media[++i];
+    if (n === 'u') { bytes.push(parseInt(media.substr(i + 1, 4), 16) & 0xff); i += 4; }
+    else if (n === 'n') bytes.push(10); else if (n === 'r') bytes.push(13);
+    else if (n === 't') bytes.push(9); else if (n === 'f') bytes.push(12);
+    else bytes.push(n.charCodeAt(0) & 0xff);
+  }
+  const key = Buffer.from(C.MD5(uid + ':' + slug + ':' + md5).toString(C.enc.Hex), 'latin1');
+  const dec = crypto.createDecipheriv('aes-256-ctr', key, key.subarray(0, 16));
+  const plain = Buffer.concat([dec.update(Buffer.from(bytes)), dec.final()]).toString('utf8');
+  const host = (/url\\?":\\?"(https:\/\/[a-z0-9][a-z0-9.-]{3,40}\.[a-z]{2,10})/.exec(plain) || [])[1];
+  const size = (/size\\?":(\d+)/.exec(plain) || [])[1];
+  const resId = (/res_id\\?":(\d+)/.exec(plain) || [])[1];
+  const path = (/path\\?":\\?"([^"\\]{10,120})/.exec(plain) || [])[1];
+  if (!host || !size || !resId) { console.log('===== dlx sora: sin datos'); return; }
+  const plainPath = '/mp4/' + md5 + '/' + resId + '/' + size + '?v=' + slug;
+  const enc = crypto.createCipheriv('aes-256-ctr', key, key.subarray(0, 16));
+  const cipher = Buffer.concat([enc.update(Buffer.from(plainPath, 'latin1')), enc.final()]);
+  const once = cipher.toString('base64').replace(/=/g, '');
+  const twice = Buffer.from(once, 'latin1').toString('base64').replace(/=/g, '');
+  // Autocomprobación: el token descifrado debe devolver la ruta.
+  const check = crypto.createDecipheriv('aes-256-ctr', key, key.subarray(0, 16));
+  const back = Buffer.concat([check.update(Buffer.from(twice, 'base64')), check.final()]);
+  const twiceCheck = Buffer.from(back, 'latin1').toString('base64').replace(/=/g, '');
+  const check2 = crypto.createDecipheriv('aes-256-ctr', key, key.subarray(0, 16));
+  const back2 = Buffer.concat([check2.update(Buffer.from(twiceCheck, 'base64')), check2.final()]).toString('latin1');
+  console.log('===== dlx sora selfcheck=' + (back2 === plainPath) + ' plain=' + plainPath);
+  const variants = {
+    'sora/twice': host + '/sora/' + size + '/' + twice,
+    'sora/once': host + '/sora/' + size + '/' + once,
+    'path.fd': host + '/' + path + '.fd',
+    'sora/twice.fd': host + '/sora/' + size + '/' + twice + '.fd',
+    'sora/res/size/token': host + '/sora/' + resId + '/' + size + '/' + twice,
+    'mp4/token': host + '/mp4/' + size + '/' + twice
+  };
+  for (const [name, target] of Object.entries(variants)) {
+    try {
+      const r = await fetch(target, { headers: { 'User-Agent': UA, Referer: B + '/', Range: 'bytes=0-255' } });
+      console.log(name + ': ' + r.status + ' ' + (r.headers.get('content-type') || '') +
+        ' len=' + (r.headers.get('content-length') || '') + ' ranges=' + (r.headers.get('accept-ranges') || '') +
+        ' :: ' + target.slice(0, 90));
+    } catch (e) { console.log(name + ': ERR ' + e.message.slice(0, 60)); }
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -836,6 +897,7 @@ async function main() {
   if (only === 'dlx38') await round36();
   if (only === 'dlx39') await round39();
   if (only === 'dlx40') await round39();
+  if (only === 'dlx41') await round41();
 }
 
 if (require.main === module) {
