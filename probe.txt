@@ -3,13 +3,17 @@ hosts limpios: https://uy8tgkg18.sssrr.org https://aytgzfk1k8.sssrr.org https://
 objetivo: https://uy8tgkg18.sssrr.org/7/f/7/c6acf11a3c4569c9ce499608cbb3c.81347747.2.fd
 solo UA/HEAD: 403 text/html; charset=UTF-8 len= ranges=
 solo UA/GET: 403 text/html; charset=UTF-8 len= ranges=
-  bytes=4544
+  bytes=4545 title="Attention Required! | Cloudflare" sf=cloudflare cf=
+  muestra: "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endi"
 UA+Referer player/HEAD: 404 text/plain;charset=UTF-8 len= ranges=
 UA+Referer player/GET: 404 text/html len= ranges=
-  bytes=27150
+  bytes=27150 title="Not Found" sf=cloudflare cf=
+  muestra: "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <link re"
 UA+Origin player/HEAD: 404 text/plain;charset=UTF-8 len= ranges=
 UA+Origin player/GET: 404 text/html len= ranges=
-  bytes=27150
+  bytes=27150 title="Not Found" sf=cloudflare cf=
+  muestra: "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <link re"
 completo/HEAD: 404 text/plain;charset=UTF-8 len= ranges=
 completo/GET: 404 text/html len= ranges=
-  bytes=27150
+  bytes=27150 title="Not Found" sf=cloudflare cf=
+  muestra: "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <link re"
