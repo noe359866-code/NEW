@@ -6,6 +6,20 @@ const { createServer } = require('../addon/server');
 const { parseVodId } = require('../addon/vod');
 const { mockFetch, loadProvider, tmdbMovie, tmdbTv, NuvioURL } = require('./utils');
 
+/** Wikidata Action API: búsqueda por haswbstatement + claims de la ficha.
+ * Es lo que consulta el core porque query.wikidata.org responde 403 al
+ * servidor del addon (política de User-Agent de Wikimedia). */
+function wikidataRoutes(entity, ids) {
+  const claims = {};
+  if (ids.imdb) claims.P345 = [{ mainsnak: { datavalue: { value: ids.imdb } } }];
+  if (ids.tmdb) claims[ids.tv ? 'P4983' : 'P4947'] = [{ mainsnak: { datavalue: { value: ids.tmdb } } }];
+  if (ids.tvdb) claims.P4835 = [{ mainsnak: { datavalue: { value: ids.tvdb } } }];
+  return [
+    ['www.wikidata.org/w/api.php?action=query&list=search', { __json: { query: { search: [{ title: entity }] } } }],
+    ['www.wikidata.org/w/api.php?action=wbgetclaims', { __json: { claims } }]
+  ];
+}
+
 const ANIME_MAP = {
   titles: { es: 'Ataque a los Titanes', en: 'Attack on Titan', 'x-jat': 'Shingeki no Kyojin' },
   episodes: {
@@ -18,9 +32,7 @@ function animeFetch(extra = []) {
     ['api.ani.zip/mappings?anilist_id=16498', { __json: ANIME_MAP }],
     ['api.ani.zip/mappings?kitsu_id=7442', { __json: ANIME_MAP }],
     ['api.ani.zip/mappings?mal_id=16498', { __json: ANIME_MAP }],
-    ['query.wikidata.org/sparql', { __json: { results: { bindings: [{
-      imdb: { value: 'tt2560140' }, tmdb: { value: '1429' }, tvdb: { value: '267440' }
-    }] } } }],
+    ...wikidataRoutes('Q288136', { imdb: 'tt2560140', tmdb: '1429', tvdb: '267440' }),
     ['v3-cinemeta.strem.io/meta/series/tt2560140.json', { __json: { meta: { type: 'series', name: 'Attack on Titan', year: '2013' } } }],
     ['api.themoviedb.org/3/tv/1429', tmdbTv(1429, 'Attack on Titan', '2013', [{ season_number: 1, episode_count: 25 }])],
     ['latanime.org/buscar?q=', '<a href="/anime/shingeki-no-kyojin-latino"><h3>Attack on Titan Latino</h3><span>Latino 2013</span></a>'],
@@ -56,9 +68,7 @@ test('tipo "anime" se trata como serie en los metadatos', async () => {
 
 test('un ID TheTVDB se traduce con Wikidata a IMDb/TMDB antes de buscar', async () => {
   const fetch = mockFetch([
-    ['query.wikidata.org/sparql', { __json: { results: { bindings: [{
-      imdb: { value: 'tt0944947' }, tmdb: { value: '1399' }, tvdb: { value: '121361' }
-    }] } } }],
+    ...wikidataRoutes('Q23572', { imdb: 'tt0944947', tmdb: '1399', tvdb: '121361' }),
     ['v3-cinemeta.strem.io/meta/series/tt0944947.json', { __json: { meta: { type: 'series', name: 'Juego de Tronos', year: '2011' } } }],
     ['api.themoviedb.org/3/find/tt0944947', { __json: { tv_results: [{ id: 1399 }], movie_results: [] } }],
     ['api.themoviedb.org/3/tv/1399', tmdbTv(1399, 'Juego de Tronos', '2011', [{ season_number: 1, episode_count: 10 }])],

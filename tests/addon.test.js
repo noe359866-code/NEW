@@ -350,3 +350,27 @@ test('El diagnóstico simula metadatos del tipo pedido (serie ≠ película)', a
   assert.equal(series.meta.type, 'series');
   assert.equal(movie.meta.type, 'movie');
 });
+
+test('sin TMDB_API_KEY un ID de TMDB de Nuvio sigue dando fuentes por id (KatDrama/frameXTV)', async () => {
+  // Caso real de Nuvio: manda «tmdb:603» / «tmdb:1399:1:1». TMDB responde 403
+  // al servidor y Wikidata puede no tener ficha: el addon debe seguir usando
+  // el id de TMDB en los sitios que lo necesitan, no devolver [].
+  const fetcher = mockFetch([
+    ['api.themoviedb.org', { __response: { status: 403 } }],
+    ['www.themoviedb.org', { __response: { status: 403 } }],
+    ['www.wikidata.org/w/api.php?action=query&list=search', { __json: { query: { search: [] } } }],
+    [/k-drama\.in\/watch\/movie\/n-a-603/, '<button onclick="switchServer(\'kat1\', \'https://k-drama.in/mx1.php?type=movie&id=603\', \'embed\', \'\')">'],
+    ['k-drama.in/mx1.php', '<video src="https://cdn.example/matrix.mp4"></video>'],
+    ['vidsync-shard.vs-deals79.workers.dev', { __json: { sources: [
+      { id: 'castle-1', url: 'https://img.example/matrix/index.m3u8', type: 'hls', quality: '720p', server: 'Castle' }
+    ] } }]
+  ]);
+  const app = await openServer({ fetcher, tmdbKey: '' });
+  try {
+    const res = await fetch(app.base + '/stream/movie/' + encodeURIComponent('tmdb:603') + '.json');
+    const { streams } = await res.json();
+    const urls = streams.map(stream => stream.url).sort();
+    assert.deepEqual(urls, ['https://cdn.example/matrix.mp4', 'https://img.example/matrix/index.m3u8']);
+    assert.ok(streams.every(stream => stream.name.startsWith('Nébula')), JSON.stringify(streams.map(s => s.name)));
+  } finally { await app.close(); }
+});

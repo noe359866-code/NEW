@@ -209,9 +209,8 @@ function resolveFromWeb(id, mediaType) {
     }, function () { return null; });
   }
 
-  function fromWikidata() {
+  function fromWikidata(property) {
     // Wikidata solo aporta IDs; el título sale de IMDb o de TVMaze.
-    var property = type === 'tv' ? 'P4983' : 'P4947';
     if (typeof wikidataLookup !== 'function') return Promise.resolve(null);
     return Promise.resolve(wikidataLookup(property, id)).then(function (ids) {
       if (!ids) return null;
@@ -237,7 +236,14 @@ function resolveFromWeb(id, mediaType) {
       return null;
     });
   }).then(function () {
-    return found || fromWikidata();
+    if (found) return found;
+    // La misma cifra puede estar declarada como película o como serie; se
+    // prueban las dos propiedades porque el tipo del cliente no siempre
+    // coincide con el de Wikidata (Nuvio llama «tv» a series de TMDB).
+    var properties = type === 'tv' ? ['P4983', 'P4947'] : ['P4947', 'P4983'];
+    return fromWikidata(properties[0]).then(function (result) {
+      return result || fromWikidata(properties[1]);
+    });
   });
 }
 

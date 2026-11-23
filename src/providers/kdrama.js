@@ -62,10 +62,15 @@ function kdServerName(id) {
 function kdGetStreams(tmdbId, mediaType, season, episode) {
   var conf = settings({ maxResults: '8' });
   return requestMedia(tmdbId, mediaType, season, episode).then(function (info) {
-    if (!info || !info.title) return [];
+    // Este sitio identifica cada ficha por el id de TMDB: el título solo se usa
+    // para etiquetar el enlace. Sin título resuelto (TMDB bloquea al servidor y
+    // Wikidata puede no tener la ficha) se sigue igualmente, porque la URL no
+    // depende de él.
+    if (!info) return [];
     if (info.isTv && (!Number.isInteger(info.season) || info.season < 1 ||
         !Number.isInteger(info.episode) || info.episode < 1)) return [];
     if (!info.tmdbId) return [];
+    var label = info.title || ('TMDB ' + info.tmdbId);
     var watch = kdWatchUrl(info.tmdbId, info.isTv, info.season, info.episode);
     return getText(watch, { timeout: 15000, retries: 1 }).then(function (html) {
       var servers = kdServers(html, watch);
@@ -75,7 +80,7 @@ function kdGetStreams(tmdbId, mediaType, season, episode) {
       var streams = [];
       for (var i = 0; i < (items || []).length; i++) {
         var item = items[i];
-        var title = info.title + (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
+        var title = label + (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
           (item.name ? ' · ' + item.name : '');
         streams.push(makeStream({ name: 'KatDrama', title: title, provider: 'k-drama', url: item.url,
           quality: parseQuality(title + ' ' + item.url), language: item.language || languageLabel(title),

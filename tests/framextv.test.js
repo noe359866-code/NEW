@@ -60,3 +60,34 @@ test('frameXTV: sin id de TMDB no inventa la consulta', async () => {
   assert.equal(streams.length, 0);
   assert.ok(!fetch.calls.some(c => c.url.includes('api/core/streams')));
 });
+
+test('frameXTV: un id de TMDB de Nuvio sin título resuelto consulta la API', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org', { __response: { status: 403 } }],
+    ['www.themoviedb.org', { __response: { status: 403 } }],
+    ['www.wikidata.org/w/api.php?action=query&list=search', { __json: { query: { search: [] } } }],
+    ['vidsync-shard.vs-deals79.workers.dev', SOURCES]
+  ]);
+  const streams = await loadProvider('framextv', { fetch, tmdbKey: '' }).getStreams('tmdb:603:1:2', 'tv', 1, 2);
+  assert.equal(streams.length, 2, JSON.stringify(streams.map(s => s.url)));
+  assert.ok(fetch.calls.some(c => c.url.includes('/api/core/streams?type=tv&id=603')));
+});
+
+test('frameXTV: Wikidata traduce TMDB sin clave de API (película declarada como serie)', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org', { __response: { status: 403 } }],
+    ['www.themoviedb.org', { __response: { status: 403 } }],
+    ['www.wikidata.org/w/api.php?action=query&list=search', { __json: { query: { search: [{ title: 'Q23572' }] } } }],
+    ['www.wikidata.org/w/api.php?action=wbgetclaims', { __json: { claims: {
+      P345: [{ mainsnak: { datavalue: { value: 'tt0944947' } } }],
+      P4983: [{ mainsnak: { datavalue: { value: '1399' } } }]
+    } } }],
+    ['v3-cinemeta.strem.io/meta/series/tt0944947.json', { __json: { meta: { type: 'series', name: 'Juego de Tronos', year: '2011', moviedb_id: 1399 } } }],
+    ['vidsync-shard.vs-deals79.workers.dev', SOURCES]
+  ]);
+  const streams = await loadProvider('framextv', { fetch, tmdbKey: '' }).getStreams('tmdb:1399:1:1', 'series', 1, 1);
+  assert.ok(streams.length >= 1);
+  assert.ok(streams.every(s => /Juego de Tronos/.test(s.title)), JSON.stringify(streams.map(s => s.title)));
+  // Nunca se consulta el servicio SPARQL: responde 403 al servidor.
+  assert.ok(!fetch.calls.some(c => c.url.includes('query.wikidata.org')));
+});
