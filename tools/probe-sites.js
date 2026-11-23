@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 /**
- * Sonda de reconocimiento: descarga el HTML crudo de las fuentes candidatas y
- * muestra solo las líneas relacionadas con reproductores y búsqueda.
+ * Sonda de reconocimiento: descarga el HTML/JSON crudo de las fuentes
+ * candidatas y muestra solo las líneas relacionadas con reproductores,
+ * búsqueda y episodios.
  *
- * Se ejecuta a mano (GitHub Actions, workflow_dispatch), no en CI: sirve para
- * mantener los selectores cuando un sitio cambia. No reproduce ni descarga
- * medios y no envía datos de usuario.
+ * Se ejecuta a mano desde GitHub Actions (`[probe]` en el mensaje del commit o
+ * la entrada `probe` del workflow), no en CI: sirve para mantener los
+ * selectores cuando un sitio cambia. No reproduce ni descarga medios y no
+ * envía datos de usuario.
  *
- * Uso: node tools/probe-sites.js [pelis24|fuegocine|all]
+ * Uso: node tools/probe-sites.js [fuegocine|k-drama|framextv|kdesa|all]
  */
 'use strict';
 
@@ -47,148 +49,60 @@ async function probe(name, url, patterns) {
   }
 }
 
-async function main() {
-  const only = (process.argv[2] || 'all').toLowerCase();
-  const playerPatterns = [
-    ['iframe/embed', 'iframe|<embed|data-src|data-url|embed_url|data-link'],
-    ['servers/ajax', 'servidor|server|ajax|api/|player|reproductor'],
-    ['json-inline', '"link"|"url"|"file"|"embed"|"server"']
-  ];
+const PLAYERS = [
+  ['iframe/embed', 'iframe|<embed|data-src|data-url|embed_url|data-link'],
+  ['servers/ajax', 'servidor|server|ajax|api/|player|reproductor'],
+  ['json-inline', '"link"|"url"|"file"|"embed"|"server"']
+];
+const LINKS = [
+  ['fichas', 'href="[^"]*(?:/watch|/pelicula|/media|details|/tv/|/movie)'],
+  ['episodios', 'episode|episodio|capitulo|season|temporada|\\d+x\\d']
+];
 
-  if (only === 'all' || only === 'pelis24') {
-    await probe('pelis24 search', 'https://ww1.pelis24.blog/search?q=interstellar', playerPatterns);
-    await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
+async function fuegocine() {
+  await probe('fuegocine watch', 'https://fuegocine.com/movies/watch/la-odisea/227', PLAYERS);
+  await probe('fuegocine search', 'https://fuegocine.com/search_elastic?s=odisea', [['resultados', 'details|alt=']]);
+  await probe('fuegocine episodio', 'https://fuegocine.com/shows/visionquest/01x02-teseo/50', PLAYERS);
+  await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
+}
+
+async function kDrama() {
+  await probe('k-drama home', 'https://k-drama.in/', PLAYERS.concat(LINKS));
+  for (const candidate of ['search?q=squid', '?s=squid', 'search?s=squid', 'buscar?q=squid']) {
+    await probe('k-drama búsqueda', 'https://k-drama.in/' + candidate, LINKS);
   }
-  if (only === 'all' || only === 'year') {
-    await probe('fc ficha año', 'https://fuegocine.com/shows/details/avatar-la-leyenda-de-aang/33',
-      [['año', '\\b(?:19|20)\\d{2}\\b']]);
-    await probe('fc excelastic avatar', 'https://fuegocine.com/search_elastic?s=avatar', [['resultados', 'details|alt=']]);
-  }
-  if (only === 'all' || only === 'embed2') {
-    for (const url of ['https://embedorigin.cc/e/yc67a46nwbpn', 'https://embedorigin.cc/e/1fnkocttdniw',
-      'https://fcplayer2.blogspot.com/?url=U2FsdGVkX1']) {
-      await probe('embed', url, [['hls', '\\.m3u8|\\.mp4|file:|sources'], ['js', 'eval|atob|decrypt|packed']]);
-    }
-  }
-  if (only === 'all' || only === 'akas') {
-    for (const id of ['tt0417299', 'tt0944947', 'tt1375666']) {
-      await probe('imdb akas ' + id, 'https://www.imdb.com/title/' + id + '/releaseinfo/',
-        [['akas', 'aka|Also known as|España|Spain|Latinoam']]);
-    }
-  }
-  if (only === 'all' || only === 'fuegocine12') {
-    await probe('fc ficha tmdb', 'https://fuegocine.com/shows/details/avatar-la-leyenda-de-aang/33',
-      [['tmdb', 'tmdb|moviedb'], ['año', '<h1|year|release']]);
-    await probe('fc excelastic inglés', 'https://fuegocine.com/search_elastic?s=avatar%20the%20last%20airbender',
-      [['resultados', 'details|alt=']]);
-  }
-  if (only === 'all' || only === 'fuegocine11') {
-    // Catálogo: cómo se llama el sitio a los títulos populares (para el matcher).
-    for (const page of [1, 2, 3]) {
-      await probe('fc catálogo', 'https://fuegocine.com/movies?page=' + page,
-        [['fichas', 'details/.*title=|details/']]);
-    }
-    await probe('fc catálogo series', 'https://fuegocine.com/shows?page=1', [['fichas', 'details/']]);
-  }
-  if (only === 'all' || only === 'fuegocine10') {
-    for (const q of ['interstellar', 'interestelar', 'shingeki', 'breaking%20bad', 'dune']) {
-      await probe('fc excelastic ' + q, 'https://fuegocine.com/search_elastic?s=' + q,
-        [['resultados', 'details|alt=']]);
-    }
-  }
-  if (only === 'all' || only === 'fuegocine9') {
-    for (const url of [
-      'https://vimeos.unlimplay.com/?id=213375',
-      'https://vimeos.unlimplay.com/?id=213375&s=1&e=2',
-      'https://vimeos.unlimplay.com/?id=213375&season=1&episode=2',
-      'https://vimeos.unlimplay.com/?tmdb=213375&season=1&episode=2'
-    ]) {
-      await probe('ulp tv', url, [['json', '.*']]);
-    }
-  }
-  if (only === 'all' || only === 'fuegocine8') {
-    await probe('fc episodio', 'https://fuegocine.com/shows/visionquest/01x02-teseo/50',
-      [['iframe', 'iframe'], ['watch', 'watch'], ['temporada', 'temporada|season']]);
-    await probe('fc detalles show', 'https://fuegocine.com/shows/details/visionquest/24',
-      [['temporadas', 'seasons/'], ['episodios', '\\dx\\d']]);
-  }
-  if (only === 'all' || only === 'fuegocine7') {
-    for (const q of ['odisea', 'la%20odisea', 'visionquest']) {
-      await probe('fc search_elastic ' + q, 'https://fuegocine.com/search_elastic?s=' + q,
-        [['resultados', 'details|title|poster']]);
-    }
-    await probe('fc search_elastic POST', 'https://fuegocine.com/search_elastic?s=odisea',
-      [['resultados', 'details']]);
-  }
-  if (only === 'all' || only === 'fuegocine6') {
-    await probe('fc showSuggestions', 'https://fuegocine.com/',
-      [['funcion', 'showSuggestions'], ['rutas', 'suggest|autocomplete|search_|ajax']]);
-  }
-  if (only === 'all' || only === 'fuegocine5') {
-    await probe('fc search error', 'https://fuegocine.com/search?s=odisea',
-      [['error', 'ErrorException|Undefined|Exception:']]);
-    await probe('fc movies page2', 'https://fuegocine.com/movies?page=2',
-      [['detalles', 'details\\/(\\d+)"|pagination|/movies\\?page']]);
-    await probe('fc form', 'https://fuegocine.com/',
-      [['navbar-form', 'navbar-form|</form>|name="|action=']]);
-    await probe('fc api', 'https://fuegocine.com/api/movies',
-      [['json', '.*']]);
-  }
-  if (only === 'all' || only === 'fuegocine4') {
-    await probe('fc show watch', 'https://fuegocine.com/shows/watch/visionquest/24',
-      [['iframe', 'iframe'], ['episodios', 'data-path|episode|Episodio']]);
-    await probe('fc sitemap', 'https://fuegocine.com/sitemap.xml', [['urls', 'movies/details|shows/details']]);
-    await probe('fc season raw', 'https://fuegocine.com/shows/visionquest/seasons/temporada-1/55',
-      [['data-path', 'data-path'], ['links', '/shows/watch|<a ']]);
-    await probe('fc search post-like', 'https://fuegocine.com/search?s=la%20odisea&type=movie',
-      [['resultados', '/movies/details|/shows/details']]);
-  }
-  if (only === 'all' || only === 'fuegocine3') {
-    await probe('fc search', 'https://fuegocine.com/search?s=odisea',
-      [['tarjetas', '/movies/details|/shows/details|title=']]);
-    await probe('fc series temporada', 'https://fuegocine.com/shows/visionquest/seasons/temporada-1/55',
-      [['episodios', 'watch|episode|Episodio|capítulo|capitulo|data-']]);
-    await probe('fc abyss', 'https://player.abyssplayer.com/KxBGoCWcV',
-      [['claves', '"|sources|file|m3u8|mp4|url']]);
-    await probe('fc unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337',
-      [['json', '.*']]);
-    await probe('fc unlimplay embed', 'https://unlimplay.com/f/embed/movie/1368337',
-      [['finalizePlayer', 'finalizePlayer|mf\.php|vimeos']]);
-  }
-  if (only === 'all' || only === 'fuegocine2') {
-    // Formulario de búsqueda real y episodios de una temporada.
-    await probe('fuegocine home/form', 'https://fuegocine.com/', [['formularios', '<form|name=\"(?:search|q)\"|action=']]);
-    await probe('fuegocine temporada', 'https://fuegocine.com/shows/visionquest/seasons/temporada-1/55',
-      [['episodios', '/shows/watch|/episodes/|Episodio|Episode']]);
-    // ¿Los reproductores embebidos exponen HLS directo?
-    for (const [name, url] of [
-      ['videro', 'https://videro.my/e/ueuf2z2cltcp6sw'],
-      ['abyssplayer', 'https://player.abyssplayer.com/KxBGoCWcV'],
-      ['unlimplay', 'https://unlimplay.com/f/embed/movie/1368337']
-    ]) {
-      await probe('embed ' + name, url, [
-        ['m3u8/mp4', '\.m3u8|\.mp4|hls|playlist'],
-        ['config js', 'sources|file|videoUrl|stream|eval\(']
-      ]);
-    }
-    for (const candidate of ['/movies?keyword=odisea', '/search?query=odisea', '/movies?title=odisea',
-      '/api/movies?search=odisea', '/movies?search=la+odisea']) {
-      await probe('fuegocine búsqueda 2', 'https://fuegocine.com' + candidate,
-        [['status', 'HTTP']]);
-    }
-  }
-  if (only === 'all' || only === 'fuegocine') {
-    await probe('fuegocine watch', 'https://fuegocine.com/movies/watch/la-odisea/227', playerPatterns);
-    await probe('fuegocine show', 'https://fuegocine.com/shows/details/visionquest/24', [
-      ['temporadas/episodios', 'season|episode|temporada|capitulo'],
-      ['watch links', '/shows/watch']
-    ]);
-    for (const candidate of ['/movies?search=odisea', '/movies?q=odisea', '/movies?keyword=odisea',
-      '/movies?title=odisea', '/api/search?q=odisea', '/search/odisea']) {
-      await probe('fuegocine búsqueda', 'https://fuegocine.com' + candidate,
-        [['status/resultados', '/movies/details|/shows/details']]);
-    }
+  for (const candidate of ['pelicula/interestelar', 'movie/interestelar', 'ver/interestelar', 'serie/squid-game']) {
+    await probe('k-drama ficha', 'https://k-drama.in/' + candidate, PLAYERS.concat(LINKS));
   }
 }
 
-main().catch(error => { console.error(error); process.exit(1); });
+async function framextv() {
+  await probe('framextv api', 'https://framextv.cc/api', [['json', '.*']]);
+  for (const candidate of ['/api/movies', '/api/search?q=dune', '/api/tmdb/movie/693134', '/api/movie/693134']) {
+    await probe('framextv api hijo', 'https://framextv.cc' + candidate, [['json', '.*']]);
+  }
+  await probe('framextv home', 'https://framextv.cc/', LINKS);
+}
+
+async function kdesa() {
+  await probe('kdesa movie', 'https://kdesa.stream/media/tmdb-movie-1595124', PLAYERS.concat(LINKS));
+  await probe('kdesa tv', 'https://kdesa.stream/media/tmdb-tv-1399-1-1', PLAYERS.concat(LINKS));
+  for (const candidate of ['search?q=dune', '?s=dune', 'buscar?q=dune', 'api/search?q=dune']) {
+    await probe('kdesa búsqueda', 'https://kdesa.stream/' + candidate, LINKS);
+  }
+  await probe('kdesa home', 'https://kdesa.stream/', LINKS);
+}
+
+async function main() {
+  const only = (process.argv[2] || 'all').toLowerCase();
+  if (only === 'all' || only === 'fuegocine') await fuegocine();
+  if (only === 'all' || only === 'k-drama' || only === 'kdrama') await kDrama();
+  if (only === 'all' || only === 'framextv') await framextv();
+  if (only === 'all' || only === 'kdesa') await kdesa();
+}
+
+if (require.main === module) {
+  main().catch(error => { console.error(error && error.stack || error); process.exitCode = 1; });
+}
+
+module.exports = { probe, interesting };
