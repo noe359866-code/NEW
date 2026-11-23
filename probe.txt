@@ -1,19 +1,7 @@
-===== dlx cdn
-hosts limpios: https://uy8tgkg18.sssrr.org https://aytgzfk1k8.sssrr.org https://vdqv2f3va0.sssrr.org https://pxqg0b5k1i0.sssrr.org https://zgok4xuuu17.sssrr.org https://8oekkfci14.sssrr.org
-objetivo: https://uy8tgkg18.sssrr.org/7/f/7/c6acf11a3c4569c9ce499608cbb3c.81347747.2.fd
-solo UA/HEAD: 403 text/html; charset=UTF-8 len= ranges=
-solo UA/GET: 403 text/html; charset=UTF-8 len= ranges=
-  bytes=4545 title="Attention Required! | Cloudflare" sf=cloudflare cf=
-  muestra: "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endi"
-UA+Referer player/HEAD: 404 text/plain;charset=UTF-8 len= ranges=
-UA+Referer player/GET: 404 text/html len= ranges=
-  bytes=27150 title="Not Found" sf=cloudflare cf=
-  muestra: "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <link re"
-UA+Origin player/HEAD: 404 text/plain;charset=UTF-8 len= ranges=
-UA+Origin player/GET: 404 text/html len= ranges=
-  bytes=27150 title="Not Found" sf=cloudflare cf=
-  muestra: "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <link re"
-completo/HEAD: 404 text/plain;charset=UTF-8 len= ranges=
-completo/GET: 404 text/html len= ranges=
-  bytes=27150 title="Not Found" sf=cloudflare cf=
-  muestra: "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <link re"
+===== dlx sora selfcheck=false plain=/mp4/23103742/2/81347747?v=K8R6OOjS7
+sora/twice: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/sora/81347747/M2l0MWZUQVg3eUQ0YkNFZm1GN2czL2RueVk5SStzWWpmQnpG
+sora/once: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/sora/81347747/3it1fTAX7yD4bCEfmF7g3/dnyY9I+sYjfBzFOM8HPMH3Pj9W
+path.fd: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/6/0/9/5babbdf1a2549ec2f5b1a25e52902.81347747.2.fd
+sora/twice.fd: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/sora/81347747/M2l0MWZUQVg3eUQ0YkNFZm1GN2czL2RueVk5SStzWWpmQnpG
+sora/res/size/token: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/sora/2/81347747/M2l0MWZUQVg3eUQ0YkNFZm1GN2czL2RueVk5SStzWWpmQn
+mp4/token: 404 text/html len= ranges= :: https://uy8tgkg18.sssrr.org/mp4/81347747/M2l0MWZUQVg3eUQ0YkNFZm1GN2czL2RueVk5SStzWWpmQnpGT
