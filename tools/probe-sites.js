@@ -91,6 +91,15 @@ async function fuegocine() {
   await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
 }
 
+async function round13() {
+  await probeSnippets('vidsync shard list', 'https://vidsync.pro/assets/index-DO1zww39.js',
+    [['shards', 'vidsync-shard\\.vs-deals\\d+\\.workers\\.dev']], 60);
+  await probe('shard tv', 'https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=tv&id=117376&season=1&episode=1',
+    [['json', '.*']]);
+  await probe('shard movie', 'https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=movie&id=1654940',
+    [['json', '.*']]);
+}
+
 async function round12() {
   for (const path of ['/api/core/shards', '/api/shards', '/api/core/config', '/api/health', '/api/core/streams?type=movie&id=155']) {
     await probe('vidsync ep', 'https://vidsync.pro' + path, [['body', '.*']].map(([l, p2]) => [l, p2]));
@@ -225,6 +234,7 @@ async function main() {
   if (only === 'all' || only === 'round10') await round10();
   if (only === 'all' || only === 'round11') await round11();
   if (only === 'all' || only === 'round12') await round12();
+  if (only === 'all' || only === 'round13') await round13();
   if (only === 'all' || only === 'kdesa') await kdesa();
 }
 
