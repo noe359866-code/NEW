@@ -57,7 +57,20 @@ jobs:
       # publica como artefacto porque los registros no son accesibles aquí.
       - name: Sonda de fuentes
         if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]')) }}
-        run: node tools/probe-sites.js "${{ inputs.probe || (contains(github.event.head_commit.message, '[dlx28]') && 'dlx28' || contains(github.event.head_commit.message, '[dlx27]') && 'dlx27' || contains(github.event.head_commit.message, '[dlx26]') && 'dlx26' || contains(github.event.head_commit.message, '[dlx]') && 'doramaslatinox' || contains(github.event.head_commit.message, '[probe24]') && 'round24only' || 'all') }}" > probe.txt 2>&1 || true
+        run: |
+          # Etiqueta del commit → ronda concreta. Las más específicas van primero.
+          MSG="${{ github.event.head_commit.message }}"
+          MODE="${{ inputs.probe }}"
+          if [ -z "$MODE" ]; then
+            for tag in dlx28 dlx27 dlx26 dlx probe24; do
+              case "$MSG" in *"[$tag]"*) MODE="$tag"; break;; esac
+            done
+            case "$MODE" in
+              dlx28) MODE=dlx28;; dlx27) MODE=dlx27;; dlx26) MODE=dlx26;;
+              dlx) MODE=doramaslatinox;; probe24) MODE=round24only;; *) MODE=all;;
+            esac
+          fi
+          node tools/probe-sites.js "$MODE" > probe.txt 2>&1 || true
       # Comprobación en vivo contra los sitios reales: se activa con [live] en
       # el mensaje del commit. Solo analiza páginas; no descarga medios.
       - name: Comprobación en vivo
