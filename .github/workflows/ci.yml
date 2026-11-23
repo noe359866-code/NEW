@@ -57,7 +57,20 @@ jobs:
       # publica como artefacto porque los registros no son accesibles aquí.
       - name: Sonda de fuentes
         if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]')) }}
-        run: node tools/probe-sites.js "${{ inputs.probe || 'all' }}" > probe.txt 2>&1 || true
+        run: |
+          # Etiqueta del commit → ronda concreta. Las más específicas van primero.
+          MSG="${{ github.event.head_commit.message }}"
+          MODE="${{ inputs.probe }}"
+          if [ -z "$MODE" ]; then
+            for tag in dlx34 dlx33 dlx32 dlx31 dlx30 dlx29 dlx28 dlx27 dlx26 dlx probe24; do
+              case "$MSG" in *"[$tag]"*) MODE="$tag"; break;; esac
+            done
+            case "$MODE" in
+              dlx34) MODE=dlx34;; dlx33) MODE=dlx33;; dlx32) MODE=dlx32;; dlx31) MODE=dlx31;; dlx30) MODE=dlx30;; dlx29) MODE=dlx29;; dlx28) MODE=dlx28;; dlx27) MODE=dlx27;; dlx26) MODE=dlx26;;
+              dlx) MODE=doramaslatinox;; probe24) MODE=round24only;; *) MODE=all;;
+            esac
+          fi
+          node tools/probe-sites.js "$MODE" > probe.txt 2>&1 || true
       # Comprobación en vivo contra los sitios reales: se activa con [live] en
       # el mensaje del commit. Solo analiza páginas; no descarga medios.
       - name: Comprobación en vivo
@@ -67,11 +80,10 @@ jobs:
             node tools/live-check.js --site fuegocine --id 1368337 --type movie --title "La Odisea" --year 2026 || true
             node tools/live-check.js --site fuegocine --id 1368337 --type movie --title "Odisea" --year 1997 || true
             node tools/live-check.js --site fuegocine --id 213375 --type tv --season 1 --episode 2 --title "VisionQuest" --year 2025 --season-counts 8 || true
-            node tools/live-check.js --site tioanime --id 16498 --type tv --season 1 --episode 1 --title "Shingeki no Kyojin" --year 2013 --season-counts 25 || true
-            node tools/live-check.js --site kdrama --id 117376 --type tv --season 1 --episode 1 --title "Vincenzo" --year 2021 --season-counts 20 || true
-            node tools/live-check.js --site framextv --id 155 --type movie --title "The Dark Knight" --year 2008 || true
-            node tools/live-check.js --site kdrama --id 155 --type movie --title "The Dark Knight" --year 2008 || true
-            node tools/live-check.js --site framextv --id 117376 --type tv --season 1 --episode 1 --title "Vincenzo" --year 2021 --season-counts 20 || true
+            node tools/check-provider.js flixlatam 157336 movie --title "Interstellar" --year 2014 --trace || true
+            node tools/check-provider.js flixlatam 117376 tv --season 1 --episode 1 --title "Vincenzo" --year 2021 --season-counts 20 --trace || true
+            node tools/live-check.js --site doramaslatinox --id 285751 --type tv --season 1 --episode 2 --title "GIFT" --year 2026 --season-counts 2 --trace || true
+            node tools/live-check.js --site latanime --id 37854 --type tv --season 1 --episode 1 --title "One Piece" --year 1999 || true
             node tools/live-check.js --site pelishax --id 155 --type movie --title "The Dark Knight" --year 2008 --trace || true
             node tools/live-check.js --site pelishax --id 117376 --type tv --season 1 --episode 1 --title "Vincenzo" --year 2021 --season-counts 20 || true
             node tools/live-check.js --site homecine --id 603 --type movie --title "The Matrix" --year 1999 || true
@@ -86,6 +98,7 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git checkout -B "$GITHUB_REF_NAME"
           git add -f probe.txt live.txt 2>/dev/null || git add -f probe.txt
+          git diff --cached --quiet && exit 0
           git commit -m 'sonda de fuentes [skip ci]' || true
           git push origin "HEAD:$GITHUB_REF_NAME" || true
       - name: Arrancar el addon y comprobar el manifiesto

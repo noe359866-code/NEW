@@ -13,6 +13,10 @@
  */
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
 const MAX_LINES = 40;
 
@@ -407,40 +411,217 @@ async function round22() {
     [['url en tabla', 'https?[^"\'\\s]{0,120}\\.(?:m3u8|mp4)'], ['file', 'm3u8|master\\.']], 400);
 }
 
-/* Ronda 23: usar el descompresor real del addon sobre los hosts con packer. */
-function loadUnpacker() {
-  const fs = require('node:fs');
-  const path = require('node:path');
-  const vm = require('node:vm');
-  const file = fs.readFileSync(path.join(__dirname, '..', 'src', 'core', '70-direct.js'), 'utf8');
-  const pick = (name) => {
-    const start = file.indexOf('function ' + name + '(');
-    if (start === -1) return '';
-    let depth = 0, i = file.indexOf('{', start);
-    for (let j = i; j < file.length; j++) {
-      if (file[j] === '{') depth++;
-      else if (file[j] === '}') { depth--; if (!depth) return file.slice(start, j + 1); }
-    }
-    return '';
-  };
-  const sandbox = { console, URL, decodeURIComponent, String, RegExp };
-  sandbox.globalThis = sandbox;
-  vm.createContext(sandbox);
-  vm.runInContext(pick('unescapePlayerText') + '\n' + pick('unpackPlayerScript'), sandbox);
-  return sandbox.unpackPlayerScript;
-}
-
+/* Ronda 23: hosts con packer. Se usa la lista blanca del addon en vez de
+ * extraer funciones sueltas: un recorte por índice rompe las expresiones. */
 async function round23() {
-  const unpack = loadUnpacker();
+  const { loadUnpack } = require('./unpack-helper');
+  const unpack = loadUnpack();
+  if (!unpack) { console.log('===== unpack\nno se pudo cargar el descompresor'); return; }
   for (const url of ['https://vidhidevip.com/v/7edm3v3ca7mf', 'https://filemoon.sx/e/d02q4wt2b80n',
-    'https://streamwish.to/e/6dz22bl4exq4', 'https://vidara.to/e/x']) {
-    const res = await fetchRaw(url);
-    const out = unpack(res.text || '') || '';
+    'https://streamwish.to/e/6dz22bl4exq4']) {
+    let out = '';
+    let status = 0;
+    try {
+      const res = await fetchRaw(url);
+      status = res.status;
+      out = unpack(res.text || '') || '';
+    } catch (e) { out = ''; }
     console.log('===== unpack ' + url);
-    console.log('status=' + res.status + ' bytes=' + (res.text || '').length + ' descomprimido=' + out.length);
+    console.log('status=' + status + ' descomprimido=' + out.length);
     const media = out.match(/https?:[^"'\\s]{10,220}\.(?:m3u8|mp4)[^"'\\s]{0,120}/g) || [];
     console.log('--- media:\n' + (media.length ? media.slice(0, 6).map((u) => '   ' + u).join('\n') : '   (sin coincidencias)'));
-    console.log('--- muestra:\n' + out.slice(0, 700).replace(/\n/g, ' '));
+  }
+}
+
+/* Ronda 24: el selector de idiomas de KatDrama. ¿De dónde sale «Latino»? */
+async function round24() {
+  const page = 'https://k-drama.in/watch/tv/n-a-117376-episode-1';
+  await probe('kd selector idioma', page, [
+    ['switchServer', "switchServer\\([^)]{0,160}"],
+    ['botones', "<button[^>]{0,200}switchServer[\\s\\S]{0,260}?</button>"],
+    ['idiomas', 'idioma|language|doblaje|audio|latino|castellano|subtitulado'],
+    ['select/option', '<select[\\s\\S]{0,500}?</select>|<option[^>]*>[^<]{0,40}'],
+    ['data attrs', 'data-(?:lang|language|audio|dub|server)[a-z-]*="[^"]{0,40}"']
+  ]);
+  await probe('kd ficha idioma', 'https://k-drama.in/detail/tv/vincenzo-117376', [
+    ['idiomas', 'idioma|language|doblaje|audio|latino|castellano|subtitulado'],
+    ['select/option', '<select[\\s\\S]{0,500}?</select>|<option[^>]*>[^<]{0,40}'],
+    ['botones', '<button[^>]{0,160}>[^<]{0,40}</button>']
+  ]);
+  await probe('kd player lang', 'https://k-drama.in/tubi2.php?id=117376&s=1&e=1',
+    [['idioma', 'latino|castellano|subtitulado'], ['switchServer', 'switchServer[^)]{0,120}']]);
+}
+
+/* Ronda 25: doramaslatinox.com — estructura de fichas, episodios y reproductores. */
+async function round25() {
+  const B = 'https://doramaslatinox.com';
+  await probeSnippets('dlx serie', B + '/series/gift/', [
+    ['temporadas', 'Temporada|season|episodios|episode'],
+    ['episodios', 'href="[^"]*/episodio/[^"]+"'],
+    ['servidores', 'server-item|data-link|data-lang|dooplay_player|playeroptions'],
+    ['tmdb', 'themoviedb|tmdb[^0-9]{0,6}[0-9]+']
+  ], 300);
+  await probeSnippets('dlx episodio', B + '/episodio/gift-1x2-episodio-2/', [
+    ['servidores', 'server-item|data-link|data-lang|dooplay_player_option|data-nume|data-post'],
+    ['iframes', '<iframe[^>]{0,200}>'],
+    ['script opts', 'var\s+\w*\s*=\s*\\{["\']|sources\s*[:=]|file\s*[:=]'],
+    ['hls', '\\.m3u8|\\.mp4'],
+    ['idioma', 'latino|castellano|subtitulado']
+  ], 300);
+  await probeSnippets('dlx pelicula', B + '/peliculas/un-poco-de-compania-antes-de-morir/', [
+    ['servidores', 'server-item|data-link|data-lang|dooplay_player_option|data-nume'],
+    ['iframes', '<iframe[^>]{0,200}>'], ['hls', '\\.m3u8|\\.mp4']
+  ], 300);
+  await probeSnippets('dlx busqueda', B + '/?s=gift', [
+    ['resultados', 'result-item|href="[^"]*/(series|peliculas)/[^"]+"'],
+    ['forms', 'name="s"|action="[^"]*"']
+  ], 250);
+  await probeSnippets('dlx ajax', B + '/wp-admin/admin-ajax.php?action=doo_player_ajax&post=0&nume=1&type=tv', [
+    ['json', '.*']
+  ], 200);
+}
+
+/* Ronda 26: el AJAX de DooPlay de doramaslatinox devuelve el embed real. */
+async function round26() {
+  const B = 'https://doramaslatinox.com';
+  for (const nume of [1, 2, 3]) {
+    await probeSnippets('dlx ajax tv ' + nume,
+      B + '/wp-admin/admin-ajax.php?action=doo_player_ajax&post=43619&nume=' + nume + '&type=tv',
+      [['json', '.*']], 300);
+  }
+  await probeSnippets('dlx ajax movie 43611',
+    B + '/wp-admin/admin-ajax.php?action=doo_player_ajax&post=43611&nume=1&type=movie',
+    [['json', '.*']], 300);
+  // ¿El slug del episodio resuelve por id de TMDB? y ¿qué hosts usa?
+  await probeSnippets('dlx home hosts', B + '/', [['hosts', 'https?://[a-z0-9.-]+/(?:embed|e|v|player)/']], 200);
+}
+
+/* Ronda 27: ¿qué necesita el AJAX de DooPlay de doramaslatinox? */
+async function round27() {
+  const B = 'https://doramaslatinox.com';
+  const page = B + '/episodio/gift-1x2-episodio-2/';
+  await probeSnippets('dlx episodio nonce', page, [
+    ['nonce', 'nonce["\']?\\s*[:=]\\s*["\'][a-z0-9]+'],
+    ['doo ajax ref', 'doo_player_ajax[^"\']{0,120}'],
+    ['player js', 'src="[^"]*(?:player|dooplay|ajax)[^"]*\\.js[^"]*"'],
+    ['data attrs', "data-(?:post|nume|type|nonce)=['\"][^'\"]{0,30}"],
+    ['scripts inline', 'ajaxurl|admin-ajax']
+  ], 300);
+  for (const extra of ['', '&nonce=b963428b95']) {
+    await probeSnippets('dlx ajax nonce' + (extra ? ' si' : ' no'),
+      B + '/wp-admin/admin-ajax.php?action=doo_player_ajax&post=43619&nume=1&type=tv' + extra,
+      [['json', '.*']], 300);
+  }
+  // El JS del tema dice cómo pide los reproductores.
+  await probeSnippets('dlx dooplay js', B + '/wp-content/themes/NIVEL-DIOSSSSSSSSS/assets/js/dooplay.js', [['ajax', 'doo_player_ajax[\s\S]{0,200}']], 300);
+}
+
+/* Ronda 28: la API de reproductores de DooPlay v2 de doramaslatinox. */
+async function round28() {
+  const B = 'https://doramaslatinox.com';
+  for (const u of [
+    '/wp-json/dooplayer/v2/43619/tv/1',
+    '/wp-json/dooplayer/v2/43619/tv/2',
+    '/wp-json/dooplayer/v2/43611/movie/1',
+    '/wp-json/dooplayer/v2/43611/movie/2'
+  ]) {
+    await probeSnippets('dlx api ' + u, B + u, [['json', '.*']], 400);
+  }
+}
+
+/* Ronda 29: los reproductores que usa DoramasLatinox (playmogo y Abyss). */
+async function round29() {
+  await probeSnippets('dlx abyss player', 'https://player.abyssplayer.com/K8R6OOjS7', [
+    ['eval/packer', 'eval\\(function\\(p,a,c,k,e'], ['m3u8', '\\.m3u8|\\.mp4'],
+    ['data/kws', 'kws|data-id|_0x|api'], ['scripts', 'src="[^"]{0,120}\\.js'],
+    ['iframe', '<iframe[^>]{0,160}>']
+  ], 300);
+  await probeSnippets('dlx playmogo', 'https://playmogo.com/e/bmzfuwzlu7z5', [
+    ['eval/packer', 'eval\\(function\\(p,a,c,k,e'], ['m3u8', '\\.m3u8|\\.mp4'],
+    ['sources', 'sources|file\\s*[:=]'], ['status', 'not found|removed|error|404']
+  ], 250);
+  await probeSnippets('dlx abyss embed', 'https://abyss.to/', [['js', 'src="[^"]{0,120}\\.js']], 200);
+}
+
+/* Ronda 30: Abyss publica sus datos cifrados en `const datas` (Base64). */
+async function round30() {
+  const res = await fetchRaw('https://player.abyssplayer.com/K8R6OOjS7');
+  const raw = res.text || '';
+  const m = /const\s+datas\s*=\s*["']([A-Za-z0-9+/=]{20,})["']/.exec(raw);
+  console.log('===== dlx abyss datas');
+  console.log('encontrado=' + Boolean(m) + ' bytes=' + (m ? m[1].length : 0));
+  if (m) {
+    let decoded = '';
+    try { decoded = Buffer.from(m[1], 'base64').toString('utf8'); } catch (e) { decoded = 'error ' + e.message; }
+    console.log('decodificado (' + decoded.length + '):');
+    console.log(decoded.slice(0, 1200));
+  }
+  // ¿Hay descifrado en el bundle del reproductor?
+  await probeSnippets('dlx abyss bundle', 'https://iamcdn.net/player-v2/core.bundle.js', [
+    ['crypto', 'CryptoJS|AES|decrypt|atob|fromCharCode'], ['datas', 'datas[\\s\\S]{0,120}']
+  ], 260);
+}
+
+/* Ronda 31: ¿hay más reproductores (nume 3..8) y cuáles son? */
+async function round31() {
+  const B = 'https://doramaslatinox.com';
+  for (const u of ['/wp-json/dooplayer/v2/43619/tv/3', '/wp-json/dooplayer/v2/43619/tv/4',
+    '/wp-json/dooplayer/v2/43619/tv/5', '/wp-json/dooplayer/v2/43619/tv/6',
+    '/wp-json/dooplayer/v2/43619/tv/7', '/wp-json/dooplayer/v2/43619/tv/8',
+    '/wp-json/dooplayer/v2/43611/movie/3', '/wp-json/dooplayer/v2/43611/movie/4']) {
+    await probeSnippets('dlx opts ' + u, B + u, [['json', '.*']], 200);
+  }
+}
+
+/* Ronda 32: ¿el redirect de DooPlay devuelve un reproductor más abierto? */
+async function round32() {
+  const B = 'https://doramaslatinox.com';
+  for (const path of ['/tv/1', '/tv/2', '/movie/1', '/movie/2']) {
+    const url = B + '/wp-json/dooplayer/v2/43619' + path.replace('/tv', '/tv').replace('/movie', '/movie');
+    try {
+      const res = await fetch(url, { redirect: 'manual', headers: { 'User-Agent': UA } });
+      const loc = res.headers.get('location') || '';
+      console.log('===== dlx redirect ' + path);
+      console.log('status=' + res.status + ' location=' + (loc || '(ninguna)'));
+      const body = await res.text();
+      console.log('body=' + JSON.stringify(body.slice(0, 200)));
+    } catch (e) { console.log('===== dlx redirect ' + path + ' ERR ' + e.message); }
+  }
+}
+
+/* Ronda 33: extraer y decodificar el bloque `datas` de Abyss. */
+async function round33() {
+  for (const slug of ['K8R6OOjS7', 'WeCIsZdM2']) {
+    const url = 'https://player.abyssplayer.com/' + slug;
+    const res = await fetchRaw(url);
+    console.log('===== dlx abyss ' + slug);
+    console.log('status=' + res.status + ' bytes=' + res.body.length);
+    const idx = res.body.indexOf('datas');
+    console.log('idx datas=' + idx);
+    if (idx > 0) console.log('zona: ' + JSON.stringify(res.body.slice(idx - 40, idx + 1200)));
+    const m = /datas\s*=\s*["']([^"']{20,})["']/.exec(res.body);
+    console.log('match=' + Boolean(m));
+    if (m) {
+      let dec = '';
+      try { dec = Buffer.from(m[1], 'base64').toString('utf8'); } catch (e) { dec = 'ERR ' + e.message; }
+      console.log('decoded(' + dec.length + '): ' + JSON.stringify(dec.slice(0, 900)));
+    }
+  }
+}
+
+/* Ronda 34: cómo obtiene Abyss la clave de AES-CTR. */
+async function round34() {
+  const res = await fetchRaw('https://iamcdn.net/player-v2/core.bundle.js');
+  const raw = res.body || '';
+  console.log('===== dlx abyss key');
+  console.log('bytes=' + raw.length);
+  for (const needle of ['getKey', 'decryptStr', 'AES-CTR', 'kws', '/api/', 'subtitles']) {
+    let i = -1, n = 0;
+    while (n < 3 && (i = raw.indexOf(needle, i + 1)) !== -1) {
+      console.log('--- ' + needle + ' @' + i + ': ' + JSON.stringify(raw.slice(Math.max(0, i - 300), i + 500)));
+      n++;
+    }
+    if (!n) console.log('--- ' + needle + ': sin coincidencias');
   }
 }
 
@@ -490,6 +671,19 @@ async function main() {
   if (only === 'all' || only === 'round21') await round21();
   if (only === 'all' || only === 'round22') await round22();
   if (only === 'all' || only === 'round23') await round23();
+  if (only === 'all' || only === 'round24') await round24();
+  // Solo esta ronda: útil mientras se investiga un sitio concreto.
+  else if (only === 'round24only') await round24();
+  if (only === 'doramaslatinox' || only === 'dlx') { await round25(); await round26(); }
+  if (only === 'dlx26') await round26();
+  if (only === 'dlx27') await round27();
+  if (only === 'dlx28') await round28();
+  if (only === 'dlx29') await round29();
+  if (only === 'dlx30') await round30();
+  if (only === 'dlx31') await round31();
+  if (only === 'dlx32') await round32();
+  if (only === 'dlx33') await round33();
+  if (only === 'dlx34') await round34();
 }
 
 if (require.main === module) {

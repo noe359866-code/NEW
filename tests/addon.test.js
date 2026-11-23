@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const { createServer } = require('../addon/server');
-const { PROVIDERS, REQUEST_BUDGET, PROVIDER_REQUEST_BUDGET, budgetFetcher, parseVodId, toStremioStream, createVodResolver, runVod } = require('../addon/vod');
+const { PROVIDERS, REQUEST_BUDGET, PROVIDER_REQUEST_BUDGET, budgetFetcher, parseVodId, toStremioStream, createVodResolver, createStreamCache, runVod } = require('../addon/vod');
 const { mockFetch, tmdbMovie, tmdbTv } = require('./utils');
 const manifest = require('../manifest.json');
 
@@ -45,8 +45,14 @@ function fixtureFetch() {
     ['flixlatam.com/pelicula/interstellar', '<iframe src="https://embed69.org/f/film"></iframe>'],
     ['embed69.org/f/film', `const LINK_CHALLENGE='challenge'; const LINK_SALT='salt'; let dataLink=${JSON.stringify(data)};`],
     ['player.example/e/film', '<video><source src="https://cdn.example/1080p/film.m3u8?sig=abc"></video>'],
-    ['latanime.org/buscar?q=', url => new URL(url).searchParams.get('q') === 'One Piece'
-      ? '<a href="/anime/one-piece-latino"><strong>One Piece Latino</strong><span>Latino 1999</span></a>' : '<p>Sin resultados</p>'],
+    ['latanime.org/buscar?q=', url => {
+      const query = new URL(url).searchParams.get('q');
+      if (query === 'One Piece') return '<a href="/anime/one-piece-latino"><strong>One Piece Latino</strong><span>Latino 1999</span></a>';
+      if (query === 'Interstellar') return '<article class="anime"><a href="/anime/interstellar-pelicula"><strong>Interstellar</strong><span>Película</span></a></article>';
+      return '<p>Sin resultados</p>';
+    }],
+    ['latanime.org/anime/interstellar-pelicula', '<a href="/ver/interstellar-pelicula-episodio-1">1</a>'],
+    ['latanime.org/ver/interstellar-pelicula-episodio-1', `<a data-player="${player}">Servidor</a>`],
     ['latanime.org/anime/one-piece-latino', '<a href="/ver/one-piece-latino-episodio-13">Episodio 13</a>'],
     ['latanime.org/ver/one-piece-latino-episodio-13', `<a data-player="${player}">Servidor</a>`],
     ['anime-player.example/e/ep13', '<source src="https://cdn.example/anime/ep13.mp4?token=abc">']
@@ -145,10 +151,9 @@ test('servidor unificado resuelve película IMDb y anime TMDB/IMDb en el mismo m
 
     const movie = (await json('/stream/movie/tt0816692.json')).body.streams;
     assert.equal(movie.length, 1);
-    assert.equal(movie[0].url, 'https://cdn.example/1080p/film.m3u8?sig=abc');
-    assert.match(movie[0].name, /TioAnime.*1080p/);
-    assert.equal(movie[0].behaviorHints.proxyHeaders.request.Referer, 'https://movie-player.example/e/film');
-    assert.equal(movie[0].behaviorHints.notWebReady, undefined);
+    assert.equal(movie[0].url, 'https://cdn.example/anime/ep13.mp4?token=abc');
+    assert.match(movie[0].name, /Latanime/);
+    assert.equal(movie[0].behaviorHints.proxyHeaders.request.Referer, 'https://anime-player.example/e/ep13');
 
     for (const id of ['tmdb:44:2:1', 'tt1234567:2:1']) {
       const result = await json('/stream/series/' + encodeURIComponent(id) + '.json');
@@ -186,7 +191,7 @@ test('un origen VOD caído no impide obtener el otro', async () => {
   } finally { await app.close(); }
 });
 
-test('búsquedas VOD simultáneas se agrupan, pero sus enlaces no se guardan', async () => {
+test('búsquedas VOD simultáneas se agrupan y el resultado se recuerda un rato', async () => {
   const mock = fixtureFetch();
   const fetcher = async (...args) => { await new Promise(resolve => setTimeout(resolve, 2)); return mock(...args); };
   const resolve = createVodResolver({ fetcher, tmdbKey: 'fixture-key' });
@@ -194,9 +199,24 @@ test('búsquedas VOD simultáneas se agrupan, pero sus enlaces no se guardan', a
   const two = resolve('tv', 'tmdb:44:2:1');
   assert.equal(one, two);
   assert.equal((await one).length, 1);
+  // Sin repeticiones de red mientras el resultado siga fresco…
   const previous = mock.calls.length;
   assert.equal((await resolve('series', 'tmdb:44:2:1')).length, 1);
+  assert.equal(mock.calls.length, previous);
+  // …pero otro episodio sí se resuelve desde cero.
+  await resolve('series', 'tmdb:44:2:2');
   assert.ok(mock.calls.length > previous);
+});
+
+test('la memoria por título caduca y no se comparte entre episodios', () => {
+  let clock = 0;
+  const cache = createStreamCache({ ttlMs: 100, now: () => clock });
+  const movie = parseVodId('movie', 'tt0816692');
+  cache.setComplete(movie, [{ url: 'https://cdn.example/a.mp4', title: 'x' }]);
+  assert.equal(cache.getComplete(movie).length, 1);
+  assert.equal(cache.getComplete(parseVodId('series', 'tmdb:44:2:1')), null);
+  clock = 150;
+  assert.equal(cache.getComplete(movie), null);
 });
 
 test('el plazo conserva los resultados de una fuente rápida si la otra tarda', async () => {
@@ -214,7 +234,7 @@ test('el plazo conserva los resultados de una fuente rápida si la otra tarda', 
   assert.match(streams[0].name, /Latanime/);
 });
 
-test('la búsqueda respeta su plazo y cancela las solicitudes activas', async () => {
+test('la búsqueda cierra a tiempo y cancela lo pendiente en segundo plano', async () => {
   const signals = [];
   const fetcher = (_url, { signal }) => new Promise((_resolve, reject) => {
     signals.push(signal);
@@ -222,9 +242,37 @@ test('la búsqueda respeta su plazo y cancela las solicitudes activas', async ()
   });
   const parsed = parseVodId('movie', 'tt0816692');
   const started = Date.now();
-  assert.deepEqual(await runVod(parsed, { fetcher, timeout: 30 }), []);
+  // El cliente no espera: se responde vacío al vencer el plazo del cliente…
+  assert.deepEqual(await runVod(parsed, { fetcher, timeout: 30, backgroundTimeout: 60 }), []);
   assert.ok(Date.now() - started < 1500);
+  // …y el trabajo que sobra se corta después, sin dejar sockets abiertos.
+  await new Promise(resolve => setTimeout(resolve, 120));
   assert.ok(signals.length > 0 && signals.every(signal => signal.aborted));
+});
+
+test('lo que no llega al plazo se completa en segundo plano y queda memorizado', async () => {
+  const mock = mockFetch([
+    ['v3-cinemeta.strem.io/meta/movie/tt0816692.json', { __json: { meta: { type: 'movie', name: 'Interstellar', year: '2014' } } }],
+    ['cineplus123.org/?s=', `<div class="result-item"><article><a href="/peliculas/interestellar/">Interstellar</a><span>2014</span></article></div>`],
+    ['cineplus123.org/peliculas/interestellar/', `<ul id="playeroptionsul">
+      <li class="dooplay_player_option" data-type="movie" data-post="9166" data-nume="1"><span class="title">LATINO</span></li>
+      </ul>`],
+    ['/wp-json/dooplayer/v2/9166/movie/1', { __json: { type: 'iframe', embed_url: 'https://vidara.to/e/fast123' } }],
+    ['vidara.to/api/stream', { __json: { streaming_url: 'https://cdn.example/lento.mp4' } }]
+  ]);
+  // Lentitud artificial: todo tarda 40 ms, así que a 1 ms no hay nada.
+  const fetcher = async (url, init) => {
+    await new Promise(resolve => setTimeout(resolve, 40));
+    return mock(url, init);
+  };
+  const cache = createStreamCache();
+  const parsed = parseVodId('movie', 'tt0816692');
+  const first = await runVod(parsed, { fetcher, tmdbKey: '', timeout: 1, backgroundTimeout: 400, cache });
+  assert.deepEqual(first, [], 'a 1 ms aún no hay nada que entregar');
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const remembered = cache.getComplete(parsed);
+  assert.ok(remembered && remembered.length, 'el resultado del segundo plano queda disponible');
+  assert.match(remembered[0].name, /CinePlus123/);
 });
 
 test('límite de concurrencia devuelve 503 sin bloquear salud ni manifiesto', async () => {
@@ -287,7 +335,7 @@ test('el addon expone CinePlus123 en su stream de película con cabeceras Vidara
 });
 
 test('presupuestos VOD: cada fuente tiene límite propio y comparte un límite global', async () => {
-  assert.deepEqual(PROVIDERS, ['tioanime', 'fuegocine', 'kdrama', 'framextv', 'latanime', 'cineplus123', 'pelishax', 'homecine', 'frikiserie']);
+  assert.deepEqual(PROVIDERS, ['fuegocine', 'latanime', 'cineplus123', 'pelishax', 'homecine', 'frikiserie', 'doramaslatinox']);
   assert.equal(REQUEST_BUDGET, 96);
   assert.equal(PROVIDER_REQUEST_BUDGET, 32);
   const controller = new AbortController();
@@ -329,14 +377,18 @@ test('CinePlus123 conserva un reproductor rápido aunque otra opción agote el p
     return mock(url, init);
   };
   const start = Date.now();
-  const streams = await runVod(parseVodId('movie', 'tt0816692'), { fetcher, tmdbKey: '', timeout: 180 });
+  const streams = await runVod(parseVodId('movie', 'tt0816692'), { fetcher, tmdbKey: '', timeout: 180, backgroundTimeout: 300 });
   assert.ok(Date.now() - start < 1500);
   assert.equal(streams.length, 1);
   assert.equal(streams[0].url, 'https://cdn.example/fast.mp4');
   assert.match(streams[0].name, /CinePlus123/);
   assert.equal(streams[0].subtitles[0].url, 'https://vidara.to/subs/es.vtt');
   assert.equal(streams[0].subtitles[0].lang, 'spa');
-  assert.ok(stalledSignal && stalledSignal.aborted, 'se cancela el reproductor que no respondió');
+  // El cierre del cliente no cancela: lo pendiente sigue en segundo plano y se
+  // corta al agotar su propio plazo, no al vencer el del cliente.
+  assert.ok(stalledSignal && !stalledSignal.aborted, 'lo pendiente sigue en segundo plano');
+  await new Promise(resolve => setTimeout(resolve, 400));
+  assert.ok(stalledSignal.aborted, 'el segundo plano se corta al agotarse su plazo');
   assert.ok(mock.calls.every(call => !/\.(?:m3u8|mp4)$/i.test(new URL(call.url).pathname)));
 });
 
@@ -351,66 +403,116 @@ test('El diagnóstico simula metadatos del tipo pedido (serie ≠ película)', a
   assert.equal(movie.meta.type, 'movie');
 });
 
-test('sin TMDB_API_KEY un ID de TMDB de Nuvio sigue dando fuentes por id (KatDrama/frameXTV)', async () => {
-  // Caso real de Nuvio: manda «tmdb:603» / «tmdb:1399:1:1». TMDB responde 403
-  // al servidor y Wikidata puede no tener ficha: el addon debe seguir usando
-  // el id de TMDB en los sitios que lo necesitan, no devolver [].
+test('sin TMDB_API_KEY un ID de TMDB de Nuvio sigue dando fuentes por id', async () => {
+  // Caso real de Nuvio: manda «tmdb:603». TMDB responde 403 al servidor y
+  // Wikidata puede no tener ficha: el addon debe seguir usando el id de TMDB
+  // en los sitios que lo necesitan (PeliShax), no devolver [].
   const fetcher = mockFetch([
     ['api.themoviedb.org', { __response: { status: 403 } }],
     ['www.themoviedb.org', { __response: { status: 403 } }],
     ['www.wikidata.org/w/api.php?action=query&list=search', { __json: { query: { search: [] } } }],
-    [/k-drama\.in\/watch\/movie\/n-a-603/, '<button onclick="switchServer(\'kat1\', \'https://k-drama.in/mx1.php?type=movie&id=603\', \'embed\', \'\')">'],
-    ['k-drama.in/mx1.php', '<video src="https://cdn.example/matrix.mp4"></video>'],
-    ['vidsync-shard.vs-deals79.workers.dev', { __json: { sources: [
-      { id: 'castle-1', url: 'https://img.example/matrix/index.m3u8', type: 'hls', quality: '720p', server: 'Castle' }
-    ] } }]
+    ['pelishaxpro.com/movies/603', '<li class="server-item" data-link="https://vidara.to/e/m603" data-lang="Español Latino">Vidara</li>'],
+    ['vidara.to/e/m603', '<video src="https://cdn.example/matrix.mp4"></video>']
   ]);
   const app = await openServer({ fetcher, tmdbKey: '' });
   try {
     const res = await fetch(app.base + '/stream/movie/' + encodeURIComponent('tmdb:603') + '.json');
     const { streams } = await res.json();
-    const urls = streams.map(stream => stream.url).sort();
-    assert.deepEqual(urls, ['https://cdn.example/matrix.mp4', 'https://img.example/matrix/index.m3u8']);
-    assert.ok(streams.every(stream => stream.name.startsWith('Nébula')), JSON.stringify(streams.map(s => s.name)));
+    assert.deepEqual(streams.map(stream => stream.url), ['https://cdn.example/matrix.mp4']);
+    assert.match(streams[0].name, /PeliShax/);
+    assert.match(streams[0].name, /Latino/);
   } finally { await app.close(); }
 });
 
-test('cada fuente etiqueta el idioma (Multi, Latino, Castellano, Inglés) en el nombre del stream', async () => {
+test('solo se entregan enlaces en español y cada uno lleva su etiqueta', async () => {
   const fetcher = mockFetch([
     ['api.themoviedb.org', { __response: { status: 403 } }],
     ['www.themoviedb.org', { __response: { status: 403 } }],
     ['www.wikidata.org/w/api.php?action=query&list=search', { __json: { query: { search: [] } } }],
-    [/watch\/movie\/n-a-603/, [
-      // KatDrama publica el idioma en el texto del botón.
-      '<button class="btn" onclick="switchServer(\'kat1\', \'https://k-drama.in/mx1.php?type=movie&id=603\', \'embed\', \'\')">Kat 1 - Hindi1080p</button>',
-      '<button class="btn" onclick="switchServer(\'kat2\', \'https://k-drama.in/vid2.php/603?m=lat\', \'embed\', \'\')">Kat 2 - Latino1080p</button>'
+    ['pelishaxpro.com/movies/603', [
+      // El sitio declara el idioma de cada reproductor en `data-lang`.
+      '<li class="server-item" data-link="https://vidara.to/e/lat" data-lang="Español Latino">Vidara</li>',
+      '<li class="server-item" data-link="https://filemoon.sx/e/hi" data-lang="Hindi">Filemoon</li>',
+      '<li class="server-item" data-link="https://streamwish.to/e/en" data-lang="English">StreamWish</li>'
     ].join('')],
-    ['k-drama.in/mx1.php', '<video src="https://cdn.example/matrix-hi.mp4"></video>'],
-    ['k-drama.in/vid2.php/603', '<video src="https://cdn.example/matrix-lat.mp4"></video>'],
-    ['vidsync-shard.vs-deals79.workers.dev', { __json: { sources: [
-      { id: 'a', url: 'https://cdn.example/nm.m3u8', type: 'hls', quality: '1080p', server: 'NetMirror', audioLanguage: 'es', audioLabel: 'Español Latino' },
-      { id: 'b', url: 'https://cdn.example/castle.m3u8', type: 'hls', quality: '720p', server: 'Castle', audioLanguage: 'en', audioLabel: 'English' },
-      { id: 'c', url: 'https://cdn.example/multi.m3u8', type: 'hls', quality: '480p', server: 'Multi', audioLabel: 'Multi Audio' }
-    ] } }]
+    ['vidara.to/e/lat', '<video src="https://cdn.example/lat.mp4"></video>'],
+    ['filemoon.sx/e/hi', '<video src="https://cdn.example/hi.mp4"></video>'],
+    ['streamwish.to/e/en', '<video src="https://cdn.example/en.mp4"></video>']
   ]);
   const app = await openServer({ fetcher, tmdbKey: '' });
   try {
     const { streams } = await (await fetch(app.base + '/stream/movie/' + encodeURIComponent('tmdb:603') + '.json')).json();
-    const byName = Object.fromEntries(Array.from(streams, stream => [stream.name, stream]));
-    assert.ok(byName['Nébula · KatDrama · Latino'], JSON.stringify(streams.map(s => s.name)));
-    assert.ok(byName['Nébula · KatDrama · Hindi'], JSON.stringify(streams.map(s => s.name)));
-    assert.ok(byName['Nébula · frameXTV · 1080p · Latino']);
-    assert.ok(byName['Nébula · frameXTV · 720p · Inglés']);
-    assert.ok(byName['Nébula · frameXTV · 480p · Multi']);
-    // El idioma aparece también en el título y en el nombre de archivo.
-    for (const stream of streams) {
-      const language = stream.name.split(' · ').pop();
-      assert.ok(stream.title.includes(language), stream.title + ' / ' + stream.name);
-      // `filename` es sintético y va en minúsculas, sin acentos y sin espacios.
-      const filename = stream.behaviorHints.filename.toLowerCase()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.]/g, ' ');
-      const wanted = language.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(' ')[0];
-      assert.ok(filename.includes(wanted), stream.behaviorHints.filename + ' vs ' + language);
-    }
+    // Hindi e inglés se descartan: el addon es solo español.
+    assert.deepEqual(streams.map(stream => stream.url), ['https://cdn.example/lat.mp4']);
+    assert.equal(streams[0].name, 'Nébula · PeliShax · Latino');
+    // El idioma aparece también en el título.
+    assert.ok(streams[0].title.includes('Latino'), streams[0].title);
+    assert.match(streams[0].behaviorHints.filename, /latino/);
   } finally { await app.close(); }
+});
+
+test('el endpoint /stream manda la cabecera al instante para que el cliente no abandone', async () => {
+  const http = require('node:http');
+  let release;
+  const gate = new Promise(resolve => { release = resolve; });
+  const app = await openServer({ resolveVod: async () => { await gate; return [{ name: 'Nébula', title: 'x', url: 'https://cdn.example/a.mp4' }]; } });
+  try {
+    const started = Date.now();
+    const firstByte = await new Promise((resolve, reject) => {
+      const request = http.get(app.base + '/stream/movie/tt0816692.json', response => {
+        resolve({ status: response.statusCode, ms: Date.now() - started });
+        response.resume();
+        setTimeout(() => response.destroy(), 50);
+      });
+      request.on('error', reject);
+    });
+    // Stremio/Nuvio cortan a los pocos segundos: la cabecera debe llegar antes.
+    assert.equal(firstByte.status, 200);
+    assert.ok(firstByte.ms < 1500, `cabecera en ${firstByte.ms} ms`);
+    release();
+  } finally { await app.close(); }
+});
+
+test('el endpoint /stream cierra igual si la resolución falla tras la cabecera', async () => {
+  const app = await openServer({ resolveVod: async () => { throw new Error('fallo'); } });
+  try {
+    const response = await fetch(app.base + '/stream/movie/tt0816692.json');
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), { streams: [] });
+  } finally { await app.close(); }
+});
+
+test('las cabeceras se entregan en proxyHeaders y en la clave de Nuvio', () => {
+  const stream = toStremioStream({
+    url: 'https://s40.fastream.to/hls2/x/master.m3u8',
+    headers: { Referer: 'https://fastream.to/embed-a.html', Origin: 'https://fastream.to' }
+  });
+  assert.deepEqual(stream.behaviorHints.proxyHeaders.request, {
+    Referer: 'https://fastream.to/embed-a.html', Origin: 'https://fastream.to'
+  });
+  assert.deepEqual(stream.behaviorHints.headers, {
+    Referer: 'https://fastream.to/embed-a.html', Origin: 'https://fastream.to'
+  });
+});
+
+test('notWebReady solo cuando el enlace realmente necesita proxy', () => {
+  // Reproductor protegido: sin proxy el Referer no se envía y no hay vídeo.
+  const guarded = toStremioStream({
+    url: 'https://vd9.okcdn.ru/video.m3u8?expires=9',
+    headers: { Referer: 'https://ok.ru/videoembed/1', Origin: 'https://ok.ru' }
+  });
+  assert.equal(guarded.behaviorHints.notWebReady, true);
+
+  // CDN de un tercero al que no le hace falta el Referer: sigue sirviendo en Web.
+  const open = toStremioStream({
+    url: 'https://cdn.example/1080p/film.m3u8',
+    headers: { Referer: 'https://player.example/e/1' }
+  });
+  assert.equal(open.behaviorHints.notWebReady, undefined);
+  assert.ok(open.behaviorHints.proxyHeaders, 'las cabeceras se envían igual');
+
+  // Sin cabeceras no hay nada que forzar.
+  const plain = toStremioStream({ url: 'https://cdn.example/live.m3u8' });
+  assert.equal(plain.behaviorHints.notWebReady, undefined);
+  assert.equal(plain.behaviorHints.headers, undefined);
 });

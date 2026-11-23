@@ -98,6 +98,12 @@ function pelishaxSearch(info) {
  * (/movies/155 = The Dark Knight), así que normalmente no hay que buscar. */
 function pelishaxCandidates(info) {
   var direct = [];
+  if (!info.title && info.tmdbId) {
+    // Sin título no se puede buscar, pero la ficha por id sí se puede abrir.
+    var only = PELISHAX_BASE + (info.isTv ? '/series/' : '/movies/') + info.tmdbId;
+    var siteOnly = pelishaxSiteUrl(only, PELISHAX_BASE + '/');
+    return Promise.resolve(siteOnly ? [{ url: siteOnly, title: '', score: 1 }] : []);
+  }
   if (info.tmdbId) {
     var url = PELISHAX_BASE + (info.isTv ? '/series/' : '/movies/') + info.tmdbId;
     var site = pelishaxSiteUrl(url, PELISHAX_BASE + '/');
@@ -226,7 +232,9 @@ function pelishaxStream(info, item) {
 function pelishaxGetStreams(tmdbId, mediaType, season, episode) {
   var conf = settings({ maxResults: '8' });
   return requestMedia(tmdbId, mediaType, season, episode).then(function (info) {
-    if (!info || !info.title) return [];
+    // La ficha se identifica por el id de TMDB (`/movies/<id>`), así que no
+    // hace falta el título: sin TMDB_API_KEY ni ficha en Wikidata se sigue.
+    if (!info) return [];
     if (info.isTv && (!Number.isInteger(info.season) || info.season < 1 ||
         !Number.isInteger(info.episode) || info.episode < 1)) return [];
     return pelishaxCandidates(info).then(function (candidates) {

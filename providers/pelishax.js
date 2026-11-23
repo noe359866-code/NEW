@@ -419,6 +419,25 @@ function languageLabel(text) {
 
 /** Prioridad de idioma al ordenar: el catálogo es hispano, así que el audio
  * en español va primero y las versiones solo subtituladas al final. */
+/**
+ * ¿La opción está en español? Solo pasan las etiquetas del addon que tienen
+ * audio o subtítulos en español. `Multi` no se puede comprobar (varios audios
+ * en el mismo archivo), así que se conserva: quitarlo eliminaría las fuentes
+ * que no declaran un idioma concreto. Sin etiqueta tampoco se descarta aquí:
+ * de eso se encarga cada fuente, que sí sabe qué sirve.
+ */
+function isSpanishAudio(label) {
+  var value = String(label || '');
+  if (!value) return true;
+  // Varios audios en el mismo archivo: no se puede descartar sin perder la fuente.
+  if (/^Multi/i.test(value)) return true;
+  if (/^(?:Latino|Espa(?:n|ñ)ol|Castellano)/i.test(value)) return true;
+  // Audio en otro idioma + subtítulos: los subtítulos son en español salvo que
+  // el propio texto diga en qué idioma están («English subtitles»).
+  if (/Subtitulado/i.test(value) && !/\b(?:english|ingles|inglés|hindi|portugu)/i.test(value)) return true;
+  return false;
+}
+
 function languageRank(label) {
   var value = String(label || '');
   if (/^Multi/i.test(value)) return 0;
@@ -2232,6 +2251,12 @@ function pelishaxSearch(info) {
  * (/movies/155 = The Dark Knight), así que normalmente no hay que buscar. */
 function pelishaxCandidates(info) {
   var direct = [];
+  if (!info.title && info.tmdbId) {
+    // Sin título no se puede buscar, pero la ficha por id sí se puede abrir.
+    var only = PELISHAX_BASE + (info.isTv ? '/series/' : '/movies/') + info.tmdbId;
+    var siteOnly = pelishaxSiteUrl(only, PELISHAX_BASE + '/');
+    return Promise.resolve(siteOnly ? [{ url: siteOnly, title: '', score: 1 }] : []);
+  }
   if (info.tmdbId) {
     var url = PELISHAX_BASE + (info.isTv ? '/series/' : '/movies/') + info.tmdbId;
     var site = pelishaxSiteUrl(url, PELISHAX_BASE + '/');
@@ -2360,7 +2385,9 @@ function pelishaxStream(info, item) {
 function pelishaxGetStreams(tmdbId, mediaType, season, episode) {
   var conf = settings({ maxResults: '8' });
   return requestMedia(tmdbId, mediaType, season, episode).then(function (info) {
-    if (!info || !info.title) return [];
+    // La ficha se identifica por el id de TMDB (`/movies/<id>`), así que no
+    // hace falta el título: sin TMDB_API_KEY ni ficha en Wikidata se sigue.
+    if (!info) return [];
     if (info.isTv && (!Number.isInteger(info.season) || info.season < 1 ||
         !Number.isInteger(info.episode) || info.episode < 1)) return [];
     return pelishaxCandidates(info).then(function (candidates) {
