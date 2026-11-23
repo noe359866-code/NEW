@@ -585,6 +585,26 @@ async function round32() {
   }
 }
 
+/* Ronda 33: extraer y decodificar el bloque `datas` de Abyss. */
+async function round33() {
+  for (const slug of ['K8R6OOjS7', 'WeCIsZdM2']) {
+    const url = 'https://player.abyssplayer.com/' + slug;
+    const res = await fetchRaw(url);
+    console.log('===== dlx abyss ' + slug);
+    console.log('status=' + res.status + ' bytes=' + res.body.length);
+    const idx = res.body.indexOf('datas');
+    console.log('idx datas=' + idx);
+    if (idx > 0) console.log('zona: ' + JSON.stringify(res.body.slice(idx - 40, idx + 1200)));
+    const m = /datas\s*=\s*["']([^"']{20,})["']/.exec(res.body);
+    console.log('match=' + Boolean(m));
+    if (m) {
+      let dec = '';
+      try { dec = Buffer.from(m[1], 'base64').toString('utf8'); } catch (e) { dec = 'ERR ' + e.message; }
+      console.log('decoded(' + dec.length + '): ' + JSON.stringify(dec.slice(0, 900)));
+    }
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -642,6 +662,7 @@ async function main() {
   if (only === 'dlx30') await round30();
   if (only === 'dlx31') await round31();
   if (only === 'dlx32') await round32();
+  if (only === 'dlx33') await round33();
 }
 
 if (require.main === module) {
