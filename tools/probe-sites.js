@@ -684,8 +684,11 @@ async function round36() {
   const dec = C.AES.decrypt({ ciphertext: C.enc.Hex.parse(Buffer.from(bytes).toString('hex')) },
     C.enc.Latin1.parse(keyHex), { iv: C.enc.Latin1.parse(keyHex.slice(0, 16)), mode: C.mode.CTR, padding: C.pad.NoPadding });
   const plain = Buffer.from(dec.toString(C.enc.Latin1), 'latin1').toString('utf8');
-  const first = JSON.parse(plain.slice(0, plain.indexOf('"domains"') - 1) + '}}');
-  const src = first.mp4.sources[0];
+  // El sitio publica algún byte corrupto: se lee por expresiones regulares.
+  const srcMatch = /\{"label":"([^"]{1,20})"[^}]*?"size":(\d+)[^}]*?"res_id":(\d+)[^}]*?"path":"([^"]{1,120})"/.exec(plain);
+  if (!srcMatch) { console.log('===== dlx candidatos: sin fuente'); return; }
+  const src = { label: srcMatch[1], size: srcMatch[2], res_id: srcMatch[3], path: srcMatch[4],
+    url: (/\{"label"[^}]*?"url":"([^"]{1,120})"/.exec(plain) || [])[1] || '' };
   const frist = /"fristDatas":\[([\s\S]*?)\]\}/.exec(plain);
   const fristUrls = frist ? [...frist[1].matchAll(/"url":"(https:\/\/[^"]+)"/g)].map(x => x[1]) : [];
   console.log('===== dlx candidatos');
