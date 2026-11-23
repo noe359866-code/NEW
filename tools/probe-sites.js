@@ -34,6 +34,31 @@ function interesting(body, pattern) {
     .map(line => (line.length > 300 ? line.slice(0, 300) + '…' : line));
 }
 
+/** Muestra hasta `size` caracteres alrededor de cada coincidencia: sirve para
+ * ficheros minificados donde la línea entera no aporta nada. */
+async function probeSnippets(name, url, patterns, size = 260) {
+  try {
+    const res = await fetchRaw(url);
+    console.log(`\n===== ${name} :: ${url}`);
+    console.log(`status=${res.status} type=${res.type} bytes=${res.body.length} final=${res.url}`);
+    for (const [label, pattern] of patterns) {
+      const re = new RegExp(pattern, 'gi');
+      let match;
+      let shown = 0;
+      console.log(`--- ${label}:`);
+      while ((match = re.exec(res.body)) && shown < 6) {
+        const start = Math.max(0, match.index - size / 2);
+        console.log('   …' + res.body.slice(start, start + size).replace(/\s+/g, ' ') + '…');
+        shown++;
+        if (match.index === re.lastIndex) re.lastIndex++;
+      }
+      if (!shown) console.log('   (sin coincidencias)');
+    }
+  } catch (error) {
+    console.log(`\n===== ${name} :: ${url}\nERROR ${error && error.message}`);
+  }
+}
+
 async function probe(name, url, patterns) {
   try {
     const res = await fetchRaw(url);
@@ -64,6 +89,15 @@ async function fuegocine() {
   await probe('fuegocine search', 'https://fuegocine.com/search_elastic?s=odisea', [['resultados', 'details|alt=']]);
   await probe('fuegocine episodio', 'https://fuegocine.com/shows/visionquest/01x02-teseo/50', PLAYERS);
   await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
+}
+
+async function round5() {
+  await probeSnippets('kd vid2', 'https://k-drama.in/vid2.php/117376/1/1?m=en',
+    [['iframe', '<iframe'], ['script', '<script'], ['hls', 'm3u8']]);
+  await probeSnippets('fx bundle', 'https://framextv.cc/assets/index-DvMX4GhI.js',
+    [['graphql', 'graphql'], ['endpoint', 'Qp='], ['anime', '/anime/']]);
+  await probe('kd id directo tv', 'https://k-drama.in/watch/tv/n-a-117376-episode-1', PLAYERS);
+  await probe('kd id directo movie', 'https://k-drama.in/watch/movie/n-a-1654940', PLAYERS);
 }
 
 async function round4() {
@@ -132,6 +166,7 @@ async function main() {
   if (only === 'all' || only === 'round2') { await kDrama2(); await framextv2(); }
   if (only === 'all' || only === 'round3') await round3();
   if (only === 'all' || only === 'round4') await round4();
+  if (only === 'all' || only === 'round5') await round5();
   if (only === 'all' || only === 'kdesa') await kdesa();
 }
 
