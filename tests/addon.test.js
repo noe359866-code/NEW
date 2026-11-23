@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const { createServer } = require('../addon/server');
-const { PROVIDERS, REQUEST_BUDGET, PROVIDER_REQUEST_BUDGET, budgetFetcher, parseVodId, toStremioStream, createVodResolver, runVod } = require('../addon/vod');
+const { PROVIDERS, REQUEST_BUDGET, PROVIDER_REQUEST_BUDGET, budgetFetcher, parseVodId, toStremioStream, createVodResolver, createStreamCache, runVod } = require('../addon/vod');
 const { mockFetch, tmdbMovie, tmdbTv } = require('./utils');
 const manifest = require('../manifest.json');
 
@@ -186,7 +186,7 @@ test('un origen VOD caído no impide obtener el otro', async () => {
   } finally { await app.close(); }
 });
 
-test('búsquedas VOD simultáneas se agrupan, pero sus enlaces no se guardan', async () => {
+test('búsquedas VOD simultáneas se agrupan y el resultado se recuerda un rato', async () => {
   const mock = fixtureFetch();
   const fetcher = async (...args) => { await new Promise(resolve => setTimeout(resolve, 2)); return mock(...args); };
   const resolve = createVodResolver({ fetcher, tmdbKey: 'fixture-key' });
@@ -194,9 +194,24 @@ test('búsquedas VOD simultáneas se agrupan, pero sus enlaces no se guardan', a
   const two = resolve('tv', 'tmdb:44:2:1');
   assert.equal(one, two);
   assert.equal((await one).length, 1);
+  // Sin repeticiones de red mientras el resultado siga fresco…
   const previous = mock.calls.length;
   assert.equal((await resolve('series', 'tmdb:44:2:1')).length, 1);
+  assert.equal(mock.calls.length, previous);
+  // …pero otro episodio sí se resuelve desde cero.
+  await resolve('series', 'tmdb:44:2:2');
   assert.ok(mock.calls.length > previous);
+});
+
+test('la memoria por título caduca y no se comparte entre episodios', () => {
+  let clock = 0;
+  const cache = createStreamCache({ ttlMs: 100, now: () => clock });
+  const movie = parseVodId('movie', 'tt0816692');
+  cache.setComplete(movie, [{ url: 'https://cdn.example/a.mp4', title: 'x' }]);
+  assert.equal(cache.getComplete(movie).length, 1);
+  assert.equal(cache.getComplete(parseVodId('series', 'tmdb:44:2:1')), null);
+  clock = 150;
+  assert.equal(cache.getComplete(movie), null);
 });
 
 test('el plazo conserva los resultados de una fuente rápida si la otra tarda', async () => {
@@ -214,7 +229,7 @@ test('el plazo conserva los resultados de una fuente rápida si la otra tarda', 
   assert.match(streams[0].name, /Latanime/);
 });
 
-test('la búsqueda respeta su plazo y cancela las solicitudes activas', async () => {
+test('la búsqueda cierra a tiempo y cancela lo pendiente en segundo plano', async () => {
   const signals = [];
   const fetcher = (_url, { signal }) => new Promise((_resolve, reject) => {
     signals.push(signal);
@@ -222,9 +237,37 @@ test('la búsqueda respeta su plazo y cancela las solicitudes activas', async ()
   });
   const parsed = parseVodId('movie', 'tt0816692');
   const started = Date.now();
-  assert.deepEqual(await runVod(parsed, { fetcher, timeout: 30 }), []);
+  // El cliente no espera: se responde vacío al vencer el plazo del cliente…
+  assert.deepEqual(await runVod(parsed, { fetcher, timeout: 30, backgroundTimeout: 60 }), []);
   assert.ok(Date.now() - started < 1500);
+  // …y el trabajo que sobra se corta después, sin dejar sockets abiertos.
+  await new Promise(resolve => setTimeout(resolve, 120));
   assert.ok(signals.length > 0 && signals.every(signal => signal.aborted));
+});
+
+test('lo que no llega al plazo se completa en segundo plano y queda memorizado', async () => {
+  const mock = mockFetch([
+    ['v3-cinemeta.strem.io/meta/movie/tt0816692.json', { __json: { meta: { type: 'movie', name: 'Interstellar', year: '2014' } } }],
+    ['cineplus123.org/?s=', `<div class="result-item"><article><a href="/peliculas/interestellar/">Interstellar</a><span>2014</span></article></div>`],
+    ['cineplus123.org/peliculas/interestellar/', `<ul id="playeroptionsul">
+      <li class="dooplay_player_option" data-type="movie" data-post="9166" data-nume="1"><span class="title">LATINO</span></li>
+      </ul>`],
+    ['/wp-json/dooplayer/v2/9166/movie/1', { __json: { type: 'iframe', embed_url: 'https://vidara.to/e/fast123' } }],
+    ['vidara.to/api/stream', { __json: { streaming_url: 'https://cdn.example/lento.mp4' } }]
+  ]);
+  // Lentitud artificial: todo tarda 40 ms, así que a 1 ms no hay nada.
+  const fetcher = async (url, init) => {
+    await new Promise(resolve => setTimeout(resolve, 40));
+    return mock(url, init);
+  };
+  const cache = createStreamCache();
+  const parsed = parseVodId('movie', 'tt0816692');
+  const first = await runVod(parsed, { fetcher, tmdbKey: '', timeout: 1, backgroundTimeout: 400, cache });
+  assert.deepEqual(first, [], 'a 1 ms aún no hay nada que entregar');
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const remembered = cache.getComplete(parsed);
+  assert.ok(remembered && remembered.length, 'el resultado del segundo plano queda disponible');
+  assert.match(remembered[0].name, /CinePlus123/);
 });
 
 test('límite de concurrencia devuelve 503 sin bloquear salud ni manifiesto', async () => {
@@ -329,14 +372,18 @@ test('CinePlus123 conserva un reproductor rápido aunque otra opción agote el p
     return mock(url, init);
   };
   const start = Date.now();
-  const streams = await runVod(parseVodId('movie', 'tt0816692'), { fetcher, tmdbKey: '', timeout: 180 });
+  const streams = await runVod(parseVodId('movie', 'tt0816692'), { fetcher, tmdbKey: '', timeout: 180, backgroundTimeout: 300 });
   assert.ok(Date.now() - start < 1500);
   assert.equal(streams.length, 1);
   assert.equal(streams[0].url, 'https://cdn.example/fast.mp4');
   assert.match(streams[0].name, /CinePlus123/);
   assert.equal(streams[0].subtitles[0].url, 'https://vidara.to/subs/es.vtt');
   assert.equal(streams[0].subtitles[0].lang, 'spa');
-  assert.ok(stalledSignal && stalledSignal.aborted, 'se cancela el reproductor que no respondió');
+  // El cierre del cliente no cancela: lo pendiente sigue en segundo plano y se
+  // corta al agotar su propio plazo, no al vencer el del cliente.
+  assert.ok(stalledSignal && !stalledSignal.aborted, 'lo pendiente sigue en segundo plano');
+  await new Promise(resolve => setTimeout(resolve, 400));
+  assert.ok(stalledSignal.aborted, 'el segundo plano se corta al agotarse su plazo');
   assert.ok(mock.calls.every(call => !/\.(?:m3u8|mp4)$/i.test(new URL(call.url).pathname)));
 });
 
@@ -412,5 +459,36 @@ test('cada fuente etiqueta el idioma (Multi, Latino, Castellano, Inglés) en el 
       const wanted = language.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(' ')[0];
       assert.ok(filename.includes(wanted), stream.behaviorHints.filename + ' vs ' + language);
     }
+  } finally { await app.close(); }
+});
+
+test('el endpoint /stream manda la cabecera al instante para que el cliente no abandone', async () => {
+  const http = require('node:http');
+  let release;
+  const gate = new Promise(resolve => { release = resolve; });
+  const app = await openServer({ resolveVod: async () => { await gate; return [{ name: 'Nébula', title: 'x', url: 'https://cdn.example/a.mp4' }]; } });
+  try {
+    const started = Date.now();
+    const firstByte = await new Promise((resolve, reject) => {
+      const request = http.get(app.base + '/stream/movie/tt0816692.json', response => {
+        resolve({ status: response.statusCode, ms: Date.now() - started });
+        response.resume();
+        setTimeout(() => response.destroy(), 50);
+      });
+      request.on('error', reject);
+    });
+    // Stremio/Nuvio cortan a los pocos segundos: la cabecera debe llegar antes.
+    assert.equal(firstByte.status, 200);
+    assert.ok(firstByte.ms < 1500, `cabecera en ${firstByte.ms} ms`);
+    release();
+  } finally { await app.close(); }
+});
+
+test('el endpoint /stream cierra igual si la resolución falla tras la cabecera', async () => {
+  const app = await openServer({ resolveVod: async () => { throw new Error('fallo'); } });
+  try {
+    const response = await fetch(app.base + '/stream/movie/tt0816692.json');
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), { streams: [] });
   } finally { await app.close(); }
 });

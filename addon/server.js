@@ -48,10 +48,21 @@ function paramsFromExtra(raw, query) {
   return { search, skip };
 }
 
+/**
+ * Stremio y Nuvio cortan la espera de /stream a los pocos segundos y muestran
+ * «sin fuentes» aunque el addon siga trabajando. En esa ruta la cabecera se
+ * envía al instante y el cuerpo se escribe en cuanto hay resultados: así el
+ * cliente mantiene la conexión y no descarta la respuesta por lentitud.
+ */
+function sendStreams(res, streams) {
+  if (!res.streamsEarly || res.writableEnded || res.destroyed) return;
+  res.end(JSON.stringify({ streams }));
+}
+
 function send(res, status, value, extra = {}) {
   if (res.writableEnded || res.destroyed) return;
   const body = JSON.stringify(value);
-  res.writeHead(status, {
+  const headers = {
     'Content-Type': 'application/json; charset=utf-8',
     'Content-Length': Buffer.byteLength(body),
     'Access-Control-Allow-Origin': '*',
@@ -59,7 +70,15 @@ function send(res, status, value, extra = {}) {
     'Cache-Control': 'no-store',
     'X-Content-Type-Options': 'nosniff',
     ...extra
-  });
+  };
+  // Una cabecera ya enviada no admite Content-Length ni reescritura: se usa
+  // el trozo inicial de la respuesta progresiva.
+  if (res.streamsEarly) {
+    res.write(body);
+    res.end();
+    return;
+  }
+  res.writeHead(status, headers);
   res.end(body);
 }
 
@@ -167,13 +186,25 @@ function createHandler(options = {}) {
           }
           // En Nuvio, tv también puede significar una serie TMDB. Los IDs
           // deportivos se distinguen antes por su prefijo propio.
+          // Cabecera inmediata: el cliente no debe abandonar por lentitud.
+          res.streamsEarly = true;
+          res.writeHead(200, {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, OPTIONS',
+            'Cache-Control': 'no-store',
+            'X-Content-Type-Options': 'nosniff',
+            'Transfer-Encoding': 'chunked'
+          });
+          if (typeof res.flushHeaders === 'function') res.flushHeaders();
           const streams = await resolveVod(type, id);
-          return send(res, 200, { streams });
+          return sendStreams(res, streams);
         });
       }
       return send(res, 404, { error: 'Ruta no encontrada' });
     } catch {
       // Un origen caído no rompe el resto del addon ni revela consultas o claves.
+      if (res.streamsEarly) { sendStreams(res, []); return; }
       return send(res, 200, /^\/stream\//i.test(url.pathname) ? { streams: [] } :
         /^\/meta\//i.test(url.pathname) ? { meta: null } : { metas: [] });
     }

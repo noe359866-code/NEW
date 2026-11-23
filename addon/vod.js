@@ -11,6 +11,13 @@ const { mediaUrl, safeUrl, isAdvertisementUrl } = require('../sports/http');
 // 403 a las IP del servidor y su PoW ya no es fiable). Sigue en el repositorio.
 const PROVIDERS = ['tioanime', 'fuegocine', 'kdrama', 'framextv', 'latanime', 'cineplus123', 'pelishax', 'homecine', 'frikiserie'];
 const TIME_BUDGET_MS = 30000;
+// Stremio y Nuvio abandonan la petición mucho antes que nuestro presupuesto:
+// si se tarda más, el cliente muestra «sin fuentes» aunque el addon sí tenga
+// enlaces. Por eso la respuesta se cierra a tiempo y se entrega lo ya resuelto.
+const CLIENT_BUDGET_MS = 9000;
+// Lo que falte se termina en segundo plano para dejarlo listo (y memorizado)
+// en la siguiente petición del mismo título sin volver a empezar de cero.
+const BACKGROUND_BUDGET_MS = 25000;
 const REQUEST_BUDGET = 96;
 const PROVIDER_REQUEST_BUDGET = 32;
 const scripts = new Map();
@@ -185,16 +192,45 @@ function budgetFetcher(fetcher, signal, maxRequests) {
   };
 }
 
+/**
+ * Resuelve las fuentes de un título repartiendo la espera en dos plazos:
+ *  - `deadline`: cuándo se cierra la respuesta HTTP (presupuesto del cliente).
+ *  - `hardDeadline`: cuándo se deja de trabajar aunque ya nadie espere.
+ * Lo resuelto antes del primer plazo se devuelve tal cual; lo que llegue
+ * después se guarda en `cache` para que la siguiente petición sea instantánea.
+ */
 async function runVod(parsed, {
-  fetcher = safeFetch, tmdbKey = '', timeout = TIME_BUDGET_MS,
-  maxRequests = REQUEST_BUDGET, settings = {}
+  fetcher = safeFetch, tmdbKey = '', timeout = CLIENT_BUDGET_MS,
+  maxRequests = REQUEST_BUDGET, settings = {}, cache = null,
+  backgroundTimeout = BACKGROUND_BUDGET_MS
 } = {}) {
-  const controller = new AbortController();
-  const fetch = budgetFetcher(fetcher, controller.signal, maxRequests);
   // Un ID de serie sin episodio solo identifica el título: no hay nada que
   // resolver y evita abrir fichas de temporadas completas.
   if (parsed.incomplete) return [];
+
+  const startedAt = Date.now();
+  const controller = new AbortController();
+  const fetch = budgetFetcher(fetcher, controller.signal, maxRequests);
   const groups = PROVIDERS.map(() => []);
+  const finished = new Array(PROVIDERS.length).fill(false);
+
+  const toStremio = () => {
+    const result = [];
+    const seen = new Set();
+    for (const group of groups) {
+      for (const raw of group) {
+        const stream = toStremioStream(raw);
+        if (!stream) continue;
+        // El mismo medio puede necesitar cabeceras diferentes según el origen.
+        const key = stream.url + '\n' + JSON.stringify((stream.behaviorHints && stream.behaviorHints.proxyHeaders) || {});
+        if (seen.has(key)) continue;
+        seen.add(key);
+        result.push(stream);
+      }
+    }
+    return result;
+  };
+
   const tasks = PROVIDERS.map(async (id, index) => {
     try {
       // Limitar cada fuente además del presupuesto global evita que una sola
@@ -210,48 +246,119 @@ async function runVod(parsed, {
       });
       const streams = await provider.getStreams(parsed.id, parsed.type, parsed.season, parsed.episode);
       if (!controller.signal.aborted && Array.isArray(streams) && streams.length) groups[index] = streams;
-    } catch { /* una fuente caída no cancela la otra */ }
+    } catch { /* una fuente caída no cancela la otra */ } finally {
+      finished[index] = true;
+    }
   });
-  let timer;
+  // Nadie debe quedar esperando a la fuente más lenta: cada task resuelve
+  // siempre porque sus errores se capturan arriba.
+  const all = Promise.all(tasks);
+
+  let clientTimer;
   try {
     await Promise.race([
-      Promise.all(tasks),
-      new Promise(resolve => { timer = setTimeout(resolve, timeout); })
+      all,
+      new Promise(resolve => { clientTimer = setTimeout(resolve, timeout); })
     ]);
   } finally {
-    clearTimeout(timer);
-    controller.abort();
+    clearTimeout(clientTimer);
   }
-  const result = [];
-  const seen = new Set();
-  for (const group of groups) {
-    for (const raw of group) {
-      const stream = toStremioStream(raw);
-      if (!stream) continue;
-      // El mismo medio puede necesitar cabeceras diferentes según el origen.
-      const key = stream.url + '\n' + JSON.stringify((stream.behaviorHints && stream.behaviorHints.proxyHeaders) || {});
-      if (seen.has(key)) continue;
-      seen.add(key);
-      result.push(stream);
-    }
+
+  const partial = toStremio();
+  const pendingSources = finished.filter(done => !done).length;
+  // Se responde ya con lo que haya; el resto continúa en segundo plano y, al
+  // terminar, alimenta la memoria para la próxima petición del mismo título.
+  if (pendingSources) {
+    const hardTimer = setTimeout(() => controller.abort(), Math.max(0, backgroundTimeout));
+    if (hardTimer.unref) hardTimer.unref();
+    const settled = all.then(() => {
+      clearTimeout(hardTimer);
+      const complete = toStremio();
+      if (cache) cache.setComplete(parsed, complete);
+      return complete;
+    }).catch(() => {
+      clearTimeout(hardTimer);
+      return partial;
+    });
+    // La siguiente petición espera a esta misma resolución en vez de repetirla.
+    if (cache) cache.setPending(parsed, { promise: settled, partial });
+    return partial;
   }
-  return result;
+
+  const complete = toStremio();
+  if (cache) cache.setComplete(parsed, complete);
+  return complete;
+}
+
+/**
+ * Memoria breve por título. La primera petición puede salir incompleta (el
+ * cliente no espera); la siguiente del mismo título recibe lo ya resuelto al
+ * instante y, si aún no estaba completo, espera el resto.
+ */
+function createStreamCache({ ttlMs = 10 * 60 * 1000, pendingTtlMs = 2 * 60 * 1000, now = Date.now } = {}) {
+  const complete = new Map();
+  const pending = new Map();
+  const keyOf = parsed => [parsed.type, parsed.id, parsed.season, parsed.episode].join('|');
+  const fresh = (entry, ttl) => entry && now() - entry.at < ttl;
+
+  function prune() {
+    const current = now();
+    for (const [key, entry] of complete) if (current - entry.at >= ttlMs) complete.delete(key);
+    for (const [key, entry] of pending) if (current - entry.at >= pendingTtlMs) pending.delete(key);
+  }
+
+  return {
+    keyOf,
+    getComplete(parsed) {
+      const entry = complete.get(keyOf(parsed));
+      return fresh(entry, ttlMs) ? entry.streams : null;
+    },
+    setComplete(parsed, streams) {
+      const key = keyOf(parsed);
+      if (!Array.isArray(streams) || !streams.length) return;
+      complete.set(key, { at: now(), streams });
+      pending.delete(key);
+      prune();
+    },
+    getPending(parsed) {
+      const entry = pending.get(keyOf(parsed));
+      return fresh(entry, pendingTtlMs) ? entry : null;
+    },
+    setPending(parsed, job) {
+      pending.set(keyOf(parsed), { at: now(), ...job });
+      prune();
+    },
+    clear() { complete.clear(); pending.clear(); }
+  };
 }
 
 function createVodResolver(options = {}) {
   const pending = new Map();
+  const cache = options.cache || createStreamCache(options.cacheOptions);
   return function resolve(type, id) {
     // parseVodId acepta IMDb, TMDB (con prefijo o número) y los IDs de anime
     // que usan los clientes (kitsu, mal, anilist, anidb) y TVDB.
     const parsed = parseVodId(type, id);
     if (!parsed || parsed.incomplete) return Promise.resolve([]);
+
+    // Un resultado completo reciente evita volver a golpear los sitios.
+    const cached = cache.getComplete(parsed);
+    if (cached) return Promise.resolve(cached);
+
     const key = [parsed.type, parsed.id, parsed.season, parsed.episode].join('|');
     if (pending.has(key)) return pending.get(key);
+
+    // Hay una resolución en curso que ya devolvió lo parcial: esta segunda
+    // petición sí puede esperar un poco más para completar la lista.
+    const running = cache.getPending(parsed);
+    const timeout = running ? CLIENT_BUDGET_MS * 2 : CLIENT_BUDGET_MS;
     // Solo se comparten búsquedas simultáneas: los enlaces pueden caducar.
-    const job = runVod(parsed, options).finally(() => pending.delete(key));
+    const job = (running && running.promise ? running.promise : runVod(parsed, {
+      ...options, cache, timeout
+    })).finally(() => pending.delete(key));
     pending.set(key, job);
     return job;
   };
 }
 
-module.exports = { PROVIDERS, TIME_BUDGET_MS, REQUEST_BUDGET, PROVIDER_REQUEST_BUDGET, loadProvider, parseVodId, streamHeaders, toStremioStream, budgetFetcher, runVod, createVodResolver };
+module.exports = { PROVIDERS, TIME_BUDGET_MS, CLIENT_BUDGET_MS, BACKGROUND_BUDGET_MS, REQUEST_BUDGET, PROVIDER_REQUEST_BUDGET, loadProvider, parseVodId, streamHeaders, toStremioStream, budgetFetcher, runVod, createStreamCache, createVodResolver };
