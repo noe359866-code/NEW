@@ -59,6 +59,16 @@ async function main() {
     await probe('pelis24 search', 'https://ww1.pelis24.blog/search?q=interstellar', playerPatterns);
     await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
   }
+  if (only === 'all' || only === 'fuegocine9') {
+    for (const url of [
+      'https://vimeos.unlimplay.com/?id=213375',
+      'https://vimeos.unlimplay.com/?id=213375&s=1&e=2',
+      'https://vimeos.unlimplay.com/?id=213375&season=1&episode=2',
+      'https://vimeos.unlimplay.com/?tmdb=213375&season=1&episode=2'
+    ]) {
+      await probe('ulp tv', url, [['json', '.*']]);
+    }
+  }
   if (only === 'all' || only === 'fuegocine8') {
     await probe('fc episodio', 'https://fuegocine.com/shows/visionquest/01x02-teseo/50',
       [['iframe', 'iframe'], ['watch', 'watch'], ['temporada', 'temporada|season']]);
