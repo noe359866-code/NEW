@@ -60,10 +60,15 @@ async function main() {
     await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
   }
   if (only === 'all' || only === 'fuegocine') {
-    await probe('fuegocine home', 'https://fuegocine.com/', playerPatterns);
     await probe('fuegocine watch', 'https://fuegocine.com/movies/watch/la-odisea/227', playerPatterns);
-    for (const candidate of ['/search?q=odisea', '/movies?search=odisea', '/search/movie?q=odisea', '/movies?q=odisea']) {
-      await probe('fuegocine búsqueda', 'https://fuegocine.com' + candidate, [['resultados', '/movies/details|/shows/details']]);
+    await probe('fuegocine show', 'https://fuegocine.com/shows/details/visionquest/24', [
+      ['temporadas/episodios', 'season|episode|temporada|capitulo'],
+      ['watch links', '/shows/watch']
+    ]);
+    for (const candidate of ['/movies?search=odisea', '/movies?q=odisea', '/movies?keyword=odisea',
+      '/movies?title=odisea', '/api/search?q=odisea', '/search/odisea']) {
+      await probe('fuegocine búsqueda', 'https://fuegocine.com' + candidate,
+        [['status/resultados', '/movies/details|/shows/details']]);
     }
   }
 }
