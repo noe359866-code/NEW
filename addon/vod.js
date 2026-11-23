@@ -9,7 +9,9 @@ const { mediaUrl, safeUrl, isAdvertisementUrl } = require('../sports/http');
 
 // FlixLatam queda fuera de la lista por decisión del usuario (Embed69 devuelve
 // 403 a las IP del servidor y su PoW ya no es fiable). Sigue en el repositorio.
-const PROVIDERS = ['tioanime', 'fuegocine', 'kdrama', 'framextv', 'latanime', 'cineplus123', 'pelishax', 'homecine', 'frikiserie'];
+// Solo fuentes que sirven en español: se retiraron TioAnime (japonés
+// subtitulado), KatDrama (hindi/inglés/original) y frameXTV (multi/inglés).
+const PROVIDERS = ['fuegocine', 'latanime', 'cineplus123', 'pelishax', 'homecine', 'frikiserie', 'doramaslatinox'];
 const TIME_BUDGET_MS = 30000;
 // Stremio y Nuvio abandonan la petición mucho antes que nuestro presupuesto:
 // si se tarda más, el cliente muestra «sin fuentes» aunque el addon sí tenga
@@ -108,6 +110,16 @@ function streamHeaders(raw) {
   return result;
 }
 
+/** ¿El enlace está en español? Misma regla que `isSpanishAudio` del core. */
+function isSpanishAudio(label) {
+  const value = String(label || '');
+  if (!value) return true;
+  if (/^Multi/i.test(value)) return true;
+  if (/^(?:Latino|Espa(?:n|ñ)ol|Castellano)/i.test(value)) return true;
+  if (/Subtitulado/i.test(value) && !/\b(?:english|ingles|inglés|hindi|portugu)/i.test(value)) return true;
+  return false;
+}
+
 function hostOf(url) {
   try { return new URL(String(url)).hostname.toLowerCase().replace(/^www\./, ''); } catch { return ''; }
 }
@@ -163,6 +175,11 @@ function toStremioStream(item) {
   if (!item || typeof item !== 'object') return null;
   const url = mediaUrl(item.url);
   if (!url || isAdvertisementUrl(url)) return null;
+  // Solo español: si la fuente declara un idioma que no es español y no lleva
+  // subtítulos en español, el enlace no se muestra. Las opciones sin etiqueta
+  // pasan (cada fuente ya decidió qué sirve) para no vaciar fuentes que no
+  // declaran idioma.
+  if (!isSpanishAudio(item.language)) return null;
   const source = String(item.name || item.provider || 'Fuente').slice(0, 100);
   // El idioma se rotula en el nombre para verlo sin abrir el detalle: Nuvio y
   // Stremio muestran `name` en la lista de opciones y `title`/`description` al

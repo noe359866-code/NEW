@@ -411,6 +411,25 @@ function languageLabel(text) {
 
 /** Prioridad de idioma al ordenar: el catálogo es hispano, así que el audio
  * en español va primero y las versiones solo subtituladas al final. */
+/**
+ * ¿La opción está en español? Solo pasan las etiquetas del addon que tienen
+ * audio o subtítulos en español. `Multi` no se puede comprobar (varios audios
+ * en el mismo archivo), así que se conserva: quitarlo eliminaría las fuentes
+ * que no declaran un idioma concreto. Sin etiqueta tampoco se descarta aquí:
+ * de eso se encarga cada fuente, que sí sabe qué sirve.
+ */
+function isSpanishAudio(label) {
+  var value = String(label || '');
+  if (!value) return true;
+  // Varios audios en el mismo archivo: no se puede descartar sin perder la fuente.
+  if (/^Multi/i.test(value)) return true;
+  if (/^(?:Latino|Espa(?:n|ñ)ol|Castellano)/i.test(value)) return true;
+  // Audio en otro idioma + subtítulos: los subtítulos son en español salvo que
+  // el propio texto diga en qué idioma están («English subtitles»).
+  if (/Subtitulado/i.test(value) && !/\b(?:english|ingles|inglés|hindi|portugu)/i.test(value)) return true;
+  return false;
+}
+
 function languageRank(label) {
   var value = String(label || '');
   if (/^Multi/i.test(value)) return 0;

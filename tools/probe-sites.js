@@ -512,6 +512,19 @@ async function round27() {
   await probeSnippets('dlx dooplay js', B + '/wp-content/themes/NIVEL-DIOSSSSSSSSS/assets/js/dooplay.js', [['ajax', 'doo_player_ajax[\s\S]{0,200}']], 300);
 }
 
+/* Ronda 28: la API de reproductores de DooPlay v2 de doramaslatinox. */
+async function round28() {
+  const B = 'https://doramaslatinox.com';
+  for (const u of [
+    '/wp-json/dooplayer/v2/43619/tv/1',
+    '/wp-json/dooplayer/v2/43619/tv/2',
+    '/wp-json/dooplayer/v2/43611/movie/1',
+    '/wp-json/dooplayer/v2/43611/movie/2'
+  ]) {
+    await probeSnippets('dlx api ' + u, B + u, [['json', '.*']], 400);
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -564,6 +577,7 @@ async function main() {
   if (only === 'doramaslatinox' || only === 'dlx') { await round25(); await round26(); }
   if (only === 'dlx26') await round26();
   if (only === 'dlx27') await round27();
+  if (only === 'dlx28') await round28();
 }
 
 if (require.main === module) {

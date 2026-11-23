@@ -102,7 +102,7 @@ function buildCoreBundle(core) {
     'unpackPlayerScript', 'pagePlayerLinks', 'embed69Links', 'solvePlayerPow', 'resolveDirectPlayers',
     'normalizeContentId', 'contentIdLabel', 'resolveRequestMedia', 'resolveAnimeMedia', 'wikidataLookup', 'aniZipLookup', 'getTextLimited', 'isSeriesLikeType',
     'solvePlayerPowHex', 'blockedObserver', 'imdbSlugTitle', 'cinemetaRequest', 'webResult', 'slugTitle',
-    'languageOf', 'languageLabel', 'languageRank', 'sortByQuality', 'uniqueBy'
+    'languageOf', 'languageLabel', 'languageRank', 'isSpanishAudio', 'sortByQuality', 'uniqueBy'
   ];
   const source = [
     "'use strict';",
