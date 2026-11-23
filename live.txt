@@ -1,27 +1,33 @@
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
-[nebula-es] http 500 https://fuegocine.com/search?…
 
-fuegocine: 0 enlace(s), 1251 ms; peticiones reales: 4, fallidas: 1
-  Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
-
-No se han probado ni descargado los medios.
-Metadatos simulados; las peticiones al sitio y los reproductores son reales.
-[nebula-es] http 500 https://fuegocine.com/search?…
-
-fuegocine: 0 enlace(s), 4544 ms; peticiones reales: 9, fallidas: 3
-  Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
+fuegocine: 1 enlace(s), 8660 ms; peticiones reales: 8, fallidas: 1
+  [2160p] La Odisea · Unlimplay
+  https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-tioanime: 4 enlace(s), 2206 ms; peticiones reales: 11, fallidas: 1
+fuegocine: 1 enlace(s), 7568 ms; peticiones reales: 8, fallidas: 1
+  [SD] Odisea · Unlimplay
+  https://p3.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
+
+No se han probado ni descargado los medios.
+Metadatos simulados; las peticiones al sitio y los reproductores son reales.
+
+fuegocine: 0 enlace(s), 5604 ms; peticiones reales: 9, fallidas: 2
+  Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
+
+No se han probado ni descargado los medios.
+Metadatos simulados; las peticiones al sitio y los reproductores son reales.
+
+tioanime: 4 enlace(s), 1892 ms; peticiones reales: 11, fallidas: 1
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
   https://www.yourupload.com/embed/999_1.mp4
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
-  https://vidcache.net:8161/a20261122nk3Ml5VD3Gp/video.mp4
+  https://vidcache.net:8161/a20261122e6YtwOsOqak/video.mp4
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
   https://www.yourupload.com/embed/2690_1.mp4
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
-  https://vidcache.net:8161/a202611221QS41661P16/video.mp4
+  https://vidcache.net:8161/a20261122KA1VPJeMUCa/video.mp4
 
 No se han probado ni descargado los medios.
