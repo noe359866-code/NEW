@@ -1,24 +1,35 @@
 
-===== dlx api /wp-json/dooplayer/v2/43619/tv/1 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/1
-status=200 type=application/json; charset=UTF-8 bytes=71 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/1
---- json:
-   …{"embed_url":"https:\/\/playmogo.com\/e\/bmzfuwzlu7z5","type":"iframe"}…
-   …{"embed_url":"https:\/\/playmogo.com\/e\/bmzfuwzlu7z5","type":"iframe"}…
+===== dlx abyss player :: https://player.abyssplayer.com/K8R6OOjS7
+status=200 type=text/html; charset=utf-8 bytes=11067 final=https://player.abyssplayer.com/K8R6OOjS7
+--- eval/packer:
+   (sin coincidencias)
+--- m3u8:
+   …E html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>bbb_sunflower_2160p_30fps_normal.mp4</title><style>#overlay, html {background: #000;}#overlay,#playback {bottom: 0;position: absolute}#overlay, svg {cursor: pointer}* {margin: 0;padd…
+--- data/kws:
+   (sin coincidencias)
+--- scripts:
+   …0.75rem;height: 0.75rem;animation: 1s linear infinite spin}@keyframes spin {0% {transform: rotate(0)}100% {transform: rotate(360deg)}}</style><script src="https://iamcdn.net/player/jwplayer.min.js"></script><script src="https://iamcdn.net/player/jwpsrv.js"></script><script src="https://iamcdn.net/pl…
+   …ames spin {0% {transform: rotate(0)}100% {transform: rotate(360deg)}}</style><script src="https://iamcdn.net/player/jwplayer.min.js"></script><script src="https://iamcdn.net/player/jwpsrv.js"></script><script src="https://iamcdn.net/player/jwplayer.core.controls.html5.js"></script><script src="https…
+   …(360deg)}}</style><script src="https://iamcdn.net/player/jwplayer.min.js"></script><script src="https://iamcdn.net/player/jwpsrv.js"></script><script src="https://iamcdn.net/player/jwplayer.core.controls.html5.js"></script><script src="https://iamcdn.net/player/stretch-plugin-settings.min.js"></scri…
+   …t><script src="https://iamcdn.net/player/jwpsrv.js"></script><script src="https://iamcdn.net/player/jwplayer.core.controls.html5.js"></script><script src="https://iamcdn.net/player/stretch-plugin-settings.min.js"></script><link rel="stylesheet" href="https://iamcdn.net/player-v2/danmu/style.css" /><…
+   …tps://iamcdn.net/player/stretch-plugin-settings.min.js"></script><link rel="stylesheet" href="https://iamcdn.net/player-v2/danmu/style.css" /><script src="https://iamcdn.net/player-v2/danmu/app.js"></script><script>const isTouchScreen = "ontouchstart" in window || "onmsgesturechange" in window;const…
+   …";img.onload = () => img.parentNode&&img.parentNode.removeChild(img);img.onerror = () => {};document.body.appendChild(img);}}}, 1e3);</script><script src="https://iamcdn.net/player-v2/core.bundle.js"></script><script>window.addEventListener("load", ()=> {const datas = "eyJzbHVnIjoiSzhSNk9PalM3IiwibW…
+--- iframe:
+   (sin coincidencias)
 
-===== dlx api /wp-json/dooplayer/v2/43619/tv/2 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/2
-status=200 type=application/json; charset=UTF-8 bytes=75 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43619/tv/2
---- json:
-   …{"embed_url":"https:\/\/player.abyssplayer.com\/WeCIsZdM2","type":"iframe"}…
-   …{"embed_url":"https:\/\/player.abyssplayer.com\/WeCIsZdM2","type":"iframe"}…
+===== dlx playmogo :: https://playmogo.com/e/bmzfuwzlu7z5
+status=403 type=text/html; charset=UTF-8 bytes=5732 final=https://playmogo.com/e/bmzfuwzlu7z5
+--- eval/packer:
+   (sin coincidencias)
+--- m3u8:
+   (sin coincidencias)
+--- sources:
+   (sin coincidencias)
+--- status:
+   …ntent{margin:8rem auto;padding-left:1.5rem;max-width:60rem}@media (width <= 720px){.main-content{margin-top:4rem}}#challenge-error-text{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMi…
+   …"></head><body><div class="main-wrapper" role="main"><div class="main-content"><noscript><div class="h2"><span id="challenge-error-text">Enable JavaScript and cookies to continue</span></div></noscript></div></div><script nonce="soMjIRGPGMuq0RnoR7eVQ…
 
-===== dlx api /wp-json/dooplayer/v2/43611/movie/1 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43611/movie/1
-status=200 type=application/json; charset=UTF-8 bytes=71 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43611/movie/1
---- json:
-   …{"embed_url":"https:\/\/playmogo.com\/e\/ecxjq7k4gexj","type":"iframe"}…
-   …{"embed_url":"https:\/\/playmogo.com\/e\/ecxjq7k4gexj","type":"iframe"}…
-
-===== dlx api /wp-json/dooplayer/v2/43611/movie/2 :: https://doramaslatinox.com/wp-json/dooplayer/v2/43611/movie/2
-status=200 type=application/json; charset=UTF-8 bytes=75 final=https://doramaslatinox.com/wp-json/dooplayer/v2/43611/movie/2
---- json:
-   …{"embed_url":"https:\/\/player.abyssplayer.com\/dKVtiA4on","type":"iframe"}…
-   …{"embed_url":"https:\/\/player.abyssplayer.com\/dKVtiA4on","type":"iframe"}…
+===== dlx abyss embed :: https://abyss.to/
+status=200 type=text/html; charset=utf-8 bytes=49202 final=https://abyss.to/
+--- js:
+   (sin coincidencias)
