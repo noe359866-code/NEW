@@ -62,11 +62,11 @@ jobs:
           MSG="${{ github.event.head_commit.message }}"
           MODE="${{ inputs.probe }}"
           if [ -z "$MODE" ]; then
-            for tag in dlx42 dlx41 dlx40 dlx39 dlx38 dlx37 dlx36 dlx35 dlx34 dlx33 dlx32 dlx31 dlx30 dlx29 dlx28 dlx27 dlx26 dlx probe24; do
+            for tag in dlx34 dlx33 dlx32 dlx31 dlx30 dlx29 dlx28 dlx27 dlx26 dlx probe24; do
               case "$MSG" in *"[$tag]"*) MODE="$tag"; break;; esac
             done
             case "$MODE" in
-              dlx42) MODE=dlx42;; dlx41) MODE=dlx41;; dlx40) MODE=dlx40;; dlx39) MODE=dlx39;; dlx38) MODE=dlx38;; dlx37) MODE=dlx37;; dlx36) MODE=dlx36;; dlx35) MODE=dlx35;; dlx34) MODE=dlx34;; dlx33) MODE=dlx33;; dlx32) MODE=dlx32;; dlx31) MODE=dlx31;; dlx30) MODE=dlx30;; dlx29) MODE=dlx29;; dlx28) MODE=dlx28;; dlx27) MODE=dlx27;; dlx26) MODE=dlx26;;
+              dlx34) MODE=dlx34;; dlx33) MODE=dlx33;; dlx32) MODE=dlx32;; dlx31) MODE=dlx31;; dlx30) MODE=dlx30;; dlx29) MODE=dlx29;; dlx28) MODE=dlx28;; dlx27) MODE=dlx27;; dlx26) MODE=dlx26;;
               dlx) MODE=doramaslatinox;; probe24) MODE=round24only;; *) MODE=all;;
             esac
           fi
@@ -89,23 +89,13 @@ jobs:
           } > live.txt 2>&1
       # El artefacto y los registros no son accesibles desde este entorno, así
       # que el resultado se confirma en la misma rama (con [skip ci]).
-      - name: Descargar activos del reproductor
-        if: ${{ matrix.node == '22' && contains(github.event.head_commit.message, '[assets]') }}
-        run: node tools/fetch-assets.js || true
-      - uses: actions/upload-artifact@v4
-        if: ${{ matrix.node == '22' && contains(github.event.head_commit.message, '[assets]') }}
-        with:
-          name: probe-assets
-          path: .probe-assets/
-          retention-days: 3
       - name: Publicar la sonda en la rama
-        if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]') || contains(github.event.head_commit.message, '[live]') || contains(github.event.head_commit.message, '[assets]')) }}
+        if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]') || contains(github.event.head_commit.message, '[live]'))) }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git checkout -B "$GITHUB_REF_NAME"
-          # El bundle del reproductor (si [assets]) se sube para analizarlo.
-          git add -f probe.txt live.txt .probe-assets 2>/dev/null || true
+          git add -f probe.txt live.txt 2>/dev/null || git add -f probe.txt
           git diff --cached --quiet && exit 0
           git commit -m 'sonda de fuentes [skip ci]' || true
           git push origin "HEAD:$GITHUB_REF_NAME" || true

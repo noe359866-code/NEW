@@ -12,4 +12,3 @@ coverage/
 # Salida de la sonda de fuentes (tools/probe-sites.js)
 probe.txt
 live.txt
-.probe-assets/

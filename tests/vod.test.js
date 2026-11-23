@@ -409,3 +409,45 @@ test('DoramasLatinox deduce el episodio desde el slug y no abre la ficha lenta',
   assert.ok(fetch.calls.some(call => call.url.includes('/episodio/gift-1x2-episodio-2')));
   assert.ok(!fetch.calls.some(call => /\/series\/gift\/?$/.test(call.url)), 'no abre la ficha de la serie');
 });
+
+// Carga de Abyss tal como la publica el reproductor: Base64 -> JSON con
+// `media` cifrado (bytes escapados como \uXXXX). Se fabrica aquí con el mismo
+// esquema que usa el sitio para no depender de contenido de terceros.
+function abyssPage({ userId, slug, md5Id, media }) {
+  const raw = JSON.stringify({ slug, md5_id: Number(md5Id), user_id: Number(userId), media });
+  return `<html><script>window.addEventListener("load", ()=> {const datas = "${Buffer.from(raw, 'latin1').toString('base64')}"`;
+}
+
+test('DoramasLatinox: descifra la carga de Abyss (AES-CTR) y pide su CDN', async () => {
+  const CryptoJS = require('crypto-js');
+  const slug = 'K8R6OOjS7';
+  const userId = 13771;
+  const md5Id = 23103742;
+  const keyHex = CryptoJS.MD5(`${userId}:${slug}:${md5Id}`).toString(CryptoJS.enc.Hex);
+  const key = CryptoJS.enc.Latin1.parse(keyHex);
+  const media = {
+    mp4: {
+      sources: [
+        { label: '720p', res_id: 4, size: 144260576, codec: 'h264', status: true, url: 'https://abc123.sssrr.org' }
+      ]
+    }
+  };
+  const plain = Buffer.from(JSON.stringify(media), 'utf8').toString('latin1');
+  const cipher = CryptoJS.AES.encrypt(CryptoJS.enc.Latin1.parse(plain), key, {
+    iv: CryptoJS.enc.Latin1.parse(keyHex.slice(0, 16)), mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.NoPadding
+  }).ciphertext.toString(CryptoJS.enc.Latin1);
+
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/tv/999', tmdbTv(999, 'GIFT')],
+    ['doramaslatinox.com/?s=', '<div class="result-item"><article><div class="title"><a href="https://doramaslatinox.com/series/gift/">GIFT</a></div></article></div>'],
+    ['doramaslatinox.com/episodio/gift-1x2-episodio-2', `<li class='dooplay_player_option' data-type='tv' data-post='43619' data-nume='2'><span class='title'>FAST</span></li>`],
+    ['wp-json/dooplayer/v2/43619/tv/2', { __json: { embed_url: 'https://player.abyssplayer.com/K8R6OOjS7' } }],
+    ['player.abyssplayer.com/K8R6OOjS7', abyssPage({ userId, slug, md5Id, media: cipher })]
+  ]);
+  const streams = await loadProvider('doramaslatinox', { fetch }).getStreams('999', 'tv', 1, 2);
+  // Se llega al reproductor y se descifra su carga; el CDN de Abyss solo sirve
+  // rutas /sora/<tamaño>/<token> sin extensión, que el addon no entrega como
+  // medio directo (solo .m3u8/.mp4), así que aquí no hay enlaces.
+  assert.ok(fetch.calls.some(call => call.url.includes('player.abyssplayer.com/K8R6OOjS7')));
+  assert.equal(streams.length, 0);
+});

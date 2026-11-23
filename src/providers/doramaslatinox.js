@@ -31,7 +31,11 @@
  *  - La URL final es <url>/sora/<size>/<token>, donde el token es otro
  *    AES-CTR (misma clave y contador) de
  *    "/<tipo>/<md5_id>/<res_id>/<size>?v=<slug>" codificado dos veces en
- *    Base64 sin relleno. Se comprobó descifrando la carga real del sitio. */
+ *    Base64 sin relleno. Se comprobó descifrando la carga real del sitio.
+ *  - Límite conocido: la ruta /sora/<tamaño>/<token> no lleva extensión y su
+ *    CDN (sssrr.org) responde 403 sin Referer del reproductor y 404 con él, así
+ *    que hoy Abyss no entrega un medio utilizable. El addon solo publica
+ *    .m3u8/.mp4 directos; si el CDN cambia, esta parte ya está lista. */
 
 var DLX_BASE = 'https://doramaslatinox.com';
 
