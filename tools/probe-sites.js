@@ -558,6 +558,17 @@ async function round30() {
   ], 260);
 }
 
+/* Ronda 31: ¿hay más reproductores (nume 3..8) y cuáles son? */
+async function round31() {
+  const B = 'https://doramaslatinox.com';
+  for (const u of ['/wp-json/dooplayer/v2/43619/tv/3', '/wp-json/dooplayer/v2/43619/tv/4',
+    '/wp-json/dooplayer/v2/43619/tv/5', '/wp-json/dooplayer/v2/43619/tv/6',
+    '/wp-json/dooplayer/v2/43619/tv/7', '/wp-json/dooplayer/v2/43619/tv/8',
+    '/wp-json/dooplayer/v2/43611/movie/3', '/wp-json/dooplayer/v2/43611/movie/4']) {
+    await probeSnippets('dlx opts ' + u, B + u, [['json', '.*']], 200);
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -613,6 +624,7 @@ async function main() {
   if (only === 'dlx28') await round28();
   if (only === 'dlx29') await round29();
   if (only === 'dlx30') await round30();
+  if (only === 'dlx31') await round31();
 }
 
 if (require.main === module) {
