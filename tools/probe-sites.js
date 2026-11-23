@@ -407,6 +407,29 @@ async function round22() {
     [['url en tabla', 'https?[^"\'\\s]{0,120}\\.(?:m3u8|mp4)'], ['file', 'm3u8|master\\.']], 400);
 }
 
+/* Ronda 23: descomprimir el packer del reproductor y ver a qué apunta. */
+function unpackPacker(source) {
+  const m = /\}\s*\(\s*'((?:\\.|[^'\\])*)'\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*'((?:\\.|[^'\\])*)'\s*\.split\('\|'\)/.exec(source);
+  if (!m) return '';
+  const radix = Number(m[2]);
+  const words = m[4].split('|');
+  const body = m[1].replace(/\\'/g, "'").replace(/\\\\/g, '\\');
+  return body.replace(/\b[0-9A-Za-z]+\b/g, (token) => {
+    const n = parseInt(token, radix);
+    return Number.isFinite(n) && words[n] ? words[n] : token;
+  });
+}
+
+async function round23() {
+  const res = await fetchRaw('https://vidhidevip.com/v/7edm3v3ca7mf');
+  const packed = /eval\(function\(p,a,c,k,e,d\)[\s\S]*?\.split\('\|'\)\)\)/.exec(res.text || '');
+  if (!packed) { console.log('===== vidhide unpack\nsin packer'); return; }
+  const out = unpackPacker(packed[0]);
+  console.log('===== vidhide unpack\\n' + out.slice(0, 3000));
+  const urls = out.match(/https?:[^"'\\s]{10,200}/g) || [];
+  console.log('--- urls:\n' + urls.slice(0, 10).map(u => '   ' + u).join('\n'));
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -452,6 +475,7 @@ async function main() {
   if (only === 'all' || only === 'round20') await round20();
   if (only === 'all' || only === 'round21') await round21();
   if (only === 'all' || only === 'round22') await round22();
+  if (only === 'all' || only === 'round23') await round23();
 }
 
 if (require.main === module) {
