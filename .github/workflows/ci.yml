@@ -53,10 +53,18 @@ jobs:
             node --check "$file"
           done
       # Los push sí están permitidos: se activa escribiendo [probe] en el
-      # mensaje del commit (o a mano con la entrada `probe`).
+      # mensaje del commit (o a mano con la entrada `probe`). El resultado se
+      # publica como artefacto porque los registros no son accesibles aquí.
       - name: Sonda de fuentes
         if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]')) }}
-        run: node tools/probe-sites.js "${{ inputs.probe || 'all' }}"
+        run: node tools/probe-sites.js "${{ inputs.probe || 'all' }}" > probe.txt 2>&1 || true
+      - name: Publicar la sonda
+        if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]')) }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonda-fuentes
+          path: probe.txt
+          retention-days: 5
       - name: Arrancar el addon y comprobar el manifiesto
         run: |
           PORT=7099 node addon/server.js &
