@@ -180,7 +180,8 @@ function homecineStream(info, item) {
     (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
     (item.name ? ' · ' + item.name : '');
   return makeStream({ name: 'HomeCine', title: title, provider: 'homecine', url: item.url,
-    quality: item.quality && item.quality !== 'SD' ? item.quality : parseQuality(title + ' ' + item.url + ' ' + (item.label || '')),
+    quality: item.quality && item.quality !== 'SD'
+      ? item.quality : parseQuality(title + ' ' + item.url + ' ' + (item.label || '')),
     language: languageLabel(item.language) || languageLabel(item.label || ''),
     headers: item.headers, subtitles: item.subtitles });
 }

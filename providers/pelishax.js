@@ -2021,7 +2021,10 @@ function resolveDirectPlayers(seeds, options) {
   function addMedia(url, ref, item, subtitles) {
     var media = directMediaUrl(url);
     if (!media || isPlayerAdvertisement(media)) return;
+    // La calidad la declara la ficha del sitio (pestañas, botones): se conserva
+    // para que el nombre del stream no tenga que adivinarla de la URL.
     var result = { url: media, name: item.name, language: item.language,
+      quality: item.quality || '',
       headers: { Referer: ref || item.referer, 'User-Agent': UA, Origin: playerOrigin(ref || item.referer) } };
     if (subtitles && subtitles.length) result.subtitles = subtitles;
     found.push(result);
@@ -2215,6 +2218,33 @@ function pelishaxSearch(info) {
   });
 }
 
+/** Candidatas: la ficha por id de TMDB y, si falla, el buscador.
+ * Las fichas de PeliShax usan el id de TMDB como número de ruta
+ * (/movies/155 = The Dark Knight), así que normalmente no hay que buscar. */
+function pelishaxCandidates(info) {
+  var direct = [];
+  if (info.tmdbId) {
+    var url = PELISHAX_BASE + (info.isTv ? '/series/' : '/movies/') + info.tmdbId;
+    var site = pelishaxSiteUrl(url, PELISHAX_BASE + '/');
+    if (site) direct.push({ url: site, title: info.title || '', score: 1 });
+  }
+  if (!direct.length) return pelishaxSearch(info);
+  return pelishaxReadPage(direct[0].url).then(function (page) {
+    // Una ficha que responde con servidores es la correcta: el id es de TMDB.
+    if (page && /server-item/i.test(page.html)) return direct;
+    return pelishaxSearch(info);
+  }, function () { return pelishaxSearch(info); });
+}
+
+/** Idioma declarado en la ficha: «Español Latino», «English 🇺🇸 Sub ES»… */
+function pelishaxLang(value) {
+  var text = String(value || '').replace(/[\u{1F1E6}-\u{1F1FF}]/gu, ' ');
+  var label = languageLabel(text);
+  // «English … Sub ES» declara idioma y subtítulos a la vez.
+  if (label && /\bsubs?\b|\bsubtitul/i.test(text)) return label + ' Subtitulado';
+  return label;
+}
+
 /** Botones de servidor: data-link (embed) y data-lang (idioma del sitio). */
 function pelishaxServers(html, base) {
   var out = [];
@@ -2229,7 +2259,7 @@ function pelishaxServers(html, base) {
     var lang = String(attrOf(tag, 'data-lang') || '').trim().slice(0, 40);
     // El texto del propio <li> puede repetir el idioma: se conserva como pista.
     var label = stripTags(text.slice(re.lastIndex, re.lastIndex + 200)).replace(/\s+/g, ' ').trim();
-    out.push({ url: url, name: pelishaxHostName(url), language: languageLabel(lang) || languageLabel(label),
+    out.push({ url: url, name: pelishaxHostName(url), language: pelishaxLang(lang) || pelishaxLang(label),
       label: lang || label });
   }
   return uniqueBy(out, function (item) { return item.url; });
@@ -2270,13 +2300,48 @@ function pelishaxReadPage(url) {
   }, function () { return null; });
 }
 
+/** Resuelve los servidores: OK.ru necesita leer su reproductor, los demás van
+ * por el extractor genérico. Se descartan los que no dan HLS/MP4. */
+function pelishaxResolveServers(servers) {
+  if (!servers.length) return Promise.resolve([]);
+  var okru = servers.filter(function (item) { return /ok\.ru\/(?:video|videoembed)\//i.test(item.url); });
+  var rest = servers.filter(function (item) { return okru.indexOf(item) === -1; });
+  var jobs = [];
+  if (rest.length) jobs.push(resolveDirectPlayers(rest, { maxDepth: 4, maxPages: 5 }));
+  okru.forEach(function (item) {
+    jobs.push(pelishaxOkru(item));
+  });
+  return Promise.all(jobs).then(function (groups) {
+    var out = [];
+    for (var i = 0; i < groups.length; i++) out = out.concat(groups[i] || []);
+    return out;
+  });
+}
+
+/** OK.ru del catálogo de PeliShax: se lee el reproductor y se toman sus MP4/HLS. */
+function pelishaxOkru(server) {
+  return request(server.url, { timeout: 9000, retries: 0, pageOnly: true }).then(function (res) {
+    if (!res.ok || !res.text) return [];
+    var medias = findDirectMedia(res.text, server.url);
+    var out = [];
+    for (var i = 0; i < medias.length && out.length < 4; i++) {
+      var url = directMediaUrl(medias[i]);
+      if (!url || isPlayerAdvertisement(url)) continue;
+      out.push({ url: url, name: 'OK.ru', language: server.language || pelishaxLang(server.label),
+        quality: server.quality || '',
+        headers: { Referer: server.url, 'User-Agent': UA, Origin: 'https://ok.ru' } });
+    }
+    return out;
+  }, function () { return []; });
+}
+
 function pelishaxStream(info, item) {
   var title = (info.title || ('TMDB ' + (info.tmdbId || ''))) +
     (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
     (item.name ? ' · ' + item.name : '');
   return makeStream({ name: 'PeliShax', title: title, provider: 'pelishax', url: item.url,
     quality: parseQuality(title + ' ' + item.url + ' ' + (item.label || '')),
-    language: languageLabel(item.language) || languageLabel(item.label || ''),
+    language: item.language || pelishaxLang(item.label || ''),
     headers: item.headers, subtitles: item.subtitles });
 }
 
@@ -2286,24 +2351,21 @@ function pelishaxGetStreams(tmdbId, mediaType, season, episode) {
     if (!info || !info.title) return [];
     if (info.isTv && (!Number.isInteger(info.season) || info.season < 1 ||
         !Number.isInteger(info.episode) || info.episode < 1)) return [];
-    return pelishaxSearch(info).then(function (candidates) {
+    return pelishaxCandidates(info).then(function (candidates) {
       return mapLimit(candidates.slice(0, 2), 2, function (candidate) {
         return pelishaxReadPage(candidate.url).then(function (page) {
           if (!page) return [];
           // Película: los servidores están en la propia ficha.
           if (!info.isTv) {
             var servers = pelishaxServers(page.html, page.url);
-            return servers.length
-              ? resolveDirectPlayers(servers, { maxDepth: 4, maxPages: 5 }) : [];
+            return pelishaxResolveServers(servers);
           }
           // Serie: la ficha trae el enlace del episodio concreto.
           var episodeUrl = pelishaxEpisodeUrl(page.html, info);
           if (!episodeUrl) return [];
           return pelishaxReadPage(episodeUrl).then(function (episodePage) {
             if (!episodePage) return [];
-            var servers = pelishaxServers(episodePage.html, episodePage.url);
-            return servers.length
-              ? resolveDirectPlayers(servers, { maxDepth: 4, maxPages: 5 }) : [];
+            return pelishaxResolveServers(pelishaxServers(episodePage.html, episodePage.url));
           });
         });
       }).then(function (groups) {

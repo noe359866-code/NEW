@@ -2021,7 +2021,10 @@ function resolveDirectPlayers(seeds, options) {
   function addMedia(url, ref, item, subtitles) {
     var media = directMediaUrl(url);
     if (!media || isPlayerAdvertisement(media)) return;
+    // La calidad la declara la ficha del sitio (pestañas, botones): se conserva
+    // para que el nombre del stream no tenga que adivinarla de la URL.
     var result = { url: media, name: item.name, language: item.language,
+      quality: item.quality || '',
       headers: { Referer: ref || item.referer, 'User-Agent': UA, Origin: playerOrigin(ref || item.referer) } };
     if (subtitles && subtitles.length) result.subtitles = subtitles;
     found.push(result);
@@ -2302,7 +2305,8 @@ function homecineStream(info, item) {
     (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
     (item.name ? ' · ' + item.name : '');
   return makeStream({ name: 'HomeCine', title: title, provider: 'homecine', url: item.url,
-    quality: item.quality && item.quality !== 'SD' ? item.quality : parseQuality(title + ' ' + item.url + ' ' + (item.label || '')),
+    quality: item.quality && item.quality !== 'SD'
+      ? item.quality : parseQuality(title + ' ' + item.url + ' ' + (item.label || '')),
     language: languageLabel(item.language) || languageLabel(item.label || ''),
     headers: item.headers, subtitles: item.subtitles });
 }

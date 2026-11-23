@@ -198,11 +198,9 @@ test('Latanime separa el título destacado de las etiquetas de tipo, idioma y a�
   assert.equal(streams[0].url, 'https://cdn.example/episode.mp4');
 });
 
-test('PeliShax: película → servidores declarados con data-lang → HLS directo', async () => {
+test('PeliShax: la ficha se abre por id de TMDB, sin pasar por el buscador', async () => {
   const fetch = mockFetch([
     ['api.themoviedb.org/3/movie/5084', tmdbMovie(5084, 'El señor de los anillos')],
-    ['pelishaxpro.com/search?q=', `<a href="/movies/5084"><img src="/p.jpg"><h3>El señor de los anillos</h3></a>
-      <a href="/series/5084"><h3>El señor de los anillos (serie)</h3></a>`],
     ['pelishaxpro.com/movies/5084', `<ul class="servers">
       <li class="server-item" data-link="https://vidara.to/e/latino1" data-lang="Español Latino"><strong>Vidara</strong></li>
       <li class="server-item" data-link="https://streamwish.to/e/jap1" data-lang="Japonés"><strong>StreamWish</strong></li>
@@ -220,14 +218,16 @@ test('PeliShax: película → servidores declarados con data-lang → HLS direct
   assert.equal(latino.type, 'direct');
   assert.match(latino.title, /Vidara/);
   assert.equal(streams.find(item => item.url.includes('/jap/')).language, 'Japonés');
+  assert.ok(!fetch.calls.some(call => call.url.includes('/search?q=')), 'el id de TMDB basta');
   assertNoMediaFetch(fetch);
 });
 
 test('PeliShax: serie usa la ficha del episodio concreto y no la de la temporada', async () => {
   const fetch = mockFetch([
     ['api.themoviedb.org/3/tv/575', tmdbTv(575, 'El marginal')],
-    ['pelishaxpro.com/search?q=', '<a href="/series/575"><h3>El marginal</h3></a>'],
-    ['pelishaxpro.com/series/575', `<div class="episode-list" id="season-1"><a href="/tv/575/1/1"><div class="episode-item">1</div></a>
+    // La ficha de la serie lista reproductores y episodios en la misma página.
+    ['pelishaxpro.com/series/575', `<li class="server-item" data-link="https://vidmoly.biz/embed-trailer.html" data-lang="Español Latino">Vidmoly</li>
+      <div class="episode-list" id="season-1"><a href="/tv/575/1/1"><div class="episode-item">1</div></a>
       <a href="/tv/575/1/2"><div class="episode-item">2</div></a></div>`],
     ['pelishaxpro.com/tv/575/1/2', '<li class="server-item" data-link="https://vidhidevip.com/v/ep2" data-lang="Español Latino">VidHide</li>'],
     ['vidhidevip.com/v/ep2', '<source src="https://cdn.pelishax.example/s01e02.mp4">']
@@ -316,4 +316,16 @@ test('FrikiSeries: un título sin enlace real no produce resultados', async () =
   const streams = await loadProvider('frikiserie', { fetch }).getStreams('1', 'tv', 1, 1);
   assert.equal(streams.length, 0);
   assert.ok(!fetch.calls.some(call => call.url.includes('ok.ru')));
+});
+
+test('PeliShax: los servidores de OK.ru se leen de su reproductor, no se descartan', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/movie/155', tmdbMovie(155, 'The Dark Knight')],
+    ['pelishaxpro.com/movies/155', `<li class="server-item" data-link="https://ok.ru/video/7652106504857" data-lang="English">OK.ru</li>`],
+    ['ok.ru/video/7652106504857', `data-options="{&quot;flashvars&quot;:{&quot;metadata&quot;:{&quot;hlsManifestUrl&quot;:&quot;https://vd9.okcdn.ru/video.m3u8?cmd=videoPlayerCdn\\u0026expires=9&quot;}}}"`]
+  ]);
+  const streams = await loadProvider('pelishax', { fetch }).getStreams('155', 'movie', null, null);
+  assert.equal(streams.length, 1);
+  assert.equal(streams[0].url, 'https://vd9.okcdn.ru/video.m3u8?cmd=videoPlayerCdn&expires=9');
+  assert.equal(streams[0].language, 'Inglés');
 });
