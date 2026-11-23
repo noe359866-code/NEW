@@ -605,6 +605,22 @@ async function round33() {
   }
 }
 
+/* Ronda 34: cómo obtiene Abyss la clave de AES-CTR. */
+async function round34() {
+  const res = await fetchRaw('https://iamcdn.net/player-v2/core.bundle.js');
+  const raw = res.body || '';
+  console.log('===== dlx abyss key');
+  console.log('bytes=' + raw.length);
+  for (const needle of ['getKey', 'decryptStr', 'AES-CTR', 'kws', '/api/', 'subtitles']) {
+    let i = -1, n = 0;
+    while (n < 3 && (i = raw.indexOf(needle, i + 1)) !== -1) {
+      console.log('--- ' + needle + ' @' + i + ': ' + JSON.stringify(raw.slice(Math.max(0, i - 300), i + 500)));
+      n++;
+    }
+    if (!n) console.log('--- ' + needle + ': sin coincidencias');
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -663,6 +679,7 @@ async function main() {
   if (only === 'dlx31') await round31();
   if (only === 'dlx32') await round32();
   if (only === 'dlx33') await round33();
+  if (only === 'dlx34') await round34();
 }
 
 if (require.main === module) {
