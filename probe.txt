@@ -125,7 +125,7 @@ status=200 type=application/json bytes=389 final=https://vimeos.unlimplay.com/?i
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=_SoueLqgXxCTeCsuViGkawUUZIBRu5bMrVuqmXcT8jw&s=1795413336&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
+   "direct": "https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=PoglexbXyx_EvgBNVo_Zwvem2UDoctzRKcls6Ohmc8A&s=1795413736&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
    }
    }
    }
@@ -1477,7 +1477,7 @@ status=200 type=application/javascript bytes=888072 final=https://framextv.cc/as
    `;function fm(e){return e?e.replace(/:?\s*(?:Season\s*\d+|Final\s*Season|\d+(?:st|nd|rd|th)\s*Season|Part\s*\d+|Cour\s*\d+|2nd\s*Season|3rd\s*Season|4th\s*Season|5th\s*Season|6th\s*Season|7th\s*Season).*$/i,``).replace(/:?\s*(?:Entertainment\s*District|Hashira\s*Training|Mugen\s*Train|Swordsmith\s*V…
 
 ===== vidly :: https://vidly.pro/tv/117376/1/1
-status=200 type=text/html; charset=utf-8 bytes=153625 final=https://vidly.pro/tv/117376/1/1
+status=200 type=text/html; charset=utf-8 bytes=153637 final=https://vidly.pro/tv/117376/1/1
 --- iframe/embed: 0 líneas
 --- servers/ajax: 2 líneas
    <!DOCTYPE html><html lang="en" class="__variable_d8ebd1"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7396d6900d8fa621.css" data-precedence="next"/><link rel="stylesheet" href="/_next/static/css/e1ab8…
@@ -2332,8 +2332,7 @@ status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/m
 --- servers/ajax: 0 líneas
 --- json-inline: 0 líneas
 --- fichas: 0 líneas
---- episodios: 1 líneas
-   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
+--- episodios: 0 líneas
 
 ===== kdesa búsqueda :: https://kdesa.stream/search?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/search?q=dune
@@ -2350,7 +2349,8 @@ status=403 type=text/html; charset=UTF-8 bytes=5641 final=https://kdesa.stream/?
 ===== kdesa búsqueda :: https://kdesa.stream/buscar?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/buscar?q=dune
 --- fichas: 0 líneas
---- episodios: 0 líneas
+--- episodios: 1 líneas
+   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
 
 ===== kdesa búsqueda :: https://kdesa.stream/api/search?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/api/search?q=dune
@@ -2360,8 +2360,7 @@ status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/a
 ===== kdesa home :: https://kdesa.stream/
 status=403 type=text/html; charset=UTF-8 bytes=5583 final=https://kdesa.stream/
 --- fichas: 0 líneas
---- episodios: 1 líneas
-   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
+--- episodios: 0 líneas
 
 ===== homecine home :: https://www3.homecine.to/
 status=200 type=text/html; charset=UTF-8 bytes=44523 final=https://www3.homecine.to/
@@ -2390,18 +2389,18 @@ status=200 type=text/html; charset=UTF-8 bytes=44523 final=https://www3.homecine
    <div class="hm-button"><a href="https://www3.homecine.to/cartelera" class="btn btn-lg btn-successful">Si deseas ver nuestra cartelera de películas, series, documentales y mas. CLICK AQUI!</a></div>
 
 ===== homecine película :: https://www3.homecine.to/pequenos-secretos
-status=200 type=text/html; charset=UTF-8 bytes=76645 final=https://www3.homecine.to/pequenos-secretos
+status=200 type=text/html; charset=UTF-8 bytes=76520 final=https://www3.homecine.to/pequenos-secretos
 --- iframe/embed: 12 líneas
    <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
    <IFRAME SRC="https://fastream.to/embed-zkfc7qenyh7k.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
    <IFRAME SRC="https://fastream.to/embed-djqspksbj10d.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
    <IFRAME SRC="https://fastream.to/embed-8bkmoz4qvu3d.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
-   <a href="https://www3.homecine.to/the-bad-shepherd" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="The Bad Shepherd" title="">
-   <a href="https://www3.homecine.to/los-criminales-de-noviembre" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Los criminales de Noviembre" title="">
-   <a href="https://www3.homecine.to/training-day-dia-de-entrenamiento" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Training Day (Día de entrenamiento)" title="">
-   <a href="https://www3.homecine.to/cuando-los-angeles-duermen" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Cuando los ángeles duermen" title="">
-   <a href="https://www3.homecine.to/quemadura" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Quemadura" title="">
-   <a href="https://www3.homecine.to/en-tierras-peligrosas" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="En tierras peligrosas" title="">
+   <a href="https://www3.homecine.to/arana" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Araña" title="">
+   <a href="https://www3.homecine.to/retribution" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Retribution" title="">
+   <a href="https://www3.homecine.to/juego-de-ladrones-2-pantera" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Juego de Ladrones 2: Pantera" title="">
+   <a href="https://www3.homecine.to/el-virtuoso" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="El Virtuoso" title="">
+   <a href="https://www3.homecine.to/harta" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Harta" title="">
+   <a href="https://www3.homecine.to/la-ultima-mirada" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="La última mirada" title="">
    <iframe id="iframe-trailer" width="600" height="450" src="//www.youtube.com/embed/_8fxE0UmBxc" frameborder="0" allowfullscreen></iframe><div itemscope itemtype="http://schema.org/VideoObject">
    <script type='text/javascript'>jQuery(document).ready(function() {(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)}…
 --- servers/ajax: 21 líneas
@@ -2466,28 +2465,28 @@ status=200 type=text/html; charset=UTF-8 bytes=76645 final=https://www3.homecine
    <div class="btn-group btn-group-justified embed-selector" style="margin-bottom:1px;">
    <span style="" class="lnk lnk-title">Server</span>
    <div class="btn-group btn-group-justified embed-selector" >
-   <div data-movie-id="245625" class="ml-item">
-   <a href="https://www3.homecine.to/the-bad-shepherd" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="The Bad Shepherd" title="">
-   <img data-original="https://image.tmdb.org/t/p/w185/7AKfaFB0RDHxJjwpD77jljBUCNn.jpg"class="lazy thumb mli-thumb" alt="The Bad Shepherd">
-   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-245625" data-nonce="5ea2191620" data-post-id="245625" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
-   </div><div data-movie-id="6495" class="ml-item">
-   <a href="https://www3.homecine.to/los-criminales-de-noviembre" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Los criminales de Noviembre" title="">
-   <img data-original="https://www3.homecine.to/wp-content/uploads/2017/11/november-criminals-6495-poster.jpg"class="lazy thumb mli-thumb" alt="Los criminales de Noviembre">
-   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-6495" data-nonce="5ea2191620" data-post-id="6495" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
-   </div><div data-movie-id="128029" class="ml-item">
-   <a href="https://www3.homecine.to/training-day-dia-de-entrenamiento" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Training Day (Día de entrenamiento)" title="">
-   <img data-original="https://image.tmdb.org/t/p/w185/ocQ1YJDGzeeAeu1SyctRYvuBcCJ.jpg"class="lazy thumb mli-thumb" alt="Training Day (Día de entrenamiento)">
+   <div data-movie-id="93191" class="ml-item">
+   <a href="https://www3.homecine.to/arana" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Araña" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/2HhUCxEj07NUP2VagllIbvW5sf2.jpg"class="lazy thumb mli-thumb" alt="Araña">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-93191" data-nonce="5ea2191620" data-post-id="93191" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="232318" class="ml-item">
+   <a href="https://www3.homecine.to/retribution" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Retribution" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/vBl0qexSJrQiUTvcXgQpGFUmP7a.jpg"class="lazy thumb mli-thumb" alt="Retribution">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-232318" data-nonce="5ea2191620" data-post-id="232318" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="261474" class="ml-item">
+   <a href="https://www3.homecine.to/juego-de-ladrones-2-pantera" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Juego de Ladrones 2: Pantera" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/wsfOvNfUGogZGfSDfMN4hCOM1kR.jpg"class="lazy thumb mli-thumb" alt="Juego de Ladrones 2: Pantera">
 
 ===== homecine serie :: https://www3.homecine.to/series/mouse
-status=200 type=text/html; charset=UTF-8 bytes=71720 final=https://www3.homecine.to/series/mouse
+status=200 type=text/html; charset=UTF-8 bytes=71691 final=https://www3.homecine.to/series/mouse
 --- iframe/embed: 9 líneas
    <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
-   <a href="https://www3.homecine.to/series/dou-shen-ji" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Dou Shen Ji" title="">
-   <a href="https://www3.homecine.to/series/jamas-de-los-jamases" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Jamás de los jamases" title="">
-   <a href="https://www3.homecine.to/series/goedam" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Goedam" title="">
-   <a href="https://www3.homecine.to/series/asesinato-en-el-campus" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Asesinato en el campus" title="">
-   <a href="https://www3.homecine.to/series/capitani" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Capitani" title="">
-   <a href="https://www3.homecine.to/series/useless-celebrity-history" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Useless Celebrity History" title="">
+   <a href="https://www3.homecine.to/series/garoden-el-camino-del-lobo-solitario" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Garōden: El camino del lobo solitario" title="">
+   <a href="https://www3.homecine.to/series/pretty-hard-cases" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Pretty Hard Cases" title="">
+   <a href="https://www3.homecine.to/series/no-soy-un-robot" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="No soy un robot" title="">
+   <a href="https://www3.homecine.to/series/teacup" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Teacup" title="">
+   <a href="https://www3.homecine.to/series/hombre-vs-bebe" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Hombre vs. Bebé" title="">
+   <a href="https://www3.homecine.to/series/zmora" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Zmora" title="">
    <iframe id="iframe-trailer" width="600" height="450" src="//www.youtube.com/embed/i_K9U3gE9os" frameborder="0" allowfullscreen></iframe><div itemscope itemtype="http://schema.org/VideoObject">
    <script type='text/javascript'>jQuery(document).ready(function() {(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)}…
 --- servers/ajax: 12 líneas
@@ -2525,30 +2524,30 @@ status=200 type=text/html; charset=UTF-8 bytes=71720 final=https://www3.homecine
    <div class="les-title"> <i class="fa fa-server mr5"></i><strong>Season 1</strong></div>
    <a data-target="#pop-trailer" data-toggle="modal" class="pop-trailer btn btn-primary">
    <meta itemprop="embedUrl" content="https://www.youtube.com/embed/i_K9U3gE9os"><meta itemprop="name" content="Mouse">
-   <div data-movie-id="166039" class="ml-item">
-   <a href="https://www3.homecine.to/series/dou-shen-ji" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Dou Shen Ji" title="">
-   <img data-original="https://image.tmdb.org/t/p/w185/7Qc3ZwxbQ5sVT4yw2BmqgTmQhsL.jpg"class="lazy thumb mli-thumb" alt="Dou Shen Ji">
-   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-166039" data-nonce="5ea2191620" data-post-id="166039" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
-   </div><div data-movie-id="256381" class="ml-item">
-   <a href="https://www3.homecine.to/series/jamas-de-los-jamases" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Jamás de los jamases" title="">
-   <img data-original="https://image.tmdb.org/t/p/w185/w0N79spypO6ucqwpCRydwzBofDv.jpg"class="lazy thumb mli-thumb" alt="Jamás de los jamases">
-   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-256381" data-nonce="5ea2191620" data-post-id="256381" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
-   </div><div data-movie-id="104150" class="ml-item">
-   <a href="https://www3.homecine.to/series/goedam" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Goedam" title="">
-   <img data-original="https://image.tmdb.org/t/p/w185/8uki437wGs5bOCnFOBf3x6xnnqe.jpg"class="lazy thumb mli-thumb" alt="Goedam">
-   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-104150" data-nonce="5ea2191620" data-post-id="104150" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
-   </div><div data-movie-id="206364" class="ml-item">
-   <a href="https://www3.homecine.to/series/asesinato-en-el-campus" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Asesinato en el campus" title="">
-   <img data-original="https://image.tmdb.org/t/p/w185/xwNn6YDaGsoX9QYyeKqAXqIGtsz.jpg"class="lazy thumb mli-thumb" alt="Asesinato en el campus">
-   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-206364" data-nonce="5ea2191620" data-post-id="206364" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
-   </div><div data-movie-id="127352" class="ml-item">
-   <a href="https://www3.homecine.to/series/capitani" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Capitani" title="">
-   <img data-original="https://image.tmdb.org/t/p/w185/AltQRrBvpQNecDNFtrAQmCNAqvq.jpg"class="lazy thumb mli-thumb" alt="Capitani">
-   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-127352" data-nonce="5ea2191620" data-post-id="127352" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
-   </div><div data-movie-id="110403" class="ml-item">
-   <a href="https://www3.homecine.to/series/useless-celebrity-history" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Useless Celebrity History" title="">
-   <img data-original="https://image.tmdb.org/t/p/w185/o6R0Fl3laDQnUu9s8Qg8x5bcjQ9.jpg"class="lazy thumb mli-thumb" alt="Useless Celebrity History">
-   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-110403" data-nonce="5ea2191620" data-post-id="110403" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   <div data-movie-id="251226" class="ml-item">
+   <a href="https://www3.homecine.to/series/garoden-el-camino-del-lobo-solitario" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Garōden: El camino del lobo solitario" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/oErcrWuqjHqigYuovMhqym5VmzW.jpg"class="lazy thumb mli-thumb" alt="Garōden: El camino del lobo solitario">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-251226" data-nonce="5ea2191620" data-post-id="251226" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="134662" class="ml-item">
+   <a href="https://www3.homecine.to/series/pretty-hard-cases" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Pretty Hard Cases" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/logy60poXm2R5RKPE0YaArgcZv1.jpg"class="lazy thumb mli-thumb" alt="Pretty Hard Cases">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-134662" data-nonce="5ea2191620" data-post-id="134662" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="231504" class="ml-item">
+   <a href="https://www3.homecine.to/series/no-soy-un-robot" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="No soy un robot" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/9VoCJArt3KtRDtfxJRRp7vkzwi.jpg"class="lazy thumb mli-thumb" alt="No soy un robot">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-231504" data-nonce="5ea2191620" data-post-id="231504" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="258535" class="ml-item">
+   <a href="https://www3.homecine.to/series/teacup" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Teacup" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/cP5zuQvWAFrgWptS0iXvDI3iND.jpg"class="lazy thumb mli-thumb" alt="Teacup">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-258535" data-nonce="5ea2191620" data-post-id="258535" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="276301" class="ml-item">
+   <a href="https://www3.homecine.to/series/hombre-vs-bebe" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Hombre vs. Bebé" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/15g7XBiKyzHh9D6ZV5kls5JyVJz.jpg"class="lazy thumb mli-thumb" alt="Hombre vs. Bebé">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-276301" data-nonce="5ea2191620" data-post-id="276301" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="290845" class="ml-item">
+   <a href="https://www3.homecine.to/series/zmora" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Zmora" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/qPwbr4eZzE6cOXVvCxemy3t4pK7.jpg"class="lazy thumb mli-thumb" alt="Zmora">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-290845" data-nonce="5ea2191620" data-post-id="290845" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-close"></i>
    <iframe id="iframe-trailer" width="600" height="450" src="//www.youtube.com/embed/i_K9U3gE9os" frameborder="0" allowfullscreen></iframe><div itemscope itemtype="http://schema.org/VideoObject">
    <meta itemprop="embedUrl" content="https://www.youtube.com/embed/i_K9U3gE9os"><meta itemprop="name" content="Mouse">
@@ -2572,13 +2571,11 @@ status=200 type=text/html; charset=UTF-8 bytes=74726 final=https://www3.homecine
    {"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://www3.homecine.to/wp-includes/js/wp-emoji-release.min.js?ver=61a1ec5563d9e94042326995ee3b4633"}}
 
 ===== homecine búsqueda :: https://www3.homecine.to/search?q=mouse
-status=200 type=text/html; charset=UTF-8 bytes=75165 final=https://www3.homecine.to/series/search-party?q=mouse
---- fichas: 5 líneas
+status=200 type=text/html; charset=UTF-8 bytes=74655 final=https://www3.homecine.to/series/search-party?q=mouse
+--- fichas: 3 líneas
    <li id="menu-item-24266" class="menu-item menu-item-type-taxonomy menu-item-object-category current-tvshows-ancestor current-menu-parent current-tvshows-parent menu-item-24266"><a href="https://www3.homecine.to/genre/peliculas-de-comedia">Comedia</a></li>
    <li id="menu-item-24290" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-24290"><a href="https://www3.homecine.to/peliculas-nuevas">Peliculas</a></li>
    <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a></p>
-   <div class="block">Genre: <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a>, <a href="https://www3.homecine.to/genre/familia" rel="category tag">Familia</a> </div>
-   <div class="block">Genre: <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a> </div>
 --- episodios: 40 líneas
    <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
    <link rel="icon" href="https://www3.homecine.to/wp-content/uploads/2019/10/cropped-ICONO512x512-1-192x192.png" sizes="192x192" />
@@ -2622,11 +2619,11 @@ status=200 type=text/html; charset=UTF-8 bytes=75165 final=https://www3.homecine
    <a href="https://www3.homecine.to/episode/search-party-temporada-2-capitulo-6">
 
 ===== homecine búsqueda :: https://www3.homecine.to/buscar?q=mouse
-status=200 type=text/html; charset=UTF-8 bytes=70164 final=https://www3.homecine.to/series/buscarse-la-vida-en-brooklyn?q=mouse
+status=200 type=text/html; charset=UTF-8 bytes=70248 final=https://www3.homecine.to/series/buscarse-la-vida-en-brooklyn?q=mouse
 --- fichas: 4 líneas
    <li id="menu-item-24266" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-24266"><a href="https://www3.homecine.to/genre/peliculas-de-comedia">Comedia</a></li>
    <li id="menu-item-24290" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-24290"><a href="https://www3.homecine.to/peliculas-nuevas">Peliculas</a></li>
-   <div class="block">Genre: <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a>, <a href="https://www3.homecine.to/genre/sci-fi-fantasy" rel="category tag">Sci-Fi &amp; Fantasy</a> </div>
+   <div class="block">Genre: <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a> </div>
    <div class="block">Genre: <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a> </div>
 --- episodios: 40 líneas
    <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
@@ -2774,8 +2771,8 @@ status=200 type=text/html; charset=utf-8 bytes=60472 final=https://pelishaxpro.c
 --- players: 24 líneas
    this.setAttribute('data-blocked-target', value);
    get: function() { return this.getAttribute('data-blocked-target') || '_self'; }
-   <button onclick="if (!window.__cfRLUnblockHandlers) return false; copyToClipboard()" data-cf-modified-5d7938d0448a9f2c494ffb6e-="">Copiar enlace</button>
-   <span class="show-more" id="toggle-text" onclick="if (!window.__cfRLUnblockHandlers) return false; toggleText()" data-cf-modified-5d7938d0448a9f2c494ffb6e-="">Mostrar más</span>
+   <button onclick="if (!window.__cfRLUnblockHandlers) return false; copyToClipboard()" data-cf-modified-093372c87ff149c2c2db1262-="">Copiar enlace</button>
+   <span class="show-more" id="toggle-text" onclick="if (!window.__cfRLUnblockHandlers) return false; toggleText()" data-cf-modified-093372c87ff149c2c2db1262-="">Mostrar más</span>
    <div class="video-embed">
    <div class="server-dropdown">
    <button class="server-dropdown-button" id="server-dropdown-button">
@@ -2794,8 +2791,8 @@ status=200 type=text/html; charset=utf-8 bytes=60472 final=https://pelishaxpro.c
    <a href="/animes" class="mobile-menu-item" data-path="animes">
    <a href="https://pelishaxpro.com/admin/cache-manager.html" class="mobile-menu-item" data-path="profile">
    const itemPath = item.getAttribute('data-path');
-   <button id="close-btn" class="close-btn" onclick="if (!window.__cfRLUnblockHandlers) return false; closeModal()" data-cf-modified-5d7938d0448a9f2c494ffb6e-="">Cerrar</button>
-   <script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="5d7938d0448a9f2c494ffb6e-|49" defer></script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxK…
+   <button id="close-btn" class="close-btn" onclick="if (!window.__cfRLUnblockHandlers) return false; closeModal()" data-cf-modified-093372c87ff149c2c2db1262-="">Cerrar</button>
+   <script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="093372c87ff149c2c2db1262-|49" defer></script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxK…
 
 ===== pelishax serie :: https://pelishaxpro.com/series/575
 status=200 type=text/html; charset=utf-8 bytes=66554 final=https://pelishaxpro.com/series/575
@@ -2813,16 +2810,16 @@ status=200 type=text/html; charset=utf-8 bytes=66554 final=https://pelishaxpro.c
 --- players: 12 líneas
    this.setAttribute('data-blocked-target', value);
    get: function() { return this.getAttribute('data-blocked-target') || '_self'; }
-   <button onclick="if (!window.__cfRLUnblockHandlers) return false; copyToClipboard()" data-cf-modified-51222416ed7b9c3d93232d87-="">Copiar enlace</button>
-   <span class="show-more" id="toggle-text" onclick="if (!window.__cfRLUnblockHandlers) return false; toggleText()" data-cf-modified-51222416ed7b9c3d93232d87-="">Mostrar más</span>
+   <button onclick="if (!window.__cfRLUnblockHandlers) return false; copyToClipboard()" data-cf-modified-837591e9cad44e9dd89b487b-="">Copiar enlace</button>
+   <span class="show-more" id="toggle-text" onclick="if (!window.__cfRLUnblockHandlers) return false; toggleText()" data-cf-modified-837591e9cad44e9dd89b487b-="">Mostrar más</span>
    <a href="/" class="mobile-menu-item" data-path="/">
    <a href="/movies" class="mobile-menu-item" data-path="movies">
    <a href="/series" class="mobile-menu-item" data-path="series">
    <a href="/animes" class="mobile-menu-item" data-path="animes">
    <a href="https://pelishaxpro.com/admin/cache-manager.html" class="mobile-menu-item" data-path="profile">
    const itemPath = item.getAttribute('data-path');
-   <button id="close-btn" class="close-btn" onclick="if (!window.__cfRLUnblockHandlers) return false; closeModal()" data-cf-modified-51222416ed7b9c3d93232d87-="">Cerrar</button>
-   <script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="51222416ed7b9c3d93232d87-|49" defer></script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxK…
+   <button id="close-btn" class="close-btn" onclick="if (!window.__cfRLUnblockHandlers) return false; closeModal()" data-cf-modified-837591e9cad44e9dd89b487b-="">Cerrar</button>
+   <script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="837591e9cad44e9dd89b487b-|49" defer></script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxK…
 
 ===== pelishax búsqueda :: https://pelishaxpro.com/search?q=dune
 status=200 type=text/html; charset=utf-8 bytes=75302 final=https://pelishaxpro.com/search?q=dune
@@ -2831,8 +2828,8 @@ status=200 type=text/html; charset=utf-8 bytes=75302 final=https://pelishaxpro.c
    <html lang="es">
    <head>
    <!-- Google tag (gtag.js) -->
-   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T3VH375N76" type="67d50a2df28adad9afd16755-text/javascript"></script>
-   <script type="67d50a2df28adad9afd16755-text/javascript">
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T3VH375N76" type="3601bc10903ae1adc3edcc83-text/javascript"></script>
+   <script type="3601bc10903ae1adc3edcc83-text/javascript">
    window.dataLayer = window.dataLayer || [];
    function gtag(){dataLayer.push(arguments);}
    gtag('js', new Date());
@@ -2990,8 +2987,8 @@ status=200 type=text/html; charset=utf-8 bytes=75296 final=https://pelishaxpro.c
    <html lang="es">
    <head>
    <!-- Google tag (gtag.js) -->
-   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T3VH375N76" type="19f88564e842e13c0aa67672-text/javascript"></script>
-   <script type="19f88564e842e13c0aa67672-text/javascript">
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T3VH375N76" type="416570204c878cf382ddcd0c-text/javascript"></script>
+   <script type="416570204c878cf382ddcd0c-text/javascript">
    window.dataLayer = window.dataLayer || [];
    function gtag(){dataLayer.push(arguments);}
    gtag('js', new Date());
@@ -3087,7 +3084,7 @@ status=200 type=text/html; charset=utf-8 bytes=117880 final=https://pelishaxpro.
    <form action="/search" class="search-form"> <input class="search-input" name="search" placeholder="Buscar Películas..."> <span class="hide-search"></span> </form>
 
 ===== homecine película data-* :: https://www3.homecine.to/pequenos-secretos
-status=200 type=text/html; charset=UTF-8 bytes=76737 final=https://www3.homecine.to/pequenos-secretos
+status=200 type=text/html; charset=UTF-8 bytes=76685 final=https://www3.homecine.to/pequenos-secretos
 --- data:
    …"top-user-content guest"> <style tyle="text/css"> </style> <a href="#pt-login" class="btn btn-successful btn-login" title="Login" data-target="" data-toggle="modal"> LOGIN</a> </div> </div> <div id="search"> <div class="search-content"> <form method="get" id="searchform" action="https://ww…
    …"searchform" action="https://www3.homecine.to"> <input class="form-control search-input" type="text" placeholder="Search.." name="s" id="s" value="" data-swplive="true"> <button type="submit"><i class="fa fa-search"></i></button> </form> </div> </div> <div class="clearfix"></div> </div> </…
@@ -3137,9 +3134,9 @@ status=200 type=text/html; charset=utf-8 bytes=60472 final=https://pelishaxpro.c
 --- m3u8:
    (sin coincidencias)
 --- onclick:
-   …tyle="display:none;"> <a id="fbShare" href="#" target="_blank">Facebook</a> <a id="waShare" href="#" target="_blank">WhatsApp</a> <button onclick="if (!window.__cfRLUnblockHandlers) return false; copyToClipboard()" data-cf-modified-885686cf1c5fd03a2fa32263-="">Copiar enlace</button> </…
-   …ad portuaria, los habitantes se ven envueltos en una desesperada lucha por la supervivencia.</p> <span class="show-more" id="toggle-text" onclick="if (!window.__cfRLUnblockHandlers) return false; toggleText()" data-cf-modified-885686cf1c5fd03a2fa32263-="">Mostrar más</span> </div…
-   …<div class="modal-message">No tienes conexión a Internet. Por favor, verifica tu conexión.</div> <button id="close-btn" class="close-btn" onclick="if (!window.__cfRLUnblockHandlers) return false; closeModal()" data-cf-modified-885686cf1c5fd03a2fa32263-="">Cerrar</button> </div> …
+   …tyle="display:none;"> <a id="fbShare" href="#" target="_blank">Facebook</a> <a id="waShare" href="#" target="_blank">WhatsApp</a> <button onclick="if (!window.__cfRLUnblockHandlers) return false; copyToClipboard()" data-cf-modified-78bddc970a20580573f3ae66-="">Copiar enlace</button> </…
+   …ad portuaria, los habitantes se ven envueltos en una desesperada lucha por la supervivencia.</p> <span class="show-more" id="toggle-text" onclick="if (!window.__cfRLUnblockHandlers) return false; toggleText()" data-cf-modified-78bddc970a20580573f3ae66-="">Mostrar más</span> </div…
+   …<div class="modal-message">No tienes conexión a Internet. Por favor, verifica tu conexión.</div> <button id="close-btn" class="close-btn" onclick="if (!window.__cfRLUnblockHandlers) return false; closeModal()" data-cf-modified-78bddc970a20580573f3ae66-="">Cerrar</button> </div> …
 
 ===== frikiserie ng-state bytes=798877
 claves: titulo, slug, totalCapitulos, fecha, imagen, descripcion, video, tipo, irAListaVideo, __nghData__
@@ -3226,14 +3223,14 @@ status=404 type=text/plain; charset=utf-8 bytes=9 final=https://www.frikiserie.c
    (sin coincidencias)
 
 ===== homecine fastream :: https://fastream.to/embed-zkfc7qenyh7k.html
-status=200 type=text/html; charset=UTF-8 bytes=7632 final=https://fastream.to/embed-zkfc7qenyh7k.html
+status=200 type=text/html; charset=UTF-8 bytes=7629 final=https://fastream.to/embed-zkfc7qenyh7k.html
 --- iframe/embed: 1 líneas
-   <script type='text/javascript'>eval(function(p,a,c,k,e,d){while(c--)if(k[c])p=p.replace(new RegExp('\\b'+c.toString(a)+'\\b','g'),k[c]);return p}('b("8s").8r({8q:[{3e:"w://3i.18.u/8p/19/3h/8o/8n.8m?t=8l-8k&s=37&e=8j&v=38&i=0.3&8i=0"}],8h:"w://3i.18.u/i/19/3h/1a.8g",8f:"3g%",8e:"3g%",8d:"8c",8b:"",8a…
+   <script type='text/javascript'>eval(function(p,a,c,k,e,d){while(c--)if(k[c])p=p.replace(new RegExp('\\b'+c.toString(a)+'\\b','g'),k[c]);return p}('b("8r").8q({8p:[{3e:"w://3i.18.u/8o/19/3h/8n/8m.8l?t=8k&s=37&e=8j&v=38&i=0.3&8i=0"}],8h:"w://3i.18.u/i/19/3h/1a.8g",8f:"3g%",8e:"3g%",8d:"8c",8b:"",8a:"8…
 --- hls/mp4: 0 líneas
 --- json: 0 líneas
 
 ===== homecine tabs :: https://www3.homecine.to/pequenos-secretos
-status=200 type=text/html; charset=UTF-8 bytes=76947 final=https://www3.homecine.to/pequenos-secretos
+status=200 type=text/html; charset=UTF-8 bytes=76118 final=https://www3.homecine.to/pequenos-secretos
 --- tabs:
    …s="fa fa-server mr5"></i> <strong>Server Cload</strong> </div> <div class="les-content"><a href="#tab1">480p - Latino</a></div> </li> <li><div class="les-title"> <i class="fa fa-server mr5"…
    …a-server mr5"></i> <strong>Server Cload</strong> </div> <div class="les-content"><a href="#tab1">480p - Latino</a></div> </li> <li><div class="les-title"> <i class="fa fa-server mr5"></i> …
@@ -3459,7 +3456,7 @@ status=200 type=text/html; charset=utf-8 bytes=66566 final=https://pelishaxpro.c
    … </p> </div> </div> </a> <a href="/tv/247718/1/4"> <div class="episode-item"> <img src="https://image.tmdb…
 
 ===== homecine serie tabs :: https://www3.homecine.to/series/mouse
-status=200 type=text/html; charset=UTF-8 bytes=71178 final=https://www3.homecine.to/series/mouse
+status=200 type=text/html; charset=UTF-8 bytes=71930 final=https://www3.homecine.to/series/mouse
 --- tabs:
    …ml-title span { background:none; }#menu .sub-container {border:0;}#menu ul.top-menu li a {color:#ff722c!important; }}.tvseason .les-content a:hover {border-bottom:3px solid #e65e2a;background:#f3702f;}.home-main #hm-search button, .search-s…
    … span { background:none; }#menu .sub-container {border:0;}#menu ul.top-menu li a {color:#ff722c!important; }}.tvseason .les-content a:hover {border-bottom:3px solid #e65e2a;background:#f3702f;}.home-main #hm-search button, .search-suggest u…
@@ -3474,3 +3471,46 @@ status=200 type=text/html; charset=UTF-8 bytes=71178 final=https://www3.homecine
    …="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1"> Episode 1 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-2"> Episode 2 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-c…
    …/episode/mouse-temporada-1-capitulo-1"> Episode 1 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-2"> Episode 2 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-3"> Episode 3 </a…
    …-temporada-1-capitulo-1"> Episode 1 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-2"> Episode 2 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-3"> Episode 3 </a> <a href=…
+
+===== pelishax tv episodio :: https://pelishaxpro.com/tv/247718/1/1
+status=200 type=text/html; charset=utf-8 bytes=74321 final=https://pelishaxpro.com/tv/247718/1/1
+--- servers: 4 líneas
+   <li class="server-item" data-link="https://vidhidevip.com/v/4y3ruku8qhtl" data-lang="Español Latino">
+   <li class="server-item" data-link="https://streamwish.to/e/ikofap9od1s2" data-lang="Español Latino">
+   <li class="server-item" data-link="https://streamwish.to/e/u8jqwoe4cnpt" data-lang="Español Latino">
+   <li class="server-item" data-link="https://vidhidevip.com/v/4y3ruku8qhtl" data-lang="Español Latino">
+--- fichas: 0 líneas
+
+===== homecine episodio :: https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1
+status=200 type=text/html; charset=UTF-8 bytes=80220 final=https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1
+--- tabs: 2 líneas
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <div class="les-content"><a href="#tab1">HD 720p - Subtitulado</a></div>
+--- iframes: 1 líneas
+   <IFRAME SRC="https://fastream.to/embed-na7qvkup7rt4.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
+--- hls/mp4: 0 líneas
+
+===== friki ficha estado :: https://www.frikiserie.com/ver-serie/marco
+status=200 type=text/html; charset=utf-8 bytes=856062 final=https://www.frikiserie.com/ver-serie/marco
+--- video:
+   …230,q-70,f-auto","descripcion":"Serie de TV (1966-1969). Cool McCool es una especie de James Bond que atrapa a los malhechores. Harry es su hermano.","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"Sherlock Holmes","slug":"sherlock-holmes","totalCapitulos":"26","fecha":"1984","imagen"…
+   … más intrigantes y enfrentarse con el malvado profesor Moriarty, en unas aventuras con mucha acción, finales inesperados y una buena dosis de humor.","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"Zone Of Enders ","slug":"zone-of-enders","totalCapitulos":"26","fecha":"2001","imagen":…
+   …ecide aprovechar un viaje llevando una carga desconocida en un cajon gigantesco de color rosa. Spin-off del videojuego de Konami \"Zone of Enders\".","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"Initial D","slug":"initial-d","totalCapitulos":"26","fecha":"1998","imagen":"https://ik…
+   … corredores callejeros: Los Akina Speedstars). Takumi, a ojos de sus amigos, no tiene la más mínima idea de coches ni tampoco el más mínimo interés.","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"Aoki Densetsu Shoot","slug":"aoki-densetsu-shoot","totalCapitulos":"58","fecha":"1993",…
+   …aishi Kenji y Kazuhiro Hiramatsu) entrarán a formar parte del Kakegawa, un equipo donde milita la estrella juvenil e ídolo de Toshi, Yoshiharu Kubo.","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"El campeon","slug":"el-campeon","totalCapitulos":"47","fecha":"1980","imagen":"https://…
+   …es hacia el desafío definitivo por el título mundial. Una secuela cruda de redención, obsesión y sacrificio que lleva la leyenda de Joe a su clímax.","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"El grupo increíble","slug":"el-grupo-increi-ble","totalCapitulos":"16","fecha":"1980",…
+--- capitulos:
+   (sin coincidencias)
+--- okru:
+   …k rel="preconnect" href="https://pics.filmaffinity.com"> <link rel="dns-prefetch" href="//filmaffinity.com"> <link rel="preconnect" href="https://ok.ru"> <link rel="dns-prefetch" href="https://ok.ru"> <link rel="alternate" hreflang="es" href="https://www.frikiserie.com/"> <!-- Open Graph -…
+   …y.com"> <link rel="dns-prefetch" href="//filmaffinity.com"> <link rel="preconnect" href="https://ok.ru"> <link rel="dns-prefetch" href="https://ok.ru"> <link rel="alternate" hreflang="es" href="https://www.frikiserie.com/"> <!-- Open Graph --> <meta property="og:site_name" content="Friki…
+   …kiSeries/caratulas/los-caballeros-del-zodiaco-1986.jpg?tr=w-150,h-100,q-70,f-auto","descripcion":"Los Caballeros del Zodiaco (1986)","video":"https://ok.ru/videoembed/14398744169198","tipo":"serie","irAListaVideo":false},{"titulo":"Sakura Card Captor - Temporada 1, 2 y 3 (1998)","slug":"sakura-card-…
+   …ra-card-captor-temporada-1-2-y-3-1998.jpg?tr=w-150,h-100,q-70,f-auto","descripcion":"Sakura Card Captor - Temporada 1, 2 y 3 (1998)","video":"https://ok.ru/videoembed/14600894483182","tipo":"serie","irAListaVideo":false},{"titulo":"Generador Rex - Temporada 1, 2 y 3 (Cartoon N.)","slug":"generador-r…
+   …ador-rex-temporada-1-2-y-3-cartoon-n.jpg?tr=w-150,h-100,q-70,f-auto","descripcion":"Generador Rex - Temporada 1, 2 y 3 (Cartoon N.)","video":"https://ok.ru/videoembed/15862881192686","tipo":"serie","irAListaVideo":false},{"titulo":"Digimon Adventure - Temporada 1 (1999)","slug":"digimon-adventure-te…
+   …/caratulas/digimon-adventure-temporada-1-1999.jpg?tr=w-150,h-100,q-70,f-auto","descripcion":"Digimon Adventure - Temporada 1 (1999)","video":"https://ok.ru/videoembed/14208264768238","tipo":"serie","irAListaVideo":false},{"titulo":"Kenichi: El discípulo más fuerte (2006)","slug":"kenichi-el-disc-pul…
+
+===== okru embed :: https://ok.ru/videoembed/14398744169198
+status=200 type=text/html;charset=UTF-8 bytes=47956 final=https://ok.ru/videoembed/14398744169198
+--- hls/mp4: 1 líneas
+   //# sourceURL=xray.init.js</script><script src="//st-ok.cdn-vk.ru/res/js/userKeeper_eqgk1owd.js"></script><script>(function(m,e,t,r,i,k,a) { m[i]=m[i] || function() { (m[i].a = m[i].a || []).push(arguments); }; m[i].l = 1 * new Date(); k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.asyn…
+--- json: 0 líneas
