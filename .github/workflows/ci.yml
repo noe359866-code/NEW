@@ -81,7 +81,9 @@ jobs:
             node tools/live-check.js --site fuegocine --id 1368337 --type movie --title "Odisea" --year 1997 || true
             node tools/live-check.js --site fuegocine --id 213375 --type tv --season 1 --episode 2 --title "VisionQuest" --year 2025 --season-counts 8 || true
             node tools/check-provider.js flixlatam 157336 movie --title "Interstellar" --year 2014 --trace || true
-            node tools/check-provider.js flixlatam 117376 movie --title "Vincenzo" --year 2021 --query "Vincenzo" --trace || true
+            node tools/check-provider.js flixlatam 117376 movie --title "Vincenzo" --year 2021 --query "Vincenzo" || true
+            node tools/check-provider.js flixlatam 603 movie --title "The Matrix" --year 1999 --trace || true
+            node tools/check-provider.js flixlatam 157336 movie --title "Interstellar" --year 2014 --query "Interestelar" --trace || true
             node tools/check-provider.js flixlatam 117376 tv --season 1 --episode 1 --title "Vincenzo" --year 2021 --season-counts 20 --trace || true
             node tools/live-check.js --site doramaslatinox --id 285751 --type tv --season 1 --episode 2 --title "GIFT" --year 2026 --season-counts 2 --trace || true
             node tools/live-check.js --site latanime --id 37854 --type tv --season 1 --episode 1 --title "One Piece" --year 1999 || true
