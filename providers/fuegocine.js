@@ -2135,8 +2135,9 @@ function unlimplayId(url) {
 
 function unlimplayStreams(id, referer, season, episode) {
   if (!id) return Promise.resolve([]);
+  // Para series la API exige season/episode; con s/e responde 404.
   var endpoint = 'https://vimeos.unlimplay.com/?id=' + id +
-    (season ? '&s=' + season + '&e=' + episode : '');
+    (season ? '&season=' + season + '&episode=' + episode : '');
   return getJson(endpoint, {
     timeout: 8000, retries: 0, headers: { Accept: 'application/json' }
   }).then(function (data) {
