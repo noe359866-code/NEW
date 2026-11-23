@@ -222,9 +222,13 @@ function resolveFromWeb(id, mediaType) {
       if (ids.tvdbId) {
         return getJson('https://api.tvmaze.com/lookup/shows?thetvdb=' + ids.tvdbId, { timeout: 8000, retries: 0 })
           .then(function (show) {
-            return show && show.name ? webResult(id, type, String(show.name).slice(0, 200), parseYear(show.premiered || ''), null) : null;
+            if (show && show.name) return webResult(id, type, String(show.name).slice(0, 200), parseYear(show.premiered || ''), null);
+            return ids.title ? webResult(id, type, String(ids.title).slice(0, 200), ids.year || null, null) : null;
           }, function () { return null; });
       }
+      // Sin IMDb ni TVMaze queda el título original de la ficha, que es el
+      // que usan estos sitios cuando la clave de TMDB no está configurada.
+      if (ids.title) return webResult(id, type, String(ids.title).slice(0, 200), ids.year || null, null);
       return null;
     }, function () { return null; });
   }

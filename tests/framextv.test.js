@@ -91,3 +91,25 @@ test('frameXTV: Wikidata traduce TMDB sin clave de API (película declarada como
   // Nunca se consulta el servicio SPARQL: responde 403 al servidor.
   assert.ok(!fetch.calls.some(c => c.url.includes('query.wikidata.org')));
 });
+
+test('frameXTV: sin clave, el título de Wikidata basta para los sitios que buscan por nombre', async () => {
+  // TMDB bloquea al servidor y su ficha pública también: el título sale de la
+  // propia ficha de Wikidata (P1476, prefiriendo el idioma español).
+  const fetch = mockFetch([
+    ['api.themoviedb.org', { __response: { status: 403 } }],
+    ['www.themoviedb.org', { __response: { status: 403 } }],
+    ['www.wikidata.org/w/api.php?action=query&list=search', { __json: { query: { search: [{ title: 'Q23572' }] } } }],
+    ['www.wikidata.org/w/api.php?action=wbgetclaims', { __json: { claims: {
+      P4835: [{ mainsnak: { datavalue: { value: '121361' } } }],
+      P1476: [{ mainsnak: { datavalue: { value: { text: 'Game of Thrones', language: 'en' } } } },
+        { mainsnak: { datavalue: { value: { text: 'Juego de Tronos', language: 'es' } } } }],
+      P577: [{ mainsnak: { datavalue: { value: { time: '+2011-04-17T00:00:00Z' } } } }]
+    } } }],
+    ['api.tvmaze.com/lookup/shows?thetvdb=121361', { __response: { status: 503 } }]
+  ]);
+  const provider = loadProvider('framextv', { fetch, tmdbKey: '' });
+  const info = await provider.resolveMeta('tvdb:121361', 'series', 1, 1);
+  assert.equal(info.title, 'Juego de Tronos');
+  assert.equal(info.year, 2011);
+  assert.equal(info.isTv, true);
+});

@@ -97,7 +97,9 @@ var WIKIDATA_PROPERTIES = {
   // IMDb → TMDB (temporada/serie) y TMDB → IMDb
   P345: 'imdb', P4947: 'tmdbMovie', P4983: 'tmdbTv',
   // TheTVDB (los sitios hispanos etiquetan el tipo por su cuenta)
-  P4835: 'tvdb'
+  P4835: 'tvdb',
+  // Título original y fecha: son los títulos del buscador de cada sitio
+  P1476: 'title', P577: 'date'
 };
 
 function wikidataEntitySearch(property, value) {
@@ -123,23 +125,41 @@ function wikidataClaims(entity) {
     .then(function (data) {
       var claims = data && data.claims && typeof data.claims === 'object' ? data.claims : null;
       if (!claims) return null;
-      var out = { imdbId: null, tmdbId: null, tvdbId: null };
+      var out = { imdbId: null, tmdbId: null, tvdbId: null, title: null, year: null };
       for (var property in WIKIDATA_PROPERTIES) {
         if (!Object.prototype.hasOwnProperty.call(claims, property)) continue;
         var statements = Array.isArray(claims[property]) ? claims[property] : [];
         for (var i = 0; i < statements.length; i++) {
           var snak = statements[i] && statements[i].mainsnak;
-          var raw = snak && snak.datavalue && snak.datavalue.value;
-          if (typeof raw !== 'string') continue;
+          var value = snak && snak.datavalue && snak.datavalue.value;
           var name = WIKIDATA_PROPERTIES[property];
+          var raw = typeof value === 'string' ? value : '';
           if (name === 'imdb' && /^tt\d{5,12}$/i.test(raw)) out.imdbId = out.imdbId || raw.toLowerCase();
           else if (name === 'tvdb' && /^\d{1,9}$/.test(raw)) out.tvdbId = out.tvdbId || raw;
           // La misma cifra puede ser de película o de serie: se acepta como
           // id de TMDB y el llamador decide si le sirve.
           else if ((name === 'tmdbMovie' || name === 'tmdbTv') && /^\d{1,9}$/.test(raw)) out.tmdbId = out.tmdbId || raw;
+          // P1476 es un monolingüe: { text, language }. Se prefiere el título
+          // en español, porque es el idioma del catálogo de estos sitios.
+          else if (name === 'title') {
+            var text = value && typeof value.text === 'string' ? value.text.trim() : '';
+            var language = value && typeof value.language === 'string' ? value.language : '';
+            if (text && text.length <= 160 && !out.title) out.title = text;
+            else if (text && text.length <= 160 && /^es/i.test(language) && !/^es/i.test(out.titleLang || '')) {
+              out.title = text;
+              out.titleLang = language;
+            }
+            if (/^es/i.test(language)) out.titleLang = language;
+          }
+          // P577 es la fecha de publicación: { time: '+2011-04-17T00:00:00Z' }.
+          else if (name === 'date' && value && typeof value.time === 'string') {
+            var year = parseInt(String(value.time).replace(/^[+-]/, '').slice(0, 4), 10);
+            if (year > 1800 && year < 2200) out.year = out.year || year;
+          }
         }
       }
-      return out.imdbId || out.tmdbId || out.tvdbId ? out : null;
+      delete out.titleLang;
+      return out.imdbId || out.tmdbId || out.tvdbId || out.title ? out : null;
     }, function () { return null; });
 }
 
@@ -222,14 +242,42 @@ function resolveAnimeMedia(parsed) {
  * Punto único que usan los providers: convierte el ID ya normalizado en los
  * metadatos que necesitan las búsquedas, sea IMDb, TMDB, TVDB o anime.
  */
+/** Ficha mínima cuando Wikidata solo da el título (sin IMDb ni TMDB): esos
+ * sitios buscan por nombre, así que todavía se pueden encontrar enlaces. */
+function mediaFromWikidata(ids, parsed) {
+  var title = ids && ids.title ? String(ids.title).slice(0, 200) : '';
+  return {
+    id: contentIdLabel(parsed),
+    tmdbId: ids && ids.tmdbId || null,
+    imdbId: ids && ids.imdbId || null,
+    isTv: parsed.type === 'series',
+    season: parsed.season,
+    episode: parsed.episode,
+    title: title,
+    originalTitle: title,
+    year: ids && ids.year || null,
+    titles: title ? [title] : [],
+    seasons: []
+  };
+}
+
 function resolveRequestMedia(parsed) {
   if (!parsed) return Promise.resolve(null);
   if (parsed.anime) return resolveAnimeMedia(parsed);
   if (parsed.tvdbId) {
     return wikidataLookup('P4835', parsed.tvdbId).then(function (ids) {
-      var target = ids && (ids.imdbId || ids.tmdbId);
-      if (!target) return null;
-      return resolveMedia(target, 'series', parsed.season, parsed.episode);
+      if (!ids) return null;
+      var target = ids.imdbId || ids.tmdbId;
+      if (!target) return mediaFromWikidata(ids, parsed);
+      return resolveMedia(target, 'series', parsed.season, parsed.episode).then(function (info) {
+        // El título de la ficha sirve cuando IMDb/TMDB no responden.
+        if (info && !info.title && ids.title) {
+          info.title = String(ids.title).slice(0, 200);
+          info.titles = [info.title];
+          info.year = info.year || ids.year || null;
+        }
+        return info;
+      });
     });
   }
   return resolveMedia(contentIdLabel(parsed), parsed.type, parsed.season, parsed.episode);
