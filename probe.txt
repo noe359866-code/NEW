@@ -11,6 +11,269 @@ status=403 type=text/html; charset=UTF-8 bytes=5708 final=https://ww1.pelis24.bl
 --- servers/ajax: 0 líneas
 --- json-inline: 0 líneas
 
+===== fuegocine home/form :: https://fuegocine.com/
+status=200 type=text/html; charset=UTF-8 bytes=49170 final=https://fuegocine.com/
+--- formularios: 1 líneas
+   <form class="navbar-form navbar-left">
+
+===== fuegocine temporada :: https://fuegocine.com/shows/visionquest/seasons/temporada-1/55
+status=200 type=text/html; charset=UTF-8 bytes=20378 final=https://fuegocine.com/shows/visionquest/seasons/temporada-1/55
+--- episodios: 0 líneas
+
+===== embed videro :: https://videro.my/e/ueuf2z2cltcp6sw
+status=403 type=text/html; charset=UTF-8 bytes=5653 final=https://videro.my/e/ueuf2z2cltcp6sw
+--- m3u8/mp4: 0 líneas
+
+===== embed videro :: https://videro.my/e/ueuf2z2cltcp6sw
+ERROR Invalid regular expression: /sources|file|videoUrl|stream|eval(/i: Unterminated group
+
+===== embed abyssplayer :: https://player.abyssplayer.com/KxBGoCWcV
+status=200 type=text/html; charset=utf-8 bytes=10617 final=https://player.abyssplayer.com/KxBGoCWcV
+--- m3u8/mp4: 0 líneas
+
+===== embed abyssplayer :: https://player.abyssplayer.com/KxBGoCWcV
+ERROR Invalid regular expression: /sources|file|videoUrl|stream|eval(/i: Unterminated group
+
+===== embed unlimplay :: https://unlimplay.com/f/embed/movie/1368337
+status=200 type=text/html; charset=utf-8 bytes=57088 final=https://unlimplay.com/f/embed/movie/1368337?_et=3fcfaa3df026a79cfc3bd3977e2d2ec3
+--- m3u8/mp4: 13 líneas
+   <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/hls.js@1.7.4/dist/hls.min.js" crossorigin>
+   <!-- Botón Auto HLS -->
+   <button class="ctrl-action-btn" id="btn-auto-hls" onclick="if (!window.__cfRLUnblockHandlers) return false; (function(){var chk=document.getElementById('ulp-smart-chk');var enabled=chk?!chk.checked:(localStorage.getItem('ulp_smart')==='false');if(chk)chk.checked=enabled;ulpSmartToggle(enabled);docum…
+   <span class="ca-tip">Auto HLS</span>
+   .ulp-mode-hls #btn-auto-hls,.ulp-mode-iframe #btn-auto-hls,.ulp-mode-hls .drop-hls-item,.ulp-mode-iframe .drop-hls-item{display:none!important}
+   .ulp-mode-hls .drop-hls-item+.drop-hls-sep,.ulp-mode-iframe .drop-hls-item+.drop-hls-sep,.drop-hls-sep.ulp-sep-off{display:none!important}</style>
+   <script src="/assets/ulp/0a03c17d6f118a6e67f6.js" type="f068dae5112d4b1cd37e2ddb-text/javascript"></script><script type="f068dae5112d4b1cd37e2ddb-text/javascript">__ulpRun("0a03c17d6f118a6e67f6",["{\"latino\":{\"XMovie\":\"https://unlimplay.com/mf.php?man=xm-035DC8C1084744C6AB570AECCE0699D3&s=6826f1…
+   <script type="f068dae5112d4b1cd37e2ddb-text/javascript">try{console.log("[ULP] tiempos ms",{"total":28,"cache":"hit"})}catch(e){}</script><script type="f068dae5112d4b1cd37e2ddb-text/javascript">if(typeof finalizePlayer==="function"){finalizePlayer({"latino":{"XMovie":"https://unlimplay.com/mf.php?ma…
+   <script type="f068dae5112d4b1cd37e2ddb-text/javascript">(function(){var _wUrl="https:\/\/vimeos.unlimplay.com\/?id=1368337";var _proxy="https:\/\/vimeos.unlimplay.com\/stream.m3u8?url=";    fetch(_wUrl,{headers:{'Accept':'application/json'}})
+   // v3.9.18: el aviso sale recién cuando el video ya se está viendo (no mientras carga el HLS) y "Empezar de nuevo"
+   // vale para toda la página: si el servidor falla y entra otro, o hls.js termina de cargar, ya no vuelve al minuto viejo.
+   var guard = null; // {t, until}: después de reiniciar, nadie (hls.js, reintentos) puede volver a ese minuto
+   // El aviso recién cuando el video se está viendo: mientras carga el HLS el servidor todavía puede fallar
+
+===== embed unlimplay :: https://unlimplay.com/f/embed/movie/1368337
+ERROR Invalid regular expression: /sources|file|videoUrl|stream|eval(/i: Unterminated group
+
+===== fuegocine búsqueda 2 :: https://fuegocine.com/movies?keyword=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?keyword=odisea
+--- status: 40 líneas
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+   <link rel="canonical" href="https://fuegocine.com/movies">
+   <meta property="og:image" content="https://fuegocine.com/upload/FuegoCine2Logo.png" />
+   <meta property="og:url" content="https://fuegocine.com/movies" />
+   <meta name="twitter:image" content="https://fuegocine.com/upload/FuegoCine2Logo.png">
+   <link rel="image_src" href="https://fuegocine.com/upload/FuegoCine2Logo.png">
+   <link rel="icon" href="https://fuegocine.com/upload/FC2Icon.png">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/megamenu.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/ionicons.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/font-awesome.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/color-style/style-six.css" id="theme">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/responsive.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/splide.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/jquery-eu-cookie-law-popup.css">
+   <script src="https://fuegocine.com/site_assets/js/sweetalert2@11.js"></script>
+   <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&display=swap" rel="stylesheet">
+   <a href="https://fuegocine.com" title="logo" class="logo"><img src="https://fuegocine.com/upload/FuegoCine2Logo.png" alt="logo" title="logo"></a>
+   <li><a href="https://fuegocine.com" class="" title="home">Home</a></li>
+   <li><a href="https://fuegocine.com/movies" class=" active" title="Películas">Películas</a></li>
+   <li><a href="https://fuegocine.com/shows" class="" title="Series">Series</a></li>
+   <a href='https://cafecito.app/fuegocine' rel='noopener' target='_blank'>
+   <img srcset='https://cdn.cafecito.app/imgs/buttons/button_5.png 1x, https://cdn.cafecito.app/imgs/buttons/button_5_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_5_3.75x.png 3.75x' src='https://cdn.cafecito.app/imgs/buttons/button_5.png' alt='Invitame un café en cafecito.app' style="height:…
+   <a href="https://fuegocine.com/login" title="login"><img src="https://fuegocine.com/site_assets/images/ic-signup-user.png" alt="ic-signup-user" title="signup-user"><span>Iniciar sesión</span></a>
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/nice-select.css">
+   <option value="https://fuegocine.com/movies?lang_id=2" >Subtitulado</option>
+   <option value="https://fuegocine.com/movies?lang_id=8" >Latino</option>
+   <option value="https://fuegocine.com/movies?genre_id=1" >Drama</option>
+   <option value="https://fuegocine.com/movies?genre_id=3" >Comedia</option>
+   <option value="https://fuegocine.com/movies?genre_id=5" >Animación</option>
+   <option value="https://fuegocine.com/movies?genre_id=6" >Terror</option>
+   <option value="https://fuegocine.com/movies?genre_id=8" >Romance</option>
+   <option value="https://fuegocine.com/movies?genre_id=9" >Aventura</option>
+   <option value="https://fuegocine.com/movies?genre_id=10" >Ciencia ficción</option>
+   <option value="https://fuegocine.com/movies?genre_id=11" >Fantasía</option>
+   <option value="https://fuegocine.com/movies?genre_id=13" >Crimen</option>
+   <option value="https://fuegocine.com/movies?genre_id=14" >Acción</option>
+   <option value="https://fuegocine.com/movies?genre_id=15" >Western</option>
+   <option value="https://fuegocine.com/movies?genre_id=16" >Bélica</option>
+
+===== fuegocine búsqueda 2 :: https://fuegocine.com/search?query=odisea
+status=500 type=text/html; charset=UTF-8 bytes=1099653 final=https://fuegocine.com/search?query=odisea
+--- status: 40 líneas
+   ErrorException: Undefined array key &quot;s&quot; in file /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php on line 189
+   #1 /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php(189): Illuminate\Foundation\Bootstrap\HandleExceptions-&gt;Illuminate\Foundation\Bootstrap\{closure}()
+   #2 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\Http\Controllers\IndexController-&gt;search()
+   #10 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}()
+   #11 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\Foundation\Http\Middleware\VerifyCsrfToken-&gt;handle()
+   #26 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\Routing\Router-&gt;dispatch()
+   #27 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\Foundation\Http\Kernel-&gt;Illuminate\Foundation\Http\{closure}()
+   #28 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}()
+   #29 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest-&gt;handle()
+   #30 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull-&gt;handle()
+   #31 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}()
+   #32 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate\Foundation\Http\Middleware\TransformsRequest-&gt;handle()
+   #33 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\Foundation\Http\Middleware\TrimStrings-&gt;handle()
+   #34 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}()
+   #35 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\Foundation\Http\Middleware\ValidatePostSize-&gt;handle()
+   #36 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}()
+   #37 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance-&gt;handle()
+   #38 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}()
+   #39 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\Http\Middleware\HandleCors-&gt;handle()
+   #40 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}()
+   #41 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\Http\Middleware\TrustProxies-&gt;handle()
+   #43 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\Pipeline\Pipeline-&gt;then()
+   #44 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\Foundation\Http\Kernel-&gt;sendRequestThroughRouter()
+   #45 /home/u311072709/domains/fuegocine.com/public_html/public/index.php(51): Illuminate\Foundation\Http\Kernel-&gt;handle()
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   ! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com
+   */*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,BlinkMacS…
+   window.data = {"report":{"notifier":"Laravel Client","language":"PHP","framework_version":"10.42.0","language_version":"8.3.37","exception_class":"ErrorException","seen_at":1795395066,"message":"Undefined array key \u0022s\u0022","glows":[],"solutions":[],"documentation_links":[],"stacktrace":[{"fil…
+   <!-- The noscript representation is for HTTP client like Postman that have JS disabled. -->
+   <pre>ErrorException: Undefined array key &quot;s&quot; in file /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php on line 189
+   #1 /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php(189): Illuminate\Foundation\Bootstrap\HandleExceptions-&gt;Illuminate\Foundation\Bootstrap\{closure}()
+   #2 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\Http\Controllers\IndexController-&gt;search()
+   #10 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}()
+   #11 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\Foundation\Http\Middleware\VerifyCsrfToken-&gt;handle()
+   #26 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\Routing\Router-&gt;dispatch()
+   #27 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\Foundation\Http\Kernel-&gt;Illuminate\Foundation\Http\{closure}()
+   #28 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}()
+   #29 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest-&gt;handle()
+   #30 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull-&gt;handle()
+   #31 /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}()
+
+===== fuegocine búsqueda 2 :: https://fuegocine.com/movies?title=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?title=odisea
+--- status: 40 líneas
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+   <link rel="canonical" href="https://fuegocine.com/movies">
+   <meta property="og:image" content="https://fuegocine.com/upload/FuegoCine2Logo.png" />
+   <meta property="og:url" content="https://fuegocine.com/movies" />
+   <meta name="twitter:image" content="https://fuegocine.com/upload/FuegoCine2Logo.png">
+   <link rel="image_src" href="https://fuegocine.com/upload/FuegoCine2Logo.png">
+   <link rel="icon" href="https://fuegocine.com/upload/FC2Icon.png">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/megamenu.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/ionicons.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/font-awesome.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/color-style/style-six.css" id="theme">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/responsive.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/splide.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/jquery-eu-cookie-law-popup.css">
+   <script src="https://fuegocine.com/site_assets/js/sweetalert2@11.js"></script>
+   <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&display=swap" rel="stylesheet">
+   <a href="https://fuegocine.com" title="logo" class="logo"><img src="https://fuegocine.com/upload/FuegoCine2Logo.png" alt="logo" title="logo"></a>
+   <li><a href="https://fuegocine.com" class="" title="home">Home</a></li>
+   <li><a href="https://fuegocine.com/movies" class=" active" title="Películas">Películas</a></li>
+   <li><a href="https://fuegocine.com/shows" class="" title="Series">Series</a></li>
+   <a href='https://cafecito.app/fuegocine' rel='noopener' target='_blank'>
+   <img srcset='https://cdn.cafecito.app/imgs/buttons/button_5.png 1x, https://cdn.cafecito.app/imgs/buttons/button_5_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_5_3.75x.png 3.75x' src='https://cdn.cafecito.app/imgs/buttons/button_5.png' alt='Invitame un café en cafecito.app' style="height:…
+   <a href="https://fuegocine.com/login" title="login"><img src="https://fuegocine.com/site_assets/images/ic-signup-user.png" alt="ic-signup-user" title="signup-user"><span>Iniciar sesión</span></a>
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/nice-select.css">
+   <option value="https://fuegocine.com/movies?lang_id=2" >Subtitulado</option>
+   <option value="https://fuegocine.com/movies?lang_id=8" >Latino</option>
+   <option value="https://fuegocine.com/movies?genre_id=1" >Drama</option>
+   <option value="https://fuegocine.com/movies?genre_id=3" >Comedia</option>
+   <option value="https://fuegocine.com/movies?genre_id=5" >Animación</option>
+   <option value="https://fuegocine.com/movies?genre_id=6" >Terror</option>
+   <option value="https://fuegocine.com/movies?genre_id=8" >Romance</option>
+   <option value="https://fuegocine.com/movies?genre_id=9" >Aventura</option>
+   <option value="https://fuegocine.com/movies?genre_id=10" >Ciencia ficción</option>
+   <option value="https://fuegocine.com/movies?genre_id=11" >Fantasía</option>
+   <option value="https://fuegocine.com/movies?genre_id=13" >Crimen</option>
+   <option value="https://fuegocine.com/movies?genre_id=14" >Acción</option>
+   <option value="https://fuegocine.com/movies?genre_id=15" >Western</option>
+   <option value="https://fuegocine.com/movies?genre_id=16" >Bélica</option>
+
+===== fuegocine búsqueda 2 :: https://fuegocine.com/api/movies?search=odisea
+status=404 type=text/html; charset=UTF-8 bytes=13234 final=https://fuegocine.com/api/movies?search=odisea
+--- status: 40 líneas
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+   <link rel="canonical" href="https://fuegocine.com/api/movies">
+   <meta property="og:image" content="https://fuegocine.com/upload/FuegoCine2Logo.png" />
+   <meta property="og:url" content="https://fuegocine.com/api/movies" />
+   <meta name="twitter:image" content="https://fuegocine.com/upload/FuegoCine2Logo.png">
+   <link rel="image_src" href="https://fuegocine.com/upload/FuegoCine2Logo.png">
+   <link rel="icon" href="https://fuegocine.com/upload/FC2Icon.png">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/megamenu.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/ionicons.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/font-awesome.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/color-style/style-six.css" id="theme">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/responsive.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/splide.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/jquery-eu-cookie-law-popup.css">
+   <script src="https://fuegocine.com/site_assets/js/sweetalert2@11.js"></script>
+   <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&display=swap" rel="stylesheet">
+   <a href="https://fuegocine.com" title="logo" class="logo"><img src="https://fuegocine.com/upload/FuegoCine2Logo.png" alt="logo" title="logo"></a>
+   <li><a href="https://fuegocine.com" class="" title="home">Home</a></li>
+   <li><a href="https://fuegocine.com/movies" class="" title="Películas">Películas</a></li>
+   <li><a href="https://fuegocine.com/shows" class="" title="Series">Series</a></li>
+   <a href='https://cafecito.app/fuegocine' rel='noopener' target='_blank'>
+   <img srcset='https://cdn.cafecito.app/imgs/buttons/button_5.png 1x, https://cdn.cafecito.app/imgs/buttons/button_5_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_5_3.75x.png 3.75x' src='https://cdn.cafecito.app/imgs/buttons/button_5.png' alt='Invitame un café en cafecito.app' style="height:…
+   <a href="https://fuegocine.com/login" title="login"><img src="https://fuegocine.com/site_assets/images/ic-signup-user.png" alt="ic-signup-user" title="signup-user"><span>Iniciar sesión</span></a>
+   <span><img src="https://fuegocine.com/site_assets/images/404.png"></span>
+   <a href="https://fuegocine.com" class="vfx-item-btn-danger page-note-found text-uppercase">Go to Home</a>
+   <li><a href="https://fuegocine.com/page/about-us" title="About Us">About Us</a></li>
+   <li><a href="https://fuegocine.com/page/terms-of-use" title="Terms Of Use">Terms Of Use</a></li>
+   <li><a href="https://fuegocine.com/page/privacy-policy" title="Privacy Policy">Privacy Policy</a></li>
+   <li><a href="https://fuegocine.com/page/faq" title="FAQ">FAQ</a></li>
+   <li><a href="https://fuegocine.com/page/contact-us" title="Contact Us">Contact Us</a></li>
+   <script src="https://fuegocine.com/site_assets/js/jquery-3.3.1.min.js"></script>
+   <script src="https://fuegocine.com/site_assets/js/jquery.easing.min.js"></script>
+   <script src="https://fuegocine.com/site_assets/js/bootstrap.min.js"></script>
+   <script src="https://fuegocine.com/site_assets/js/owl.carousel.min.js"></script>
+   <script src="https://fuegocine.com/site_assets/js/jquery.nice-select.min.js"></script>
+   <script src="https://fuegocine.com/site_assets/js/megamenu.js"></script>
+   <script src="https://fuegocine.com/site_assets/js/splide.min.js"></script>
+   <script src="https://fuegocine.com/site_assets/js/custom-main.js"></script>
+
+===== fuegocine búsqueda 2 :: https://fuegocine.com/movies?search=la+odisea
+status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?search=la+odisea
+--- status: 40 líneas
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+   <link rel="canonical" href="https://fuegocine.com/movies">
+   <meta property="og:image" content="https://fuegocine.com/upload/FuegoCine2Logo.png" />
+   <meta property="og:url" content="https://fuegocine.com/movies" />
+   <meta name="twitter:image" content="https://fuegocine.com/upload/FuegoCine2Logo.png">
+   <link rel="image_src" href="https://fuegocine.com/upload/FuegoCine2Logo.png">
+   <link rel="icon" href="https://fuegocine.com/upload/FC2Icon.png">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/megamenu.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/ionicons.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/font-awesome.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/color-style/style-six.css" id="theme">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/responsive.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/splide.min.css">
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/jquery-eu-cookie-law-popup.css">
+   <script src="https://fuegocine.com/site_assets/js/sweetalert2@11.js"></script>
+   <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&display=swap" rel="stylesheet">
+   <a href="https://fuegocine.com" title="logo" class="logo"><img src="https://fuegocine.com/upload/FuegoCine2Logo.png" alt="logo" title="logo"></a>
+   <li><a href="https://fuegocine.com" class="" title="home">Home</a></li>
+   <li><a href="https://fuegocine.com/movies" class=" active" title="Películas">Películas</a></li>
+   <li><a href="https://fuegocine.com/shows" class="" title="Series">Series</a></li>
+   <a href='https://cafecito.app/fuegocine' rel='noopener' target='_blank'>
+   <img srcset='https://cdn.cafecito.app/imgs/buttons/button_5.png 1x, https://cdn.cafecito.app/imgs/buttons/button_5_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_5_3.75x.png 3.75x' src='https://cdn.cafecito.app/imgs/buttons/button_5.png' alt='Invitame un café en cafecito.app' style="height:…
+   <a href="https://fuegocine.com/login" title="login"><img src="https://fuegocine.com/site_assets/images/ic-signup-user.png" alt="ic-signup-user" title="signup-user"><span>Iniciar sesión</span></a>
+   <link rel="stylesheet" href="https://fuegocine.com/site_assets/css/nice-select.css">
+   <option value="https://fuegocine.com/movies?lang_id=2" >Subtitulado</option>
+   <option value="https://fuegocine.com/movies?lang_id=8" >Latino</option>
+   <option value="https://fuegocine.com/movies?genre_id=1" >Drama</option>
+   <option value="https://fuegocine.com/movies?genre_id=3" >Comedia</option>
+   <option value="https://fuegocine.com/movies?genre_id=5" >Animación</option>
+   <option value="https://fuegocine.com/movies?genre_id=6" >Terror</option>
+   <option value="https://fuegocine.com/movies?genre_id=8" >Romance</option>
+   <option value="https://fuegocine.com/movies?genre_id=9" >Aventura</option>
+   <option value="https://fuegocine.com/movies?genre_id=10" >Ciencia ficción</option>
+   <option value="https://fuegocine.com/movies?genre_id=11" >Fantasía</option>
+   <option value="https://fuegocine.com/movies?genre_id=13" >Crimen</option>
+   <option value="https://fuegocine.com/movies?genre_id=14" >Acción</option>
+   <option value="https://fuegocine.com/movies?genre_id=15" >Western</option>
+   <option value="https://fuegocine.com/movies?genre_id=16" >Bélica</option>
+
 ===== fuegocine watch :: https://fuegocine.com/movies/watch/la-odisea/227
 status=200 type=text/html; charset=UTF-8 bytes=42326 final=https://fuegocine.com/movies/watch/la-odisea/227
 --- iframe/embed: 18 líneas
