@@ -339,3 +339,14 @@ test('CinePlus123 conserva un reproductor rápido aunque otra opción agote el p
   assert.ok(stalledSignal && stalledSignal.aborted, 'se cancela el reproductor que no respondió');
   assert.ok(mock.calls.every(call => !/\.(?:m3u8|mp4)$/i.test(new URL(call.url).pathname)));
 });
+
+test('El diagnóstico simula metadatos del tipo pedido (serie ≠ película)', async () => {
+  const { metadataStub } = require('../addon/diag');
+  const real = async () => new Response('', { status: 404 });
+  const stubSeries = metadataStub('VisionQuest', 2025, real, 'series');
+  const stubMovie = metadataStub('VisionQuest', 2025, real, 'movie');
+  const series = await (await stubSeries('https://v3-cinemeta.strem.io/meta/series/tt1.json')).json();
+  const movie = await (await stubMovie('https://v3-cinemeta.strem.io/meta/movie/tt1.json')).json();
+  assert.equal(series.meta.type, 'series');
+  assert.equal(movie.meta.type, 'movie');
+});
