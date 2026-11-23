@@ -91,6 +91,13 @@ async function fuegocine() {
   await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
 }
 
+async function round9() {
+  await probe('vidsync api tv', 'https://vidsync.pro/api/core/streams?type=tv&id=117376&season=1&episode=1',
+    [['json', '.*']]);
+  await probe('vidsync api movie', 'https://vidsync.pro/api/core/streams?type=movie&id=1654940', [['json', '.*']]);
+  await probe('vidsync api video movie', 'https://vidsync.pro/api/core/streams?type=video&id=1654940', [['json', '.*']]);
+}
+
 async function round8() {
   await probeSnippets('vidsync bundle', 'https://vidsync.pro/assets/index-DO1zww39.js',
     [['api', 'https://[a-z0-9.-]+\\.[a-z]{2,}(?:/[a-z0-9._-]*)?/api'], ['paths', '/api/[a-z0-9/_-]+'], ['src', 'sources|m3u8']], 300);
@@ -193,6 +200,7 @@ async function main() {
   if (only === 'all' || only === 'round6') await round6();
   if (only === 'all' || only === 'round7') await round7();
   if (only === 'all' || only === 'round8') await round8();
+  if (only === 'all' || only === 'round9') await round9();
   if (only === 'all' || only === 'kdesa') await kdesa();
 }
 
