@@ -492,6 +492,26 @@ async function round26() {
   await probeSnippets('dlx home hosts', B + '/', [['hosts', 'https?://[a-z0-9.-]+/(?:embed|e|v|player)/']], 200);
 }
 
+/* Ronda 27: ¿qué necesita el AJAX de DooPlay de doramaslatinox? */
+async function round27() {
+  const B = 'https://doramaslatinox.com';
+  const page = B + '/episodio/gift-1x2-episodio-2/';
+  await probeSnippets('dlx episodio nonce', page, [
+    ['nonce', 'nonce["\']?\\s*[:=]\\s*["\'][a-z0-9]+'],
+    ['doo ajax ref', 'doo_player_ajax[^"\']{0,120}'],
+    ['player js', 'src="[^"]*(?:player|dooplay|ajax)[^"]*\\.js[^"]*"'],
+    ['data attrs', "data-(?:post|nume|type|nonce)=['\"][^'\"]{0,30}"],
+    ['scripts inline', 'ajaxurl|admin-ajax']
+  ], 300);
+  for (const extra of ['', '&nonce=b963428b95']) {
+    await probeSnippets('dlx ajax nonce' + (extra ? ' si' : ' no'),
+      B + '/wp-admin/admin-ajax.php?action=doo_player_ajax&post=43619&nume=1&type=tv' + extra,
+      [['json', '.*']], 300);
+  }
+  // El JS del tema dice cómo pide los reproductores.
+  await probeSnippets('dlx dooplay js', B + '/wp-content/themes/NIVEL-DIOSSSSSSSSS/assets/js/dooplay.js', [['ajax', 'doo_player_ajax[\s\S]{0,200}']], 300);
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -543,6 +563,7 @@ async function main() {
   else if (only === 'round24only') await round24();
   if (only === 'doramaslatinox' || only === 'dlx') { await round25(); await round26(); }
   if (only === 'dlx26') await round26();
+  if (only === 'dlx27') await round27();
 }
 
 if (require.main === module) {
