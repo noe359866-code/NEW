@@ -91,6 +91,11 @@ async function fuegocine() {
   await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
 }
 
+async function round10() {
+  await probeSnippets('vidsync shards', 'https://vidsync.pro/assets/index-DO1zww39.js',
+    [['bs', 'function bs\\('], ['hosts', 'vidsync\\.[a-z]+'], ['api', 'api/core/streams']], 420);
+}
+
 async function round9() {
   await probe('vidsync api tv', 'https://vidsync.pro/api/core/streams?type=tv&id=117376&season=1&episode=1',
     [['json', '.*']]);
@@ -201,6 +206,7 @@ async function main() {
   if (only === 'all' || only === 'round7') await round7();
   if (only === 'all' || only === 'round8') await round8();
   if (only === 'all' || only === 'round9') await round9();
+  if (only === 'all' || only === 'round10') await round10();
   if (only === 'all' || only === 'kdesa') await kdesa();
 }
 
