@@ -103,7 +103,7 @@ test('adaptador de stream conserva las cabeceras seguras y rechaza páginas e IP
     url: 'https://cdn.example/film.mp4?secret=abc',
     headers: { referer: 'https://player.example/e/1', Origin: 'https://player.example', 'User-Agent': 'Test', Host: 'localhost', bad: 'x', Cookie: 'a=b' }
   });
-  assert.equal(stream.name, 'Nébula · FlixLatam · 1080p');
+  assert.equal(stream.name, 'Nébula · FlixLatam · 1080p · Latino');
   assert.equal(stream.description, 'Película · Latino');
   assert.deepEqual(stream.behaviorHints.proxyHeaders.request, {
     Referer: 'https://player.example/e/1', Origin: 'https://player.example', 'User-Agent': 'Test', Cookie: 'a=b'
@@ -372,5 +372,45 @@ test('sin TMDB_API_KEY un ID de TMDB de Nuvio sigue dando fuentes por id (KatDra
     const urls = streams.map(stream => stream.url).sort();
     assert.deepEqual(urls, ['https://cdn.example/matrix.mp4', 'https://img.example/matrix/index.m3u8']);
     assert.ok(streams.every(stream => stream.name.startsWith('Nébula')), JSON.stringify(streams.map(s => s.name)));
+  } finally { await app.close(); }
+});
+
+test('cada fuente etiqueta el idioma (Multi, Latino, Castellano, Inglés) en el nombre del stream', async () => {
+  const fetcher = mockFetch([
+    ['api.themoviedb.org', { __response: { status: 403 } }],
+    ['www.themoviedb.org', { __response: { status: 403 } }],
+    ['www.wikidata.org/w/api.php?action=query&list=search', { __json: { query: { search: [] } } }],
+    [/watch\/movie\/n-a-603/, [
+      // KatDrama publica el idioma en el texto del botón.
+      '<button class="btn" onclick="switchServer(\'kat1\', \'https://k-drama.in/mx1.php?type=movie&id=603\', \'embed\', \'\')">Kat 1 - Hindi1080p</button>',
+      '<button class="btn" onclick="switchServer(\'kat2\', \'https://k-drama.in/vid2.php/603?m=lat\', \'embed\', \'\')">Kat 2 - Latino1080p</button>'
+    ].join('')],
+    ['k-drama.in/mx1.php', '<video src="https://cdn.example/matrix-hi.mp4"></video>'],
+    ['k-drama.in/vid2.php/603', '<video src="https://cdn.example/matrix-lat.mp4"></video>'],
+    ['vidsync-shard.vs-deals79.workers.dev', { __json: { sources: [
+      { id: 'a', url: 'https://cdn.example/nm.m3u8', type: 'hls', quality: '1080p', server: 'NetMirror', audioLanguage: 'es', audioLabel: 'Español Latino' },
+      { id: 'b', url: 'https://cdn.example/castle.m3u8', type: 'hls', quality: '720p', server: 'Castle', audioLanguage: 'en', audioLabel: 'English' },
+      { id: 'c', url: 'https://cdn.example/multi.m3u8', type: 'hls', quality: '480p', server: 'Multi', audioLabel: 'Multi Audio' }
+    ] } }]
+  ]);
+  const app = await openServer({ fetcher, tmdbKey: '' });
+  try {
+    const { streams } = await (await fetch(app.base + '/stream/movie/' + encodeURIComponent('tmdb:603') + '.json')).json();
+    const byName = Object.fromEntries(Array.from(streams, stream => [stream.name, stream]));
+    assert.ok(byName['Nébula · KatDrama · Latino'], JSON.stringify(streams.map(s => s.name)));
+    assert.ok(byName['Nébula · KatDrama · Hindi'], JSON.stringify(streams.map(s => s.name)));
+    assert.ok(byName['Nébula · frameXTV · 1080p · Latino']);
+    assert.ok(byName['Nébula · frameXTV · 720p · Inglés']);
+    assert.ok(byName['Nébula · frameXTV · 480p · Multi']);
+    // El idioma aparece también en el título y en el nombre de archivo.
+    for (const stream of streams) {
+      const language = stream.name.split(' · ').pop();
+      assert.ok(stream.title.includes(language), stream.title + ' / ' + stream.name);
+      // `filename` es sintético y va en minúsculas, sin acentos y sin espacios.
+      const filename = stream.behaviorHints.filename.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.]/g, ' ');
+      const wanted = language.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(' ')[0];
+      assert.ok(filename.includes(wanted), stream.behaviorHints.filename + ' vs ' + language);
+    }
   } finally { await app.close(); }
 });

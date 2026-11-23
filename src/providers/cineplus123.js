@@ -242,7 +242,7 @@ function cineOptions(html, isTv) {
       if (!postId) postId = post;
       if (post !== postId) continue;
       options.push({ post: post, nume: nume, type: type,
-        label: String(label || 'Opción ' + nume).slice(0, 100), language: languageLabel(label) });
+        label: String(label || 'Opción ' + nume).slice(0, 100), language: languageLabel(label) || null });
     }
     return uniqueBy(options, function (item) { return item.post + ':' + item.type + ':' + item.nume; });
   }

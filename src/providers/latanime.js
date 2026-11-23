@@ -122,7 +122,9 @@ function latanimeGetStreams(tmdbId, mediaType, season, episode) {
             var title = info.title + (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
               (item.name ? ' · ' + item.name : '');
             streams.push(makeStream({ name: 'Latanime', title: title, provider: 'latanime', url: item.url,
-              quality: parseQuality(title + ' ' + item.url), language: item.language, headers: item.headers, subtitles: item.subtitles }));
+              quality: parseQuality(title + ' ' + item.url),
+              // Latanime solo publica audio latino; el reproductor puede declarar otro idioma.
+              language: languageLabel(item.language) || 'Latino', headers: item.headers, subtitles: item.subtitles }));
           }
         }
         return finalizeStreams('Latanime', streams, { max: conf.maxResults });

@@ -224,7 +224,7 @@ function tioanimeGetStreams(tmdbId, mediaType, season, episode) {
             var title = info.title + (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
               (item.name ? ' · ' + item.name : '');
             streams.push(makeStream({ name: 'TioAnime', title: title, provider: 'tioanime', url: item.url,
-              quality: parseQuality(title + ' ' + item.url), language: item.language || 'Japones Subtitulado',
+              quality: parseQuality(title + ' ' + item.url), language: languageLabel(item.language) || 'Japonés Subtitulado',
               headers: item.headers, subtitles: item.subtitles }));
           }
         }

@@ -101,7 +101,8 @@ function buildCoreBundle(core) {
     'languageLabel', 'unescapePlayerText', 'publicHttpUrl', 'directMediaUrl', 'findDirectMedia',
     'unpackPlayerScript', 'pagePlayerLinks', 'embed69Links', 'solvePlayerPow', 'resolveDirectPlayers',
     'normalizeContentId', 'contentIdLabel', 'resolveRequestMedia', 'resolveAnimeMedia', 'wikidataLookup', 'aniZipLookup', 'getTextLimited', 'isSeriesLikeType',
-    'solvePlayerPowHex', 'blockedObserver', 'imdbSlugTitle', 'cinemetaRequest', 'webResult', 'slugTitle'
+    'solvePlayerPowHex', 'blockedObserver', 'imdbSlugTitle', 'cinemetaRequest', 'webResult', 'slugTitle',
+    'languageOf', 'languageLabel', 'languageRank', 'sortByQuality', 'uniqueBy'
   ];
   const source = [
     "'use strict';",

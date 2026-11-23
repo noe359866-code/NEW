@@ -14,6 +14,38 @@
 | kdesa.stream | **No incluido**: Cloudflare responde «Just a moment…» (403) a todas las rutas desde el servidor, incluidas las de `/media/tmdb-*`. |
 | TVEnVivo, OnDemand y TheDaddy | Catálogos de canales y eventos deportivos y sus enlaces directos. |
 
+### Idiomas
+
+Cada enlace se etiqueta con el idioma que **publica su fuente**, y esa etiqueta se
+añade al nombre de la opción (`Nébula · KatDrama · 1080p · Latino`), al título y a
+`behaviorHints.filename`, así que se ve en la lista de Stremio/Nuvio.
+
+| Etiqueta | Cuándo aparece |
+| --- | --- |
+| `Multi` | La fuente declara varios audios: `multi`/`dual audio` o varios idiomas distintos en la API de Unlimplay. |
+| `Latino` | `latino`, `LAT`, `Español Latino`, `Latinoamérica`. **Se comprueba antes que «español»**, así que nunca cae en Castellano. |
+| `Castellano` | `castellano`, `español`, `es`, `spanish`. |
+| `Inglés` | `english`, `en`, `eng`. |
+| `<Idioma> Subtitulado` | La fuente declara el idioma y además subtítulos: `English subtitles`, `Japonés Subtitulado`. |
+| `Subtitulado` | Solo se declaran subtítulos, sin idioma de audio. |
+| Otros | Hindi, Coreano, Chino, Japonés, Portugués, Francés, Alemán… cuando el sitio los publica. |
+
+De dónde sale el idioma en cada web:
+
+| Web | Origen del idioma |
+| --- | --- |
+| FuegoCine | Clave del objeto `embeds` de la API de Unlimplay (`latino`, `castellano`, `subtitulado`…) y texto del botón de cada reproductor. Varios idiomas ⇒ `Multi`. |
+| KatDrama | Etiqueta visible de cada botón (`Kat 1 - Hindi`, `Kat 2 - English`, `Aurora - English subtitles`); `Original` se marca como versión original. |
+| CinePlus123 | Texto del botón de opción (`LATINO`, `CASTELLANO`, `SUBTITULADO`). |
+| TioAnime | Catálogo en japonés con subtítulos en español ⇒ `Japonés Subtitulado`. |
+| Latanime | Catálogo en español latinoamericano ⇒ `Latino`, salvo que el reproductor declare otro idioma. |
+| frameXTV | `audioLanguage`/`audioLabel`/`audio` de cada `source` de la API de VidSync. |
+
+Al ordenar, dentro de la misma calidad van primero `Multi`, `Latino`, `Castellano`
+y después las versiones que solo llevan subtítulos. El idioma **declarado por la
+fuente** es el que se muestra: el addon no analiza el audio, así que si un sitio
+etiqueta mal una pista, la etiqueta heredará ese error.
+
 Las fuentes activas son TioAnime, FuegoCine, KatDrama, frameXTV, Latanime y CinePlus123. Las películas, series y anime se buscan desde los **títulos que ya aparecen en el catálogo del cliente**; este addon no aporta un catálogo propio de películas o anime. Sí aporta catálogos de deportes. Solo devuelve enlaces `.m3u8` o `.mp4` identificados en los sitios: **no inventa enlaces ni convierte páginas HTML en vídeo**. La disponibilidad depende de las fuentes, la región y el reproductor.
 
 ## Desplegar en Render

@@ -50,11 +50,4 @@ function mapLimit(items, limit, iterator) {
   return Promise.all(workers).then(function () { return results; });
 }
 
-function languageLabel(text) {
-  var s = String(text == null ? '' : text);
-  if (/\b(?:latino|lat)\b/i.test(s)) return 'Latino';
-  if (/castellano|espa(ñ|n)ol|\besp\b/i.test(s)) return 'Castellano';
-  if (/vose|subtitulado|\bsub\b/i.test(s)) return 'Subtitulado';
-  if (/\bjap\b/i.test(s)) return 'Japonés';
-  return null;
-}
+

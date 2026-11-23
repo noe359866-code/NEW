@@ -128,10 +128,15 @@ function toStremioStream(item) {
   const url = mediaUrl(item.url);
   if (!url || isAdvertisementUrl(url)) return null;
   const source = String(item.name || item.provider || 'Fuente').slice(0, 100);
+  // El idioma se rotula en el nombre para verlo sin abrir el detalle: Nuvio y
+  // Stremio muestran `name` en la lista de opciones y `title`/`description` al
+  // desplegarla. Solo se aceptan las etiquetas que produce el addon.
+  const language = typeof item.language === 'string' && /^[A-Za-zÁÉÍÓÚÑáéíóúñ ]{2,30}$/.test(item.language.trim())
+    ? item.language.trim().slice(0, 30) : '';
   const quality = typeof item.quality === 'string' && /^(?:2160p|1080p|720p|576p|480p)$/i.test(item.quality)
     ? ' · ' + item.quality : '';
-  const name = `Nébula · ${source}${quality}`;
-  const title = [String(item.title || source).slice(0, 300), typeof item.language === 'string' ? item.language.slice(0, 40) : '']
+  const name = `Nébula · ${source}${quality}${language ? ' · ' + language : ''}`;
+  const title = [String(item.title || source).slice(0, 300), language]
     .filter(Boolean).join(' · ');
   // `notWebReady` quitaba la reproducción web sin aportar nada al reproductor
   // nativo. `bingeGroup` conserva el mismo reproductor en el episodio siguiente
@@ -146,9 +151,9 @@ function toStremioStream(item) {
     hints.bingeGroup = binges.length === 1 ? binges[0] : binges;
   }
   if (typeof item.filename === 'string' && item.filename && item.filename.length <= 200) hints.filename = item.filename;
-  else if (item.quality || item.language) {
+  else if (item.quality || language) {
     // Insignias de calidad del cliente: solo leen el nombre, no el archivo.
-    hints.filename = [String(item.title || source).slice(0, 120), item.language, item.quality].filter(Boolean).join(' ').slice(0, 200);
+    hints.filename = [String(item.title || source).slice(0, 120), language, item.quality].filter(Boolean).join(' ').slice(0, 200);
   }
   const headers = streamHeaders(item.headers);
   if (Object.keys(headers).length) hints.proxyHeaders = { request: headers };

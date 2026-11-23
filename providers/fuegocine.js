@@ -343,11 +343,101 @@ function uniqueBy(items, keyFn) {
   return out;
 }
 
+/* ----------------------------- idioma ----------------------------- */
+
+/* Etiquetas que publican los sitios y los reproductores. Se normaliza el texto
+ * (minúsculas, sin acentos) y se busca la primera coincidencia, de la más
+ * específica a la más general: «español latino» es Latino, no Castellano, y
+ * «subtitulado español» es Español Subtitulado, no Castellano.
+ *
+ * Se devuelve siempre el nombre del idioma del audio seguido de «Subtitulado»
+ * cuando el sitio declara subtítulos (TioAnime, KatDrama, Vidara...), para que
+ * el cliente muestre «Latino», «Castellano», «Inglés», «Multi» o
+ * «Japonés Subtitulado» sin ambigüedad. */
+var LANGUAGE_RULES = [
+  // Multi / dual: varios audios en el mismo archivo.
+  { re: /\b(?:multi(?:audio)?|dual(?: ?audio)?|multilenguaje|varios idiomas|all audio)\b/, label: 'Multi' },
+  // Latino (Latinoamérica): se comprueba antes que «español» y «castellano».
+  { re: /\b(?:latino|latina|lat|latinoamerica|espa(?:n|ñ)ol latino|audio latino| \| lat \||\blat\b)/, label: 'Latino' },
+  // Castellano / español de España.
+  { re: /\b(?:castellano|cast|espa(?:n|ñ)ol|spanish|esp|espa(?:n|ñ)a|es)\b/, label: 'Castellano' },
+  // Inglés.
+  // «Original» y «VO» no dicen el idioma: se tratan como versión original
+  // (sin doblaje) y solo se marcan como subtituladas, sin inventar «Inglés».
+  { re: /\b(?:ingles|english|eng|en)\b/, label: 'Inglés' },
+  // Portugués.
+  { re: /\b(?:portugues|portuguese|pt|ptbr|dublado|legendado)\b/, label: 'Portugués' },
+  // Idiomas originales de los catálogos de anime/dorama.
+  { re: /\b(?:japones|japanese|jap|jp|ja)\b/, label: 'Japonés' },
+  { re: /\b(?:coreano|korean|kor|ko)\b/, label: 'Coreano' },
+  { re: /\b(?:chino|chinese|chi|zh|mandarin|cantonés|cantones)\b/, label: 'Chino' },
+  { re: /\b(?:hindi|hin|hi)\b/, label: 'Hindi' },
+  { re: /\b(?:frances|french|fre|fr)\b/, label: 'Francés' },
+  { re: /\b(?:aleman|german|ger|de)\b/, label: 'Alemán' },
+  { re: /\b(?:italiano|italian|ita|it)\b/, label: 'Italiano' },
+  { re: /\b(?:arabe|arabic|ara|ar)\b/, label: 'Árabe' },
+  { re: /\b(?:ruso|russian|rus|ru)\b/, label: 'Ruso' },
+  { re: /\b(?:tailandes|thai|tha|th)\b/, label: 'Tailandés' },
+  { re: /\b(?:turco|turkish|tur|tr)\b/, label: 'Turco' },
+  { re: /\b(?:vietnamita|vietnamese|vie|vi)\b/, label: 'Vietnamita' },
+  { re: /\b(?:indonesio|indonesian|ind|id)\b/, label: 'Indonesio' }
+];
+
+var SUBTITLE_RE = /\b(?:sub(?:titulado|titulada|titulos|s)?|vose|vostfr|subtitles?|cc|sdh|doblado|dubbed)\b/;
+
+/** Nombre del idioma del texto, o '' si no se reconoce. */
+function languageOf(text) {
+  // Los sitios pegan la calidad al idioma («Hindi1080p», «Latino720p»), así que
+  // se quitan resoluciones, formatos y cifras antes de buscar el nombre.
+  var s = norm(text)
+    .replace(/\b\d{3,4}p\b/g, ' ')
+    .replace(/\b(?:4k|8k|uhd|fhd|hdr10|hdr|dv|sd|hd|hevc|x265|x264|av1|aac|ac3)\b/g, ' ')
+    .replace(/[0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!s) return '';
+  for (var i = 0; i < LANGUAGE_RULES.length; i++) {
+    if (LANGUAGE_RULES[i].re.test(s)) return LANGUAGE_RULES[i].label;
+  }
+  return '';
+}
+
+/**
+ * Etiqueta de idioma para el cliente. Admite tanto el nombre del idioma
+ * («latino», «en», «English») como frases del sitio («Audio Latino HD»,
+ * «Subtitulado Español», «Japonés Subtitulado»). Devuelve null si no hay pista.
+ */
+function languageLabel(text) {
+  var s = norm(text);
+  if (!s) return null;
+  var language = languageOf(s);
+  var subtitled = SUBTITLE_RE.test(s);
+  if (!language) return subtitled ? 'Subtitulado' : null;
+  // «Doblado» no cambia el audio, solo confirma que no es el original.
+  return subtitled ? language + ' Subtitulado' : language;
+}
+
+/** Prioridad de idioma al ordenar: el catálogo es hispano, así que el audio
+ * en español va primero y las versiones solo subtituladas al final. */
+function languageRank(label) {
+  var value = String(label || '');
+  if (/^Multi/i.test(value)) return 0;
+  if (/^Latino/i.test(value)) return 1;
+  if (/^Español/i.test(value) || /^Castellano/i.test(value)) return 2;
+  if (!value) return 3;
+  if (/^Inglés/i.test(value)) return /Subtitulado/i.test(value) ? 6 : 4;
+  if (/Subtitulado/i.test(value)) return 7;
+  return 5;
+}
+
 function sortByQuality(streams) {
   return streams.slice().sort(function (a, b) {
     var qa = qualityRank(a.quality);
     var qb = qualityRank(b.quality);
     if (qa !== qb) return qa - qb;
+    var la = languageRank(a.language);
+    var lb = languageRank(b.language);
+    if (la !== lb) return la - lb;
     return (b.size || 0) - (a.size || 0);
   });
 }
@@ -1548,15 +1638,6 @@ function mapLimit(items, limit, iterator) {
   return Promise.all(workers).then(function () { return results; });
 }
 
-function languageLabel(text) {
-  var s = String(text == null ? '' : text);
-  if (/\b(?:latino|lat)\b/i.test(s)) return 'Latino';
-  if (/castellano|espa(ñ|n)ol|\besp\b/i.test(s)) return 'Castellano';
-  if (/vose|subtitulado|\bsub\b/i.test(s)) return 'Subtitulado';
-  if (/\bjap\b/i.test(s)) return 'Japonés';
-  return null;
-}
-
 /* ===== core/70-direct.js ===== */
 /*
  * Resolución de páginas de reproductores a HLS/MP4. Solo analiza texto: nunca
@@ -2217,13 +2298,17 @@ function fuegoEpisodes(html) {
 /** Reproductores de una ficha: iframes de /watch o de la propia página. */
 function fuegoPlayers(html, base) {
   var links = [];
+  var text = String(html || '');
+  // El idioma suele estar en el texto del propio botón o del contenedor:
+  // «Servidor 1 · Latino», «Audio: Castellano», «SUB», «Dual Audio».
+  var declared = languageLabel(stripTags(text).slice(0, 4000));
   var re = /<iframe\b[^>]*>/gi;
   var match;
-  while ((match = re.exec(String(html || ''))) && links.length < 20) {
+  while ((match = re.exec(text)) && links.length < 20) {
     var src = attrOf(match[0], 'src') || attrOf(match[0], 'data-src');
     var url = publicHttpUrl(src, base || FUEGO_BASE + '/');
     if (!url || isPlayerAdvertisement(url)) continue;
-    links.push({ url: url, name: playerName(url) });
+    links.push({ url: url, name: playerName(url), language: declared });
   }
   return uniqueBy(links, function (item) { return item.url; });
 }
@@ -2278,12 +2363,16 @@ function unlimplayStreams(id, referer, season, episode) {
     if (!embeds) return [];
     var out = [];
     var languages = Object.keys(embeds).slice(0, 6);
+    // Más de un idioma en el mismo título: el archivo es multi-audio.
+    var multi = languages.length > 1;
     for (var i = 0; i < languages.length; i++) {
       var language = languages[i];
       var entry = (embeds[language] && embeds[language].direct) || '';
       var media = playerMediaUrl(entry);
       if (!media) continue;
-      out.push({ url: media, name: 'Unlimplay', language: languageLabel(language) || language,
+      // `embeds` viene indexado por idioma: latino, castellano, subtitulado, english...
+      out.push({ url: media, name: 'Unlimplay',
+        language: languageLabel(language) || language || (multi ? 'Multi' : null),
         headers: { Referer: referer || 'https://unlimplay.com/', 'User-Agent': UA,
           Origin: 'https://unlimplay.com' } });
     }

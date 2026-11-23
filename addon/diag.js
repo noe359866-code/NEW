@@ -110,9 +110,14 @@ async function runDiagnostic({ type, id, season, episode, probeTitle, providers 
         report.blocked = blocks;
         report.simulated = { title: probe, streams: Array.isArray(streams) ? streams.length : 0 };
         if (streams && streams.length) {
-          report.simulated.sample = streams.slice(0, 2).map(stream => ({
-            name: stream.name, url: cleanUrl(stream.url), hints: Object.keys(stream.behaviorHints || {})
+          // El idioma detectado por web es lo que ve el cliente en la etiqueta.
+          report.simulated.sample = streams.slice(0, 4).map(stream => ({
+            name: stream.name, url: cleanUrl(stream.url),
+            language: stream.language || null,
+            quality: stream.quality || null,
+            hints: Object.keys(stream.behaviorHints || {})
           }));
+          report.simulated.languages = Array.from(new Set(streams.map(stream => stream.language || 'sin etiqueta')));
         }
       } catch (error) {
         report.simulated = { title: probe, streams: 0, error: String((error && error.message) || error).slice(0, 140) };

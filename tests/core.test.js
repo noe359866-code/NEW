@@ -180,3 +180,50 @@ test('Cinemeta aporta el id de TMDB cuando el metadato lo incluye', async () => 
   assert.equal(media.title, 'Avatar: The Last Airbender');
   assert.equal(media.isTv, true);
 });
+
+test('idiomas: cada web se etiqueta como Multi, Latino, Castellano, Inglés o Subtitulado', () => {
+  const core = require('./.build/core.cjs');
+  const expected = {
+    // Multi-audio
+    'multi': 'Multi', 'Dual Audio': 'Multi', 'MULTI | 1080p': 'Multi',
+    // Español de Latinoamérica (se comprueba antes que «español»)
+    'latino': 'Latino', 'LAT': 'Latino', 'Español Latino': 'Latino',
+    'Español (Latinoamérica)': 'Latino', 'Audio Latino HD': 'Latino',
+    // Español de España
+    'castellano': 'Castellano', 'Español': 'Castellano', 'Spanish': 'Castellano',
+    // Inglés
+    'English': 'Inglés', 'en': 'Inglés',
+    // Subtítulos
+    'Español Subtitulado': 'Castellano Subtitulado',
+    'Japonés Subtitulado': 'Japonés Subtitulado',
+    'English subtitles': 'Inglés Subtitulado',
+    'SUBTITULADO': 'Subtitulado',
+    // Originales de los catálogos de anime/dorama
+    'Hindi': 'Hindi', 'jap': 'Japonés',
+    // Los sitios pegan la calidad al idioma: «Kat 1 - Hindi1080p»
+    'Kat 1 - Hindi1080p': 'Hindi', 'Kat 2 - English1080p': 'Inglés', 'Latino720p': 'Latino',
+    // Sin pista de idioma
+    '1080p': null, '': null
+  };
+  for (const [text, label] of Object.entries(expected)) {
+    assert.equal(core.languageLabel(text), label, text);
+  }
+  // «Original» / «VO» no identifican un idioma: no se inventa «Inglés».
+  assert.equal(core.languageLabel('Original'), null);
+  assert.equal(core.languageLabel('VO'), null);
+  // «Español Latino» nunca debe caer en Castellano.
+  assert.notEqual(core.languageLabel('Español Latino'), 'Castellano');
+});
+
+test('idiomas: al ordenar, el audio en español va antes que las versiones solo subtituladas', () => {
+  const core = require('./.build/core.cjs');
+  const streams = [
+    { quality: '1080p', language: 'Japonés Subtitulado', url: 'https://cdn.example/3.mp4' },
+    { quality: '1080p', language: 'Multi', url: 'https://cdn.example/1.mp4' },
+    { quality: '1080p', language: 'Inglés Subtitulado', url: 'https://cdn.example/4.mp4' },
+    { quality: '1080p', language: 'Castellano', url: 'https://cdn.example/2b.mp4' },
+    { quality: '1080p', language: 'Latino', url: 'https://cdn.example/2.mp4' }
+  ];
+  const ordered = core.sortByQuality(streams).map(stream => stream.language);
+  assert.deepEqual(ordered, ['Multi', 'Latino', 'Castellano', 'Inglés Subtitulado', 'Japonés Subtitulado']);
+});
