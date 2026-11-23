@@ -138,6 +138,22 @@ function pagePlayerLinks(html, base) {
       break;
     }
   }
+  // Embed69 publica sus reproductores en onclick="go_to_playerVast('...')".
+  // El nombre del servidor está en el <span> que sigue al onclick, dentro del
+  // mismo <li>; se lee hacia delante y se descartan las descargas.
+  var vast = /go_to_playerVast\(\s*['"]([^'"]+)['"]/gi;
+  var vastMatch;
+  var vastText = String(html || '');
+  while ((vastMatch = vast.exec(vastText)) && links.length < 40) {
+    var vastUrl = publicHttpUrl(String(vastMatch[1]).trim(), base);
+    if (!vastUrl || isPlayerAdvertisement(vastUrl)) continue;
+    var nearby = vastText.slice(vastMatch.index, vastMatch.index + 320);
+    var labelMatch = /<span\b[^>]*>([\s\S]{1,60}?)<\/span>/i.exec(nearby);
+    var label = labelMatch ? stripTags(labelMatch[1]).trim() : '';
+    if (/download|1fichier/i.test(label)) continue;
+    links.push({ url: vastUrl, name: label });
+  }
+
   // A few video hosts use a simple redirect instead of an iframe.
   var redirect = /(?:window\.)?location(?:\.href)?\s*=\s*["']([^"']+)["']/i.exec(String(html || ''));
   if (redirect) {
@@ -185,6 +201,25 @@ function powSatisfied(hash, bits) {
   return (nibble >> (4 - restBits)) === 0;
 }
 
+/* Embed69 valida su propio PoW contando CERO HEXADECIMALES al principio
+ * (`hash.startsWith("0".repeat(difficulty))` en la referencia de FlixLatam),
+ * no bits. Con el criterio de Anubis el nonce devuelto no lo acepta el sitio y
+ * el dataLink nunca se descifraba: por eso FlixLatam devolvía cero enlaces. */
+function solvePlayerPowHex(challenge, digits) {
+  var length = parseInt(digits, 10);
+  if (!challenge || String(challenge).length > 512 || !isFinite(length) || length < 0 || length > 6) return null;
+  var prefix = '';
+  for (var d = 0; d < length; d++) prefix += '0';
+  var budget = typeof HOSTED_MAX_POW_MS === 'number' ? Math.max(250, Math.min(HOSTED_MAX_POW_MS, 6000)) : 6000;
+  var started = Date.now();
+  for (var n = 0; n < 20000000; n++) {
+    if (n % 256 === 0 && Date.now() - started > budget) break;
+    var hash = sha256Hex(challenge + n);
+    if (hash.slice(0, length) === prefix) return { nonce: n, hash: hash, elapsed: Math.max(1, Date.now() - started) };
+  }
+  return null;
+}
+
 function solvePlayerPow(challenge, difficulty) {
   var bits = parseInt(difficulty, 10);
   if (!challenge || String(challenge).length > 512 || !isFinite(bits) || bits < 0 || bits > 24) return null;
@@ -218,7 +253,7 @@ function embed69Links(html, base) {
     var powSalt = variable('POW_SALT');
     var diff = /\bPOW_DIFFICULTY\s*=\s*(\d+)/i.exec(text);
     if (powChallenge && powSalt && diff) {
-      var solved = solvePlayerPow(powChallenge, diff[1]);
+      var solved = solvePlayerPowHex(powChallenge, diff[1]);
       if (solved) key = sha256Hex(powChallenge + solved.nonce + powSalt);
     }
   }
