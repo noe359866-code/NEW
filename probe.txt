@@ -1,0 +1,127 @@
+
+===== pelis24 search :: https://ww1.pelis24.blog/search?q=interstellar
+status=403 type=text/html; charset=UTF-8 bytes=5708 final=https://ww1.pelis24.blog/search?q=interstellar
+--- iframe/embed: 0 líneas
+--- servers/ajax: 0 líneas
+--- json-inline: 0 líneas
+
+===== pelis24 detail :: https://ww1.pelis24.blog/pelicula/interestelar-2014
+status=403 type=text/html; charset=UTF-8 bytes=5708 final=https://ww1.pelis24.blog/pelicula/interestelar-2014
+--- iframe/embed: 0 líneas
+--- servers/ajax: 0 líneas
+--- json-inline: 0 líneas
+
+===== fuegocine home :: https://fuegocine.com/
+status=200 type=text/html; charset=UTF-8 bytes=49170 final=https://fuegocine.com/
+--- iframe/embed: 0 líneas
+--- servers/ajax: 2 líneas
+   Este sitio web opera exclusivamente como un índice de contenidos multimedia recopilados de fuentes públicas de internet (tales como TMDb, APIs de vídeo y servidores externos de alojamiento). FuegoCine.com no aloja, almacena ni distribuye archivos protegidos por derechos de autor en sus propios servi…
+   $.ajax({
+--- json-inline: 0 líneas
+
+===== fuegocine watch :: https://fuegocine.com/movies/watch/la-odisea/227
+status=200 type=text/html; charset=UTF-8 bytes=42326 final=https://fuegocine.com/movies/watch/la-odisea/227
+--- iframe/embed: 18 líneas
+   .iframe-container {
+   .iframe-container iframe {
+   <div class="iframe-container">
+   <iframe src="https://videro.my/e/ueuf2z2cltcp6sw" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen allow="autoplay; fullscreen" sandbox="allow-scripts allow-same-origin allow-presentation allow-forms allow-modals"></iframe>
+   <div class="iframe-container">
+   <iframe src="https://player.abyssplayer.com/KxBGoCWcV" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen allow="autoplay; fullscreen" sandbox="allow-scripts allow-same-origin allow-presentation allow-forms allow-modals"></iframe>
+   <div class="iframe-container">
+   <iframe src="https://unlimplay.com/f/embed/movie/1368337" width="100%" height="500" allowfullscreen allow="autoplay; encrypted-media" ></iframe>
+   1: `<iframe src="https://videro.my/e/ueuf2z2cltcp6sw" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen allow="autoplay; fullscreen" sandbox="allow-scripts allow-same-origin allow-presentation allow-forms allow-modals"></iframe>`,
+   2: `<iframe src="https://player.abyssplayer.com/KxBGoCWcV" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen allow="autoplay; fullscreen" sandbox="allow-scripts allow-same-origin allow-presentation allow-forms allow-modals"></iframe>`,
+   3: `<iframe src="https://unlimplay.com/f/embed/movie/1368337" width="100%" height="500" allowfullscreen allow="autoplay; encrypted-media" ></iframe>`,
+   var innerBox = container1.querySelector('.iframe-container');
+   var innerBox = container2.querySelector('.iframe-container');
+   var innerBox = container3.querySelector('.iframe-container');
+   var innerBoxActive = activeContainer.querySelector('.iframe-container');
+   <div class="iframe-container">
+   .iframe-container {
+   .iframe-container iframe {
+--- servers/ajax: 31 líneas
+   <!-- Estilos optimizados para el reproductor principal y trailers -->
+   <div class="container-fluid bg-dark video-player-base">
+   <div class="multi-server-player">
+   <!-- Botones de servidores (solo si el servidor tiene un enlace cargado) -->
+   <div class="server-selector mb-3" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; justify-content: center;">
+   <button type="button" class="btn btn-sm btn-danger active-server" id="btn-server1" onclick="switchServer(1)">
+   <i class="fa fa-play-circle"></i> Servidor 1
+   <button type="button" class="btn btn-sm btn-secondary" id="btn-server2" onclick="switchServer(2)">
+   <i class="fa fa-play-circle"></i> Servidor 2
+   <button type="button" class="btn btn-sm btn-secondary" id="btn-server3" onclick="switchServer(3)">
+   <i class="fa fa-play-circle"></i> Servidor 3
+   <div id="container-server1" class="video-embed-box" style="">
+   <div id="container-server2" class="video-embed-box" style="display: none;">
+   <iframe src="https://player.abyssplayer.com/KxBGoCWcV" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen allow="autoplay; fullscreen" sandbox="allow-scripts allow-same-origin allow-presentation allow-forms allow-modals"></iframe>
+   <div id="container-server3" class="video-embed-box" style="display: none;">
+   <!-- Script para alternar entre servidores de forma limpia y apagar los anteriores -->
+   var serverHtmlContent = {
+   2: `<iframe src="https://player.abyssplayer.com/KxBGoCWcV" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen allow="autoplay; fullscreen" sandbox="allow-scripts allow-same-origin allow-presentation allow-forms allow-modals"></iframe>`,
+   function switchServer(num) {
+   var container1 = document.getElementById('container-server1');
+   var btn1 = document.getElementById('btn-server1');
+   var container2 = document.getElementById('container-server2');
+   var btn2 = document.getElementById('btn-server2');
+   var container3 = document.getElementById('container-server3');
+   var btn3 = document.getElementById('btn-server3');
+   var activeContainer = document.getElementById('container-server' + num);
+   var activeBtn = document.getElementById('btn-server' + num);
+   innerBoxActive.innerHTML = serverHtmlContent[num];
+   activeBtn.className = 'btn btn-sm btn-danger active-server';
+   Este sitio web opera exclusivamente como un índice de contenidos multimedia recopilados de fuentes públicas de internet (tales como TMDb, APIs de vídeo y servidores externos de alojamiento). FuegoCine.com no aloja, almacena ni distribuye archivos protegidos por derechos de autor en sus propios servi…
+   $.ajax({
+--- json-inline: 0 líneas
+
+===== fuegocine búsqueda :: https://fuegocine.com/search?q=odisea
+status=500 type=text/html; charset=UTF-8 bytes=1099637 final=https://fuegocine.com/search?q=odisea
+--- resultados: 0 líneas
+
+===== fuegocine búsqueda :: https://fuegocine.com/movies?search=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?search=odisea
+--- resultados: 18 líneas
+   <a href="https://fuegocine.com/movies/details/jack-y-jill/345" title="Jack y Jill">
+   <a href="https://fuegocine.com/movies/details/del-cielo-al-infierno/344" title="Del Cielo al Infierno">
+   <a href="https://fuegocine.com/movies/details/cuando-el-cielo-se-equivoca/343" title="Cuando el Cielo se Equivoca">
+   <a href="https://fuegocine.com/movies/details/13-fantasmas/342" title="13 Fantasmas">
+   <a href="https://fuegocine.com/movies/details/el-efecto-mariposa/341" title="El Efecto Mariposa">
+   <a href="https://fuegocine.com/movies/details/apex/340" title="Apex">
+   <a href="https://fuegocine.com/movies/details/wake-up-dead-man-un-misterio-de-knives-out/339" title="Wake Up Dead Man: Un Misterio de Knives Out">
+   <a href="https://fuegocine.com/movies/details/la-barbería/338" title="La Barbería">
+   <a href="https://fuegocine.com/movies/details/fenomeno-siniestro/337" title="Fenomeno Siniestro">
+   <a href="https://fuegocine.com/movies/details/noroi-la-maldición/336" title="Noroi: La Maldición">
+   <a href="https://fuegocine.com/movies/details/norbit/335" title="Norbit">
+   <a href="https://fuegocine.com/movies/details/corazón-de-tinta/334" title="Corazón de Tinta">
+   <a href="https://fuegocine.com/movies/details/dos-locas-en-fuga/328" title="Dos Locas en Fuga">
+   <a href="https://fuegocine.com/movies/details/desde-la-oscuridad/327" title="Desde la Oscuridad">
+   <a href="https://fuegocine.com/movies/details/f1-la-película/326" title="F1 La Película">
+   <a href="https://fuegocine.com/movies/details/la-vida-de-chuck/325" title="La Vida de Chuck">
+   <a href="https://fuegocine.com/movies/details/plan-de-escape/324" title="Plan de Escape">
+   <a href="https://fuegocine.com/movies/details/ghost-in-the-shell-la-vigilante-del-futuro/323" title="Ghost in the Shell: La Vigilante del Futuro">
+
+===== fuegocine búsqueda :: https://fuegocine.com/search/movie?q=odisea
+status=404 type=text/html; charset=UTF-8 bytes=13238 final=https://fuegocine.com/search/movie?q=odisea
+--- resultados: 0 líneas
+
+===== fuegocine búsqueda :: https://fuegocine.com/movies?q=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?q=odisea
+--- resultados: 18 líneas
+   <a href="https://fuegocine.com/movies/details/jack-y-jill/345" title="Jack y Jill">
+   <a href="https://fuegocine.com/movies/details/del-cielo-al-infierno/344" title="Del Cielo al Infierno">
+   <a href="https://fuegocine.com/movies/details/cuando-el-cielo-se-equivoca/343" title="Cuando el Cielo se Equivoca">
+   <a href="https://fuegocine.com/movies/details/13-fantasmas/342" title="13 Fantasmas">
+   <a href="https://fuegocine.com/movies/details/el-efecto-mariposa/341" title="El Efecto Mariposa">
+   <a href="https://fuegocine.com/movies/details/apex/340" title="Apex">
+   <a href="https://fuegocine.com/movies/details/wake-up-dead-man-un-misterio-de-knives-out/339" title="Wake Up Dead Man: Un Misterio de Knives Out">
+   <a href="https://fuegocine.com/movies/details/la-barbería/338" title="La Barbería">
+   <a href="https://fuegocine.com/movies/details/fenomeno-siniestro/337" title="Fenomeno Siniestro">
+   <a href="https://fuegocine.com/movies/details/noroi-la-maldición/336" title="Noroi: La Maldición">
+   <a href="https://fuegocine.com/movies/details/norbit/335" title="Norbit">
+   <a href="https://fuegocine.com/movies/details/corazón-de-tinta/334" title="Corazón de Tinta">
+   <a href="https://fuegocine.com/movies/details/dos-locas-en-fuga/328" title="Dos Locas en Fuga">
+   <a href="https://fuegocine.com/movies/details/desde-la-oscuridad/327" title="Desde la Oscuridad">
+   <a href="https://fuegocine.com/movies/details/f1-la-película/326" title="F1 La Película">
+   <a href="https://fuegocine.com/movies/details/la-vida-de-chuck/325" title="La Vida de Chuck">
+   <a href="https://fuegocine.com/movies/details/plan-de-escape/324" title="Plan de Escape">
+   <a href="https://fuegocine.com/movies/details/ghost-in-the-shell-la-vigilante-del-futuro/323" title="Ghost in the Shell: La Vigilante del Futuro">
