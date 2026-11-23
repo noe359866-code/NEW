@@ -52,9 +52,11 @@ jobs:
           for file in providers/*.js addon/*.js sports/*.js; do
             node --check "$file"
           done
-      - name: Sonda de fuentes (solo ejecución manual)
-        if: ${{ matrix.node == '22' && inputs.probe != '' }}
-        run: node tools/probe-sites.js "${{ inputs.probe }}"
+      # Los push sí están permitidos: se activa escribiendo [probe] en el
+      # mensaje del commit (o a mano con la entrada `probe`).
+      - name: Sonda de fuentes
+        if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]')) }}
+        run: node tools/probe-sites.js "${{ inputs.probe || 'all' }}"
       - name: Arrancar el addon y comprobar el manifiesto
         run: |
           PORT=7099 node addon/server.js &
