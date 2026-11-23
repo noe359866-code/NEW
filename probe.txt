@@ -125,7 +125,7 @@ status=200 type=application/json bytes=389 final=https://vimeos.unlimplay.com/?i
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=RkfN8Dy9H5tyUtxWUkMbHfxrECF64h60Bm-hmbIao1o&s=1795403095&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
+   "direct": "https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=XVhC_HHMKdsu4UNATYMNNxh-TsMNni9r34hg84yC6HQ&s=1795403518&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
    }
    }
    }
@@ -1725,6 +1725,36 @@ status=200 type=text/html; charset=UTF-8 bytes=143480 final=https://k-drama.in/w
 --- json-inline: 1 líneas
    "url": "https://k-drama.in/detail/movie/one-year-to-live-buy-a-man-1654940"
 
+===== vidsync embed :: https://vidsync.pro/embed/tv/117376/1/1?dublang=en&autoplay=1
+status=200 type=text/html; charset=utf-8 bytes=3694 final=https://vidsync.pro/embed/tv/117376/1/1?dublang=en&autoplay=1
+--- iframe:
+   (sin coincidencias)
+--- hls:
+   (sin coincidencias)
+--- json:
+   (sin coincidencias)
+--- api:
+   (sin coincidencias)
+
+===== vidsync movie :: https://vidsync.pro/embed/movie/1654940?autoplay=1
+status=200 type=text/html; charset=utf-8 bytes=3694 final=https://vidsync.pro/embed/movie/1654940?autoplay=1
+--- hls:
+   (sin coincidencias)
+--- iframe:
+   (sin coincidencias)
+
+===== fx bundle2 :: https://framextv.cc/assets/index-DvMX4GhI.js
+status=200 type=application/javascript bytes=888072 final=https://framextv.cc/assets/index-DvMX4GhI.js
+--- http:
+   …\/+$/,``),ee=`https://crap.hybrows.workers.dev`.replace(/\/+$/,``),te=`https://frappe.hybrows.workers.dev`.replace(/\/+$/,``),ne=`https://discord.gg/vPCHZ6PgRX`,re=`https://framextv-downloads.hybrows.workers.dev/download`.replace(/\/+$/,``);async function ie(e…
+   …workers.dev`.replace(/\/+$/,``),te=`https://frappe.hybrows.workers.dev`.replace(/\/+$/,``),ne=`https://discord.gg/vPCHZ6PgRX`,re=`https://framextv-downloads.hybrows.workers.dev/download`.replace(/\/+$/,``);async function ie(e,t,n){let r=typeof e==`string`?e:ty…
+   …y)`} (Active: ${m()}, Port: ${window.location.port||`default`})`);var se=`https://api.wecollege.net`,ce=`https://www.movy.sx`,le=`https://www.movy.sx/`;async function C(e,t){try{let n=await fetch(e,{signal:t});if(n.ok)return n}catch(e){if(e?.name===`AbortError…
+   …turn{success:!1,provider:`headhunter`,sources:[],error:`Failed to generate VidLink encrypted ID via WebAssembly`};let s=e===`tv`?`https://vidlink.pro/api/b/tv/${o}/${n}/${r}?multiLang=0`:`https://vidlink.pro/api/b/movie/${o}?multiLang=0`,c=ee||te,l=te&&te!==c?…
+   …iled to generate VidLink encrypted ID via WebAssembly`};let s=e===`tv`?`https://vidlink.pro/api/b/tv/${o}/${n}/${r}?multiLang=0`:`https://vidlink.pro/api/b/movie/${o}?multiLang=0`,c=ee||te,l=te&&te!==c?te:``,u=c?`${c}/?url=${encodeURIComponent(s)}`:``,d=l?`${l…
+   …,10)||0)-n});for(let e of a){let t=n[e];if(t&&t.url&&typeof t.url==`string`&&t.url.startsWith(`http`)){let n=t.headers?.referer||`https://filmboom.top/`,i=t.headers?.origin||`https://filmboom.top`,a=`${b}/api/proxy?url=${encodeURIComponent(t.url)}&referer=${en…
+--- const:
+   …p-1 text-white/45 hover:text-white/80 transition-colors cursor-pointer`,children:(0,H.jsx)(Kd,{className:`w-3.5 h-3.5`})})]})]})},Qp=`https://graphql.anilist.co`;function $p(){return b||(typeof window<`u`&&window.location?.origin&&window.location.origin!==`nul…
+
 ===== kdesa movie :: https://kdesa.stream/media/tmdb-movie-1595124
 status=403 type=text/html; charset=UTF-8 bytes=5698 final=https://kdesa.stream/media/tmdb-movie-1595124
 --- iframe/embed: 0 líneas
@@ -1757,8 +1787,7 @@ status=403 type=text/html; charset=UTF-8 bytes=5641 final=https://kdesa.stream/?
 ===== kdesa búsqueda :: https://kdesa.stream/buscar?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/buscar?q=dune
 --- fichas: 0 líneas
---- episodios: 1 líneas
-   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
+--- episodios: 0 líneas
 
 ===== kdesa búsqueda :: https://kdesa.stream/api/search?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/api/search?q=dune
@@ -1769,4 +1798,5 @@ status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/a
 ===== kdesa home :: https://kdesa.stream/
 status=403 type=text/html; charset=UTF-8 bytes=5583 final=https://kdesa.stream/
 --- fichas: 0 líneas
---- episodios: 0 líneas
+--- episodios: 1 líneas
+   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
