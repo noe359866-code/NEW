@@ -758,7 +758,14 @@ async function round39() {
         const r = await fetch(target, { method, headers: { 'User-Agent': UA, ...(method === 'GET' ? { Range: 'bytes=0-255' } : {}), ...extra } });
         console.log(name + '/' + method + ': ' + r.status + ' ' + (r.headers.get('content-type') || '') +
           ' len=' + (r.headers.get('content-length') || '') + ' ranges=' + (r.headers.get('accept-ranges') || ''));
-        if (method === 'GET') { const b = await r.arrayBuffer(); console.log('  bytes=' + b.byteLength); }
+        if (method === 'GET') {
+          const b = await r.arrayBuffer();
+          const txt = Buffer.from(b).toString('utf8');
+          const title = (/<title>([^<]{0,120})<\/title>/i.exec(txt) || [])[1] || '';
+          console.log('  bytes=' + b.byteLength + ' title=' + JSON.stringify(title) +
+            ' sf=' + (r.headers.get('server') || '') + ' cf=' + (r.headers.get('cf-mitigated') || ''));
+          console.log('  muestra: ' + JSON.stringify(txt.slice(0, 160)));
+        }
       } catch (e) { console.log(name + '/' + method + ': ERR ' + e.message); }
     }
   }
@@ -828,6 +835,7 @@ async function main() {
   if (only === 'dlx37') await round36();
   if (only === 'dlx38') await round36();
   if (only === 'dlx39') await round39();
+  if (only === 'dlx40') await round39();
 }
 
 if (require.main === module) {
