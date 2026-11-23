@@ -70,6 +70,8 @@ jobs:
             node tools/live-check.js --site tioanime --id 16498 --type tv --season 1 --episode 1 --title "Shingeki no Kyojin" --year 2013 --season-counts 25 || true
             node tools/live-check.js --site kdrama --id 117376 --type tv --season 1 --episode 1 --title "Vincenzo" --year 2021 --season-counts 20 || true
             node tools/live-check.js --site framextv --id 155 --type movie --title "The Dark Knight" --year 2008 || true
+            node tools/live-check.js --site kdrama --id 155 --type movie --title "The Dark Knight" --year 2008 || true
+            node tools/live-check.js --site framextv --id 117376 --type tv --season 1 --episode 1 --title "Vincenzo" --year 2021 --season-counts 20 || true
           } > live.txt 2>&1
       # El artefacto y los registros no son accesibles desde este entorno, así
       # que el resultado se confirma en la misma rama (con [skip ci]).
