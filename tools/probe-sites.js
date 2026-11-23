@@ -407,62 +407,25 @@ async function round22() {
     [['url en tabla', 'https?[^"\'\\s]{0,120}\\.(?:m3u8|mp4)'], ['file', 'm3u8|master\\.']], 400);
 }
 
-/* Ronda 23: usar el descompresor real del addon sobre los hosts con packer. */
-function loadUnpacker() {
-  const fs = require('node:fs');
-  const path = require('node:path');
-  const vm = require('node:vm');
-  const file = fs.readFileSync(path.join(__dirname, '..', 'src', 'core', '70-direct.js'), 'utf8');
-  const pick = (name) => {
-    const start = file.indexOf('function ' + name + '(');
-    if (start === -1) return '';
-    let depth = 0, i = file.indexOf('{', start);
-    for (let j = i; j < file.length; j++) {
-      if (file[j] === '{') depth++;
-      else if (file[j] === '}') { depth--; if (!depth) return file.slice(start, j + 1); }
-    }
-    return '';
-  };
-  const sandbox = { console, URL, decodeURIComponent, String, RegExp };
-  sandbox.globalThis = sandbox;
-  vm.createContext(sandbox);
-  vm.runInContext(pick('unescapePlayerText') + '\n' + pick('unpackPlayerScript'), sandbox);
-  return sandbox.unpackPlayerScript;
-}
-
+/* Ronda 23: hosts con packer. Se usa la lista blanca del addon en vez de
+ * extraer funciones sueltas: un recorte por índice rompe las expresiones. */
 async function round23() {
-  const unpack = loadUnpacker();
+  const { loadUnpack } = require('./unpack-helper');
+  const unpack = loadUnpack();
+  if (!unpack) { console.log('===== unpack\nno se pudo cargar el descompresor'); return; }
   for (const url of ['https://vidhidevip.com/v/7edm3v3ca7mf', 'https://filemoon.sx/e/d02q4wt2b80n',
-    'https://streamwish.to/e/6dz22bl4exq4', 'https://vidara.to/e/x']) {
-    const res = await fetchRaw(url);
-    const out = unpack(res.text || '') || '';
+    'https://streamwish.to/e/6dz22bl4exq4']) {
+    let out = '';
+    let status = 0;
+    try {
+      const res = await fetchRaw(url);
+      status = res.status;
+      out = unpack(res.text || '') || '';
+    } catch (e) { out = ''; }
     console.log('===== unpack ' + url);
-    console.log('status=' + res.status + ' bytes=' + (res.text || '').length + ' descomprimido=' + out.length);
+    console.log('status=' + status + ' descomprimido=' + out.length);
     const media = out.match(/https?:[^"'\\s]{10,220}\.(?:m3u8|mp4)[^"'\\s]{0,120}/g) || [];
     console.log('--- media:\n' + (media.length ? media.slice(0, 6).map((u) => '   ' + u).join('\n') : '   (sin coincidencias)'));
-    console.log('--- muestra:\n' + out.slice(0, 700).replace(/\n/g, ' '));
-  }
-}
-
-/* Ronda 24: el selector de idiomas de KatDrama. ¿De dónde sale «Latino»? */
-async function round24() {
-  const page = 'https://k-drama.in/watch/tv/n-a-117376-episode-1';
-  await probe('kd selector idioma', page, [
-    ['switchServer', "switchServer\\([^)]{0,160}"],
-    ['buttons', '<button[^>]{0,200}switchServer[\\s\\S]{0,300}?</button>'],
-    ['selector/idiomas', 'idioma|language|doblaje|audio|latino|castellano|subtitulado'],
-    ['select/option', '<select[\\s\\S]{0,600}?</select>|<option[^>]*>[^<]{0,40}'],
-    ['data attrs', 'data-(?:lang|language|audio|dub|server)[a-z-]*="[^"]{0,40}"']
-  ]);
-  await probe('kd detail idioma', 'https://k-drama.in/detail/tv/vincenzo-117376', [
-    ['selector/idiomas', 'idioma|language|doblaje|audio|latino|castellano|subtitulado'],
-    ['select/option', '<select[\\s\\S]{0,600}?</select>|<option[^>]*>[^<]{0,40}'],
-    ['buttons', '<button[^>]{0,160}>[^<]{0,40}</button>']
-  ]);
-  // ¿El reproductor propio recibe el idioma por parámetro?
-  for (const u of ['https://k-drama.in/tubi2.php?id=117376&s=1&e=1&lang=latino',
-                   'https://k-drama.in/api/languages?tmdb=117376']) {
-    await probe('kd lang param', u, [['idioma', 'latino|castellano|subtitulado'], ['json', '.*']]);
   }
 }
 
