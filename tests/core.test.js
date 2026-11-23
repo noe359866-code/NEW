@@ -102,3 +102,44 @@ test('data-player en Base64 y dataLink AES producen enlaces de reproductor, no e
   assert.equal(core.sha256Hex('challenge' + solved.nonce), solved.hash);
   assert.equal(core.solvePlayerPow('challenge', 40), null);
 });
+
+// Referencia: FlixLatamProvider.solvePoW de StreamflixReborn. Embed69 valida
+// «hash.startsWith("0".repeat(difficulty))», es decir ceros HEXADECIMALES, no
+// bits como Anubis. Con el criterio equivocado el dataLink no se descifraba.
+test('Embed69 resuelve su PoW con ceros hexadecimales y descifra el dataLink', () => {
+  const solved = core.solvePlayerPowHex('reto', 4);
+  assert.ok(solved, 'resuelve 4 ceros hexadecimales');
+  assert.match(solved.hash, /^0000/);
+  assert.equal(core.sha256Hex('reto' + solved.nonce), solved.hash);
+  assert.equal(core.solvePlayerPowHex('reto', 9), null, 'un presupuesto imposible no se acepta');
+
+  const key = crypto.createHash('sha256').update('reto' + solved.nonce + 'sal').digest();
+  const iv = Buffer.alloc(16, 3);
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+  const link = Buffer.concat([iv, cipher.update('https://player.example/embed/pow'), cipher.final()]).toString('base64');
+  const html = `const POW_CHALLENGE = 'reto'; const POW_SALT = 'sal'; const POW_DIFFICULTY = 4;
+    let dataLink = ${JSON.stringify([{ video_language: 'LAT', sortedEmbeds: [{ servername: 'filemoon', link }] }])};`;
+  const links = core.embed69Links(html, 'https://embed69.org/f/x');
+  assert.equal(links.length, 1);
+  assert.equal(links[0].url, 'https://player.example/embed/pow');
+});
+
+test('dataLink en formato cabecera.payload.firma se decodifica en base64', () => {
+  const payload = Buffer.from(JSON.stringify({ link: 'https://player.example/embed/jwt' })).toString('base64').replace(/=+$/, '');
+  const link = ['eyJhbGciOiJIUzI1NiJ9', payload, 'firma'].join('.');
+  const html = `let dataLink = ${JSON.stringify([{ video_language: 'LAT', sortedEmbeds: [{ servername: 'streamtape', link }] }])};`;
+  const links = core.embed69Links(html, 'https://embed69.org/f/x');
+  assert.equal(links.length, 1);
+  assert.equal(links[0].url, 'https://player.example/embed/jwt');
+});
+
+test('go_to_playerVast aporta los reproductores y descarta las descargas', () => {
+  const html = `<ul class="OD_1">
+    <li onclick="go_to_playerVast('https://p.example/e/1')"><span>Filemoon</span></li>
+    <li onclick="go_to_playerVast('https://p.example/dl')"><span>Download</span></li>
+    <li onclick="go_to_playerVast('//p2.example/e/2')"><span>Streamtape</span></li>
+  </ul>`;
+  const links = core.pagePlayerLinks(html, 'https://embed69.org/f/tt1/');
+  assert.deepEqual(links.map(item => item.url), ['https://p.example/e/1', 'https://p2.example/e/2']);
+  assert.equal(links[0].name, 'Filemoon');
+});

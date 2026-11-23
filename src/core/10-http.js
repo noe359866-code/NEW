@@ -127,20 +127,30 @@ function request(url, options) {
         var status = response && typeof response.status === 'number' ? response.status : 0;
         var finalUrl = (response && response.url) || url;
         absorbCookies(hostKeyOf(finalUrl) || hostKey, response && response.headers);
-        // Algunos desafíos Anubis llegan con 403 o 503. Solo en páginas de
-        // reproductor conservamos el texto del error para reconocer el reto;
-        // no convertimos una respuesta fallida en éxito.
+        // Algunos bloqueos llegan con 403/503 y un desafío (Anubis, LiteSpeed)
+        // que hay que reconocer en el cuerpo. En páginas se conserva ese texto
+        // para poder resolverlo; nunca se convierte un error en éxito.
         var challengeStatus = opts.pageOnly && (status === 403 || status === 503);
         if (!response || (!response.ok && !challengeStatus)) {
           return { ok: false, status: status, url: finalUrl, bytes: new Uint8Array(0), text: '', headers: (response && response.headers) || {} };
         }
         var contentType = response.headers && response.headers.get ? String(response.headers.get('content-type') || '') : '';
+        // Un 403 puede traer el cuerpo vacío o binario: se marca recordable
+        // para que el orquestador printe las cabeceras del bloqueo.
+        var recordable = opts.pageOnly === 'record' && (status === 403 || status === 503);
         if (opts.pageOnly && (directMediaUrl(finalUrl) || /^(?:video\/|audio\/|application\/(?:vnd\.apple\.mpegurl|x-mpegurl|octet-stream))/i.test(contentType))) {
           return { ok: !!response.ok, status: status, url: finalUrl, isMedia: true, bytes: new Uint8Array(0), text: '', headers: response.headers || {} };
         }
+        if (recordable && !/text\/|json|html/i.test(contentType)) {
+          // Sin cuerpo legible: solo queda el estado y las cabeceras.
+          try { response.arrayBuffer().catch(function () {}); } catch (e) { /* ignora */ }
+          return { ok: false, status: status, url: finalUrl, bytes: new Uint8Array(0), text: '',
+            headers: response.headers || {}, challenge: true, blocked: true };
+        }
         return response.arrayBuffer().then(function (buffer) {
           var bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
-          return { ok: !!response.ok, status: status, url: finalUrl, bytes: bytes, text: bytesToText(bytes), headers: response.headers || {} };
+          return { ok: !!response.ok, status: status, url: finalUrl, bytes: bytes, text: bytesToText(bytes),
+            headers: response.headers || {}, challenge: challengeStatus, blocked: challengeStatus };
         }, function () {
           return response.text().then(function (text) {
             return { ok: !!response.ok, status: status, url: finalUrl, bytes: utf8ToBytes(text), text: text, headers: response.headers || {} };

@@ -4,12 +4,14 @@
 
 | Fuente | Qué busca el addon |
 | --- | --- |
-| FlixLatam | Fuentes directas para películas, series y anime. |
+| TioAnime | Anime en japonés con subtítulos: directorio → ficha → episodio → Voe/YourUpload. |
+| FuegoCine | Películas y series: catálogo → ficha → temporada/episodio → Unlimplay, Abyssplayer o Videro. Unlimplay entrega HLS directo desde su API JSON. |
 | Latanime | Fuentes directas para películas de anime y episodios. |
 | CinePlus123 | Fuentes directas para películas y episodios de series, con sus idiomas disponibles. |
+| FlixLatam | En el repositorio, **desactivado**: Embed69 devuelve 403 a las IP del servidor. |
 | TVEnVivo, OnDemand y TheDaddy | Catálogos de canales y eventos deportivos y sus enlaces directos. |
 
-Las películas, series y anime se buscan desde los **títulos que ya aparecen en el catálogo del cliente**; este addon no aporta un catálogo propio de películas o anime. Sí aporta catálogos de deportes. Solo devuelve enlaces `.m3u8` o `.mp4` identificados en los sitios: **no inventa enlaces ni convierte páginas HTML en vídeo**. La disponibilidad depende de las fuentes, la región y el reproductor.
+Las fuentes activas son TioAnime, FuegoCine, Latanime y CinePlus123. Las películas, series y anime se buscan desde los **títulos que ya aparecen en el catálogo del cliente**; este addon no aporta un catálogo propio de películas o anime. Sí aporta catálogos de deportes. Solo devuelve enlaces `.m3u8` o `.mp4` identificados en los sitios: **no inventa enlaces ni convierte páginas HTML en vídeo**. La disponibilidad depende de las fuentes, la región y el reproductor.
 
 ## Desplegar en Render
 
@@ -65,10 +67,20 @@ Los IDs admitidos son IMDb `tt…`, TMDB `tmdb:…`, `tmdb:`, `tmdb_`, `tmdb-` o
 - El servidor consulta documentos HTML/JSON para descubrir fuentes, pero **no tiene proxy de vídeo ni retransmite playlists o segmentos**. No solicita URLs identificadas como `.m3u8`/`.mp4`, tampoco sigue redirecciones a esos medios y corta las respuestas que no son documentos. El reproductor conecta directamente al origen.
 - Las cabeceras necesarias se entregan en `behaviorHints.proxyHeaders.request`: es el nombre del campo del protocolo, no un proxy proporcionado por este servicio. Además de la URL se envían `behaviorHints.bingeGroup` (mantiene el mismo reproductor al pasar de episodio) y `behaviorHints.filename` (insignias de calidad); no se marca `notWebReady` para no desactivar la reproducción del cliente. Algunos reproductores o versiones del cliente podrían no respetarlas. Los enlaces pueden caducar o requerir cookies, CAPTCHA, DRM u otras protecciones que no se puedan resolver.
 - Las solicitudes de documentos usan HTTPS, puerto estándar, comprobación DNS IPv4 contra redes no públicas, límites de tamaño y tiempo, redirecciones limitadas y un máximo de seis búsquedas o catálogos simultáneos. Son GET, salvo el POST JSON restringido a la API conocida de Vidara (`/api/stream` y parámetros validados); ese POST no sigue redirecciones y cada salto GET vuelve a validarse. La resolución VOD tiene un presupuesto de 30 segundos, 96 solicitudes en total y 32 por fuente; las redirecciones que se siguen también cuentan. Los enlaces que CinePlus123 ya haya resuelto se conservan si otra opción agota el plazo. El catálogo deportivo se guarda en memoria durante 60 segundos por fuente; OnDemand se actualiza al buscar un stream. El servicio no incluye autenticación ni límites por usuario: si lo expones públicamente, añade protección contra abuso en el perímetro.
-- El filtro deportivo es heurístico: puede omitir o incluir algún canal mal etiquetado. En Latanime se usan los recuentos de TMDB para temporadas con numeración continua; si no están disponibles, se acude a ani.zip y, si tampoco, se evita adivinar el episodio. CinePlus123 sigue el enlace publicado para cada episodio, comprueba título y año cuando están disponibles, y solo conserva los reproductores que puede resolver. Cuando Vidara proporciona subtítulos externos con URL válida, se adjuntan al stream sin descargarlos. Las opciones que exijan otros métodos, CAPTCHA o que vinculen sus enlaces a la IP del servidor pueden no funcionar en el cliente.
-- Las pruebas automatizadas utilizan datos **simulados**. En este entorno el acceso directo a las fuentes está restringido: **no se ha verificado reproducción real de extremo a extremo**. Se consultó la API pública de opciones de CinePlus123, pero no se pudo verificar aquí la extracción y reproducción de sus medios. Un enlace devuelto tampoco garantiza que siga funcionando.
+- El filtro deportivo es heurístico: puede omitir o incluir algún canal mal etiquetado. En Latanime se usan los recuentos de TMDB para temporadas con numeración continua; si no están disponibles, se acude a ani.zip y, si tampoco, se evita adivinar el episodio. CinePlus123 sigue el enlace publicado para cada episodio, comprueba título y año cuando están disponibles, y solo conserva los reproductores que puede resolver. Cuando Vidara proporciona subtítulos externos con URL válida, se adjuntan al stream sin descargarlos. Las opciones que exijan otros métodos, CAPTCHA o que vinculen sus enlaces a la IP del servidor pueden no funcionar en el cliente. FuegoCine devuelve los HLS que publica Unlimplay en su JSON (`embeds.<idioma>.direct`; la API pide `season`/`episode` para series) y recorre los iframes de los demás reproductores. Su buscador es `/search_elastic` (el que usa el propio sitio): `/search` responde 500 porque le falta la vista `pages.search`; si la sugerencia no coincide con el título se puntúa contra el catálogo paginado. Pelis24 (`ww1.pelis24.blog`) queda fuera: responde **403** al runner de GitHub y a este entorno, y sus reproductores están tras un desafío de Cloudflare.
+- Las pruebas automatizadas utilizan datos **simulados**, y además el CI ejecuta una comprobación en vivo (`[live]` en el mensaje del commit) que analiza los sitios reales desde el runner: FuegoCine devolvió HLS de Unlimplay para *La Odisea* y para `VisionQuest` S01E02, y TioAnime devolvió MP4 de YourUpload. No se descargan medios, así que no se verifica la reproducción de extremo a extremo. Se consultó la API pública de opciones de CinePlus123, pero no se pudo verificar aquí la extracción y reproducción de sus medios. Un enlace devuelto tampoco garantiza que siga funcionando.
 - `crypto-js` se usa para descifrar enlaces de algunos reproductores. Su desarrollo ha sido descontinuado; conviene supervisar la dependencia y sustituirla en una futura actualización.
 - El proyecto solo busca y entrega enlaces. Utilízalo únicamente con contenidos para los que tengas los derechos necesarios.
+
+## Sonda y comprobación en vivo
+
+`tools/probe-sites.js` lee el HTML de las fuentes candidatas y muestra solo las líneas del reproductor, la búsqueda y los enlaces de fichas; no descarga medios. Este entorno no alcanza los sitios, así que el reconocimiento se hace en GitHub Actions:
+
+```bash
+# .github/workflows/ci.yml responde a marcadores en el mensaje del commit
+git commit -m "[probe] revisar selectores"   # escribe probe.txt y lo confirma en la rama
+git commit -m "[live] comprobar fuentes"     # ejecuta tools/live-check.js y confirma live.txt
+```
 
 ## Desarrollo
 

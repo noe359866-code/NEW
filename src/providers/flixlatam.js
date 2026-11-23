@@ -69,6 +69,11 @@ function flixlatamGetStreams(tmdbId, mediaType, season, episode) {
         if (info.isTv) page += '/temporada/' + info.season + '/capitulo/' + info.episode;
         return resolveDirectPlayers([{ url: page, referer: FLIX_BASE + '/' }], { maxDepth: 4, maxPages: 10 });
       }).then(function (groups) {
+        var blocked = [];
+        for (var b = 0; b < groups.length; b++) {
+          if (groups[b] && groups[b].blocked && groups[b].blocked.length) blocked = blocked.concat(groups[b].blocked.slice(0, 3));
+        }
+        if (blocked.length) log('flixlatam: bloqueo del sitio', JSON.stringify(blocked));
         var streams = [];
         for (var i = 0; i < groups.length; i++) {
           var results = groups[i] || [];

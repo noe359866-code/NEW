@@ -100,7 +100,8 @@ function buildCoreBundle(core) {
     'resolveMedia', 'searchQueries', 'cleanContentId', 'makeStream', 'finalizeStreams', 'mapLimit',
     'languageLabel', 'unescapePlayerText', 'publicHttpUrl', 'directMediaUrl', 'findDirectMedia',
     'unpackPlayerScript', 'pagePlayerLinks', 'embed69Links', 'solvePlayerPow', 'resolveDirectPlayers',
-    'normalizeContentId', 'contentIdLabel', 'resolveRequestMedia', 'resolveAnimeMedia', 'wikidataLookup', 'aniZipLookup', 'getTextLimited', 'isSeriesLikeType'
+    'normalizeContentId', 'contentIdLabel', 'resolveRequestMedia', 'resolveAnimeMedia', 'wikidataLookup', 'aniZipLookup', 'getTextLimited', 'isSeriesLikeType',
+    'solvePlayerPowHex', 'blockedObserver', 'imdbSlugTitle', 'cinemetaRequest', 'webResult', 'slugTitle'
   ];
   const source = [
     "'use strict';",

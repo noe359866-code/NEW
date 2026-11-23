@@ -18,12 +18,12 @@ function assertNoMediaFetch(fetch) {
   assert.ok(fetch.calls.every(call => !/\.(?:m3u8|mp4)(?:[?#]|$)/i.test(new URL(call.url).pathname)), 'el extractor no debe descargar medios');
 }
 
-test('el manifiesto es un único addon y los tres bundles son providers internos', () => {
+test('el manifiesto es un único addon y los bundles son providers internos', () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'manifest.json')));
   assert.equal(manifest.id, 'org.nebula.es.unificado');
   assert.deepEqual(manifest.resources.map(r => r.name), ['catalog', 'meta', 'stream']);
   assert.equal(manifest.scrapers, undefined);
-  assert.deepEqual(fs.readdirSync(path.join(ROOT, 'providers')).sort(), ['cineplus123.js', 'flixlatam.js', 'latanime.js']);
+  assert.deepEqual(fs.readdirSync(path.join(ROOT, 'providers')).sort(), ['cineplus123.js', 'flixlatam.js', 'fuegocine.js', 'latanime.js', 'tioanime.js']);
 });
 
 test('FlixLatam: película → Embed69 AES → reproductor → HLS directo con cabeceras', async () => {

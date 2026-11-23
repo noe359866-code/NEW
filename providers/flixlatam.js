@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------
  * Nébula Scrapers · flixlatam
  * Generado por build.js a partir de src/core + src/providers.
- * 2026-11-22 · no editar a mano.
+ * 2026-11-23 · no editar a mano.
  * ------------------------------------------------------------------ */
 (function () {
 'use strict';
@@ -473,6 +473,14 @@ function rot13(text) {
   });
 }
 
+/** Observador de bloqueos que inyecta el servidor (no el usuario).
+ * Se mantiene fuera de `settings()` para que ningún ajuste del cliente pueda
+ * sustituirlo por una función arbitraria. */
+function blockedObserver() {
+  var provided = typeof SCRAPER_SETTINGS !== 'undefined' && SCRAPER_SETTINGS ? SCRAPER_SETTINGS : null;
+  return provided && typeof provided.onBlocked === 'function' ? provided.onBlocked : null;
+}
+
 /** Ajustes del usuario inyectados por Nuvio (SCRAPER_SETTINGS). */
 function settings(defaults) {
   var out = {};
@@ -617,20 +625,30 @@ function request(url, options) {
         var status = response && typeof response.status === 'number' ? response.status : 0;
         var finalUrl = (response && response.url) || url;
         absorbCookies(hostKeyOf(finalUrl) || hostKey, response && response.headers);
-        // Algunos desafíos Anubis llegan con 403 o 503. Solo en páginas de
-        // reproductor conservamos el texto del error para reconocer el reto;
-        // no convertimos una respuesta fallida en éxito.
+        // Algunos bloqueos llegan con 403/503 y un desafío (Anubis, LiteSpeed)
+        // que hay que reconocer en el cuerpo. En páginas se conserva ese texto
+        // para poder resolverlo; nunca se convierte un error en éxito.
         var challengeStatus = opts.pageOnly && (status === 403 || status === 503);
         if (!response || (!response.ok && !challengeStatus)) {
           return { ok: false, status: status, url: finalUrl, bytes: new Uint8Array(0), text: '', headers: (response && response.headers) || {} };
         }
         var contentType = response.headers && response.headers.get ? String(response.headers.get('content-type') || '') : '';
+        // Un 403 puede traer el cuerpo vacío o binario: se marca recordable
+        // para que el orquestador printe las cabeceras del bloqueo.
+        var recordable = opts.pageOnly === 'record' && (status === 403 || status === 503);
         if (opts.pageOnly && (directMediaUrl(finalUrl) || /^(?:video\/|audio\/|application\/(?:vnd\.apple\.mpegurl|x-mpegurl|octet-stream))/i.test(contentType))) {
           return { ok: !!response.ok, status: status, url: finalUrl, isMedia: true, bytes: new Uint8Array(0), text: '', headers: response.headers || {} };
         }
+        if (recordable && !/text\/|json|html/i.test(contentType)) {
+          // Sin cuerpo legible: solo queda el estado y las cabeceras.
+          try { response.arrayBuffer().catch(function () {}); } catch (e) { /* ignora */ }
+          return { ok: false, status: status, url: finalUrl, bytes: new Uint8Array(0), text: '',
+            headers: response.headers || {}, challenge: true, blocked: true };
+        }
         return response.arrayBuffer().then(function (buffer) {
           var bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
-          return { ok: !!response.ok, status: status, url: finalUrl, bytes: bytes, text: bytesToText(bytes), headers: response.headers || {} };
+          return { ok: !!response.ok, status: status, url: finalUrl, bytes: bytes, text: bytesToText(bytes),
+            headers: response.headers || {}, challenge: challengeStatus, blocked: challengeStatus };
         }, function () {
           return response.text().then(function (text) {
             return { ok: !!response.ok, status: status, url: finalUrl, bytes: utf8ToBytes(text), text: text, headers: response.headers || {} };
@@ -1577,6 +1595,22 @@ function pagePlayerLinks(html, base) {
       break;
     }
   }
+  // Embed69 publica sus reproductores en onclick="go_to_playerVast('...')".
+  // El nombre del servidor está en el <span> que sigue al onclick, dentro del
+  // mismo <li>; se lee hacia delante y se descartan las descargas.
+  var vast = /go_to_playerVast\(\s*['"]([^'"]+)['"]/gi;
+  var vastMatch;
+  var vastText = String(html || '');
+  while ((vastMatch = vast.exec(vastText)) && links.length < 40) {
+    var vastUrl = publicHttpUrl(String(vastMatch[1]).trim(), base);
+    if (!vastUrl || isPlayerAdvertisement(vastUrl)) continue;
+    var nearby = vastText.slice(vastMatch.index, vastMatch.index + 320);
+    var labelMatch = /<span\b[^>]*>([\s\S]{1,60}?)<\/span>/i.exec(nearby);
+    var label = labelMatch ? stripTags(labelMatch[1]).trim() : '';
+    if (/download|1fichier/i.test(label)) continue;
+    links.push({ url: vastUrl, name: label });
+  }
+
   // A few video hosts use a simple redirect instead of an iframe.
   var redirect = /(?:window\.)?location(?:\.href)?\s*=\s*["']([^"']+)["']/i.exec(String(html || ''));
   if (redirect) {
@@ -1624,6 +1658,25 @@ function powSatisfied(hash, bits) {
   return (nibble >> (4 - restBits)) === 0;
 }
 
+/* Embed69 valida su propio PoW contando CERO HEXADECIMALES al principio
+ * (`hash.startsWith("0".repeat(difficulty))` en la referencia de FlixLatam),
+ * no bits. Con el criterio de Anubis el nonce devuelto no lo acepta el sitio y
+ * el dataLink nunca se descifraba: por eso FlixLatam devolvía cero enlaces. */
+function solvePlayerPowHex(challenge, digits) {
+  var length = parseInt(digits, 10);
+  if (!challenge || String(challenge).length > 512 || !isFinite(length) || length < 0 || length > 6) return null;
+  var prefix = '';
+  for (var d = 0; d < length; d++) prefix += '0';
+  var budget = typeof HOSTED_MAX_POW_MS === 'number' ? Math.max(250, Math.min(HOSTED_MAX_POW_MS, 6000)) : 6000;
+  var started = Date.now();
+  for (var n = 0; n < 20000000; n++) {
+    if (n % 256 === 0 && Date.now() - started > budget) break;
+    var hash = sha256Hex(challenge + n);
+    if (hash.slice(0, length) === prefix) return { nonce: n, hash: hash, elapsed: Math.max(1, Date.now() - started) };
+  }
+  return null;
+}
+
 function solvePlayerPow(challenge, difficulty) {
   var bits = parseInt(difficulty, 10);
   if (!challenge || String(challenge).length > 512 || !isFinite(bits) || bits < 0 || bits > 24) return null;
@@ -1657,7 +1710,7 @@ function embed69Links(html, base) {
     var powSalt = variable('POW_SALT');
     var diff = /\bPOW_DIFFICULTY\s*=\s*(\d+)/i.exec(text);
     if (powChallenge && powSalt && diff) {
-      var solved = solvePlayerPow(powChallenge, diff[1]);
+      var solved = solvePlayerPowHex(powChallenge, diff[1]);
       if (solved) key = sha256Hex(powChallenge + solved.nonce + powSalt);
     }
   }
@@ -1685,8 +1738,10 @@ function embed69Links(html, base) {
 }
 
 function pageRequest(url, referer) {
+  // `pageOnly: 'record'` conserva estado y cabeceras de un 403/503 sin cuerpo
+  // para poder explicar el bloqueo (WAF) en vez de devolver una lista vacía.
   return request(url, {
-    timeout: 6500, retries: 0, redirect: 'manual', pageOnly: true,
+    timeout: 6500, retries: 0, redirect: 'manual', pageOnly: 'record',
     headers: referer ? { Referer: referer } : {}
   });
 }
@@ -1771,6 +1826,8 @@ function resolveDirectPlayers(seeds, options) {
   });
   var seen = {};
   var found = [];
+  var blocks = [];
+  var observer = typeof blockedObserver === 'function' ? blockedObserver() : null;
   var visited = 0;
   var maxPages = Math.max(1, Math.min(16, opts.maxPages || 10));
   var maxDepth = Math.max(0, Math.min(5, opts.maxDepth == null ? 3 : opts.maxDepth));
@@ -1840,7 +1897,15 @@ function resolveDirectPlayers(seeds, options) {
         return null;
       }
       if (/anubis_challenge/i.test(response.text)) return passAnubis(response.text, url, item.referer);
-      if (!response.ok) return null;
+      if (!response.ok) {
+        // Se deja constancia del bloqueo para que /diag y los registros digan
+        // qué host rechaza la IP del servidor, en vez de un vacío silencioso.
+        if (response.blocked) {
+          if (blocks.length < 6) blocks.push({ url: url, status: response.status });
+          if (observer) { try { observer({ url: url, status: response.status }); } catch (e) { /* observador */ } }
+        }
+        return null;
+      }
       if (response.isMedia) { addMedia(response.url, item.referer, item); return null; }
       return response;
     }).then(function (response) {
@@ -1858,7 +1923,13 @@ function resolveDirectPlayers(seeds, options) {
   }
   function nextBatch() {
     if (!queue.length || Date.now() >= deadline || found.length >= 20) {
-      return Promise.resolve(uniqueBy(found, function (item) { return item.url; }));
+      var result = uniqueBy(found, function (item) { return item.url; });
+      // Los bloqueos del WAF se adjuntan al resultado para poder explicarlos.
+      try {
+        result.blocked = blocks;
+        Object.defineProperty(result, 'blocked', { enumerable: false });
+      } catch (e) { /* arreglos congelados */ }
+      return Promise.resolve(result);
     }
     var batch = queue.splice(0, concurrency);
     return Promise.all(batch.map(visit)).then(nextBatch);
@@ -1936,6 +2007,11 @@ function flixlatamGetStreams(tmdbId, mediaType, season, episode) {
         if (info.isTv) page += '/temporada/' + info.season + '/capitulo/' + info.episode;
         return resolveDirectPlayers([{ url: page, referer: FLIX_BASE + '/' }], { maxDepth: 4, maxPages: 10 });
       }).then(function (groups) {
+        var blocked = [];
+        for (var b = 0; b < groups.length; b++) {
+          if (groups[b] && groups[b].blocked && groups[b].blocked.length) blocked = blocked.concat(groups[b].blocked.slice(0, 3));
+        }
+        if (blocked.length) log('flixlatam: bloqueo del sitio', JSON.stringify(blocked));
         var streams = [];
         for (var i = 0; i < groups.length; i++) {
           var results = groups[i] || [];
