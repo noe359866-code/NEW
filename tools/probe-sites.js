@@ -712,6 +712,58 @@ async function round36() {
   }
 }
 
+/* Ronda 39: el CDN de Abyss (sssrr.org) rechaza; ¿qué cabecera espera? */
+async function round39() {
+  const C = require('crypto-js');
+  const crypto = require('crypto');
+  const B = 'https://player.abyssplayer.com/K8R6OOjS7';
+  const res = await fetchRaw(B);
+  const m = /datas\s*=\s*"([A-Za-z0-9+/=]{20,})"/.exec(res.body);
+  if (!m) return;
+  const payload = Buffer.from(m[1], 'base64').toString('latin1');
+  const slug = /"slug"\s*:\s*"([^"]{1,40})"/.exec(payload)[1];
+  const md5 = /"md5_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload)[1];
+  const uid = /"user_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload)[1];
+  const at = payload.indexOf('"media":"');
+  let media = payload.slice(at + 9); media = media.slice(0, media.lastIndexOf('"'));
+  const bytes = [];
+  for (let i = 0; i < media.length; i++) {
+    if (media[i] !== '\\') { bytes.push(media.charCodeAt(i) & 0xff); continue; }
+    const n = media[++i];
+    if (n === 'u') { bytes.push(parseInt(media.substr(i + 1, 4), 16) & 0xff); i += 4; }
+    else if (n === 'n') bytes.push(10); else if (n === 'r') bytes.push(13);
+    else if (n === 't') bytes.push(9); else if (n === 'f') bytes.push(12);
+    else bytes.push(n.charCodeAt(0) & 0xff);
+  }
+  const key = Buffer.from(C.MD5(uid + ':' + slug + ':' + md5).toString(C.enc.Hex), 'latin1');
+  const dec = crypto.createDecipheriv('aes-256-ctr', key, key.subarray(0, 16));
+  const plain = Buffer.concat([dec.update(Buffer.from(bytes)), dec.final()]).toString('utf8');
+  const first = /https:\/\/[a-z0-9]+[^"\\]{0,40}?\/([0-9a-f]\/[0-9a-f]\/[0-9a-f]\/[0-9a-f]{20,}\.[0-9]+\.[0-9]+\.fd)/.exec(plain);
+  const clean = /(https:\/\/[a-z0-9][a-z0-9.-]{3,40}\.[a-z]{2,10})/g;
+  const hosts = [...new Set([...plain.matchAll(clean)].map(x => x[1]))];
+  console.log('===== dlx cdn');
+  console.log('hosts limpios: ' + hosts.slice(0, 6).join(' '));
+  if (!first || !hosts.length) { console.log('sin ruta'); return; }
+  const target = hosts[0] + '/' + first[1];
+  console.log('objetivo: ' + target.slice(0, 110));
+  const sets = {
+    'solo UA': {},
+    'UA+Referer player': { Referer: B + '/' },
+    'UA+Origin player': { Origin: 'https://player.abyssplayer.com' },
+    'completo': { Referer: B + '/', Origin: 'https://player.abyssplayer.com', Accept: '*/*' }
+  };
+  for (const [name, extra] of Object.entries(sets)) {
+    for (const method of ['HEAD', 'GET']) {
+      try {
+        const r = await fetch(target, { method, headers: { 'User-Agent': UA, ...(method === 'GET' ? { Range: 'bytes=0-255' } : {}), ...extra } });
+        console.log(name + '/' + method + ': ' + r.status + ' ' + (r.headers.get('content-type') || '') +
+          ' len=' + (r.headers.get('content-length') || '') + ' ranges=' + (r.headers.get('accept-ranges') || ''));
+        if (method === 'GET') { const b = await r.arrayBuffer(); console.log('  bytes=' + b.byteLength); }
+      } catch (e) { console.log(name + '/' + method + ': ERR ' + e.message); }
+    }
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -775,6 +827,7 @@ async function main() {
   if (only === 'dlx36') await round36();
   if (only === 'dlx37') await round36();
   if (only === 'dlx38') await round36();
+  if (only === 'dlx39') await round39();
 }
 
 if (require.main === module) {
