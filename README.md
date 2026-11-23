@@ -4,12 +4,13 @@
 
 | Fuente | Qué busca el addon |
 | --- | --- |
-| FlixLatam | Fuentes directas para películas, series y anime. |
+| TioAnime | Anime en japonés con subtítulos: directorio → ficha → episodio → Voe/YourUpload. |
 | Latanime | Fuentes directas para películas de anime y episodios. |
 | CinePlus123 | Fuentes directas para películas y episodios de series, con sus idiomas disponibles. |
+| FlixLatam | En el repositorio, **desactivado**: Embed69 devuelve 403 a las IP del servidor. |
 | TVEnVivo, OnDemand y TheDaddy | Catálogos de canales y eventos deportivos y sus enlaces directos. |
 
-Las películas, series y anime se buscan desde los **títulos que ya aparecen en el catálogo del cliente**; este addon no aporta un catálogo propio de películas o anime. Sí aporta catálogos de deportes. Solo devuelve enlaces `.m3u8` o `.mp4` identificados en los sitios: **no inventa enlaces ni convierte páginas HTML en vídeo**. La disponibilidad depende de las fuentes, la región y el reproductor.
+Las fuentes activas son TioAnime, Latanime y CinePlus123. Las películas, series y anime se buscan desde los **títulos que ya aparecen en el catálogo del cliente**; este addon no aporta un catálogo propio de películas o anime. Sí aporta catálogos de deportes. Solo devuelve enlaces `.m3u8` o `.mp4` identificados en los sitios: **no inventa enlaces ni convierte páginas HTML en vídeo**. La disponibilidad depende de las fuentes, la región y el reproductor.
 
 ## Desplegar en Render
 

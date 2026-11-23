@@ -63,7 +63,10 @@ function metadataStub(title, year, fetcher) {
   };
 }
 
-async function runDiagnostic({ type, id, season, episode, probeTitle = 'Interstellar', providers = PROVIDERS } = {}) {
+async function runDiagnostic({ type, id, season, episode, probeTitle, providers = PROVIDERS } = {}) {
+  // Con un título simulado se separa «no hay metadatos» de «el sitio no da
+  // enlaces»: el anime se prueba con un título que existe en esos sitios.
+  const probe = probeTitle || (type === 'movie' ? 'Interstellar' : 'Shingeki no Kyojin');
   const result = { input: { type, id, season: season || null, episode: episode || null }, providers: [] };
   for (const providerId of providers) {
     if (!PROVIDERS.includes(providerId)) continue;
@@ -97,19 +100,19 @@ async function runDiagnostic({ type, id, season, episode, probeTitle = 'Interste
       const started = Date.now();
       try {
         const provider = loadProvider(providerId, {
-          fetcher: metadataStub(probeTitle, 2014, fetcher), tmdbKey: '',
+          fetcher: metadataStub(probe, 2014, fetcher), tmdbKey: '',
           settings: { onBlocked: value => blocks.push({ url: cleanUrl(value.url), status: value.status }) }
         });
         const streams = await provider.getStreams(id, type, season, episode);
         report.blocked = blocks;
-        report.simulated = { title: probeTitle, streams: Array.isArray(streams) ? streams.length : 0 };
+        report.simulated = { title: probe, streams: Array.isArray(streams) ? streams.length : 0 };
         if (streams && streams.length) {
           report.simulated.sample = streams.slice(0, 2).map(stream => ({
             name: stream.name, url: cleanUrl(stream.url), hints: Object.keys(stream.behaviorHints || {})
           }));
         }
       } catch (error) {
-        report.simulated = { title: probeTitle, streams: 0, error: String((error && error.message) || error).slice(0, 140) };
+        report.simulated = { title: probe, streams: 0, error: String((error && error.message) || error).slice(0, 140) };
       }
       report.simulatedMs = Date.now() - started;
       report.simulatedRequests = requests;

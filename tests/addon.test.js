@@ -29,6 +29,17 @@ function fixtureFetch() {
     ['api.themoviedb.org/3/tv/44', tmdbTv(44, 'One Piece', '1999', [
       { season_number: 1, episode_count: 12 }, { season_number: 2, episode_count: 10 }
     ])],
+    ['tioanime.com/directorio?q=', url => {
+      const query = new URL(url).searchParams.get('q');
+      if (query === 'One Piece') return '<article class="anime"><a href="/anime/one-piece"><h3 class="title">One Piece</h3></a></article>';
+      if (query === 'Interstellar') return '<article class="anime"><a href="/anime/interstellar-pelicula"><h3 class="title">Interstellar</h3></a><span class="anime-type-peli">Película</span></article>';
+      return '<p>Sin resultados</p>';
+    }],
+    ['tioanime.com/anime/interstellar-pelicula', '<script>var episodes = [1];</script>'],
+    ['tioanime.com/ver/interstellar-pelicula-1', `<script>var videos = [["Voe","https://movie-player.example/e/film"]];</script>`],
+    ['movie-player.example/e/film', '<video><source src="https://cdn.example/1080p/film.m3u8?sig=abc"></video>'],
+    ['tioanime.com/anime/one-piece', '<script>var episodes = [12,13];</script>'],
+    ['tioanime.com/ver/one-piece-13', `<script>var videos = [["Voe","${'https://anime-player.example/e/ep13'}"]];</script>`],
     ['flixlatam.com/search?s=', url => new URL(url).searchParams.get('s') === 'Interstellar'
       ? '<a href="/pelicula/interstellar"><img alt="Ver Interstellar online"></a>' : '<p>Sin resultados</p>'],
     ['flixlatam.com/pelicula/interstellar', '<iframe src="https://embed69.org/f/film"></iframe>'],
@@ -135,8 +146,8 @@ test('servidor unificado resuelve película IMDb y anime TMDB/IMDb en el mismo m
     const movie = (await json('/stream/movie/tt0816692.json')).body.streams;
     assert.equal(movie.length, 1);
     assert.equal(movie[0].url, 'https://cdn.example/1080p/film.m3u8?sig=abc');
-    assert.match(movie[0].name, /FlixLatam.*1080p/);
-    assert.equal(movie[0].behaviorHints.proxyHeaders.request.Referer, 'https://player.example/e/film');
+    assert.match(movie[0].name, /TioAnime.*1080p/);
+    assert.equal(movie[0].behaviorHints.proxyHeaders.request.Referer, 'https://movie-player.example/e/film');
     assert.equal(movie[0].behaviorHints.notWebReady, undefined);
 
     for (const id of ['tmdb:44:2:1', 'tt1234567:2:1']) {
@@ -276,7 +287,7 @@ test('el addon expone CinePlus123 en su stream de película con cabeceras Vidara
 });
 
 test('presupuestos VOD: cada fuente tiene límite propio y comparte un límite global', async () => {
-  assert.deepEqual(PROVIDERS, ['flixlatam', 'latanime', 'cineplus123']);
+  assert.deepEqual(PROVIDERS, ['tioanime', 'latanime', 'cineplus123']);
   assert.equal(REQUEST_BUDGET, 96);
   assert.equal(PROVIDER_REQUEST_BUDGET, 32);
   const controller = new AbortController();

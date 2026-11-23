@@ -7,7 +7,9 @@ const { createHash } = require('node:crypto');
 const { safeFetch } = require('./fetch');
 const { mediaUrl, safeUrl, isAdvertisementUrl } = require('../sports/http');
 
-const PROVIDERS = ['flixlatam', 'latanime', 'cineplus123'];
+// FlixLatam queda fuera de la lista por decisión del usuario (Embed69 devuelve
+// 403 a las IP del servidor y su PoW ya no es fiable). Sigue en el repositorio.
+const PROVIDERS = ['tioanime', 'latanime', 'cineplus123'];
 const TIME_BUDGET_MS = 30000;
 const REQUEST_BUDGET = 96;
 const PROVIDER_REQUEST_BUDGET = 32;
