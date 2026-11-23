@@ -525,6 +525,20 @@ async function round28() {
   }
 }
 
+/* Ronda 29: los reproductores que usa DoramasLatinox (playmogo y Abyss). */
+async function round29() {
+  await probeSnippets('dlx abyss player', 'https://player.abyssplayer.com/K8R6OOjS7', [
+    ['eval/packer', 'eval\\(function\\(p,a,c,k,e'], ['m3u8', '\\.m3u8|\\.mp4'],
+    ['data/kws', 'kws|data-id|_0x|api'], ['scripts', 'src="[^"]{0,120}\\.js'],
+    ['iframe', '<iframe[^>]{0,160}>']
+  ], 300);
+  await probeSnippets('dlx playmogo', 'https://playmogo.com/e/bmzfuwzlu7z5', [
+    ['eval/packer', 'eval\\(function\\(p,a,c,k,e'], ['m3u8', '\\.m3u8|\\.mp4'],
+    ['sources', 'sources|file\\s*[:=]'], ['status', 'not found|removed|error|404']
+  ], 250);
+  await probeSnippets('dlx abyss embed', 'https://abyss.to/', [['js', 'src="[^"]{0,120}\\.js']], 200);
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -578,6 +592,7 @@ async function main() {
   if (only === 'dlx26') await round26();
   if (only === 'dlx27') await round27();
   if (only === 'dlx28') await round28();
+  if (only === 'dlx29') await round29();
 }
 
 if (require.main === module) {

@@ -62,11 +62,11 @@ jobs:
           MSG="${{ github.event.head_commit.message }}"
           MODE="${{ inputs.probe }}"
           if [ -z "$MODE" ]; then
-            for tag in dlx28 dlx27 dlx26 dlx probe24; do
+            for tag in dlx29 dlx28 dlx27 dlx26 dlx probe24; do
               case "$MSG" in *"[$tag]"*) MODE="$tag"; break;; esac
             done
             case "$MODE" in
-              dlx28) MODE=dlx28;; dlx27) MODE=dlx27;; dlx26) MODE=dlx26;;
+              dlx29) MODE=dlx29;; dlx28) MODE=dlx28;; dlx27) MODE=dlx27;; dlx26) MODE=dlx26;;
               dlx) MODE=doramaslatinox;; probe24) MODE=round24only;; *) MODE=all;;
             esac
           fi
