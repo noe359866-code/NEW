@@ -66,6 +66,19 @@ async function fuegocine() {
   await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
 }
 
+async function kDrama2() {
+  await probe('kd watch', 'https://k-drama.in/watch/vincenzo-117376-episode-1', PLAYERS);
+  await probe('kd detail', 'https://k-drama.in/detail/tv/vincenzo-117376', PLAYERS.concat(LINKS));
+  await probe('kd search api', 'https://k-drama.in/api/search?q=vincenzo', [['json', '.*']]);
+}
+
+async function framextv2() {
+  await probe('fx bundle refs', 'https://framextv.cc/', [['js', 'src="/assets/[^"]+\\.js"']]);
+  for (const candidate of ['/api/v1/movies', 'https://api.framextv.cc/', 'https://framextv.xyz/api']) {
+    await probe('fx api alt', candidate.startsWith('http') ? candidate : 'https://framextv.cc' + candidate, [['json', '.*']]);
+  }
+}
+
 async function kDrama() {
   await probe('k-drama home', 'https://k-drama.in/', PLAYERS.concat(LINKS));
   for (const candidate of ['search?q=squid', '?s=squid', 'search?s=squid', 'buscar?q=squid']) {
@@ -98,6 +111,7 @@ async function main() {
   if (only === 'all' || only === 'fuegocine') await fuegocine();
   if (only === 'all' || only === 'k-drama' || only === 'kdrama') await kDrama();
   if (only === 'all' || only === 'framextv') await framextv();
+  if (only === 'all' || only === 'round2') { await kDrama2(); await framextv2(); }
   if (only === 'all' || only === 'kdesa') await kdesa();
 }
 
