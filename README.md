@@ -6,12 +6,15 @@
 | --- | --- |
 | TioAnime | Anime en japonés con subtítulos: directorio → ficha → episodio → Voe/YourUpload. |
 | FuegoCine | Películas y series: catálogo → ficha → temporada/episodio → Unlimplay, Abyssplayer o Videro. Unlimplay entrega HLS directo desde su API JSON. |
+| KatDrama | Doramas y películas asiáticas de `k-drama.in`: con el id de TMDB del addon se abre la página del episodio y se recorren sus servidores. |
+| frameXTV | API de `framextv.cc` (VidSync) por id de TMDB: entrega HLS/MP4 con sus cabeceras y subtítulos VTT. |
 | Latanime | Fuentes directas para películas de anime y episodios. |
 | CinePlus123 | Fuentes directas para películas y episodios de series, con sus idiomas disponibles. |
 | FlixLatam | En el repositorio, **desactivado**: Embed69 devuelve 403 a las IP del servidor. |
+| kdesa.stream | **No incluido**: Cloudflare responde «Just a moment…» (403) a todas las rutas desde el servidor, incluidas las de `/media/tmdb-*`. |
 | TVEnVivo, OnDemand y TheDaddy | Catálogos de canales y eventos deportivos y sus enlaces directos. |
 
-Las fuentes activas son TioAnime, FuegoCine, Latanime y CinePlus123. Las películas, series y anime se buscan desde los **títulos que ya aparecen en el catálogo del cliente**; este addon no aporta un catálogo propio de películas o anime. Sí aporta catálogos de deportes. Solo devuelve enlaces `.m3u8` o `.mp4` identificados en los sitios: **no inventa enlaces ni convierte páginas HTML en vídeo**. La disponibilidad depende de las fuentes, la región y el reproductor.
+Las fuentes activas son TioAnime, FuegoCine, KatDrama, frameXTV, Latanime y CinePlus123. Las películas, series y anime se buscan desde los **títulos que ya aparecen en el catálogo del cliente**; este addon no aporta un catálogo propio de películas o anime. Sí aporta catálogos de deportes. Solo devuelve enlaces `.m3u8` o `.mp4` identificados en los sitios: **no inventa enlaces ni convierte páginas HTML en vídeo**. La disponibilidad depende de las fuentes, la región y el reproductor.
 
 ## Desplegar en Render
 
