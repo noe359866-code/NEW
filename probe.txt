@@ -125,7 +125,7 @@ status=200 type=application/json bytes=389 final=https://vimeos.unlimplay.com/?i
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=h-MtV2LI8l5-GeJHuT5URyrbgD1MgIpUNgb8TTJQMFY&s=1795405425&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
+   "direct": "https://p3.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=iKh44O6JUmW7JaFjzL59GM1HllH54LMG-qBPo0Q2QHU&s=1795405896&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
    }
    }
    }
@@ -1948,6 +1948,24 @@ status=200 type=text/html; charset=utf-8 bytes=3694 final=https://vidsync.pro/ap
    flex-direction: column !important;
    justify-content: space-between !important;
 
+===== vidsync shards :: https://vidsync.pro/assets/index-DO1zww39.js
+status=200 type=application/javascript bytes=1991970 final=https://vidsync.pro/assets/index-DO1zww39.js
+--- bs:
+   …k;case 8:sx(),Si=6;break e;default:throw Error(i(462))}}m_();break}catch(Fe){PS(a,Fe)}while(!0);return Ma=Ll=null,D.H=g,D.A=w,Ls=f,as!==null?0:(ei=null,ds=0,mf(),Si)}function m_(){for(;as!==null&&!Ze();)BS(as)}function BS(a){var c=dS(a.alternate,a,Ha);a.memoizedProps=a.pendingProps,c===null?Yf(a):as=c}function US(a){var c=a,f=c.alternate;switch(c.tag){case 15:case 0:c=nS(f,c,c.pendingProps,c.type,void 0,ds);break;cas…
+   …learTimeout(b),m&&m.removeEventListener("abort",p)}}catch(u){if(u?.name==="AbortError"&&t?.signal?.aborted)throw u;if(l=u,d<i-1)try{Ld(h,900*1e3)}catch{}}}if(r)return r;throw l||new Error("Fleet fetch failed")}function bs(s,e=0){if(e===0){const n=L6();if(n)return n}const t=C6();if(!t||t.length===0)return"";const i=(A6(s)+e)%t.length;for(let n=0;n<t.length;n++){const r=t[(i+n)%t.length];if(rl(r))return r}return t[i]}f…
+   …){if(s.audioRenditions.length===0)return;const i=t(e);if(i){const n=s.audioRenditions.find(r=>t(r.language)===i||t(r.name)===i);if(n)return n}return s.audioRenditions.find(n=>n.isDefault)||s.audioRenditions[0]}function Bs(s,e){return s.getAttribute(e)??void 0}function Ya(s){if(s===void 0)return;const e=parseFloat(s);return isNaN(e)?void 0:e}function $P(s){if(!s)return 0;const e=/^P(?:(\d+(?:\.\d+)?)Y)?(?:(\d+(?:\.\d+…
+--- hosts:
+   …IO_LANG__&&(t=window.__VIDSYNC_ACTIVE_AUDIO_LANG__),e.includes("/api/proxy")||e.includes("/api/core/proxy")||e.includes("/api/stream/proxy")){const i=new URL(e,typeof window<"u"?window.location.origin:"https://vidsync.pro"),n=i.searchParams.get("defaultAudio")||i.searchParams.get("audio")||"";n&&(t=n);const r=i.searchParams.get("data");if(r){let d="";try{const h=JSON.parse(decodeURIComponent(r));h.url&&(d=h.url),(h.d…
+   …"/api/fixer/proxy"))return null;let t=e,i=!1;try{if(e.includes("/api/proxy")||e.includes("/api/core/proxy")||e.includes("/api/stream/proxy")){const r=new URL(e,typeof window<"u"?window.location.origin:"https://vidsync.pro").searchParams.get("data");if(r){let l="";try{const d=JSON.parse(decodeURIComponent(r));d.url&&(l=d.url)}catch{try{const h=atob(decodeURIComponent(r)),u=JSON.parse(h);u.url&&(l=u.url)}catch{try{cons…
+   …=>{const s=Fd(),[e,t]=v.useState("url"),[i,n]=v.useState("all"),[r,l]=v.useState(null),d=typeof window<"u"&&window.location.origin&&!window.location.origin.includes("localhost")?window.location.origin:"https://vidsync.pro",u=[{id:"movie",category:"stream",label:"TMDB Movie Embed",categoryBadge:"🍿 TMDB Movies & TV",method:"GET / Embed",route:"/embed/movie/{tmdbId}",exampleId:"155",exampleTitle:"The Dark Knight (TMDB …
+   …useState(!1),[ft,at]=v.useState(null),[Oe,Ke]=v.useState("all"),[ut,it]=v.useState(0),Ye=typeof window<"u"&&window.location.origin&&!window.location.origin.includes("localhost")?window.location.origin:"https://vidsync.pro",Zt=Se=>oe(tt=>tt.includes(Se)?tt:[...tt,Se]),Ci=Se=>oe(tt=>tt.filter(ct=>ct!==Se)),Rs=(Se,tt)=>oe(ct=>{const Ss=[...ct],Mt=Se+tt;return Mt<0||Mt>=Ss.length?ct:([Ss[Se],Ss[Mt]]=[Ss[Mt],Ss[Se]],Ss)})…
+   …()=>{const s=Fd(),[e,t]=v.useState(""),[i,n]=v.useState("all"),[r,l]=v.useState("all"),d=typeof window<"u"&&window.location.origin&&!window.location.origin.includes("localhost")?window.location.origin:"https://vidsync.pro",u=[{id:"movie",category:"stream",label:"TMDB Movie Embed",group:"🍿 TMDB — Movies & TV API",route:"/embed/movie/{tmdbId}",method:"GET / Embed",exampleId:"155",exampleUrl:`${d}/embed/movie/155`,desc…
+   …tId||"",n=s?.movieboxMeta?.se??0,r=s?.movieboxMeta?.ep??0;const l=String(s?.quality||"").toLowerCase();let d=l&&l!=="auto"&&l!=="hd"?l:"";try{const x=new URL(t,typeof window<"u"?window.location.origin:"https://vidsync.pro");i||(i=x.searchParams.get("subjectId")||""),x.searchParams.has("se")&&(n=parseInt(x.searchParams.get("se")||"0",10)||0),x.searchParams.has("ep")&&(r=parseInt(x.searchParams.get("ep")||"0",10)||0);c…
+--- api:
+   …r,l=0){const d=`${s}-${e}-${t||"1"}-${i||"1"}`,h=bs(d,l),u=new URLSearchParams({type:s,id:e,season:t||"1",episode:i||"1"});return n&&u.set("audio",n),r&&u.set("server",r),u.set("_t",String(Date.now())),h?`${h}/api/core/streams?${u.toString()}`:`/api/core/streams?${u.toString()}`}function _6(s){const e=`${s.type||"video"}-${s.id||"id"}-${s.season||"1"}-${s.episode||"1"}`,t=s.useShards!==!1?bs(e):"",i=new URLSearchPara…
+   …${i||"1"}`,h=bs(d,l),u=new URLSearchParams({type:s,id:e,season:t||"1",episode:i||"1"});return n&&u.set("audio",n),r&&u.set("server",r),u.set("_t",String(Date.now())),h?`${h}/api/core/streams?${u.toString()}`:`/api/core/streams?${u.toString()}`}function _6(s){const e=`${s.type||"video"}-${s.id||"id"}-${s.season||"1"}-${s.episode||"1"}`,t=s.useShards!==!1?bs(e):"",i=new URLSearchParams;return s.type&&i.set("type",s.typ…
+   …")=>{const Oe=lt||we,Ke=new URLSearchParams({type:e,id:s,season:Y||"1",episode:F||"1"});return te&&Ke.set("audio",te),ft&&Ke.set("provider",ft),xe&&Ke.set("fresh","true"),Ke.set("_t",String(Date.now())),`${Oe}/api/core/streams?${Ke.toString()}${at}`};if(!pe&&!xe&&!G.signal.aborted)try{const lt=Le(Ge,void 0,"&cacheOnly=1"),ft=await Vr(lt,`cache-${e}-${s}`,{maxAttempts:3,timeoutMs:5500,signal:G.signal});if(ft&&ft.ok){c…
+
 ===== kdesa movie :: https://kdesa.stream/media/tmdb-movie-1595124
 status=403 type=text/html; charset=UTF-8 bytes=5698 final=https://kdesa.stream/media/tmdb-movie-1595124
 --- iframe/embed: 0 líneas
@@ -1963,12 +1981,14 @@ status=403 type=text/html; charset=UTF-8 bytes=5692 final=https://kdesa.stream/m
 --- servers/ajax: 0 líneas
 --- json-inline: 0 líneas
 --- fichas: 0 líneas
---- episodios: 0 líneas
+--- episodios: 1 líneas
+   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
 
 ===== kdesa búsqueda :: https://kdesa.stream/search?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/search?q=dune
 --- fichas: 0 líneas
---- episodios: 0 líneas
+--- episodios: 1 líneas
+   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
 
 ===== kdesa búsqueda :: https://kdesa.stream/?s=dune
 status=403 type=text/html; charset=UTF-8 bytes=5641 final=https://kdesa.stream/?s=dune
