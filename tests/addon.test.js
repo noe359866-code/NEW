@@ -287,7 +287,7 @@ test('el addon expone CinePlus123 en su stream de película con cabeceras Vidara
 });
 
 test('presupuestos VOD: cada fuente tiene límite propio y comparte un límite global', async () => {
-  assert.deepEqual(PROVIDERS, ['tioanime', 'latanime', 'cineplus123']);
+  assert.deepEqual(PROVIDERS, ['tioanime', 'fuegocine', 'latanime', 'cineplus123']);
   assert.equal(REQUEST_BUDGET, 96);
   assert.equal(PROVIDER_REQUEST_BUDGET, 32);
   const controller = new AbortController();
