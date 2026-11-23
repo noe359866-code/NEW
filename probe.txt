@@ -11,14 +11,6 @@ status=403 type=text/html; charset=UTF-8 bytes=5708 final=https://ww1.pelis24.bl
 --- servers/ajax: 0 líneas
 --- json-inline: 0 líneas
 
-===== fuegocine home :: https://fuegocine.com/
-status=200 type=text/html; charset=UTF-8 bytes=49170 final=https://fuegocine.com/
---- iframe/embed: 0 líneas
---- servers/ajax: 2 líneas
-   Este sitio web opera exclusivamente como un índice de contenidos multimedia recopilados de fuentes públicas de internet (tales como TMDb, APIs de vídeo y servidores externos de alojamiento). FuegoCine.com no aloja, almacena ni distribuye archivos protegidos por derechos de autor en sus propios servi…
-   $.ajax({
---- json-inline: 0 líneas
-
 ===== fuegocine watch :: https://fuegocine.com/movies/watch/la-odisea/227
 status=200 type=text/html; charset=UTF-8 bytes=42326 final=https://fuegocine.com/movies/watch/la-odisea/227
 --- iframe/embed: 18 líneas
@@ -74,13 +66,25 @@ status=200 type=text/html; charset=UTF-8 bytes=42326 final=https://fuegocine.com
    $.ajax({
 --- json-inline: 0 líneas
 
-===== fuegocine búsqueda :: https://fuegocine.com/search?q=odisea
-status=500 type=text/html; charset=UTF-8 bytes=1099637 final=https://fuegocine.com/search?q=odisea
---- resultados: 0 líneas
+===== fuegocine show :: https://fuegocine.com/shows/details/visionquest/24
+status=200 type=text/html; charset=UTF-8 bytes=20901 final=https://fuegocine.com/shows/details/visionquest/24
+--- temporadas/episodios: 11 líneas
+   <li><a href="#" title="Seasons">1 Seasons</a></li>
+   <li><a href="#" title="Episodes">8 Episodes</a></li>
+   <!-- Start Season Video Carousel -->
+   <div class="video-shows-section vfx-item-ptb tv-season-related-block">
+   <h3>Temporadas</h3>
+   <div class="season-item-related owl-carousel">
+   <a href="https://fuegocine.com/shows/visionquest/seasons/temporada-1/55" title="Temporada 1">
+   <img src="https://media.themoviedb.org/t/p/w440_and_h660_face/JjhhO14cNfpKPUHxWkI27wnvf9.jpg" alt="Temporada 1" title="Temporada 1">
+   <div class="season-title-item">
+   <h3>Temporada 1</h3>
+   <!-- End Season Video Carousel -->
+--- watch links: 0 líneas
 
 ===== fuegocine búsqueda :: https://fuegocine.com/movies?search=odisea
 status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?search=odisea
---- resultados: 18 líneas
+--- status/resultados: 18 líneas
    <a href="https://fuegocine.com/movies/details/jack-y-jill/345" title="Jack y Jill">
    <a href="https://fuegocine.com/movies/details/del-cielo-al-infierno/344" title="Del Cielo al Infierno">
    <a href="https://fuegocine.com/movies/details/cuando-el-cielo-se-equivoca/343" title="Cuando el Cielo se Equivoca">
@@ -99,14 +103,10 @@ status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com
    <a href="https://fuegocine.com/movies/details/la-vida-de-chuck/325" title="La Vida de Chuck">
    <a href="https://fuegocine.com/movies/details/plan-de-escape/324" title="Plan de Escape">
    <a href="https://fuegocine.com/movies/details/ghost-in-the-shell-la-vigilante-del-futuro/323" title="Ghost in the Shell: La Vigilante del Futuro">
-
-===== fuegocine búsqueda :: https://fuegocine.com/search/movie?q=odisea
-status=404 type=text/html; charset=UTF-8 bytes=13238 final=https://fuegocine.com/search/movie?q=odisea
---- resultados: 0 líneas
 
 ===== fuegocine búsqueda :: https://fuegocine.com/movies?q=odisea
 status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?q=odisea
---- resultados: 18 líneas
+--- status/resultados: 18 líneas
    <a href="https://fuegocine.com/movies/details/jack-y-jill/345" title="Jack y Jill">
    <a href="https://fuegocine.com/movies/details/del-cielo-al-infierno/344" title="Del Cielo al Infierno">
    <a href="https://fuegocine.com/movies/details/cuando-el-cielo-se-equivoca/343" title="Cuando el Cielo se Equivoca">
@@ -125,3 +125,55 @@ status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com
    <a href="https://fuegocine.com/movies/details/la-vida-de-chuck/325" title="La Vida de Chuck">
    <a href="https://fuegocine.com/movies/details/plan-de-escape/324" title="Plan de Escape">
    <a href="https://fuegocine.com/movies/details/ghost-in-the-shell-la-vigilante-del-futuro/323" title="Ghost in the Shell: La Vigilante del Futuro">
+
+===== fuegocine búsqueda :: https://fuegocine.com/movies?keyword=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?keyword=odisea
+--- status/resultados: 18 líneas
+   <a href="https://fuegocine.com/movies/details/jack-y-jill/345" title="Jack y Jill">
+   <a href="https://fuegocine.com/movies/details/del-cielo-al-infierno/344" title="Del Cielo al Infierno">
+   <a href="https://fuegocine.com/movies/details/cuando-el-cielo-se-equivoca/343" title="Cuando el Cielo se Equivoca">
+   <a href="https://fuegocine.com/movies/details/13-fantasmas/342" title="13 Fantasmas">
+   <a href="https://fuegocine.com/movies/details/el-efecto-mariposa/341" title="El Efecto Mariposa">
+   <a href="https://fuegocine.com/movies/details/apex/340" title="Apex">
+   <a href="https://fuegocine.com/movies/details/wake-up-dead-man-un-misterio-de-knives-out/339" title="Wake Up Dead Man: Un Misterio de Knives Out">
+   <a href="https://fuegocine.com/movies/details/la-barbería/338" title="La Barbería">
+   <a href="https://fuegocine.com/movies/details/fenomeno-siniestro/337" title="Fenomeno Siniestro">
+   <a href="https://fuegocine.com/movies/details/noroi-la-maldición/336" title="Noroi: La Maldición">
+   <a href="https://fuegocine.com/movies/details/norbit/335" title="Norbit">
+   <a href="https://fuegocine.com/movies/details/corazón-de-tinta/334" title="Corazón de Tinta">
+   <a href="https://fuegocine.com/movies/details/dos-locas-en-fuga/328" title="Dos Locas en Fuga">
+   <a href="https://fuegocine.com/movies/details/desde-la-oscuridad/327" title="Desde la Oscuridad">
+   <a href="https://fuegocine.com/movies/details/f1-la-película/326" title="F1 La Película">
+   <a href="https://fuegocine.com/movies/details/la-vida-de-chuck/325" title="La Vida de Chuck">
+   <a href="https://fuegocine.com/movies/details/plan-de-escape/324" title="Plan de Escape">
+   <a href="https://fuegocine.com/movies/details/ghost-in-the-shell-la-vigilante-del-futuro/323" title="Ghost in the Shell: La Vigilante del Futuro">
+
+===== fuegocine búsqueda :: https://fuegocine.com/movies?title=odisea
+status=200 type=text/html; charset=UTF-8 bytes=32255 final=https://fuegocine.com/movies?title=odisea
+--- status/resultados: 18 líneas
+   <a href="https://fuegocine.com/movies/details/jack-y-jill/345" title="Jack y Jill">
+   <a href="https://fuegocine.com/movies/details/del-cielo-al-infierno/344" title="Del Cielo al Infierno">
+   <a href="https://fuegocine.com/movies/details/cuando-el-cielo-se-equivoca/343" title="Cuando el Cielo se Equivoca">
+   <a href="https://fuegocine.com/movies/details/13-fantasmas/342" title="13 Fantasmas">
+   <a href="https://fuegocine.com/movies/details/el-efecto-mariposa/341" title="El Efecto Mariposa">
+   <a href="https://fuegocine.com/movies/details/apex/340" title="Apex">
+   <a href="https://fuegocine.com/movies/details/wake-up-dead-man-un-misterio-de-knives-out/339" title="Wake Up Dead Man: Un Misterio de Knives Out">
+   <a href="https://fuegocine.com/movies/details/la-barbería/338" title="La Barbería">
+   <a href="https://fuegocine.com/movies/details/fenomeno-siniestro/337" title="Fenomeno Siniestro">
+   <a href="https://fuegocine.com/movies/details/noroi-la-maldición/336" title="Noroi: La Maldición">
+   <a href="https://fuegocine.com/movies/details/norbit/335" title="Norbit">
+   <a href="https://fuegocine.com/movies/details/corazón-de-tinta/334" title="Corazón de Tinta">
+   <a href="https://fuegocine.com/movies/details/dos-locas-en-fuga/328" title="Dos Locas en Fuga">
+   <a href="https://fuegocine.com/movies/details/desde-la-oscuridad/327" title="Desde la Oscuridad">
+   <a href="https://fuegocine.com/movies/details/f1-la-película/326" title="F1 La Película">
+   <a href="https://fuegocine.com/movies/details/la-vida-de-chuck/325" title="La Vida de Chuck">
+   <a href="https://fuegocine.com/movies/details/plan-de-escape/324" title="Plan de Escape">
+   <a href="https://fuegocine.com/movies/details/ghost-in-the-shell-la-vigilante-del-futuro/323" title="Ghost in the Shell: La Vigilante del Futuro">
+
+===== fuegocine búsqueda :: https://fuegocine.com/api/search?q=odisea
+status=404 type=text/html; charset=UTF-8 bytes=13234 final=https://fuegocine.com/api/search?q=odisea
+--- status/resultados: 0 líneas
+
+===== fuegocine búsqueda :: https://fuegocine.com/search/odisea
+status=404 type=text/html; charset=UTF-8 bytes=13240 final=https://fuegocine.com/search/odisea
+--- status/resultados: 0 líneas
