@@ -59,6 +59,12 @@ async function main() {
     await probe('pelis24 search', 'https://ww1.pelis24.blog/search?q=interstellar', playerPatterns);
     await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
   }
+  if (only === 'all' || only === 'fuegocine12') {
+    await probe('fc ficha tmdb', 'https://fuegocine.com/shows/details/avatar-la-leyenda-de-aang/33',
+      [['tmdb', 'tmdb|moviedb'], ['año', '<h1|year|release']]);
+    await probe('fc excelastic inglés', 'https://fuegocine.com/search_elastic?s=avatar%20the%20last%20airbender',
+      [['resultados', 'details|alt=']]);
+  }
   if (only === 'all' || only === 'fuegocine11') {
     // Catálogo: cómo se llama el sitio a los títulos populares (para el matcher).
     for (const page of [1, 2, 3]) {
