@@ -621,6 +621,52 @@ async function round34() {
   }
 }
 
+/* Ronda 35: ¿responden los medios de Abyss (sssrr.org) con cabecera? */
+async function round35() {
+  const C = require('crypto-js');
+  const B = 'https://player.abyssplayer.com/K8R6OOjS7';
+  const res = await fetchRaw(B);
+  const m = /datas\s*=\s*"([A-Za-z0-9+/=]{20,})"/.exec(res.body);
+  if (!m) { console.log('===== dlx media: sin datas'); return; }
+  const payload = Buffer.from(m[1], 'base64').toString('latin1');
+  const slug = /"slug"\s*:\s*"([^"]{1,40})"/.exec(payload)[1];
+  const md5 = /"md5_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload)[1];
+  const uid = /"user_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload)[1];
+  const at = payload.indexOf('"media":"');
+  let media = payload.slice(at + 9);
+  media = media.slice(0, media.lastIndexOf('"'));
+  const bytes = [];
+  for (let i = 0; i < media.length; i++) {
+    if (media[i] !== '\\') { bytes.push(media.charCodeAt(i) & 0xff); continue; }
+    const n = media[++i];
+    if (n === 'u') { bytes.push(parseInt(media.substr(i + 1, 4), 16) & 0xff); i += 4; }
+    else if (n === 'n') bytes.push(10); else if (n === 'r') bytes.push(13);
+    else if (n === 't') bytes.push(9); else if (n === 'f') bytes.push(12);
+    else bytes.push(n.charCodeAt(0) & 0xff);
+  }
+  const keyHex = C.MD5(uid + ':' + slug + ':' + md5).toString(C.enc.Hex);
+  const dec = C.AES.decrypt({ ciphertext: C.enc.Hex.parse(Buffer.from(bytes).toString('hex')) },
+    C.enc.Latin1.parse(keyHex), { iv: C.enc.Latin1.parse(keyHex.slice(0, 16)), mode: C.mode.CTR, padding: C.pad.NoPadding });
+  const plain = Buffer.from(dec.toString(C.enc.Latin1), 'latin1').toString('utf8');
+  const data = JSON.parse(plain.slice(0, plain.lastIndexOf('}') + 1));
+  const src = data.mp4.sources[0];
+  const enc = C.AES.encrypt(C.enc.Utf8.parse('/mp4/' + md5 + '/' + src.res_id + '/' + src.size + '?v=' + slug),
+    C.enc.Latin1.parse(keyHex), { iv: C.enc.Latin1.parse(keyHex.slice(0, 16)), mode: C.mode.CTR, padding: C.pad.NoPadding })
+    .ciphertext.toString(C.enc.Latin1);
+  let token = Buffer.from(Buffer.from(enc, 'latin1').toString('base64').replace(/=/g, ''), 'base64').toString('base64').replace(/=/g, '');
+  const url = src.url.replace(/\/$/, '') + '/sora/' + src.size + '/' + token;
+  console.log('===== dlx media ' + src.label);
+  console.log('url=' + url.slice(0, 120));
+  for (const [name, headers] of [['sin cabecera', {}], ['con Referer', { Referer: B + '/' }]]) {
+    try {
+      const head = await fetch(url, { headers: { 'User-Agent': UA, ...headers }, method: 'GET' });
+      const body = await head.arrayBuffer();
+      console.log(name + ': status=' + head.status + ' type=' + (head.headers.get('content-type') || '') +
+        ' bytes=' + body.byteLength + ' range=' + (head.headers.get('accept-ranges') || ''));
+    } catch (e) { console.log(name + ': ERR ' + e.message); }
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -680,6 +726,7 @@ async function main() {
   if (only === 'dlx32') await round32();
   if (only === 'dlx33') await round33();
   if (only === 'dlx34') await round34();
+  if (only === 'dlx35') await round35();
 }
 
 if (require.main === module) {

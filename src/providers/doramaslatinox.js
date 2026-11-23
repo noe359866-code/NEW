@@ -16,7 +16,22 @@
  *      /wp-json/dooplayer/v2/<post>/<type>/<nume>
  *    (el `player_api` que anuncia su propio `dtAjax`), no con el
  *    `admin-ajax.php?action=doo_player_ajax` clásico, que responde vacío.
- *  - Todo el catálogo está en español latino; la calidad viene de la ficha. */
+ *  - Reproductores que usa: playmogo.com (cerrado tras Cloudflare) y
+ *    player.abyssplayer.com (Abyss), que sí se puede resolver.
+ *  - Todo el catálogo está en español latino; la calidad viene de la ficha.
+ *
+ * Abyss (player.abyssplayer.com/<slug>):
+ *  - La página trae `const datas = "<base64>"`; al decodificarlo es un JSON
+ *    con slug, md5_id, user_id y `media` (texto cifrado con AES-CTR).
+ *  - La clave es el MD5 en hexadecimal de "<user_id>:<slug>:<md5_id>"; el
+ *    contador es la primera mitad de esa misma clave y el bloque es de 128
+ *    bits. Importante: los bytes del campo `media` llegan escapados como
+ *    \uXXXX dentro del JSON, hay que desescaparlos antes de descifrar.
+ *  - El JSON descifrado trae `sources` con label, size, res_id, sub y url.
+ *  - La URL final es <url>/sora/<size>/<token>, donde el token es otro
+ *    AES-CTR (misma clave y contador) de
+ *    "/<tipo>/<md5_id>/<res_id>/<size>?v=<slug>" codificado dos veces en
+ *    Base64 sin relleno. Se comprobó descifrando la carga real del sitio. */
 
 var DLX_BASE = 'https://doramaslatinox.com';
 
@@ -237,12 +252,122 @@ function doramaslatinoxGetStreams(tmdbId, mediaType, season, episode) {
 }
 
 /** Cada botón DooPlay → API del tema → reproductor → HLS/MP4. */
+/* ------------------------- Abyss (AES-CTR) ------------------------- */
+
+/** Bytes de un literal JSON, deshaciendo los escapes \uXXXX / \xNN. */
+function dlxUnescapeBytes(text) {
+  var s = String(text || '');
+  var out = [];
+  for (var i = 0; i < s.length; i++) {
+    var ch = s.charAt(i);
+    if (ch !== '\\') { out.push(s.charCodeAt(i) & 0xff); continue; }
+    var next = s.charAt(++i);
+    if (next === 'u') { out.push(parseInt(s.substr(i + 1, 4), 16) & 0xff); i += 4; }
+    else if (next === 'x') { out.push(parseInt(s.substr(i + 1, 2), 16) & 0xff); i += 2; }
+    else if (next === 'n') out.push(10);
+    else if (next === 'r') out.push(13);
+    else if (next === 't') out.push(9);
+    else if (next === 'b') out.push(8);
+    else if (next === 'f') out.push(12);
+    else out.push(next.charCodeAt(0) & 0xff);
+  }
+  return out;
+}
+
+/** AES-256-CTR con la clave de Abyss. Devuelve bytes o null. */
+function dlxAbyssCipher(bytes, keyHex) {
+  var C = cryptoJsModule();
+  if (!C || !keyHex) return null;
+  try {
+    // El reproductor codifica el MD5 hexadecimal como TEXTO (32 bytes → AES-256);
+    // interpretarlo como Hex daría 16 bytes y descifraría basura.
+    var key = C.enc.Latin1.parse(keyHex);
+    var counter = C.enc.Latin1.parse(keyHex.slice(0, 16));
+    var decrypted = C.AES.decrypt({ ciphertext: C.enc.Hex.parse(bytesToHex(bytes)) }, key, {
+      iv: counter, mode: C.mode.CTR, padding: C.pad.NoPadding
+    });
+    return binaryToBytes(decrypted.toString(C.enc.Latin1));
+  } catch (e) { return null; }
+}
+
+/** Token de /sora/: el mismo cifrado del camino, en Base64 doble sin relleno. */
+function dlxAbyssToken(path, keyHex) {
+  var C = cryptoJsModule();
+  if (!C || !keyHex) return '';
+  try {
+    var key = C.enc.Latin1.parse(keyHex);
+    var counter = C.enc.Latin1.parse(keyHex.slice(0, 16));
+    var out = C.AES.encrypt(C.enc.Utf8.parse(path), key, {
+      iv: counter, mode: C.mode.CTR, padding: C.pad.NoPadding
+    }).ciphertext.toString(C.enc.Latin1);
+    return bytesToB64(b64ToBytes(bytesToB64(binaryToBytes(out)))).replace(/=+$/, '');
+  } catch (e) { return ''; }
+}
+
+/** Anfitriones del reproductor Abyss. */
+function isAbyssHost(url) {
+  try { return /(^|\.)abyssplayer\.com$/i.test(new URL(String(url)).hostname); }
+  catch (e) { return false; }
+}
+
+/** Medios directos de un reproductor Abyss. */
+function dlxAbyssStreams(url, referer, language) {
+  return getText(url, { timeout: 12000, retries: 0,
+    headers: { Referer: referer || DLX_BASE + '/', 'Accept-Language': 'es-ES,es;q=0.9' } })
+    .then(function (html) {
+      var match = /datas\s*=\s*["']([A-Za-z0-9+/=]{20,})["']/.exec(String(html || ''));
+      if (!match) return [];
+      // Se lee byte a byte: el campo `media` son datos binarios y una
+      // decodificación UTF-8 los corrompería.
+      var payload = bytesToBinary(b64ToBytes(match[1]));
+      var slug = /"slug"\s*:\s*"([^"]{1,40})"/.exec(payload);
+      var md5Id = /"md5_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload);
+      var userId = /"user_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload);
+      var mediaAt = payload.indexOf('"media":"');
+      if (!slug || !md5Id || !userId || mediaAt < 0) return [];
+      var mediaText = payload.slice(mediaAt + 9);
+      var close = mediaText.lastIndexOf('"');
+      if (close > 0) mediaText = mediaText.slice(0, close);
+      var C = cryptoJsModule();
+      if (!C) return [];
+      var keyHex = C.MD5(userId[1] + ':' + slug[1] + ':' + md5Id[1]).toString(C.enc.Hex);
+      var plain = dlxAbyssCipher(dlxUnescapeBytes(mediaText), keyHex);
+      if (!plain) return [];
+      // Detrás del JSON quedan restos del relleno del cifrado: se recorta al
+      // último cierre de objeto equilibrado.
+      var json = bytesToUtf8(plain);
+      var end = json.lastIndexOf('}');
+      if (end > 0) json = json.slice(0, end + 1);
+      var data = null;
+      try { data = JSON.parse(json); } catch (e) { data = null; }
+      if (!data) return [];
+      var kind = data.mp4 ? 'mp4' : (data.hls || data.m3u8 ? 'hls' : '');
+      var sources = (data.mp4 && data.mp4.sources) || (data.hls && data.hls.sources) ||
+        (data.m3u8 && data.m3u8.sources) || [];
+      var out = [];
+      for (var i = 0; i < sources.length && out.length < 12; i++) {
+        var source = sources[i] || {};
+        if (!source.size || !source.res_id || !source.url || source.status === false) continue;
+        var host = publicHttpUrl(source.url, url);
+        if (!host) continue;
+        var token = dlxAbyssToken('/' + kind + '/' + md5Id[1] + '/' + source.res_id + '/' + source.size +
+          '?v=' + slug[1], keyHex);
+        if (!token) continue;
+        out.push({ url: host.replace(/\/$/, '') + '/sora/' + source.size + '/' + token,
+          name: source.label || '', language: language || 'Latino', quality: source.label || '',
+          referer: 'https://player.abyssplayer.com/' });
+      }
+      return out;
+    }, function () { return []; });
+}
+
 function dlxResolve(page, info) {
   var options = dlxOptions(page.html);
   if (!options.length) return [];
   return mapLimit(options, 4, function (option) {
     return dlxPlayer(option, page.url).then(function (entry) {
       if (!entry) return [];
+      if (isAbyssHost(entry.url)) return dlxAbyssStreams(entry.url, page.url, entry.language);
       return resolveDirectPlayers([{ url: entry.url, name: entry.server, language: entry.language,
         referer: page.url }], { maxDepth: 4, maxPages: 4 });
     });
