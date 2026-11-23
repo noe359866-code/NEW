@@ -93,10 +93,15 @@ async function runDiagnostic({ type, id, season, episode, probeTitle = 'Interste
     // 2) Camino completo con metadatos simulados: ¿el sitio da enlaces?
     {
       const { fetcher, requests } = recorder();
+      const blocks = [];
       const started = Date.now();
       try {
-        const provider = loadProvider(providerId, { fetcher: metadataStub(probeTitle, 2014, fetcher), tmdbKey: '' });
+        const provider = loadProvider(providerId, {
+          fetcher: metadataStub(probeTitle, 2014, fetcher), tmdbKey: '',
+          settings: { onBlocked: value => blocks.push({ url: cleanUrl(value.url), status: value.status }) }
+        });
         const streams = await provider.getStreams(id, type, season, episode);
+        report.blocked = blocks;
         report.simulated = { title: probeTitle, streams: Array.isArray(streams) ? streams.length : 0 };
         if (streams && streams.length) {
           report.simulated.sample = streams.slice(0, 2).map(stream => ({

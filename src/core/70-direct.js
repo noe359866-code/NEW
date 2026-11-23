@@ -246,8 +246,10 @@ function embed69Links(html, base) {
 }
 
 function pageRequest(url, referer) {
+  // `pageOnly: 'record'` conserva estado y cabeceras de un 403/503 sin cuerpo
+  // para poder explicar el bloqueo (WAF) en vez de devolver una lista vacía.
   return request(url, {
-    timeout: 6500, retries: 0, redirect: 'manual', pageOnly: true,
+    timeout: 6500, retries: 0, redirect: 'manual', pageOnly: 'record',
     headers: referer ? { Referer: referer } : {}
   });
 }
@@ -332,6 +334,8 @@ function resolveDirectPlayers(seeds, options) {
   });
   var seen = {};
   var found = [];
+  var blocks = [];
+  var observer = typeof blockedObserver === 'function' ? blockedObserver() : null;
   var visited = 0;
   var maxPages = Math.max(1, Math.min(16, opts.maxPages || 10));
   var maxDepth = Math.max(0, Math.min(5, opts.maxDepth == null ? 3 : opts.maxDepth));
@@ -401,7 +405,15 @@ function resolveDirectPlayers(seeds, options) {
         return null;
       }
       if (/anubis_challenge/i.test(response.text)) return passAnubis(response.text, url, item.referer);
-      if (!response.ok) return null;
+      if (!response.ok) {
+        // Se deja constancia del bloqueo para que /diag y los registros digan
+        // qué host rechaza la IP del servidor, en vez de un vacío silencioso.
+        if (response.blocked) {
+          if (blocks.length < 6) blocks.push({ url: url, status: response.status });
+          if (observer) { try { observer({ url: url, status: response.status }); } catch (e) { /* observador */ } }
+        }
+        return null;
+      }
       if (response.isMedia) { addMedia(response.url, item.referer, item); return null; }
       return response;
     }).then(function (response) {
@@ -419,7 +431,13 @@ function resolveDirectPlayers(seeds, options) {
   }
   function nextBatch() {
     if (!queue.length || Date.now() >= deadline || found.length >= 20) {
-      return Promise.resolve(uniqueBy(found, function (item) { return item.url; }));
+      var result = uniqueBy(found, function (item) { return item.url; });
+      // Los bloqueos del WAF se adjuntan al resultado para poder explicarlos.
+      try {
+        result.blocked = blocks;
+        Object.defineProperty(result, 'blocked', { enumerable: false });
+      } catch (e) { /* arreglos congelados */ }
+      return Promise.resolve(result);
     }
     var batch = queue.splice(0, concurrency);
     return Promise.all(batch.map(visit)).then(nextBatch);

@@ -465,6 +465,14 @@ function rot13(text) {
   });
 }
 
+/** Observador de bloqueos que inyecta el servidor (no el usuario).
+ * Se mantiene fuera de `settings()` para que ningún ajuste del cliente pueda
+ * sustituirlo por una función arbitraria. */
+function blockedObserver() {
+  var provided = typeof SCRAPER_SETTINGS !== 'undefined' && SCRAPER_SETTINGS ? SCRAPER_SETTINGS : null;
+  return provided && typeof provided.onBlocked === 'function' ? provided.onBlocked : null;
+}
+
 /** Ajustes del usuario inyectados por Nuvio (SCRAPER_SETTINGS). */
 function settings(defaults) {
   var out = {};

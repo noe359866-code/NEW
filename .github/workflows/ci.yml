@@ -1,0 +1,70 @@
+name: CI
+
+# Se ejecuta en cada push y en cada PR: si el build o las pruebas fallan, no se
+# entrega. El despliegue de Render no depende de este archivo, pero GitHub
+# marca el commit en rojo y el PR no se fusiona por error.
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build y pruebas (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20.3', '22']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci --no-audit --no-fund
+      - name: Compilar providers
+        run: npm run build
+      - name: Comprobar que el build no deja cambios sin confirmar
+        run: git diff --exit-code -- providers manifest.json
+      - name: Pruebas
+        run: npm test
+      - name: Comprobación de sintaxis de los bundles
+        run: |
+          for file in providers/*.js addon/*.js sports/*.js; do
+            node --check "$file"
+          done
+      - name: Arrancar el addon y comprobar el manifiesto
+        run: |
+          PORT=7099 node addon/server.js &
+          server=$!
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:7099/healthz >/dev/null 2>&1; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:7099/manifest.json > manifest.out.json
+          node -e '
+            const fs = require("fs");
+            const m = JSON.parse(fs.readFileSync("manifest.out.json", "utf8"));
+            const names = m.resources.map(r => r.name).sort().join(",");
+            if (names !== "catalog,meta,stream") throw new Error("resources inesperados: " + names);
+            for (const type of ["movie", "series", "anime", "channel"]) {
+              if (!m.types.includes(type)) throw new Error("falta el tipo " + type);
+            }
+            const stream = m.resources.find(r => r.name === "stream");
+            for (const prefix of ["tt", "tmdb", "kitsu", "mal", "anidb", "nebula-sport:"]) {
+              if (!stream.idPrefixes.includes(prefix)) throw new Error("falta el prefijo " + prefix);
+            }
+            console.log("manifiesto OK:", m.version, m.types.join("/"));
+          '
+          kill $server
