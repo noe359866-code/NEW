@@ -91,6 +91,15 @@ async function fuegocine() {
   await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
 }
 
+async function round6() {
+  await probeSnippets('vidsync embed', 'https://vidsync.pro/embed/tv/117376/1/1?dublang=en&autoplay=1',
+    [['iframe', '<iframe'], ['hls', 'm3u8'], ['json', '"file"|"source"|"url"'], ['api', 'fetch\\(|ajax|/api/']]);
+  await probeSnippets('vidsync movie', 'https://vidsync.pro/embed/movie/1654940?autoplay=1',
+    [['hls', 'm3u8'], ['iframe', '<iframe']]);
+  await probeSnippets('fx bundle2', 'https://framextv.cc/assets/index-DvMX4GhI.js',
+    [['http', 'https://[a-z0-9.-]+\\.[a-z]{2,}/[a-z0-9/_-]*'], ['const', 'Qp=']]);
+}
+
 async function round5() {
   await probeSnippets('kd vid2', 'https://k-drama.in/vid2.php/117376/1/1?m=en',
     [['iframe', '<iframe'], ['script', '<script'], ['hls', 'm3u8']]);
@@ -167,6 +176,7 @@ async function main() {
   if (only === 'all' || only === 'round3') await round3();
   if (only === 'all' || only === 'round4') await round4();
   if (only === 'all' || only === 'round5') await round5();
+  if (only === 'all' || only === 'round6') await round6();
   if (only === 'all' || only === 'kdesa') await kdesa();
 }
 
