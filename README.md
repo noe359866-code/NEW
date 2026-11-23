@@ -4,15 +4,13 @@
 
 | Fuente | Qué busca el addon |
 | --- | --- |
-| TioAnime | Anime en japonés con subtítulos: directorio → ficha → episodio → Voe/YourUpload. |
 | FuegoCine | Películas y series: catálogo → ficha → temporada/episodio → Unlimplay, Abyssplayer o Videro. Unlimplay entrega HLS directo desde su API JSON. |
-| KatDrama | Doramas y películas asiáticas de `k-drama.in`: con el id de TMDB del addon se abre la página del episodio y se recorren sus servidores. |
-| frameXTV | API de `framextv.cc` (VidSync) por id de TMDB: entrega HLS/MP4 con sus cabeceras y subtítulos VTT. |
 | Latanime | Fuentes directas para películas de anime y episodios. |
 | CinePlus123 | Fuentes directas para películas y episodios de series, con sus idiomas disponibles. |
 | PeliShax | `pelishaxpro.com`: películas, series y anime por id de TMDB. Sus reproductores vienen declarados con `data-lang` (Latino, Castellano, Japonés). |
 | HomeCine | `www3.homecine.to`: catálogo en español. Cada pestaña de la ficha es un idioma (Latino, Castellano, Subtitulado) y su iframe es un reproductor fastream. |
 | FrikiSeries | `www.frikiserie.com`: series y películas clásicas dobladas al latino; sus reproductores son embeds de OK.ru. |
+| DoramasLatinox | `doramaslatinox.com`: doramas, series y películas asiáticas en audio latino. Sus reproductores se resuelven con la API v2 de su tema DooPlay. |
 | FlixLatam | En el repositorio, **desactivado**: Embed69 devuelve 403 a las IP del servidor. |
 | kdesa.stream | **No incluido**: Cloudflare responde «Just a moment…» (403) a todas las rutas desde el servidor, incluidas las de `/media/tmdb-*`. |
 | TVEnVivo, OnDemand y TheDaddy | Catálogos de canales y eventos deportivos y sus enlaces directos. |
@@ -47,12 +45,14 @@ De dónde sale el idioma en cada web:
 | HomeCine | Texto de la pestaña del reproductor (`480p - Latino`, `HD 1080p - Castellano`, `720p - Subtitulado`). |
 | FrikiSeries | Catálogo doblado al latinoamericano ⇒ `Latino`. |
 
+**Solo español:** además de quitar las fuentes que no lo sirven, cada enlace se filtra por su etiqueta. Se muestran los que son `Latino`, `Castellano`, `Español`, `Multi` y los subtitulados en español; se descartan `Inglés`, `Hindi`, `Japonés`, `Inglés Subtitulado`, etc. Los enlaces sin etiqueta pasan, porque cada fuente ya decide qué sirve y hay sitios que no declaran el idioma.
+
 Al ordenar, dentro de la misma calidad van primero `Multi`, `Latino`, `Castellano`
 y después las versiones que solo llevan subtítulos. El idioma **declarado por la
 fuente** es el que se muestra: el addon no analiza el audio, así que si un sitio
 etiqueta mal una pista, la etiqueta heredará ese error.
 
-Las fuentes activas son TioAnime, FuegoCine, KatDrama, frameXTV, Latanime, CinePlus123, PeliShax, HomeCine y FrikiSeries. Las películas, series y anime se buscan desde los **títulos que ya aparecen en el catálogo del cliente**; este addon no aporta un catálogo propio de películas o anime. Sí aporta catálogos de deportes. Solo devuelve enlaces `.m3u8` o `.mp4` identificados en los sitios: **no inventa enlaces ni convierte páginas HTML en vídeo**. La disponibilidad depende de las fuentes, la región y el reproductor.
+Las fuentes activas son FuegoCine, Latanime, CinePlus123, PeliShax, HomeCine, FrikiSeries y DoramasLatinox: **solo las que sirven en español**. TioAnime (japonés subtitulado), KatDrama (hindi/inglés) y frameXTV (multi/inglés) siguen en el repositorio y sus pruebas pasan, pero están fuera de la lista activa. Las películas, series y anime se buscan desde los **títulos que ya aparecen en el catálogo del cliente**; este addon no aporta un catálogo propio de películas o anime. Sí aporta catálogos de deportes. Solo devuelve enlaces `.m3u8` o `.mp4` identificados en los sitios: **no inventa enlaces ni convierte páginas HTML en vídeo**. La disponibilidad depende de las fuentes, la región y el reproductor.
 
 ## Desplegar en Render
 

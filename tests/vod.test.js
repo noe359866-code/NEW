@@ -23,7 +23,7 @@ test('el manifiesto es un único addon y los bundles son providers internos', ()
   assert.equal(manifest.id, 'org.nebula.es.unificado');
   assert.deepEqual(manifest.resources.map(r => r.name), ['catalog', 'meta', 'stream']);
   assert.equal(manifest.scrapers, undefined);
-  assert.deepEqual(fs.readdirSync(path.join(ROOT, 'providers')).sort(), ['cineplus123.js', 'flixlatam.js', 'framextv.js', 'frikiserie.js', 'fuegocine.js', 'homecine.js', 'kdrama.js', 'latanime.js', 'pelishax.js', 'tioanime.js']);
+  assert.deepEqual(fs.readdirSync(path.join(ROOT, 'providers')).sort(), ['cineplus123.js', 'doramaslatinox.js', 'flixlatam.js', 'framextv.js', 'frikiserie.js', 'fuegocine.js', 'homecine.js', 'kdrama.js', 'latanime.js', 'pelishax.js', 'tioanime.js']);
 });
 
 test('FlixLatam: película → Embed69 AES → reproductor → HLS directo con cabeceras', async () => {
@@ -349,4 +349,49 @@ test('HomeCine: con más reproductores que pestañas, cada uno hereda su idioma 
   assert.equal(streams.find(item => item.url.endsWith('/b.mp4')).language, 'Castellano');
   assert.equal(streams.find(item => item.url.endsWith('/c.mp4')).language, 'Castellano');
   assert.equal(streams.find(item => item.url.endsWith('/b.mp4')).quality, '1080p');
+});
+
+test('DoramasLatinox: búsqueda → serie → episodio → API DooPlay v2 → HLS', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/tv/999', tmdbTv(999, 'GIFT')],
+    ['doramaslatinox.com/?s=', `<div class="result-item"><article><div class="thumbnail">
+        <a href="https://doramaslatinox.com/series/gift/"><img alt="GIFT"></a></div>
+        <div class="details"><div class="title"><a href="https://doramaslatinox.com/series/gift/">GIFT</a></div>
+        <div class="meta">- Japón<span class="year">2026</span></div></div></article></div>`],
+    ['doramaslatinox.com/series/gift', `<div id="seasons"><div class="se-c"><div class="se-q"><span class="se-t">Temporada 1 <span>(2 Eps.)</span></span></div>
+        <div class="se-a"><ul class="episodios">
+        <a href="https://doramaslatinox.com/episodio/gift-1x1-episodio-1/"><li>Episodio 1</li></a>
+        <a href="https://doramaslatinox.com/episodio/gift-1x2-episodio-2/"><li>Episodio 2</li></a>
+        </ul></div></div></div>`],
+    ['doramaslatinox.com/episodio/gift-1x2-episodio-2', `<div id='playeroptions'><ul id='playeroptionsul'>
+        <li id='player-option-1' class='dooplay_player_option' data-type='tv' data-post='43619' data-nume='1'>
+          <i class='fas fa-play-circle'></i><span class='title'>DOO</span>
+          <span class='flag'><img src='/wp-content/themes/x/assets/img/flags/mx.png'></span></li>
+        <li id='player-option-2' class='dooplay_player_option' data-type='tv' data-post='43619' data-nume='2'>
+          <i class='fas fa-play-circle'></i><span class='title'>FAST</span>
+          <span class='flag'><img src='/wp-content/themes/x/assets/img/flags/mx.png'></span></li>
+        </ul></div>`],
+    ['wp-json/dooplayer/v2/43619/tv/1', { __json: { embed_url: 'https://vidara.to/e/doo1', type: 'iframe' } }],
+    ['wp-json/dooplayer/v2/43619/tv/2', { __json: { embed_url: 'https://fastream.to/embed-fast2.html', type: 'iframe' } }],
+    ['vidara.to/e/doo1', '<source src="https://cdn.example/gift-s01e02.mp4">']
+  ]);
+  const streams = await loadProvider('doramaslatinox', { fetch }).getStreams('999', 'tv', 1, 2);
+  assert.equal(streams.length, 1);
+  assert.equal(streams[0].url, 'https://cdn.example/gift-s01e02.mp4');
+  assert.equal(streams[0].language, 'Latino');
+  assert.equal(streams[0].provider, 'doramaslatinox');
+  assert.match(streams[0].title, /S01E02/);
+  // Se pidió el episodio 1x2, no el 1x1.
+  assert.ok(!fetch.calls.some(call => call.url.includes('gift-1x1')));
+  assertNoMediaFetch(fetch);
+});
+
+test('DoramasLatinox: sin botones de reproductor no inventa enlaces', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/movie/5', tmdbMovie(5, 'Prueba')],
+    ['doramaslatinox.com/?s=', '<div class="result-item"><article><div class="title"><a href="https://doramaslatinox.com/peliculas/prueba/">Prueba</a></div></article></div>'],
+    ['doramaslatinox.com/peliculas/prueba', '<p>Sin reproductores disponibles</p>']
+  ]);
+  const streams = await loadProvider('doramaslatinox', { fetch }).getStreams('5', 'movie', null, null);
+  assert.equal(streams.length, 0);
 });

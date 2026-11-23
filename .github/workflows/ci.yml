@@ -80,11 +80,8 @@ jobs:
             node tools/live-check.js --site fuegocine --id 1368337 --type movie --title "La Odisea" --year 2026 || true
             node tools/live-check.js --site fuegocine --id 1368337 --type movie --title "Odisea" --year 1997 || true
             node tools/live-check.js --site fuegocine --id 213375 --type tv --season 1 --episode 2 --title "VisionQuest" --year 2025 --season-counts 8 || true
-            node tools/live-check.js --site tioanime --id 16498 --type tv --season 1 --episode 1 --title "Shingeki no Kyojin" --year 2013 --season-counts 25 || true
-            node tools/live-check.js --site kdrama --id 117376 --type tv --season 1 --episode 1 --title "Vincenzo" --year 2021 --season-counts 20 || true
-            node tools/live-check.js --site framextv --id 155 --type movie --title "The Dark Knight" --year 2008 || true
-            node tools/live-check.js --site kdrama --id 155 --type movie --title "The Dark Knight" --year 2008 || true
-            node tools/live-check.js --site framextv --id 117376 --type tv --season 1 --episode 1 --title "Vincenzo" --year 2021 --season-counts 20 || true
+            node tools/live-check.js --site doramaslatinox --id 285751 --type tv --season 1 --episode 2 --title "GIFT" --year 2026 --season-counts 2 --trace || true
+            node tools/live-check.js --site latanime --id 37854 --type tv --season 1 --episode 1 --title "One Piece" --year 1999 || true
             node tools/live-check.js --site pelishax --id 155 --type movie --title "The Dark Knight" --year 2008 --trace || true
             node tools/live-check.js --site pelishax --id 117376 --type tv --season 1 --episode 1 --title "Vincenzo" --year 2021 --season-counts 20 || true
             node tools/live-check.js --site homecine --id 603 --type movie --title "The Matrix" --year 1999 || true
