@@ -193,18 +193,21 @@ function pelishaxResolveServers(servers) {
   });
 }
 
-/** OK.ru del catálogo de PeliShax: se lee el reproductor y se toman sus MP4/HLS. */
+/** OK.ru del catálogo de PeliShax: solo el reproductor publica los MP4/HLS.
+ * Las fichas enlazan la página de vídeo (ok.ru/video/<id>); ahí no hay enlaces
+ * directos, así que se pide el embed equivalente. */
 function pelishaxOkru(server) {
-  return request(server.url, { timeout: 9000, retries: 0, pageOnly: true }).then(function (res) {
+  var embed = String(server.url).replace(/ok\.ru\/video\/(\d+)/i, 'ok.ru/videoembed/$1');
+  return request(embed, { timeout: 9000, retries: 0, pageOnly: true }).then(function (res) {
     if (!res.ok || !res.text) return [];
-    var medias = findDirectMedia(res.text, server.url);
+    var medias = findDirectMedia(res.text, embed);
     var out = [];
     for (var i = 0; i < medias.length && out.length < 4; i++) {
       var url = directMediaUrl(medias[i]);
       if (!url || isPlayerAdvertisement(url)) continue;
       out.push({ url: url, name: 'OK.ru', language: server.language || pelishaxLang(server.label),
         quality: server.quality || '',
-        headers: { Referer: server.url, 'User-Agent': UA, Origin: 'https://ok.ru' } });
+        headers: { Referer: embed, 'User-Agent': UA, Origin: 'https://ok.ru' } });
     }
     return out;
   }, function () { return []; });

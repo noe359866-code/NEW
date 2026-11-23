@@ -376,6 +376,25 @@ async function round20() {
   await probe('pelishax movie 155 ddg', 'https://pelishaxpro.com/movies/155/the-dark-knight', [['title', '<title>[^<]*'], ['servers', 'server-item']]);
 }
 
+/* Ronda 21: qué publican los hosts de PeliShax (StreamWish, Filemoon, VidHide)
+ * y si el embed de OK.ru es el que sí trae enlaces. */
+async function round21() {
+  await probeSnippets('streamwish embed', 'https://streamwish.to/e/6dz22bl4exq4', [
+    ['eval/packer', 'eval\\(function\\(p,a,c,k,e'], ['m3u8/mp4', '\\.m3u8|\\.mp4'],
+    ['sources', 'sources\\s*[:=]|file\\s*[:=]'], ['scripts', '<script[^>]*src="[^"]+"']
+  ], 260);
+  await probeSnippets('filemoon embed', 'https://filemoon.sx/e/d02q4wt2b80n', [
+    ['eval/packer', 'eval\\(function\\(p,a,c,k,e'], ['m3u8/mp4', '\\.m3u8|\\.mp4'],
+    ['sources', 'sources\\s*[:=]|file\\s*[:=]'], ['api', '\\/api\\/|\\/dl\\?']
+  ], 260);
+  await probeSnippets('vidhide embed', 'https://vidhidevip.com/v/7edm3v3ca7mf', [
+    ['eval/packer', 'eval\\(function\\(p,a,c,k,e'], ['m3u8/mp4', '\\.m3u8|\\.mp4'], ['sources', 'sources\\s*[:=]']
+  ], 260);
+  await probeSnippets('okru video page', 'https://ok.ru/video/7652106504857', [
+    ['m3u8', 'video\\.m3u8|\\.mp4'], ['videoembed link', 'videoembed/[0-9]+']
+  ], 200);
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -419,6 +438,7 @@ async function main() {
   if (only === 'all' || only === 'round18') await round18();
   if (only === 'all' || only === 'round19') await round19();
   if (only === 'all' || only === 'round20') await round20();
+  if (only === 'all' || only === 'round21') await round21();
 }
 
 if (require.main === module) {

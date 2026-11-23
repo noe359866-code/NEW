@@ -322,7 +322,7 @@ test('PeliShax: los servidores de OK.ru se leen de su reproductor, no se descart
   const fetch = mockFetch([
     ['api.themoviedb.org/3/movie/155', tmdbMovie(155, 'The Dark Knight')],
     ['pelishaxpro.com/movies/155', `<li class="server-item" data-link="https://ok.ru/video/7652106504857" data-lang="English">OK.ru</li>`],
-    ['ok.ru/video/7652106504857', `data-options="{&quot;flashvars&quot;:{&quot;metadata&quot;:{&quot;hlsManifestUrl&quot;:&quot;https://vd9.okcdn.ru/video.m3u8?cmd=videoPlayerCdn\\u0026expires=9&quot;}}}"`]
+    ['ok.ru/videoembed/7652106504857', `data-options="{&quot;flashvars&quot;:{&quot;metadata&quot;:{&quot;hlsManifestUrl&quot;:&quot;https://vd9.okcdn.ru/video.m3u8?cmd=videoPlayerCdn\\u0026expires=9&quot;}}}"`]
   ]);
   const streams = await loadProvider('pelishax', { fetch }).getStreams('155', 'movie', null, null);
   assert.equal(streams.length, 1);
