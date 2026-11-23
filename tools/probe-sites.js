@@ -59,6 +59,18 @@ async function main() {
     await probe('pelis24 search', 'https://ww1.pelis24.blog/search?q=interstellar', playerPatterns);
     await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
   }
+  if (only === 'all' || only === 'fuegocine3') {
+    await probe('fc search', 'https://fuegocine.com/search?s=odisea',
+      [['tarjetas', '/movies/details|/shows/details|title=']]);
+    await probe('fc series temporada', 'https://fuegocine.com/shows/visionquest/seasons/temporada-1/55',
+      [['episodios', 'watch|episode|Episodio|capítulo|capitulo|data-']]);
+    await probe('fc abyss', 'https://player.abyssplayer.com/KxBGoCWcV',
+      [['claves', '"|sources|file|m3u8|mp4|url']]);
+    await probe('fc unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337',
+      [['json', '.*']]);
+    await probe('fc unlimplay embed', 'https://unlimplay.com/f/embed/movie/1368337',
+      [['finalizePlayer', 'finalizePlayer|mf\.php|vimeos']]);
+  }
   if (only === 'all' || only === 'fuegocine2') {
     // Formulario de búsqueda real y episodios de una temporada.
     await probe('fuegocine home/form', 'https://fuegocine.com/', [['formularios', '<form|name=\"(?:search|q)\"|action=']]);
