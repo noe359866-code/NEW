@@ -89,6 +89,15 @@ jobs:
           } > live.txt 2>&1
       # El artefacto y los registros no son accesibles desde este entorno, así
       # que el resultado se confirma en la misma rama (con [skip ci]).
+      - name: Descargar activos del reproductor
+        if: ${{ matrix.node == '22' && contains(github.event.head_commit.message, '[assets]') }}
+        run: node tools/fetch-assets.js || true
+      - uses: actions/upload-artifact@v4
+        if: ${{ matrix.node == '22' && contains(github.event.head_commit.message, '[assets]') }}
+        with:
+          name: probe-assets
+          path: .probe-assets/
+          retention-days: 3
       - name: Publicar la sonda en la rama
         if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]') || contains(github.event.head_commit.message, '[live]')) }}
         run: |
