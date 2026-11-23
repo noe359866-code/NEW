@@ -1,48 +1,57 @@
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-fuegocine: 1 enlace(s), 7884 ms; peticiones reales: 7, fallidas: 1
+fuegocine: 1 enlace(s), 5127 ms; peticiones reales: 7, fallidas: 1
   [SD] La Odisea · Unlimplay
-  https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
+  https://p3.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-fuegocine: 1 enlace(s), 2427 ms; peticiones reales: 7, fallidas: 1
+fuegocine: 1 enlace(s), 3011 ms; peticiones reales: 7, fallidas: 1
   [SD] Odisea · Unlimplay
   https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-fuegocine: 1 enlace(s), 12246 ms; peticiones reales: 9, fallidas: 2
+fuegocine: 1 enlace(s), 4748 ms; peticiones reales: 9, fallidas: 1
   [2160p] VisionQuest · S01E02 · Unlimplay
-  https://p5.vimeos.zip/hls2/02/00014/kr4k7o11ytq2_,n,h,.urlset/master.m3u8?[oculto]
+  https://p6.vimeos.zip/hls2/02/00014/kr4k7o11ytq2_,n,h,.urlset/master.m3u8?[oculto]
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-tioanime: 4 enlace(s), 2166 ms; peticiones reales: 11, fallidas: 1
+tioanime: 4 enlace(s), 2429 ms; peticiones reales: 11, fallidas: 1
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
   https://www.yourupload.com/embed/999_1.mp4
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
-  https://vidcache.net:8161/a2026112206lMs1WGAGr/video.mp4
+  https://vidcache.net:8161/a20261122v6MUFI0O657/video.mp4
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
   https://www.yourupload.com/embed/2690_1.mp4
   [SD] Shingeki no Kyojin · S01E01 · YourUpload
-  https://vidcache.net:8161/a20261122ak3G7Nt16PI/video.mp4
-
-No se han probado ni descargado los medios.
-Metadatos simulados; las peticiones al sitio y los reproductores son reales.
-[nebula-es] http timeout 8000ms https://k-drama.in/search?…
-[nebula-es] http timeout 8000ms https://k-drama.in/search?…
-
-kdrama: 0 enlace(s), 16023 ms; peticiones reales: 2, fallidas: 2
-  Sin enlaces: puede ser red, título no encontrado, protección o reproductor no compatible.
+  https://vidcache.net:8161/a20261122L1EbvP6pX2V/video.mp4
 
 No se han probado ni descargado los medios.
 Metadatos simulados; las peticiones al sitio y los reproductores son reales.
 
-framextv: 4 enlace(s), 906 ms; peticiones reales: 1, fallidas: 0
+kdrama: 8 enlace(s), 13440 ms; peticiones reales: 9, fallidas: 0
+  [2160p] Vincenzo · S01E01 · KatDrama
+  https://nc-fa2.tubi.video/c943391e-1899-4500-9796-6eaafef89771/2m7m5lrsmg.m3u8?[oculto]
+  [2160p] Vincenzo · S01E01 · KatDrama
+  https://nc-fa2.tubi.video/c943391e-1899-4500-9796-6eaafef89771/3g4yu9kwz7.m3u8?[oculto]
+  [SD] Vincenzo · S01E01 · KatDrama
+  https://d3sgzbosmwirao.cloudfront.net/video/a2333196b77e6066e0a49a83154cd27d3e33ea26d389bafdc8e5821646df8283/1/hls/h264_high.m3u8
+  [SD] Vincenzo · S01E01 · KatDrama
+  https://nc-fa2.tubi.video/9e892a6c-6728-43c6-bd30-27ac95387c3e/91pn624aqx.m3u8?[oculto]
+  [SD] Vincenzo · S01E01 · KatDrama
+  https://nc-cf.tubi.video/9e892a6c-6728-43c6-bd30-27ac95387c3e/91pn624aqx.m3u8?[oculto]
+  [SD] Vincenzo · S01E01 · KatDrama
+  https://nc-fa2.tubi.video/9e892a6c-6728-43c6-bd30-27ac95387c3e/1nlxnirtrv.m3u8?[oculto]
+
+No se han probado ni descargado los medios.
+Metadatos simulados; las peticiones al sitio y los reproductores son reales.
+
+framextv: 4 enlace(s), 1169 ms; peticiones reales: 1, fallidas: 0
   [1080p] The Dark Knight · NetMirror
   https://vidsync-shard.vs-deals41.workers.dev/api/netmirror/master.m3u8?[oculto]
   [1080p] The Dark Knight · NetMirror
