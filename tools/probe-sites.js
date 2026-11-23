@@ -223,6 +223,54 @@ async function kdesa() {
   await probe('kdesa home', 'https://kdesa.stream/', LINKS);
 }
 
+/* ------------------- ronda 15: homecine / frikiserie / pelishax ------------------- */
+
+const MEDIA = [['hls/mp4', '\\.m3u8|\\.mp4'], ['iframes', '<iframe[^>]*>'],
+  ['players', 'player|embed|reproductor|servidor|server|data-']];
+
+async function homecine() {
+  await probe('homecine home', 'https://www3.homecine.to/', [['form', '<form[^>]*>'], ['search', 'name="s"|search'], ['links', 'href="[^"]*/cartelera']]);
+  await probe('homecine película', 'https://www3.homecine.to/pequenos-secretos', PLAYERS.concat(MEDIA));
+  await probe('homecine serie', 'https://www3.homecine.to/series/mouse', PLAYERS.concat(MEDIA));
+  for (const candidate of ['?s=mouse', 'search?q=mouse', 'buscar?q=mouse']) {
+    await probe('homecine búsqueda', 'https://www3.homecine.to/' + candidate, LINKS);
+  }
+}
+
+async function frikiserie() {
+  await probe('frikiserie home', 'https://www.frikiserie.com/', [['form', '<form[^>]*>'], ['links', 'href="[^"]*(?:lista-series|ver-serie)']]);
+  await probe('frikiserie serie', 'https://www.frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986', PLAYERS.concat(MEDIA));
+  await probe('frikiserie lista', 'https://www.frikiserie.com/lista-series/cool-mccool', PLAYERS.concat(MEDIA).concat(LINKS));
+  for (const candidate of ['buscar?q=marco', 'search?q=marco', '?s=marco']) {
+    await probe('frikiserie búsqueda', 'https://www.frikiserie.com/' + candidate, LINKS);
+  }
+}
+
+async function pelishax() {
+  await probe('pelishax película', 'https://pelishaxpro.com/movies/5084', PLAYERS.concat(MEDIA));
+  await probe('pelishax serie', 'https://pelishaxpro.com/series/575', PLAYERS.concat(MEDIA));
+  for (const candidate of ['/search?q=dune', '/buscar?q=dune', '/api/search?q=dune', '/search/dune']) {
+    await probe('pelishax búsqueda', 'https://pelishaxpro.com' + candidate, [['json', '.*']].concat(LINKS));
+  }
+  await probe('pelishax home', 'https://pelishaxpro.com/', [['form', '<form[^>]*>'], ['search', 'search|buscar']]);
+}
+
+/* Imprime los atributos que publican la URL del reproductor, que es lo que
+ * necesita el addon: sin un enlace directo o un iframe no hay nada que ofrecer. */
+async function playersRaw() {
+  const targets = [
+    ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
+    ['frikiserie serie', 'https://www.frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986'],
+    ['pelishax película', 'https://pelishaxpro.com/movies/5084']
+  ];
+  for (const [name, url] of targets) {
+    await probeSnippets(name + ' data-*', url,
+      [['data', 'data-[a-z-]+="[^"]{4,200}"'], ['iframe', '<iframe[^>]{0,300}'],
+        ['video', '<video[^>]{0,200}|<source[^>]{0,200}'], ['m3u8', 'm3u8|\\.mp4'],
+        ['onclick', 'onclick="[^"]{4,200}"']], 300);
+  }
+}
+
 async function main() {
   const only = (process.argv[2] || 'all').toLowerCase();
   if (only === 'all' || only === 'fuegocine') await fuegocine();
@@ -242,6 +290,10 @@ async function main() {
   if (only === 'all' || only === 'round13') await round13();
   if (only === 'all' || only === 'round14') await round14();
   if (only === 'all' || only === 'kdesa') await kdesa();
+  if (only === 'all' || only === 'homecine') await homecine();
+  if (only === 'all' || only === 'frikiserie') await frikiserie();
+  if (only === 'all' || only === 'pelishax') await pelishax();
+  if (only === 'all' || only === 'players') await playersRaw();
 }
 
 if (require.main === module) {
