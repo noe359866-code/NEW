@@ -569,6 +569,22 @@ async function round31() {
   }
 }
 
+/* Ronda 32: ¿el redirect de DooPlay devuelve un reproductor más abierto? */
+async function round32() {
+  const B = 'https://doramaslatinox.com';
+  for (const path of ['/tv/1', '/tv/2', '/movie/1', '/movie/2']) {
+    const url = B + '/wp-json/dooplayer/v2/43619' + path.replace('/tv', '/tv').replace('/movie', '/movie');
+    try {
+      const res = await fetch(url, { redirect: 'manual', headers: { 'User-Agent': UA } });
+      const loc = res.headers.get('location') || '';
+      console.log('===== dlx redirect ' + path);
+      console.log('status=' + res.status + ' location=' + (loc || '(ninguna)'));
+      const body = await res.text();
+      console.log('body=' + JSON.stringify(body.slice(0, 200)));
+    } catch (e) { console.log('===== dlx redirect ' + path + ' ERR ' + e.message); }
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -625,6 +641,7 @@ async function main() {
   if (only === 'dlx29') await round29();
   if (only === 'dlx30') await round30();
   if (only === 'dlx31') await round31();
+  if (only === 'dlx32') await round32();
 }
 
 if (require.main === module) {
