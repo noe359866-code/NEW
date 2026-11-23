@@ -1942,14 +1942,16 @@ function resolveDirectPlayers(seeds, options) {
 }
 
 
-/* k-drama.in (KatDrama): /search?q= → /detail/{tv|movie}/<slug>-<tmdb>
- * → /watch/{tv|movie}/<slug>-<tmdb>[-episode-<n>] → botones de servidor.
+/* k-drama.in (KatDrama): id de TMDB → /watch/{tv|movie}/n-a-<tmdb>[-episode-<n>]
+ * → botones de servidor.
  *
  * Lo reconocido con tools/probe-sites.js (2026-11):
  *  - Las fichas se identifican por el id de TMDB al final del slug
- *    (`/detail/tv/vincenzo-117376`). Con ese id, la URL de reproducción se
- *    arma sin adivinar: /watch/tv/<slug>-<id>-episode-<n>. Si el slug no
- *    coincide con el título, el servidor redirige a la URL canónica.
+ *    (`/detail/tv/vincenzo-117376`). El slug solo es decorativo: con
+ *    /watch/tv/n-a-<tmdb>-episode-<n> el sitio responde 200 y redirige a la
+ *    URL canónica, cuyo HTML ya trae los reproductores. Por eso no se busca
+ *    por título: /search funciona solo en el navegador (JavaScript) y desde
+ *    el servidor no devuelve resultados.
  *  - Cada botón de servidor publica su URL en `onclick="switchServer('id',
  *    'url', ...)"`. Unos son embeds de terceros y otros propios
  *    (/vid2.php, /mx1.php, /tubi2.php, /yoy4.php, /kk2.php).
@@ -1958,76 +1960,12 @@ function resolveDirectPlayers(seeds, options) {
 
 var KD_BASE = 'https://k-drama.in';
 
-/** 117376 de /detail/tv/vincenzo-117376 (el último grupo numérico del slug). */
-function kdTmdbId(slug) {
-  var match = /-(\d{3,9})$/.exec(String(slug || ''));
-  return match ? match[1] : null;
-}
-
-function kdCards(html, kind) {
-  var out = [];
-  var re = new RegExp('<a\\b[^>]*href=["\']/detail/(' + kind + ')/([^"\'#?]+)["\'][^>]*>', 'gi');
-  var match;
-  var source = String(html || '');
-  while ((match = re.exec(source)) && out.length < 80) {
-    var tail = source.slice(match.index, match.index + 900);
-    var title = attrOf(match[0], 'title');
-    if (!title) {
-      var image = /<img\b[^>]*>/i.exec(tail);
-      title = image ? attrOf(image[0], 'alt') : '';
-    }
-    title = String(title || '').trim();
-    if (!title || title === 'N/A' || title.length > 200) continue;
-    var slug = match[2];
-    out.push({
-      kind: match[1].toLowerCase(),
-      slug: slug,
-      id: kdTmdbId(slug),
-      title: title,
-      url: KD_BASE + '/detail/' + match[1].toLowerCase() + '/' + slug
-    });
+/** URL de reproducción con slug comodín; el sitio la redirige a la canónica. */
+function kdWatchUrl(tmdbId, isTv, season, episode) {
+  if (isTv) {
+    return KD_BASE + '/watch/tv/n-a-' + tmdbId + '-episode-' + episode;
   }
-  return uniqueBy(out, function (item) { return item.url; });
-}
-
-/** Busca la ficha del título pedido; con un único resultado para la consulta
- * exacta se acepta aunque el nombre del sitio esté en otro idioma. */
-function kdSearch(info) {
-  var kind = info.isTv ? 'tv' : 'movie';
-  var queries = searchQueries(info).slice(0, 3);
-  var found = [];
-
-  function collect(html, uniqueForQuery) {
-    var cards = kdCards(html, kind);
-    var unambiguous = uniqueForQuery && cards.length === 1;
-    for (var i = 0; i < cards.length; i++) {
-      var card = cards[i];
-      if (!card.id) continue;
-      var score = 0;
-      var titles = info.titles && info.titles.length ? info.titles : [info.title, info.originalTitle];
-      for (var j = 0; j < titles.length; j++) {
-        if (titles[j]) score = Math.max(score, titleScore(card.title, titles[j]));
-      }
-      if (score < 0.78 && unambiguous) score = 0.8;
-      if (score < 0.78) continue;
-      card.score = score;
-      found.push(card);
-    }
-  }
-
-  function next(index) {
-    if (index >= queries.length) return Promise.resolve();
-    return getText(KD_BASE + '/search?q=' + encodeURIComponent(queries[index]),
-      { timeout: 8000, retries: 0 }).then(function (html) {
-        collect(html, true);
-        return found.length ? null : next(index + 1);
-      }, function () { return next(index + 1); });
-  }
-
-  return next(0).then(function () {
-    return uniqueBy(found, function (item) { return item.url; })
-      .sort(function (a, b) { return b.score - a.score; });
-  });
+  return KD_BASE + '/watch/movie/n-a-' + tmdbId;
 }
 
 /** Servidores del botón `onclick="switchServer('id', 'url', ...)"`. */
@@ -2069,30 +2007,21 @@ function kdGetStreams(tmdbId, mediaType, season, episode) {
     if (!info || !info.title) return [];
     if (info.isTv && (!Number.isInteger(info.season) || info.season < 1 ||
         !Number.isInteger(info.episode) || info.episode < 1)) return [];
-    return kdSearch(info).then(function (cards) {
-      return mapLimit(cards.slice(0, 2), 2, function (card) {
-        // Con el id de TMDB la URL de reproducción no se adivina: la canónica
-        // la decide el sitio a partir del slug + id.
-        var watch = card.kind === 'movie'
-          ? KD_BASE + '/watch/movie/' + card.slug
-          : KD_BASE + '/watch/tv/' + card.slug + '-episode-' + info.episode;
-        return getText(watch, { timeout: 9000, retries: 0 }).then(function (html) {
-          var servers = kdServers(html, watch);
-          if (!servers.length) return [];
-          return resolveDirectPlayers(servers, { maxDepth: 3, maxPages: 8 });
-        }, function () { return []; });
-      });
-    }).then(function (groups) {
+    if (!info.tmdbId) return [];
+    var watch = kdWatchUrl(info.tmdbId, info.isTv, info.season, info.episode);
+    return getText(watch, { timeout: 15000, retries: 1 }).then(function (html) {
+      var servers = kdServers(html, watch);
+      if (!servers.length) return [];
+      return resolveDirectPlayers(servers, { maxDepth: 3, maxPages: 8 });
+    }).then(function (items) {
       var streams = [];
-      for (var i = 0; i < groups.length; i++) {
-        for (var j = 0; j < (groups[i] || []).length; j++) {
-          var item = groups[i][j];
-          var title = info.title + (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
-            (item.name ? ' · ' + item.name : '');
-          streams.push(makeStream({ name: 'KatDrama', title: title, provider: 'k-drama', url: item.url,
-            quality: parseQuality(title + ' ' + item.url), language: item.language || languageLabel(title),
-            headers: item.headers, subtitles: item.subtitles }));
-        }
+      for (var i = 0; i < (items || []).length; i++) {
+        var item = items[i];
+        var title = info.title + (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
+          (item.name ? ' · ' + item.name : '');
+        streams.push(makeStream({ name: 'KatDrama', title: title, provider: 'k-drama', url: item.url,
+          quality: parseQuality(title + ' ' + item.url), language: item.language || languageLabel(title),
+          headers: item.headers, subtitles: item.subtitles }));
       }
       return finalizeStreams('KatDrama', streams, { max: conf.maxResults });
     });
