@@ -6,7 +6,8 @@
  * reutiliza su cargador y sus metadatos simulados para poder revisar una
  * fuente retirada (por ejemplo FlixLatam) sin volver a activarla.
  *
- * Uso: node tools/check-provider.js flixlatam 157336 movie --title "Interstellar" --year 2014 --trace
+ * Uso: node tools/check-provider.js <provider> <id> <movie|tv> --title "Título" --year 2014 --trace
+ *      --query "otro título" busca con un nombre distinto al de los metadatos.
  */
 'use strict';
 
@@ -23,6 +24,8 @@ function parse(argv) {
     if (token === '--title') { args.options.title = argv[++i]; continue; }
     if (token === '--year') { args.options.year = argv[++i]; continue; }
     if (token === '--season-counts') { args.options.seasonCounts = argv[++i].split(',').map(Number); continue; }
+    // Permite un título distinto al del ID para forzar una búsqueda concreta.
+    if (token === '--query') { args.options.query = argv[++i]; continue; }
     if (token === '--settings') { args.options.settings = JSON.parse(argv[++i]); continue; }
     throw new Error('Opción desconocida: ' + token);
   }
@@ -44,7 +47,7 @@ async function main(argv = process.argv.slice(2)) {
     return response;
   };
   const fetcher = args.options.title
-    ? tmdbStubFetch(args.options.title, args.options.year, args.type, networkFetch, args.options.seasonCounts || [])
+    ? tmdbStubFetch(args.options.query || args.options.title, args.options.year, args.type, networkFetch, args.options.seasonCounts || [])
     : networkFetch;
   const provider = loadProvider(site, { settings: args.options.settings || {}, fetcher,
     tmdbKey: args.options.title ? 'metadatos-simulados' : (process.env.TMDB_API_KEY || '') });
