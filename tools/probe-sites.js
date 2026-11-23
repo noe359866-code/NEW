@@ -539,6 +539,25 @@ async function round29() {
   await probeSnippets('dlx abyss embed', 'https://abyss.to/', [['js', 'src="[^"]{0,120}\\.js']], 200);
 }
 
+/* Ronda 30: Abyss publica sus datos cifrados en `const datas` (Base64). */
+async function round30() {
+  const res = await fetchRaw('https://player.abyssplayer.com/K8R6OOjS7');
+  const raw = res.text || '';
+  const m = /const\s+datas\s*=\s*["']([A-Za-z0-9+/=]{20,})["']/.exec(raw);
+  console.log('===== dlx abyss datas');
+  console.log('encontrado=' + Boolean(m) + ' bytes=' + (m ? m[1].length : 0));
+  if (m) {
+    let decoded = '';
+    try { decoded = Buffer.from(m[1], 'base64').toString('utf8'); } catch (e) { decoded = 'error ' + e.message; }
+    console.log('decodificado (' + decoded.length + '):');
+    console.log(decoded.slice(0, 1200));
+  }
+  // ¿Hay descifrado en el bundle del reproductor?
+  await probeSnippets('dlx abyss bundle', 'https://iamcdn.net/player-v2/core.bundle.js', [
+    ['crypto', 'CryptoJS|AES|decrypt|atob|fromCharCode'], ['datas', 'datas[\\s\\S]{0,120}']
+  ], 260);
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -593,6 +612,7 @@ async function main() {
   if (only === 'dlx27') await round27();
   if (only === 'dlx28') await round28();
   if (only === 'dlx29') await round29();
+  if (only === 'dlx30') await round30();
 }
 
 if (require.main === module) {
