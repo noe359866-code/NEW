@@ -395,6 +395,18 @@ async function round21() {
   ], 200);
 }
 
+/* Ronda 22: StreamWish por su API interna y el packer de VidHide ya descomprimido. */
+async function round22() {
+  await probeSnippets('streamwish main.js', 'https://streamwish.to/main.js?v=1.1.9',
+    [['api', '\\/dl\\?[^"\'`]{0,80}|op=embed|file_code'], ['fetch', 'fetch\\([^)]{0,120}'], ['eval', 'eval\\(|atob\\(']], 220);
+  for (const u of ['https://streamwish.to/dl?op=embed&file_code=6dz22bl4exq4&referer=',
+                   'https://streamwish.to/dl?op=view&file_code=6dz22bl4exq4']) {
+    await probeSnippets('streamwish dl', u, [['m3u8/mp4', '\\.m3u8|\\.mp4'], ['packer', 'eval\\(function\\(p,a,c,k,e']], 300);
+  }
+  await probeSnippets('vidhide packed', 'https://vidhidevip.com/v/7edm3v3ca7mf',
+    [['url en tabla', 'https?[^"\'\\s]{0,120}\\.(?:m3u8|mp4)'], ['file', 'm3u8|master\\.']], 400);
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -439,6 +451,7 @@ async function main() {
   if (only === 'all' || only === 'round19') await round19();
   if (only === 'all' || only === 'round20') await round20();
   if (only === 'all' || only === 'round21') await round21();
+  if (only === 'all' || only === 'round22') await round22();
 }
 
 if (require.main === module) {
