@@ -1,1 +1,7 @@
-===== dlx candidatos: sin fuente
+===== dlx candidatos
+plain head: "{\"mp4\":{\"sources\":[{\"label\":\"360p\",\"res_id\":2,\"size\":81347747,\"codec\":\"h264\",\"status\":true,\"path\":\"6/0/9/5babbdf1a2549ec2f5b1a25e52902.81347747.2\",\"url\":\"https://8oekkfci14.s\u0019srr.org\",\"partSize\":0,\"sub\":\"hgexcwir16\"},{\"label\":\"720p\",\"res_id\":4,\"size\":144260576,\"codec\":\"h264\",\"status\":true,\"path\":\"b/"
+plain tail: "03b730283530.252999150.5.fd\",\"partSize\":2097152}]}}��.Wf��w\u000e,a��!�J_��;פ+~lys���]\u0012�e��\u0003`\u001e�YB\u0016H>\rRb����(� �N��`�w��k��\u0003�*>\u0014\u0005�x�\nF�ja�6d硖�_ak�F���\"�݀�3�ղ��-���A���˔��m�V#.�r����Z�\u0001�i��8��\u001e�Z�\u000eC��\u0007UC��'"
+source: {"label":"360p","size":"81347747","res_id":"2","path":"6/0/9/5babbdf1a2549ec2f5b1a25e52902.81347747.2"}
+fristDatas[0]: 403 type=text/html; charset=UTF-8 bytes=4542 head=<!DOCTYPE  :: https://uy8tgkg18.sssrr.org/5/a/4/70b302d9582df161f0a73dd4f1490.144X60576.4.fd
+host+path+fd: ERR Failed to parse URL from https://8oekkfci14.ssrr.org/6/0/9/5babbdf1a2549ec2f5b1a25e52902.81347747.2.fd
+host+path: ERR Failed to parse URL from https://8oekkfci14.ssrr.org/6/0/9/5babbdf1a2549ec2f5b1a25e52902.81347747.2
