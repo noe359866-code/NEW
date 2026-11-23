@@ -2170,8 +2170,10 @@ function unlimplayStreams(id, referer, season, episode) {
   // Para series la API exige season/episode; con s/e responde 404.
   var endpoint = 'https://vimeos.unlimplay.com/?id=' + id +
     (season ? '&season=' + season + '&episode=' + episode : '');
+  // Desde el servidor (IP de Render) la API tarda a veces más de 8 s y la
+  // respuesta llega vacía; se reintenta una vez con más margen.
   return getJson(endpoint, {
-    timeout: 8000, retries: 0, headers: { Accept: 'application/json' }
+    timeout: 15000, retries: 1, headers: { Accept: 'application/json' }
   }).then(function (data) {
     var embeds = data && data.embeds && typeof data.embeds === 'object' ? data.embeds : null;
     if (!embeds) return [];
