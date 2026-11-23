@@ -101,7 +101,8 @@ function buildCoreBundle(core) {
     'languageLabel', 'unescapePlayerText', 'publicHttpUrl', 'directMediaUrl', 'findDirectMedia',
     'unpackPlayerScript', 'pagePlayerLinks', 'embed69Links', 'solvePlayerPow', 'resolveDirectPlayers',
     'normalizeContentId', 'contentIdLabel', 'resolveRequestMedia', 'resolveAnimeMedia', 'wikidataLookup', 'aniZipLookup', 'getTextLimited', 'isSeriesLikeType',
-    'solvePlayerPowHex', 'blockedObserver', 'imdbSlugTitle', 'cinemetaRequest', 'webResult', 'slugTitle'
+    'solvePlayerPowHex', 'blockedObserver', 'imdbSlugTitle', 'cinemetaRequest', 'webResult', 'slugTitle',
+    'languageOf', 'languageLabel', 'languageRank', 'sortByQuality', 'uniqueBy'
   ];
   const source = [
     "'use strict';",
@@ -127,7 +128,7 @@ function validateManifest() {
     if (ids.has(catalog.id)) errors.push('catálogo duplicado: ' + catalog.id);
     ids.add(catalog.id);
   }
-  for (const id of ['flixlatam', 'latanime', 'cineplus123']) {
+  for (const id of ['flixlatam', 'latanime', 'cineplus123', 'pelishax', 'homecine', 'frikiserie']) {
     const target = path.join(OUT_DIR, id + '.js');
     if (!fs.existsSync(target)) errors.push('falta el provider interno: ' + id);
     else if (fs.statSync(target).size > 5 * 1024 * 1024) errors.push('provider demasiado grande: ' + id);

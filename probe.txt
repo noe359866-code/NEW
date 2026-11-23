@@ -125,13 +125,13 @@ status=200 type=application/json bytes=389 final=https://vimeos.unlimplay.com/?i
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p4.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=gKti5JPIcMzt7vMZ3HacMrsaZIkeGUTjiD-o5IkpXKw&s=1795408233&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
+   "direct": "https://p4.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=RwtROePCKaErBGPAVM5vRVi2UboWddIF8nuWpspRvig&s=1795417954&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
    }
    }
    }
 
 ===== k-drama home :: https://k-drama.in/
-status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/
+status=200 type=text/html; charset=UTF-8 bytes=406420 final=https://k-drama.in/
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 17 líneas
@@ -168,7 +168,7 @@ status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-substitute-303552" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/gunshot-306609" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/mazu-the-millennium-goddess-342590" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/n-a-342038" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-scent-of-karma-342135" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/river-of-no-return-203483" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
@@ -198,10 +198,10 @@ status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/
    <a href="/detail/tv/the-blue-road-300523" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 24 líneas
+--- episodios: 25 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -212,13 +212,14 @@ status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/alchemy-of-souls-135157-episode-13" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Episode 13 se hindi main dalo please&rdquo;</p>
    <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
    <img src="https://image.tmdb.org/t/p/w342/liGgY9uimx9jmv89x49jHtb8Ndl.jpg" alt="World Wonder Ring Stardom" class="cineapse-poster-img" loading="lazy">
@@ -228,7 +229,7 @@ status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/search?q=squid
-status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/search?q=squid
+status=200 type=text/html; charset=UTF-8 bytes=417518 final=https://k-drama.in/search?q=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -237,7 +238,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/s
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-substitute-303552" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/gunshot-306609" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/mazu-the-millennium-goddess-342590" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/n-a-342038" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-scent-of-karma-342135" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/river-of-no-return-203483" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
@@ -267,10 +268,10 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/s
    <a href="/detail/tv/the-blue-road-300523" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 24 líneas
+--- episodios: 25 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -281,13 +282,14 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/s
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/alchemy-of-souls-135157-episode-13" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Episode 13 se hindi main dalo please&rdquo;</p>
    <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
    <img src="https://image.tmdb.org/t/p/w342/liGgY9uimx9jmv89x49jHtb8Ndl.jpg" alt="World Wonder Ring Stardom" class="cineapse-poster-img" loading="lazy">
@@ -297,7 +299,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/s
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/?s=squid
-status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/?s=squid
+status=200 type=text/html; charset=UTF-8 bytes=406420 final=https://k-drama.in/?s=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -306,7 +308,7 @@ status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/?
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-substitute-303552" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/gunshot-306609" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/mazu-the-millennium-goddess-342590" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/n-a-342038" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-scent-of-karma-342135" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/river-of-no-return-203483" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
@@ -336,10 +338,10 @@ status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/?
    <a href="/detail/tv/the-blue-road-300523" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 24 líneas
+--- episodios: 25 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -350,13 +352,14 @@ status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/?
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/alchemy-of-souls-135157-episode-13" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Episode 13 se hindi main dalo please&rdquo;</p>
    <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
    <img src="https://image.tmdb.org/t/p/w342/liGgY9uimx9jmv89x49jHtb8Ndl.jpg" alt="World Wonder Ring Stardom" class="cineapse-poster-img" loading="lazy">
@@ -366,7 +369,7 @@ status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/?
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/search?s=squid
-status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/search?s=squid
+status=200 type=text/html; charset=UTF-8 bytes=417518 final=https://k-drama.in/search?s=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -375,7 +378,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/s
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-substitute-303552" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/gunshot-306609" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/mazu-the-millennium-goddess-342590" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/n-a-342038" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-scent-of-karma-342135" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/river-of-no-return-203483" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
@@ -405,10 +408,10 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/s
    <a href="/detail/tv/the-blue-road-300523" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 24 líneas
+--- episodios: 25 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -419,13 +422,14 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/s
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/alchemy-of-souls-135157-episode-13" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Episode 13 se hindi main dalo please&rdquo;</p>
    <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
    <img src="https://image.tmdb.org/t/p/w342/liGgY9uimx9jmv89x49jHtb8Ndl.jpg" alt="World Wonder Ring Stardom" class="cineapse-poster-img" loading="lazy">
@@ -435,7 +439,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/s
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/buscar?q=squid
-status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/buscar?q=squid
+status=200 type=text/html; charset=UTF-8 bytes=417518 final=https://k-drama.in/buscar?q=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -444,7 +448,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/b
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-substitute-303552" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/gunshot-306609" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/mazu-the-millennium-goddess-342590" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/n-a-342038" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-scent-of-karma-342135" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/river-of-no-return-203483" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
@@ -474,10 +478,10 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/b
    <a href="/detail/tv/the-blue-road-300523" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 24 líneas
+--- episodios: 25 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -488,13 +492,14 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/b
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/alchemy-of-souls-135157-episode-13" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Episode 13 se hindi main dalo please&rdquo;</p>
    <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
    <img src="https://image.tmdb.org/t/p/w342/liGgY9uimx9jmv89x49jHtb8Ndl.jpg" alt="World Wonder Ring Stardom" class="cineapse-poster-img" loading="lazy">
@@ -504,7 +509,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/b
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/pelicula/interestelar
-status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/pelicula/interestelar
+status=200 type=text/html; charset=UTF-8 bytes=417518 final=https://k-drama.in/pelicula/interestelar
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -556,7 +561,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/p
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-substitute-303552" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/gunshot-306609" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/mazu-the-millennium-goddess-342590" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/n-a-342038" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-scent-of-karma-342135" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/river-of-no-return-203483" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
@@ -586,10 +591,10 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/p
    <a href="/detail/tv/the-blue-road-300523" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 24 líneas
+--- episodios: 25 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -600,13 +605,14 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/p
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/alchemy-of-souls-135157-episode-13" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Episode 13 se hindi main dalo please&rdquo;</p>
    <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
    <img src="https://image.tmdb.org/t/p/w342/liGgY9uimx9jmv89x49jHtb8Ndl.jpg" alt="World Wonder Ring Stardom" class="cineapse-poster-img" loading="lazy">
@@ -616,7 +622,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/p
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/movie/interestelar
-status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/movie/interestelar
+status=200 type=text/html; charset=UTF-8 bytes=417518 final=https://k-drama.in/movie/interestelar
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -668,7 +674,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/m
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-substitute-303552" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/gunshot-306609" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/mazu-the-millennium-goddess-342590" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/n-a-342038" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-scent-of-karma-342135" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/river-of-no-return-203483" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
@@ -698,10 +704,10 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/m
    <a href="/detail/tv/the-blue-road-300523" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 24 líneas
+--- episodios: 25 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -712,13 +718,14 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/m
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/alchemy-of-souls-135157-episode-13" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Episode 13 se hindi main dalo please&rdquo;</p>
    <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
    <img src="https://image.tmdb.org/t/p/w342/liGgY9uimx9jmv89x49jHtb8Ndl.jpg" alt="World Wonder Ring Stardom" class="cineapse-poster-img" loading="lazy">
@@ -728,7 +735,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/m
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/ver/interestelar
-status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/ver/interestelar
+status=200 type=text/html; charset=UTF-8 bytes=417518 final=https://k-drama.in/ver/interestelar
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -780,7 +787,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/v
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-substitute-303552" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/gunshot-306609" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/mazu-the-millennium-goddess-342590" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/n-a-342038" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-scent-of-karma-342135" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/river-of-no-return-203483" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
@@ -810,10 +817,10 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/v
    <a href="/detail/tv/the-blue-road-300523" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 24 líneas
+--- episodios: 25 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -824,13 +831,14 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/v
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/alchemy-of-souls-135157-episode-13" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Episode 13 se hindi main dalo please&rdquo;</p>
    <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
    <img src="https://image.tmdb.org/t/p/w342/liGgY9uimx9jmv89x49jHtb8Ndl.jpg" alt="World Wonder Ring Stardom" class="cineapse-poster-img" loading="lazy">
@@ -840,7 +848,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/v
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/serie/squid-game
-status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/serie/squid-game
+status=200 type=text/html; charset=UTF-8 bytes=417518 final=https://k-drama.in/serie/squid-game
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -892,7 +900,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/s
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-substitute-303552" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/gunshot-306609" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/mazu-the-millennium-goddess-342590" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/n-a-342038" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-scent-of-karma-342135" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/river-of-no-return-203483" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
@@ -922,10 +930,10 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/s
    <a href="/detail/tv/the-blue-road-300523" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-devil-s-plan-214582" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/final-table-316702" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
-   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
+   <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 24 líneas
+--- episodios: 25 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -936,13 +944,14 @@ status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/s
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/alchemy-of-souls-135157-episode-13" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Episode 13 se hindi main dalo please&rdquo;</p>
    <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
    <img src="https://image.tmdb.org/t/p/w342/liGgY9uimx9jmv89x49jHtb8Ndl.jpg" alt="World Wonder Ring Stardom" class="cineapse-poster-img" loading="lazy">
@@ -1177,7 +1186,7 @@ status=200 type=text/html bytes=3193 final=https://framextv.cc/
 --- episodios: 0 líneas
 
 ===== kd watch :: https://k-drama.in/watch/vincenzo-117376-episode-1
-status=200 type=text/html; charset=UTF-8 bytes=238647 final=https://k-drama.in/watch/vincenzo-117376-episode-1
+status=200 type=text/html; charset=UTF-8 bytes=238635 final=https://k-drama.in/watch/vincenzo-117376-episode-1
 --- iframe/embed: 10 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
    <iframe id="video-player-frame" src="https://k-drama.in/vid2.php/117376/1/1?m=hi" class="cineapse-player-iframe" allowfullscreen allow="autoplay; fullscreen; encrypted-media; picture-in-picture; accelerometer; gyroscope; clipboard-write; web-share" referrerpolicy="no-referrer-when-downgrade"></ifram…
@@ -1296,7 +1305,7 @@ status=200 type=text/html; charset=UTF-8 bytes=127954 final=https://k-drama.in/d
    <div class="ep-card"><a class="ep-card__link" href="/watch/tv/vincenzo-117376-episode-1" style="display:block;text-decoration:none;color:inherit;"><div class="ep-card__media"><img src="https://image.tmdb.org/t/p/w500/zsat0wHWuEBOU5OTGcVyMlROZNv.jpg" alt="Episode 1 - Episode 1" loading="lazy"><span c…
 
 ===== kd search api :: https://k-drama.in/api/search?q=vincenzo
-status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/api/search?q=vincenzo
+status=200 type=text/html; charset=UTF-8 bytes=417518 final=https://k-drama.in/api/search?q=vincenzo
 --- json: 40 líneas
    <!DOCTYPE html>
    <html lang="en">
@@ -1438,13 +1447,11 @@ status=200 type=text/html bytes=3193 final=https://framextv.cc/api
    } catch (e) {
 
 ===== kd search vincenzo :: https://k-drama.in/search?q=vincenzo
-status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/search?q=vincenzo
---- vincenzo: 9 líneas
+status=200 type=text/html; charset=UTF-8 bytes=417518 final=https://k-drama.in/search?q=vincenzo
+--- vincenzo: 7 líneas
    "text": "KatDrama (https://k-drama.in) is recognized as the best site to watch K-Dramas online. It offers an extensive catalog of popular and ongoing Korean dramas (such as Queen of Tears, Crash Landing on You, The K2, Vincenzo, Lovely Runner, and Marry My Husband) in 1080p Ultra HD with verified En…
    <button onclick="setSearchTerm('Vincenzo')" style="
    Vincenzo                        </button>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
-   <span class="cc__show"><i class="fas fa-tv"></i> Vincenzo</span>
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <span class="cc__show"><i class="fas fa-tv"></i> Vincenzo</span>
    Stream major hits like <em>Queen of Tears</em>, <em>Crash Landing on You</em>, <em>The K2 Drama</em>, <em>Lovely Runner</em>, <em>Vincenzo</em>, and <em>Marry My Husband</em> with daily simulcasts within minutes of South Korean broadcasts.
@@ -1477,14 +1484,15 @@ status=200 type=application/javascript bytes=888072 final=https://framextv.cc/as
    `;function fm(e){return e?e.replace(/:?\s*(?:Season\s*\d+|Final\s*Season|\d+(?:st|nd|rd|th)\s*Season|Part\s*\d+|Cour\s*\d+|2nd\s*Season|3rd\s*Season|4th\s*Season|5th\s*Season|6th\s*Season|7th\s*Season).*$/i,``).replace(/:?\s*(?:Entertainment\s*District|Hashira\s*Training|Mugen\s*Train|Swordsmith\s*V…
 
 ===== vidly :: https://vidly.pro/tv/117376/1/1
-status=200 type=text/html; charset=utf-8 bytes=56105 final=https://vidly.pro/tv/117376/1/1
+status=200 type=text/html; charset=utf-8 bytes=153605 final=https://vidly.pro/tv/117376/1/1
 --- iframe/embed: 0 líneas
 --- servers/ajax: 2 líneas
    <!DOCTYPE html><html lang="en" class="__variable_d8ebd1"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7396d6900d8fa621.css" data-precedence="next"/><link rel="stylesheet" href="/_next/static/css/e1ab8…
    $RC=function(a,b){if(b=document.getElementById(b))(a=document.getElementById(a))?(a.previousSibling.data="$~",$RB.push(a,b),2===$RB.length&&("number"!==typeof $RT?requestAnimationFrame($RV.bind(null,$RB)):(a=performance.now(),setTimeout($RV.bind(null,$RB),2300>a&&2E3<a?2300-a:$RT+300-a)))):b.parentN…
 --- json-inline: 1 líneas
    $RC=function(a,b){if(b=document.getElementById(b))(a=document.getElementById(a))?(a.previousSibling.data="$~",$RB.push(a,b),2===$RB.length&&("number"!==typeof $RT?requestAnimationFrame($RV.bind(null,$RB)):(a=performance.now(),setTimeout($RV.bind(null,$RB),2300>a&&2E3<a?2300-a:$RT+300-a)))):b.parentN…
---- hls: 0 líneas
+--- hls: 1 líneas
+   $RC=function(a,b){if(b=document.getElementById(b))(a=document.getElementById(a))?(a.previousSibling.data="$~",$RB.push(a,b),2===$RB.length&&("number"!==typeof $RT?requestAnimationFrame($RV.bind(null,$RB)):(a=performance.now(),setTimeout($RV.bind(null,$RB),2300>a&&2E3<a?2300-a:$RT+300-a)))):b.parentN…
 
 ===== kd vid2 raw :: https://k-drama.in/vid2.php/117376/1/1?m=en
 status=200 type=text/html; charset=UTF-8 bytes=4581 final=https://k-drama.in/vid2.php/117376/1/1?m=en
@@ -1619,7 +1627,7 @@ status=200 type=application/javascript bytes=888072 final=https://framextv.cc/as
    …Th(){return(0,H.jsx)(up,{children:(0,H.jsx)(nd,{children:(0,H.jsx)(wh,{children:(0,H.jsxs)(_u,{children:[(0,H.jsx)(X,{path:`/embed/anime/*`,element:(0,H.jsx)(V.Suspense,{fallback:(0,H.jsx)(vh,{}),children:(0,H.jsx)(bh,{})})}),(0,H.jsx)(X,{path:`/embed/anime`,e…
 
 ===== kd id directo tv :: https://k-drama.in/watch/tv/n-a-117376-episode-1
-status=200 type=text/html; charset=UTF-8 bytes=238647 final=https://k-drama.in/watch/tv/vincenzo-117376-episode-1
+status=200 type=text/html; charset=UTF-8 bytes=238635 final=https://k-drama.in/watch/tv/vincenzo-117376-episode-1
 --- iframe/embed: 10 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
    <iframe id="video-player-frame" src="https://k-drama.in/vid2.php/117376/1/1?m=hi" class="cineapse-player-iframe" allowfullscreen allow="autoplay; fullscreen; encrypted-media; picture-in-picture; accelerometer; gyroscope; clipboard-write; web-share" referrerpolicy="no-referrer-when-downgrade"></ifram…
@@ -2000,7 +2008,7 @@ status=200 type=text/html; charset=utf-8 bytes=19926 final=https://embed.reelsdo
    …s/231-d674b1e36192340c.js" async=""></script><script src="/_next/static/chunks/259-299345dbf92299f1.js" async=""></script><script src="/_next/static/chunks/1223-ab91e720b90032b2.js" async=""></script><script src="/_next/static/chunks/app/layout-ca7906e9bae1a3a…
 
 ===== wecollege :: https://api.wecollege.net/
-status=403 type=text/html; charset=UTF-8 bytes=4917 final=https://api.wecollege.net/
+status=403 type=text/html; charset=UTF-8 bytes=4913 final=https://api.wecollege.net/
 --- json: 40 líneas
    <!DOCTYPE html>
    <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
@@ -2281,7 +2289,7 @@ status=200 type=application/javascript bytes=1991970 final=https://vidsync.pro/a
    …-deals7.workers.dev","https://vidsync-shard.vs-deals6.worker…
 
 ===== shard tv :: https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=tv&id=117376&season=1&episode=1
-status=200 type=application/json bytes=306162 final=https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=tv&id=117376&season=1&episode=1
+status=200 type=application/json bytes=306161 final=https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=tv&id=117376&season=1&episode=1
 --- json: 1 líneas
    {"sources":[{"id":"castle-5699276480732160-en-auto","url":"https://img.hscow.com/hls_mps/244368831/720/index_287.m3u8","rawUrl":"https://img1.hscow.com/hls_mps/244368831/720/index_287.m3u8?Expires=1795112459&KeyName=Signature&Signature=386pvYnT5j_y6ina8YKyBNUOxOFgtR2nx264XXIqs8QtvB5GQ5pEHMFteCL_nUvE…
 
@@ -2291,7 +2299,7 @@ status=200 type=application/json bytes=17567 final=https://vidsync-shard.vs-deal
    {"sources":[{"id":"netmirror-nf-81505776","url":"https://vidsync-shard.vs-deals54.workers.dev/api/netmirror/master.m3u8?cid=81505776&base=https%3A%2F%2Fs22.freecdn41.top%2Ffiles%2F81505776&ott=nf&quals=1080p%2C720p%2C480p&ext=.woff2&tracks=W3siYyI6ImRlIiwibCI6Ikdlcm1hbiIsIm8iOjAsInUiOiIvYS8wLzAubTN1…
 
 ===== shard movie keys :: https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=movie&id=155
-status=200 type=application/json bytes=248567 final=https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=movie&id=155
+status=200 type=application/json bytes=248566 final=https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=movie&id=155
 --- head:
    …{"sources":[{"id":"castle-6148658229583872-hi-auto","url":"https://img.hscow.com/hls_mps/19711468df4078c930e6ea1202b8f4ee16db6d08/720/index_287.m3u8","rawUrl":"https://img1.hscow.com/hls_mps/19711468df4078c930e6ea1202b8f4ee16db6d08/720/index_287.m3u8?Expires=1795179850&KeyName=Signature&Signature=VpBiCDiDiyiMC4m-9kKo9xwnHBIXuJU97BZv005NVaP9MwWhoa9xFYnnURV0lQ3H-a7WzWCbhdHslMySp5mNCw==","directUrl":"https://img.hscow.com/hls_mps/19711468df4078c930e6ea1202b8f4ee16db6d08/720/index_287.m3u8","permanent_m3u8_url":"https://img.hscow.com/hls_mps/19711468df4078c930e6ea1202b8f4ee16db6d08/720/index_287.m3u8","fallbackProxyUrl":"https://vidsync-shard.vs-deals41.workers.dev/api/core/proxy?data=%7B%22url%…
 --- subtitles:
@@ -2317,7 +2325,7 @@ status=200 type=application/json bytes=248567 final=https://vidsync-shard.vs-dea
    …,"layerName":"Layer 1: Permanent Google Cloud CDN","headers":{"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"streamHeaders":{"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137.0.0.0","Referer":"https://api.hlowb.com/"},"type":"hls","quality":"720p","availableQualities":["720p","480p","Auto"],"audio":"en","audioLanguage":"en","audioLabel":"English","audioIndex":1,"allAudioTracks":[{"language":"hi","label":"Hindi","trackIndex":0,"original":false},{"language":"en","label":"English","trackIndex":1,"original":true}],"audioTracks":[{"language":"hi","label":"Hindi","index":0,"trackI…
 
 ===== kdesa movie :: https://kdesa.stream/media/tmdb-movie-1595124
-status=403 type=text/html; charset=UTF-8 bytes=5698 final=https://kdesa.stream/media/tmdb-movie-1595124
+status=403 type=text/html; charset=UTF-8 bytes=5677 final=https://kdesa.stream/media/tmdb-movie-1595124
 --- iframe/embed: 0 líneas
 --- servers/ajax: 0 líneas
 --- json-inline: 0 líneas
@@ -2326,7 +2334,7 @@ status=403 type=text/html; charset=UTF-8 bytes=5698 final=https://kdesa.stream/m
    <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
 
 ===== kdesa tv :: https://kdesa.stream/media/tmdb-tv-1399-1-1
-status=403 type=text/html; charset=UTF-8 bytes=5692 final=https://kdesa.stream/media/tmdb-tv-1399-1-1
+status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/media/tmdb-tv-1399-1-1
 --- iframe/embed: 0 líneas
 --- servers/ajax: 0 líneas
 --- json-inline: 0 líneas
@@ -2336,10 +2344,11 @@ status=403 type=text/html; charset=UTF-8 bytes=5692 final=https://kdesa.stream/m
 ===== kdesa búsqueda :: https://kdesa.stream/search?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/search?q=dune
 --- fichas: 0 líneas
---- episodios: 0 líneas
+--- episodios: 1 líneas
+   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
 
 ===== kdesa búsqueda :: https://kdesa.stream/?s=dune
-status=403 type=text/html; charset=UTF-8 bytes=5641 final=https://kdesa.stream/?s=dune
+status=403 type=text/html; charset=UTF-8 bytes=5619 final=https://kdesa.stream/?s=dune
 --- fichas: 0 líneas
 --- episodios: 1 líneas
    <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
@@ -2352,10 +2361,1412 @@ status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/b
 ===== kdesa búsqueda :: https://kdesa.stream/api/search?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/api/search?q=dune
 --- fichas: 0 líneas
---- episodios: 0 líneas
+--- episodios: 1 líneas
+   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
 
 ===== kdesa home :: https://kdesa.stream/
 status=403 type=text/html; charset=UTF-8 bytes=5583 final=https://kdesa.stream/
 --- fichas: 0 líneas
 --- episodios: 1 líneas
    <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
+
+===== homecine home :: https://www3.homecine.to/
+status=200 type=text/html; charset=UTF-8 bytes=44523 final=https://www3.homecine.to/
+--- form: 5 líneas
+   <form method="get" id="searchform" action="https://www3.homecine.to">
+   <form method="get" id="searchform" action="https://www3.homecine.to">
+   <form id="pt_registration_form" action="https://www3.homecine.to/" method="POST">
+   <form id="pt_login_form" action="https://www3.homecine.to/" method="post">
+   <form id="pt_reset_password_form" action="https://www3.homecine.to/" method="post">
+--- search: 14 líneas
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <div class="mobile-search"><i class="fa fa-search"></i></div>
+   <div id="search">
+   <div class="search-content">
+   <form method="get" id="searchform" action="https://www3.homecine.to">
+   <input class="form-control search-input" type="text" placeholder="Search.." name="s" id="s" value="" data-swplive="true">
+   <button type="submit"><i class="fa fa-search"></i></button>
+   <div class="addthis_inline_share_toolbox mb10"></div>	            <div id="hm-search">
+   <div id="search-homepage" class="search-content">
+   <form method="get" id="searchform" action="https://www3.homecine.to">
+   <input class="form-control search-input" type="text" placeholder="Search.." name="s" id="s" value="" data-swpconfig="home-search" data-swplive="true">
+   <button type="submit"><i class="fa fa-search"></i></button>
+   <div id="search-homepage-results">
+   <script type='text/javascript'>jQuery(document).ready(function() {(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)}…
+--- links: 1 líneas
+   <div class="hm-button"><a href="https://www3.homecine.to/cartelera" class="btn btn-lg btn-successful">Si deseas ver nuestra cartelera de películas, series, documentales y mas. CLICK AQUI!</a></div>
+
+===== homecine película :: https://www3.homecine.to/pequenos-secretos
+status=200 type=text/html; charset=UTF-8 bytes=77005 final=https://www3.homecine.to/pequenos-secretos
+--- iframe/embed: 12 líneas
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <IFRAME SRC="https://fastream.to/embed-zkfc7qenyh7k.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
+   <IFRAME SRC="https://fastream.to/embed-djqspksbj10d.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
+   <IFRAME SRC="https://fastream.to/embed-8bkmoz4qvu3d.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
+   <a href="https://www3.homecine.to/enola-holmes-2" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Enola Holmes 2" title="">
+   <a href="https://www3.homecine.to/undercover-cheerleader" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Undercover Cheerleader" title="">
+   <a href="https://www3.homecine.to/fisher" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Fisher" title="">
+   <a href="https://www3.homecine.to/nuestro-padre" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Nuestro padre" title="">
+   <a href="https://www3.homecine.to/10-dias-de-un-buen-hombre" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="10 días de un buen hombre" title="">
+   <a href="https://www3.homecine.to/con-air-riesgo-en-el-aire" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Con Air (Convictos en el aire)" title="">
+   <iframe id="iframe-trailer" width="600" height="450" src="//www.youtube.com/embed/_8fxE0UmBxc" frameborder="0" allowfullscreen></iframe><div itemscope itemtype="http://schema.org/VideoObject">
+   <script type='text/javascript'>jQuery(document).ready(function() {(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)}…
+--- servers/ajax: 21 líneas
+   <link rel='dns-prefetch' href='//ajax.googleapis.com' />
+   <script id="jquery-main-js" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js?ver=2.1.3"></script>
+   <script id="psy_front_ajax-js-extra">
+   var psyAjax = {"url":"https://www3.homecine.to/wp-admin/admin-ajax.php","like":"Favorite","unlike":"Remove Favorite"};
+   //# sourceURL=psy_front_ajax-js-extra
+   <script id="psy_front_ajax-js" src="https://www3.homecine.to/wp-content/themes/custom/assets/js/theme.script.min.js?ver=1.2.5"></script>
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <h3 style="font-size: 25px;    font-weight: 700;    margin: 10px 0;">*REPRODUCTOR BLOQUEADO*</h3><br/>
+   <div id="player2">
+   <div id="bar-player">
+   <style>#bar-player span:after {content: ""!important;}</style>
+   <div class="player_nav">
+   <i class="fa fa-server mr5"></i>
+   <strong>Server Cload</strong>
+   <i class="fa fa-server mr5"></i>
+   <strong>Server Cload</strong>
+   <i class="fa fa-server mr5"></i>
+   <strong>Server Cload</strong>
+   <span style="" class="lnk lnk-title">Server</span>
+   <p style="font-size: 11px; line-height: 14px; color: rgba(255,255,255,0.4)">Homecine no almacena ninguna película o serie en sus servidores.</p>
+   <script type='text/javascript'>jQuery(document).ready(function() {(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)}…
+--- json-inline: 3 líneas
+   var psyAjax = {"url":"https://www3.homecine.to/wp-admin/admin-ajax.php","like":"Favorite","unlike":"Remove Favorite"};
+   <meta itemprop="url" content="https://www3.homecine.to/pequenos-secretos" />
+   <input type="hidden" name="link" value="https://www3.homecine.to">
+--- hls/mp4: 0 líneas
+--- iframes: 4 líneas
+   <IFRAME SRC="https://fastream.to/embed-zkfc7qenyh7k.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
+   <IFRAME SRC="https://fastream.to/embed-djqspksbj10d.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
+   <IFRAME SRC="https://fastream.to/embed-8bkmoz4qvu3d.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
+   <iframe id="iframe-trailer" width="600" height="450" src="//www.youtube.com/embed/_8fxE0UmBxc" frameborder="0" allowfullscreen></iframe><div itemscope itemtype="http://schema.org/VideoObject">
+--- players: 40 líneas
+   <link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://www3.homecine.to/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww3.homecine.to%2Fpequenos-secretos" />
+   <link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://www3.homecine.to/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww3.homecine.to%2Fpequenos-secretos&#038;format=xml" />
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <a href="#pt-login" class="btn btn-successful btn-login" title="Login" data-target="" data-toggle="modal"> LOGIN</a>
+   <input class="form-control search-input" type="text" placeholder="Search.." name="s" id="s" value="" data-swplive="true">
+   <div id="content-embed">
+   <h3 style="font-size: 25px;    font-weight: 700;    margin: 10px 0;">*REPRODUCTOR BLOQUEADO*</h3><br/>
+   <div id="content-embed" style="">
+   <div id="player2">
+   <IFRAME SRC="https://fastream.to/embed-zkfc7qenyh7k.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
+   <IFRAME SRC="https://fastream.to/embed-djqspksbj10d.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
+   <IFRAME SRC="https://fastream.to/embed-8bkmoz4qvu3d.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
+   <div id="bar-player">
+   <style>#bar-player span:after {content: ""!important;}</style>
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-276473" data-nonce="5ea2191620" data-post-id="276473" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span>
+   <a class="btn bp-btn-report" data-target="#pop-report" data-toggle="modal" style="color: #fff000; float: right"><i class="fa fa-warning"></i> <span>Report</span></a>
+   <div class="player_nav">
+   <i class="fa fa-server mr5"></i>
+   <strong>Server Cload</strong>
+   <i class="fa fa-server mr5"></i>
+   <strong>Server Cload</strong>
+   <i class="fa fa-server mr5"></i>
+   <strong>Server Cload</strong>
+   <a data-target="#pop-trailer" data-toggle="modal" class="pop-trailer btn btn-primary">
+   <meta itemprop="embedUrl" content="https://www.youtube.com/embed/_8fxE0UmBxc"><meta itemprop="name" content="Pequeños Secretos">
+   <li><a data-toggle="tab" href="#list-dl">Download</a></li>
+   <div class="btn-group btn-group-justified embed-selector" style="margin-bottom:1px;">
+   <span style="" class="lnk lnk-title">Server</span>
+   <div class="btn-group btn-group-justified embed-selector" >
+   <div data-movie-id="200204" class="ml-item">
+   <a href="https://www3.homecine.to/enola-holmes-2" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Enola Holmes 2" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/eC7d7caUKi1dJuRdWPK8b8Hkpz5.jpg"class="lazy thumb mli-thumb" alt="Enola Holmes 2">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-200204" data-nonce="5ea2191620" data-post-id="200204" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="79696" class="ml-item">
+   <a href="https://www3.homecine.to/undercover-cheerleader" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Undercover Cheerleader" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/vdN72pwqNmwGcpfSrIW8Y8Vt5Qx.jpg"class="lazy thumb mli-thumb" alt="Undercover Cheerleader">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-79696" data-nonce="5ea2191620" data-post-id="79696" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="175780" class="ml-item">
+   <a href="https://www3.homecine.to/fisher" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Fisher" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/1TW74g1D5Ktvv3fRo866fvysSMN.jpg"class="lazy thumb mli-thumb" alt="Fisher">
+
+===== homecine serie :: https://www3.homecine.to/series/mouse
+status=200 type=text/html; charset=UTF-8 bytes=71302 final=https://www3.homecine.to/series/mouse
+--- iframe/embed: 9 líneas
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <a href="https://www3.homecine.to/series/el-catalogo" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="El catálogo" title="">
+   <a href="https://www3.homecine.to/series/tandem" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Tandem" title="">
+   <a href="https://www3.homecine.to/series/santa-evita" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Santa Evita" title="">
+   <a href="https://www3.homecine.to/series/incontrolables" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Incontrolables" title="">
+   <a href="https://www3.homecine.to/series/los-invencibles" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Los invencibles" title="">
+   <a href="https://www3.homecine.to/series/aqui-no-hay-quien-viva" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Aquí no hay quien viva" title="">
+   <iframe id="iframe-trailer" width="600" height="450" src="//www.youtube.com/embed/i_K9U3gE9os" frameborder="0" allowfullscreen></iframe><div itemscope itemtype="http://schema.org/VideoObject">
+   <script type='text/javascript'>jQuery(document).ready(function() {(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)}…
+--- servers/ajax: 12 líneas
+   <link rel='dns-prefetch' href='//ajax.googleapis.com' />
+   <script id="jquery-main-js" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js?ver=2.1.3"></script>
+   <script id="psy_front_ajax-js-extra">
+   var psyAjax = {"url":"https://www3.homecine.to/wp-admin/admin-ajax.php","like":"Favorite","unlike":"Remove Favorite"};
+   //# sourceURL=psy_front_ajax-js-extra
+   <script id="psy_front_ajax-js" src="https://www3.homecine.to/wp-content/themes/custom/assets/js/theme.script.min.js?ver=1.2.5"></script>
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <div id="bar-player">
+   <style>#bar-player span:after {content: ""!important;}</style>
+   <div class="les-title"> <i class="fa fa-server mr5"></i><strong>Season 1</strong></div>
+   <p style="font-size: 11px; line-height: 14px; color: rgba(255,255,255,0.4)">Homecine no almacena ninguna película o serie en sus servidores.</p>
+   <script type='text/javascript'>jQuery(document).ready(function() {(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)}…
+--- json-inline: 4 líneas
+   var psyAjax = {"url":"https://www3.homecine.to/wp-admin/admin-ajax.php","like":"Favorite","unlike":"Remove Favorite"};
+   <meta itemprop="url" content="https://www3.homecine.to/series/mouse" />
+   <meta itemprop="url" content="https://www3.homecine.to/series/mouse" />
+   <input type="hidden" name="link" value="https://www3.homecine.to">
+--- hls/mp4: 0 líneas
+--- iframes: 1 líneas
+   <iframe id="iframe-trailer" width="600" height="450" src="//www.youtube.com/embed/i_K9U3gE9os" frameborder="0" allowfullscreen></iframe><div itemscope itemtype="http://schema.org/VideoObject">
+--- players: 40 líneas
+   <link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://www3.homecine.to/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww3.homecine.to%2Fseries%2Fmouse" />
+   <link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://www3.homecine.to/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww3.homecine.to%2Fseries%2Fmouse&#038;format=xml" />
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <a href="#pt-login" class="btn btn-successful btn-login" title="Login" data-target="" data-toggle="modal"> LOGIN</a>
+   <input class="form-control search-input" type="text" placeholder="Search.." name="s" id="s" value="" data-swplive="true">
+   <div id="content-embed" style="display:block;">
+   <div id="bar-player">
+   <style>#bar-player span:after {content: ""!important;}</style>
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-287757" data-nonce="5ea2191620" data-post-id="287757" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span>
+   <a class="btn bp-btn-report" data-target="#pop-report" data-toggle="modal" style="color: #fff000; float: right"><i class="fa fa-warning"></i> <span>Report</span></a>
+   <div class="les-title"> <i class="fa fa-server mr5"></i><strong>Season 1</strong></div>
+   <a data-target="#pop-trailer" data-toggle="modal" class="pop-trailer btn btn-primary">
+   <meta itemprop="embedUrl" content="https://www.youtube.com/embed/i_K9U3gE9os"><meta itemprop="name" content="Mouse">
+   <div data-movie-id="266850" class="ml-item">
+   <a href="https://www3.homecine.to/series/el-catalogo" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="El catálogo" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/85NgPJnx2XbbTHTrdP3jfNaGz0Q.jpg"class="lazy thumb mli-thumb" alt="El catálogo">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-266850" data-nonce="5ea2191620" data-post-id="266850" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="37208" class="ml-item">
+   <a href="https://www3.homecine.to/series/tandem" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Tandem" title="">
+   <img data-original="https://www3.homecine.to/wp-content/uploads/2019/03/5EgTZSyK5mvFwkz1nRfgkiu5SGQ.jpg"class="lazy thumb mli-thumb" alt="Tandem">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-37208" data-nonce="5ea2191620" data-post-id="37208" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="187496" class="ml-item">
+   <a href="https://www3.homecine.to/series/santa-evita" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Santa Evita" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/jc9rB1qmw2aCsekYrCpsq31opko.jpg"class="lazy thumb mli-thumb" alt="Santa Evita">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-187496" data-nonce="5ea2191620" data-post-id="187496" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="271909" class="ml-item">
+   <a href="https://www3.homecine.to/series/incontrolables" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Incontrolables" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/f7I0xEq69fDghGjdtmHVDyyUYph.jpg"class="lazy thumb mli-thumb" alt="Incontrolables">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-271909" data-nonce="5ea2191620" data-post-id="271909" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="238202" class="ml-item">
+   <a href="https://www3.homecine.to/series/los-invencibles" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Los invencibles" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/uYEBGgBngMJeQvNj6jZtNLTrgQu.jpg"class="lazy thumb mli-thumb" alt="Los invencibles">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-238202" data-nonce="5ea2191620" data-post-id="238202" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   </div><div data-movie-id="110206" class="ml-item">
+   <a href="https://www3.homecine.to/series/aqui-no-hay-quien-viva" data-url="" class="ml-mask jt" data-hasqtip="112" oldtitle="Aquí no hay quien viva" title="">
+   <img data-original="https://image.tmdb.org/t/p/w185/yj3sVi1fJFKJPSPPCJC94yvEDQy.jpg"class="lazy thumb mli-thumb" alt="Aquí no hay quien viva">
+   <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-110206" data-nonce="5ea2191620" data-post-id="110206" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span></div>
+   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-close"></i>
+   <iframe id="iframe-trailer" width="600" height="450" src="//www.youtube.com/embed/i_K9U3gE9os" frameborder="0" allowfullscreen></iframe><div itemscope itemtype="http://schema.org/VideoObject">
+   <meta itemprop="embedUrl" content="https://www.youtube.com/embed/i_K9U3gE9os"><meta itemprop="name" content="Mouse">
+
+===== homecine búsqueda :: https://www3.homecine.to/?s=mouse
+status=200 type=text/html; charset=UTF-8 bytes=74726 final=https://www3.homecine.to/?s=mouse
+--- fichas: 8 líneas
+   <li id="menu-item-24266" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-24266"><a href="https://www3.homecine.to/genre/peliculas-de-comedia">Comedia</a></li>
+   <li id="menu-item-24290" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-24290"><a href="https://www3.homecine.to/peliculas-nuevas">Peliculas</a></li>
+   <div class="block">Genre: <a href="https://www3.homecine.to/genre/action-adventure" rel="category tag">Action &amp; Adventure</a>, <a href="https://www3.homecine.to/genre/animacion" rel="category tag">Animación</a>, <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Com…
+   <div class="block">Genre: <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a>, <a href="https://www3.homecine.to/genre/suspense" rel="category tag">Suspense</a>, <a href="https://www3.homecine.to/genre/terror" rel="category tag">Terror</a> </div>
+   <div class="block">Genre: <a href="https://www3.homecine.to/genre/animacion" rel="category tag">Animación</a>, <a href="https://www3.homecine.to/genre/aventura" rel="category tag">Aventura</a>, <a href="https://www3.homecine.to/genre/pelicula-de-tv" rel="category tag">Película de TV</a> </div>
+   <div class="block">Genre: <a href="https://www3.homecine.to/genre/crimen" rel="category tag">Crimen</a>, <a href="https://www3.homecine.to/genre/misterio" rel="category tag">Misterio</a>, <a href="https://www3.homecine.to/genre/pelicula-de-tv" rel="category tag">Película de TV</a> </div>
+   <div class="block">Genre: <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a>, <a href="https://www3.homecine.to/genre/familia" rel="category tag">Familia</a> </div>
+   <div class="block">Genre: <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a>, <a href="https://www3.homecine.to/genre/familia" rel="category tag">Familia</a> </div>
+--- episodios: 5 líneas
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <link rel="icon" href="https://www3.homecine.to/wp-content/uploads/2019/10/cropped-ICONO512x512-1-192x192.png" sizes="192x192" />
+   <link rel="apple-touch-icon" href="https://www3.homecine.to/wp-content/uploads/2019/10/cropped-ICONO512x512-1-180x180.png" />
+   <meta name="msapplication-TileImage" content="https://www3.homecine.to/wp-content/uploads/2019/10/cropped-ICONO512x512-1-270x270.png" />
+   {"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://www3.homecine.to/wp-includes/js/wp-emoji-release.min.js?ver=61a1ec5563d9e94042326995ee3b4633"}}
+
+===== homecine búsqueda :: https://www3.homecine.to/search?q=mouse
+status=200 type=text/html; charset=UTF-8 bytes=75241 final=https://www3.homecine.to/series/search-party?q=mouse
+--- fichas: 4 líneas
+   <li id="menu-item-24266" class="menu-item menu-item-type-taxonomy menu-item-object-category current-tvshows-ancestor current-menu-parent current-tvshows-parent menu-item-24266"><a href="https://www3.homecine.to/genre/peliculas-de-comedia">Comedia</a></li>
+   <li id="menu-item-24290" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-24290"><a href="https://www3.homecine.to/peliculas-nuevas">Peliculas</a></li>
+   <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a></p>
+   <div class="block">Genre: <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a>, <a href="https://www3.homecine.to/genre/drama" rel="category tag">Drama</a> </div>
+--- episodios: 40 líneas
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <link rel="icon" href="https://www3.homecine.to/wp-content/uploads/2019/10/cropped-ICONO512x512-1-192x192.png" sizes="192x192" />
+   <link rel="apple-touch-icon" href="https://www3.homecine.to/wp-content/uploads/2019/10/cropped-ICONO512x512-1-180x180.png" />
+   <meta name="msapplication-TileImage" content="https://www3.homecine.to/wp-content/uploads/2019/10/cropped-ICONO512x512-1-270x270.png" />
+   <div id="seasons">
+   <div class="tvseason" >
+   <div class="les-title"> <i class="fa fa-server mr5"></i><strong>Season 1</strong></div>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-1-capitulo-1">
+   Episode 1 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-1-capitulo-2">
+   Episode 2 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-1-capitulo-3">
+   Episode 3 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-1-capitulo-4">
+   Episode 4 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-1-capitulo-5">
+   Episode 5 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-1-capitulo-6">
+   Episode 6 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-1-capitulo-7">
+   Episode 7 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-1-capitulo-8">
+   Episode 8 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-1-capitulo-9">
+   Episode 9 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-1-capitulo-10">
+   Episode 10 </a>
+   <div class="tvseason" >
+   <div class="les-title"> <i class="fa fa-server mr5"></i><strong>Season 2</strong></div>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-2-capitulo-1">
+   Episode 1 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-2-capitulo-2">
+   Episode 2 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-2-capitulo-3">
+   Episode 3 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-2-capitulo-4">
+   Episode 4 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-2-capitulo-5">
+   Episode 5 </a>
+   <a href="https://www3.homecine.to/episode/search-party-temporada-2-capitulo-6">
+
+===== homecine búsqueda :: https://www3.homecine.to/buscar?q=mouse
+status=200 type=text/html; charset=UTF-8 bytes=70456 final=https://www3.homecine.to/series/buscarse-la-vida-en-brooklyn?q=mouse
+--- fichas: 3 líneas
+   <li id="menu-item-24266" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-24266"><a href="https://www3.homecine.to/genre/peliculas-de-comedia">Comedia</a></li>
+   <li id="menu-item-24290" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-24290"><a href="https://www3.homecine.to/peliculas-nuevas">Peliculas</a></li>
+   <div class="block">Genre: <a href="https://www3.homecine.to/genre/peliculas-de-comedia" rel="category tag">Comedia</a> </div>
+--- episodios: 40 líneas
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <link rel="icon" href="https://www3.homecine.to/wp-content/uploads/2019/10/cropped-ICONO512x512-1-192x192.png" sizes="192x192" />
+   <link rel="apple-touch-icon" href="https://www3.homecine.to/wp-content/uploads/2019/10/cropped-ICONO512x512-1-180x180.png" />
+   <meta name="msapplication-TileImage" content="https://www3.homecine.to/wp-content/uploads/2019/10/cropped-ICONO512x512-1-270x270.png" />
+   <div id="seasons">
+   <div class="tvseason" >
+   <div class="les-title"> <i class="fa fa-server mr5"></i><strong>Season 1</strong></div>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-1-capitulo-1">
+   Episode 1 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-1-capitulo-2">
+   Episode 2 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-1-capitulo-3">
+   Episode 3 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-1-capitulo-4">
+   Episode 4 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-1-capitulo-5">
+   Episode 5 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-1-capitulo-6">
+   Episode 6 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-1-capitulo-7">
+   Episode 7 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-1-capitulo-8">
+   Episode 8 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-1-capitulo-9">
+   Episode 9 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-1-capitulo-10">
+   Episode 10 </a>
+   <div class="tvseason" >
+   <div class="les-title"> <i class="fa fa-server mr5"></i><strong>Season 2</strong></div>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-2-capitulo-1">
+   Episode 1 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-2-capitulo-2">
+   Episode 2 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-2-capitulo-3">
+   Episode 3 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-2-capitulo-4">
+   Episode 4 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-2-capitulo-5">
+   Episode 5 </a>
+   <a href="https://www3.homecine.to/episode/buscarse-la-vida-en-brooklyn-temporada-2-capitulo-6">
+
+===== frikiserie home :: https://www.frikiserie.com/
+status=200 type=text/html; charset=utf-8 bytes=856062 final=https://www.frikiserie.com/
+--- form: 0 líneas
+--- links: 1 líneas
+   <app-root _nghost-ng-c2172236213 ng-version="18.2.14" ngh="2" ng-server-context="ssg"><header _ngcontent-ng-c2172236213 class="main-header"><div _ngcontent-ng-c2172236213 class="header-inner"><a _ngcontent-ng-c2172236213 routerlink="/series" aria-label="FrikiSeries - Series y películas online" class…
+
+===== frikiserie serie :: https://www.frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986
+status=200 type=text/html; charset=utf-8 bytes=856062 final=https://www.frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986
+--- iframe/embed: 0 líneas
+--- servers/ajax: 2 líneas
+   <app-root _nghost-ng-c2172236213 ng-version="18.2.14" ngh="2" ng-server-context="ssg"><header _ngcontent-ng-c2172236213 class="main-header"><div _ngcontent-ng-c2172236213 class="header-inner"><a _ngcontent-ng-c2172236213 routerlink="/series" aria-label="FrikiSeries - Series y películas online" class…
+   <script id="ng-state" type="application/json">{"data-info":[{"titulo":"Cool McCool","slug":"cool-mccool","totalCapitulos":"19","fecha":"1966","imagen":"https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/cool-mccool.jpg?tr=w-170,h-230,q-70,f-auto","descripcion":"Serie de TV (1966-1969). Cool McC…
+--- json-inline: 0 líneas
+--- hls/mp4: 0 líneas
+--- iframes: 0 líneas
+--- players: 5 líneas
+   <!DOCTYPE html><html lang="es" dir="ltr" data-critters-container><head>
+   <script async="async" data-cfasync="false" src="https://bancadeltempoidea.org/21/1686ee819d87e64de74ff3ff164e1742"></script>
+   <app-root _nghost-ng-c2172236213 ng-version="18.2.14" ngh="2" ng-server-context="ssg"><header _ngcontent-ng-c2172236213 class="main-header"><div _ngcontent-ng-c2172236213 class="header-inner"><a _ngcontent-ng-c2172236213 routerlink="/series" aria-label="FrikiSeries - Series y películas online" class…
+   <script data-cfasync="false" src="https://bancadeltempoidea.org/14/c23c48b31c8a49b3102367b708a51490"></script>
+   <script id="ng-state" type="application/json">{"data-info":[{"titulo":"Cool McCool","slug":"cool-mccool","totalCapitulos":"19","fecha":"1966","imagen":"https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/cool-mccool.jpg?tr=w-170,h-230,q-70,f-auto","descripcion":"Serie de TV (1966-1969). Cool McC…
+
+===== frikiserie lista :: https://www.frikiserie.com/lista-series/cool-mccool
+status=200 type=text/html; charset=utf-8 bytes=856062 final=https://www.frikiserie.com/lista-series/cool-mccool
+--- iframe/embed: 0 líneas
+--- servers/ajax: 2 líneas
+   <app-root _nghost-ng-c2172236213 ng-version="18.2.14" ngh="2" ng-server-context="ssg"><header _ngcontent-ng-c2172236213 class="main-header"><div _ngcontent-ng-c2172236213 class="header-inner"><a _ngcontent-ng-c2172236213 routerlink="/series" aria-label="FrikiSeries - Series y películas online" class…
+   <script id="ng-state" type="application/json">{"data-info":[{"titulo":"Cool McCool","slug":"cool-mccool","totalCapitulos":"19","fecha":"1966","imagen":"https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/cool-mccool.jpg?tr=w-170,h-230,q-70,f-auto","descripcion":"Serie de TV (1966-1969). Cool McC…
+--- json-inline: 0 líneas
+--- hls/mp4: 0 líneas
+--- iframes: 0 líneas
+--- players: 5 líneas
+   <!DOCTYPE html><html lang="es" dir="ltr" data-critters-container><head>
+   <script async="async" data-cfasync="false" src="https://bancadeltempoidea.org/21/1686ee819d87e64de74ff3ff164e1742"></script>
+   <app-root _nghost-ng-c2172236213 ng-version="18.2.14" ngh="2" ng-server-context="ssg"><header _ngcontent-ng-c2172236213 class="main-header"><div _ngcontent-ng-c2172236213 class="header-inner"><a _ngcontent-ng-c2172236213 routerlink="/series" aria-label="FrikiSeries - Series y películas online" class…
+   <script data-cfasync="false" src="https://bancadeltempoidea.org/14/c23c48b31c8a49b3102367b708a51490"></script>
+   <script id="ng-state" type="application/json">{"data-info":[{"titulo":"Cool McCool","slug":"cool-mccool","totalCapitulos":"19","fecha":"1966","imagen":"https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/cool-mccool.jpg?tr=w-170,h-230,q-70,f-auto","descripcion":"Serie de TV (1966-1969). Cool McC…
+--- fichas: 1 líneas
+   <app-root _nghost-ng-c2172236213 ng-version="18.2.14" ngh="2" ng-server-context="ssg"><header _ngcontent-ng-c2172236213 class="main-header"><div _ngcontent-ng-c2172236213 class="header-inner"><a _ngcontent-ng-c2172236213 routerlink="/series" aria-label="FrikiSeries - Series y películas online" class…
+--- episodios: 3 líneas
+   <meta property="og:image" content="https://ik.imagekit.io/xqyzlihzqf/frikiSeries/icon-512x512.png?updatedAt=1741202274066">
+   <meta name="twitter:image" content="https://ik.imagekit.io/xqyzlihzqf/frikiSeries/icon-512x512.png">
+   <script id="ng-state" type="application/json">{"data-info":[{"titulo":"Cool McCool","slug":"cool-mccool","totalCapitulos":"19","fecha":"1966","imagen":"https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/cool-mccool.jpg?tr=w-170,h-230,q-70,f-auto","descripcion":"Serie de TV (1966-1969). Cool McC…
+
+===== frikiserie búsqueda :: https://www.frikiserie.com/buscar?q=marco
+status=200 type=text/html; charset=utf-8 bytes=828125 final=https://www.frikiserie.com/buscar/?q=marco
+--- fichas: 1 líneas
+   <app-root _nghost-ng-c2172236213 ng-version="18.2.14" ngh="1" ng-server-context="ssg"><header _ngcontent-ng-c2172236213 class="main-header"><div _ngcontent-ng-c2172236213 class="header-inner"><a _ngcontent-ng-c2172236213 routerlink="/series" aria-label="FrikiSeries - Series y películas online" class…
+--- episodios: 4 líneas
+   <meta property="og:image" content="https://ik.imagekit.io/xqyzlihzqf/frikiSeries/icon-512x512.png?updatedAt=1741202274066">
+   <meta name="twitter:image" content="https://ik.imagekit.io/xqyzlihzqf/frikiSeries/icon-512x512.png">
+   </style><link rel="stylesheet" href="styles-XZHN3RR6.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-XZHN3RR6.css"></noscript><style ng-app-id="ng">@charset "UTF-8";.main-header[_ngcontent-ng-c2172236213]{position:fixed;top:0;left:0;right:0;height:64px;z-in…
+   <script id="ng-state" type="application/json">{"data-info":[{"titulo":"Cool McCool","slug":"cool-mccool","totalCapitulos":"19","fecha":"1966","imagen":"https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/cool-mccool.jpg?tr=w-170,h-230,q-70,f-auto","descripcion":"Serie de TV (1966-1969). Cool McC…
+
+===== frikiserie búsqueda :: https://www.frikiserie.com/search?q=marco
+status=200 type=text/html; charset=utf-8 bytes=856062 final=https://www.frikiserie.com/search?q=marco
+--- fichas: 1 líneas
+   <app-root _nghost-ng-c2172236213 ng-version="18.2.14" ngh="2" ng-server-context="ssg"><header _ngcontent-ng-c2172236213 class="main-header"><div _ngcontent-ng-c2172236213 class="header-inner"><a _ngcontent-ng-c2172236213 routerlink="/series" aria-label="FrikiSeries - Series y películas online" class…
+--- episodios: 3 líneas
+   <meta property="og:image" content="https://ik.imagekit.io/xqyzlihzqf/frikiSeries/icon-512x512.png?updatedAt=1741202274066">
+   <meta name="twitter:image" content="https://ik.imagekit.io/xqyzlihzqf/frikiSeries/icon-512x512.png">
+   <script id="ng-state" type="application/json">{"data-info":[{"titulo":"Cool McCool","slug":"cool-mccool","totalCapitulos":"19","fecha":"1966","imagen":"https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/cool-mccool.jpg?tr=w-170,h-230,q-70,f-auto","descripcion":"Serie de TV (1966-1969). Cool McC…
+
+===== frikiserie búsqueda :: https://www.frikiserie.com/?s=marco
+status=200 type=text/html; charset=utf-8 bytes=856062 final=https://www.frikiserie.com/?s=marco
+--- fichas: 1 líneas
+   <app-root _nghost-ng-c2172236213 ng-version="18.2.14" ngh="2" ng-server-context="ssg"><header _ngcontent-ng-c2172236213 class="main-header"><div _ngcontent-ng-c2172236213 class="header-inner"><a _ngcontent-ng-c2172236213 routerlink="/series" aria-label="FrikiSeries - Series y películas online" class…
+--- episodios: 3 líneas
+   <meta property="og:image" content="https://ik.imagekit.io/xqyzlihzqf/frikiSeries/icon-512x512.png?updatedAt=1741202274066">
+   <meta name="twitter:image" content="https://ik.imagekit.io/xqyzlihzqf/frikiSeries/icon-512x512.png">
+   <script id="ng-state" type="application/json">{"data-info":[{"titulo":"Cool McCool","slug":"cool-mccool","totalCapitulos":"19","fecha":"1966","imagen":"https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/cool-mccool.jpg?tr=w-170,h-230,q-70,f-auto","descripcion":"Serie de TV (1966-1969). Cool McC…
+
+===== pelishax película :: https://pelishaxpro.com/movies/5084
+status=200 type=text/html; charset=utf-8 bytes=60472 final=https://pelishaxpro.com/movies/5084
+--- iframe/embed: 6 líneas
+   .iframe {
+   <li class="server-item" data-link="https://vidmoly.biz/embed-i5h82uzxkt0k.html" data-lang="Japonés">
+   <li class="server-item" data-link="https://streamwish.to/e/9zrnt5sv3wmz" data-lang="Japonés">
+   <li class="server-item" data-link="https://vidhidevip.com/v/vzkabk1bx3xc" data-lang="Japonés">
+   <li class="server-item" data-link="https://vidara.to/e/r8riaE8EAmeFm" data-lang="Español Latino">
+   <li class="server-item" data-link="https://vidmoly.biz/embed-8inl46rg1scw.html" data-lang="Español Latino">
+--- servers/ajax: 13 líneas
+   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" as="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+   <div class="server-dropdown">
+   <button class="server-dropdown-button" id="server-dropdown-button">
+   Servidores - <span class="caret"></span>
+   <div class="server-list-container">
+   <div class="server-card">
+   <ul class="server-list" id="server-list">
+   <li class="server-item" data-link="https://vidmoly.biz/embed-i5h82uzxkt0k.html" data-lang="Japonés">
+   <li class="server-item" data-link="https://streamwish.to/e/9zrnt5sv3wmz" data-lang="Japonés">
+   <li class="server-item" data-link="https://vidhidevip.com/v/vzkabk1bx3xc" data-lang="Japonés">
+   <li class="server-item" data-link="https://vidara.to/e/r8riaE8EAmeFm" data-lang="Español Latino">
+   <li class="server-item" data-link="https://vidmoly.biz/embed-8inl46rg1scw.html" data-lang="Español Latino">
+--- json-inline: 3 líneas
+   "url": "https://pelishaxpro.com/movies/5084",
+   "url": "https://image.tmdb.org/t/p/original/ujUwzNV8ZkOzZonvhhHsc9KOKDf.jpg",
+   "url": "https://pelishaxpro.com/assets/img/logo.png"
+--- hls/mp4: 0 líneas
+--- iframes: 0 líneas
+--- players: 24 líneas
+   this.setAttribute('data-blocked-target', value);
+   get: function() { return this.getAttribute('data-blocked-target') || '_self'; }
+   <button onclick="if (!window.__cfRLUnblockHandlers) return false; copyToClipboard()" data-cf-modified-62b8a1267c1bcaccb70f9159-="">Copiar enlace</button>
+   <span class="show-more" id="toggle-text" onclick="if (!window.__cfRLUnblockHandlers) return false; toggleText()" data-cf-modified-62b8a1267c1bcaccb70f9159-="">Mostrar más</span>
+   <div class="video-embed">
+   <div class="server-dropdown">
+   <button class="server-dropdown-button" id="server-dropdown-button">
+   Servidores - <span class="caret"></span>
+   <div class="server-list-container">
+   <div class="server-card">
+   <ul class="server-list" id="server-list">
+   <li class="server-item" data-link="https://vidmoly.biz/embed-i5h82uzxkt0k.html" data-lang="Japonés">
+   <li class="server-item" data-link="https://streamwish.to/e/9zrnt5sv3wmz" data-lang="Japonés">
+   <li class="server-item" data-link="https://vidhidevip.com/v/vzkabk1bx3xc" data-lang="Japonés">
+   <li class="server-item" data-link="https://vidara.to/e/r8riaE8EAmeFm" data-lang="Español Latino">
+   <li class="server-item" data-link="https://vidmoly.biz/embed-8inl46rg1scw.html" data-lang="Español Latino">
+   <a href="/" class="mobile-menu-item" data-path="/">
+   <a href="/movies" class="mobile-menu-item" data-path="movies">
+   <a href="/series" class="mobile-menu-item" data-path="series">
+   <a href="/animes" class="mobile-menu-item" data-path="animes">
+   <a href="https://pelishaxpro.com/admin/cache-manager.html" class="mobile-menu-item" data-path="profile">
+   const itemPath = item.getAttribute('data-path');
+   <button id="close-btn" class="close-btn" onclick="if (!window.__cfRLUnblockHandlers) return false; closeModal()" data-cf-modified-62b8a1267c1bcaccb70f9159-="">Cerrar</button>
+   <script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="62b8a1267c1bcaccb70f9159-|49" defer></script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxK…
+
+===== pelishax serie :: https://pelishaxpro.com/series/575
+status=200 type=text/html; charset=utf-8 bytes=66554 final=https://pelishaxpro.com/series/575
+--- iframe/embed: 1 líneas
+   .iframe {
+--- servers/ajax: 2 líneas
+   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" as="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+--- json-inline: 3 líneas
+   "url": "https://pelishaxpro.com/series/575",
+   "url": "https://image.tmdb.org/t/p/original/6iWzDqqIKjViOu7dKPeKLW9aPbl.jpg",
+   "url": "https://pelishaxpro.com/assets/img/logo.png"
+--- hls/mp4: 0 líneas
+--- iframes: 0 líneas
+--- players: 12 líneas
+   this.setAttribute('data-blocked-target', value);
+   get: function() { return this.getAttribute('data-blocked-target') || '_self'; }
+   <button onclick="if (!window.__cfRLUnblockHandlers) return false; copyToClipboard()" data-cf-modified-07b0c5078829a2e3ed962763-="">Copiar enlace</button>
+   <span class="show-more" id="toggle-text" onclick="if (!window.__cfRLUnblockHandlers) return false; toggleText()" data-cf-modified-07b0c5078829a2e3ed962763-="">Mostrar más</span>
+   <a href="/" class="mobile-menu-item" data-path="/">
+   <a href="/movies" class="mobile-menu-item" data-path="movies">
+   <a href="/series" class="mobile-menu-item" data-path="series">
+   <a href="/animes" class="mobile-menu-item" data-path="animes">
+   <a href="https://pelishaxpro.com/admin/cache-manager.html" class="mobile-menu-item" data-path="profile">
+   const itemPath = item.getAttribute('data-path');
+   <button id="close-btn" class="close-btn" onclick="if (!window.__cfRLUnblockHandlers) return false; closeModal()" data-cf-modified-07b0c5078829a2e3ed962763-="">Cerrar</button>
+   <script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="07b0c5078829a2e3ed962763-|49" defer></script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxK…
+
+===== pelishax búsqueda :: https://pelishaxpro.com/search?q=dune
+status=200 type=text/html; charset=utf-8 bytes=75302 final=https://pelishaxpro.com/search?q=dune
+--- json: 40 líneas
+   <!DOCTYPE html>
+   <html lang="es">
+   <head>
+   <!-- Google tag (gtag.js) -->
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T3VH375N76" type="0a44abb2aabb1f0fd2b62753-text/javascript"></script>
+   <script type="0a44abb2aabb1f0fd2b62753-text/javascript">
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+   gtag('config', 'G-T3VH375N76');
+   </script>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Resultados de búsqueda</title>
+   <meta name="description" content="Pelishax: Busca tus películas, series o animes favoritos al instante. Encuentra todo lo que quieres ver con nuestra herramienta de búsqueda rápida y precisa.">
+   <meta property="og:image" content="https://pelishaxpro.com/assets/img/covers.webp">
+   <meta name="twitter:image" content="https://pelishaxpro.com/assets/img/covers.webp">
+   <meta property="og:image:width" content="1200">
+   <meta property="og:image:height" content="630">
+   <meta name="twitter:image:width" content="1200">
+   <meta name="twitter:image:height" content="630">
+   <meta name="theme-color" content="#080d10">
+   <meta name="robots" content="noindex, nofollow">
+   <meta name="googlebot" content="noindex, nofollow">
+   <link rel="canonical" href="https://pelishaxpro.com/search?q=dune" >
+   <!-- Favicon -->
+   <link rel="icon" href="/assets/img/pelishax-favicon.ico" >
+   <!-- Preload para Font Awesome -->
+   <!-- Preconexión y resolución anticipada para Font Awesome -->
+   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+   <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+   <!-- Preload del archivo CSS de Font Awesome -->
+   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" as="stylesheet">
+   <!-- Hoja de estilos de Font Awesome -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+   <!-- Preload para Google Fonts -->
+   <!-- Preconexión y resolución anticipada para Google Fonts -->
+   <!-- Preload de la hoja de estilos para Google Fonts -->
+   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" as="stylesheet">
+   <!-- Hoja de estilos para Google Fonts -->
+--- fichas: 40 líneas
+   <li> <a href="/movies"> <i class="fas fa-film"></i> Películas </a> </li>
+   <li> <a href="/movies"> <i class="fas fa-film"></i> Películas </a> </li>
+   <a href="/movies/184346" class="movie-card">
+   <a href="/movies/184346">:Deliver Us from Evil: Líbranos del mal</a>
+   <a href="/movies/458594" class="movie-card">
+   <a href="/movies/458594">:Justicia impacable: Matar o Morir</a>
+   <a href="/movies/1198994" class="movie-card">
+   <a href="/movies/1198994">¡Ayuda!</a>
+   <a href="/movies/335797" class="movie-card">
+   <a href="/movies/335797">¡Canta!</a>
+   <a href="/movies/438695" class="movie-card">
+   <a href="/movies/438695">¡Canta! 2</a>
+   <a href="/movies/1371727" class="movie-card">
+   <a href="/movies/1371727">¡Canta!: Thriller</a>
+   <a href="/movies/7839" class="movie-card">
+   <a href="/movies/7839">¡Cásate conmigo!</a>
+   <a href="/movies/11212" class="movie-card">
+   <a href="/movies/11212">¡Cuidado: Bebé suelto!</a>
+   <a href="/movies/11852" class="movie-card">
+   <a href="/movies/11852">¡Este cuerpo no es el mío!</a>
+   <a href="/movies/1391524" class="movie-card">
+   <a href="/movies/1391524">¡Hasta la Madre de la Navidad!</a>
+   <a href="/movies/454619" class="movie-card">
+   <a href="/movies/454619">¡Hombre al Agua!</a>
+   <a href="/movies/638597" class="movie-card">
+   <a href="/movies/638597">¡Hoy sí!</a>
+   <a href="/movies/419430" class="movie-card">
+   <a href="/movies/419430">¡Huye!</a>
+   <a href="/movies/1159831" class="movie-card">
+   <a href="/movies/1159831">¡La novia!</a>
+   <a href="/movies/1365884" class="movie-card">
+   <a href="/movies/1365884">¡Llama a mi agente!: La película</a>
+   <a href="/movies/834404" class="movie-card">
+   <a href="/movies/834404">¡Los Jóvenes Titanes en acción! ven Space Jam</a>
+   <a href="/movies/913205" class="movie-card">
+   <a href="/movies/913205">¡Los Jóvenes Titanes en Acción! y DC Super Hero Girls: Caos en el Multiverso</a>
+   <a href="/movies/999644" class="movie-card">
+   <a href="/movies/999644">¡No estás invitada a mi bat Mitzvah!</a>
+   <a href="/movies/375355" class="movie-card">
+   <a href="/movies/375355">¡No vayas a colgar!</a>
+--- episodios: 5 líneas
+   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+   <link rel="apple-touch-icon" sizes="152x152" href="/assets/img/apple-touch-icon-152x152.png">
+   <link rel="apple-touch-icon" sizes="167x167" href="/assets/img/to/apple-touch-icon-167x167.png">
+   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/to/apple-touch-icon-180x180.png">
+   data-src="http://image.tmdb.org/t/p/w500/https://image.tmdb.org/t/p/w500/4othL1YUfIrmlt8X2jYvqiJ1mtv.jpg"
+
+===== pelishax búsqueda :: https://pelishaxpro.com/buscar?q=dune
+status=200 type=text/html; charset=utf-8 bytes=52467 final=https://pelishaxpro.com/buscar?q=dune
+--- json: 40 líneas
+   <!DOCTYPE html>
+   <html lang="es">
+   <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="robots" content="noindex, nofollow">
+   <meta name="googlebot" content="noindex, nofollow">
+   <title>🔍 Busca y ✉️ Envía tu Sugerencia</title>
+   <meta name="description" content="¿No encuentras lo que buscas? Usa el buscador y sugiere tus películas, series o animes favoritos. ¡Lo añadimos por ti!">
+   <meta property="og:image" content="/assets/img/sugerencia.webp">
+   <meta name="twitter:image" content="/assets/img/sugerencia.webp">
+   <meta property="og:image:width" content="1200">
+   <meta property="og:image:height" content="630">
+   <meta name="twitter:image:width" content="1200">
+   <meta name="twitter:image:height" content="630">
+   <meta name="theme-color" content="#080d10">
+   <meta name="robots" content="noindex, nofollow">
+   <meta name="googlebot" content="noindex, nofollow">
+   <link rel="icon" href="/assets/img/pelishax-favicon.ico" >
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+   <style>
+   :root {
+   --primary-color: #651fff;
+   --primary-hover: #4a1bb5;
+   --primary-dark: #3d1991;
+   --primary-light: #7d4aff;
+   --primary-gradient: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+   --secondary-color: #1e1e2d;
+   --tertiary-color: #2a2a3c;
+   --text-primary: #e0e0e0;
+   --text-secondary: #b0b0b0;
+   --text-tertiary: #808080;
+   --bg-color: #121218;
+   --bg-white: #ffffff;
+   --bg-black: #000000;
+   --card-bg: var(--tertiary-color);
+   --card-shadow: 0 4px 20px rgba(0,0,0,0.3);
+   --card-hover-shadow: 0 10px 25px rgba(0,0,0,0.5);
+   --transition-speed: 0.3s;
+--- fichas: 2 líneas
+   <a href="openapp://pelishax.top/movies/818" class="btn btn-success btn-suggest">
+   <a href="openapp://pelishax.top/movies/577" class="btn btn-success btn-suggest">
+--- episodios: 0 líneas
+
+===== pelishax búsqueda :: https://pelishaxpro.com/api/search?q=dune
+status=404 type=text/html bytes=915 final=https://pelishaxpro.com/api/search?q=dune
+--- json: 14 líneas
+   <html>
+   <head><title>404 Not Found</title></head>
+   <body>
+   <center><h1>404 Not Found</h1></center>
+   <hr><center>nginx</center>
+   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"40734a5ef16b445e8…
+   </body>
+   </html>
+   <!-- a padding to disable MSIE and Chrome friendly error page -->
+   <!-- a padding to disable MSIE and Chrome friendly error page -->
+   <!-- a padding to disable MSIE and Chrome friendly error page -->
+   <!-- a padding to disable MSIE and Chrome friendly error page -->
+   <!-- a padding to disable MSIE and Chrome friendly error page -->
+   <!-- a padding to disable MSIE and Chrome friendly error page -->
+--- fichas: 0 líneas
+--- episodios: 0 líneas
+
+===== pelishax búsqueda :: https://pelishaxpro.com/search/dune
+status=200 type=text/html; charset=utf-8 bytes=75296 final=https://pelishaxpro.com/search/dune
+--- json: 40 líneas
+   <!DOCTYPE html>
+   <html lang="es">
+   <head>
+   <!-- Google tag (gtag.js) -->
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T3VH375N76" type="421b4aa20f6722a80cc8264a-text/javascript"></script>
+   <script type="421b4aa20f6722a80cc8264a-text/javascript">
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+   gtag('config', 'G-T3VH375N76');
+   </script>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Resultados de búsqueda</title>
+   <meta name="description" content="Pelishax: Busca tus películas, series o animes favoritos al instante. Encuentra todo lo que quieres ver con nuestra herramienta de búsqueda rápida y precisa.">
+   <meta property="og:image" content="https://pelishaxpro.com/assets/img/covers.webp">
+   <meta name="twitter:image" content="https://pelishaxpro.com/assets/img/covers.webp">
+   <meta property="og:image:width" content="1200">
+   <meta property="og:image:height" content="630">
+   <meta name="twitter:image:width" content="1200">
+   <meta name="twitter:image:height" content="630">
+   <meta name="theme-color" content="#080d10">
+   <meta name="robots" content="noindex, nofollow">
+   <meta name="googlebot" content="noindex, nofollow">
+   <link rel="canonical" href="https://pelishaxpro.com/search/dune" >
+   <!-- Favicon -->
+   <link rel="icon" href="/assets/img/pelishax-favicon.ico" >
+   <!-- Preload para Font Awesome -->
+   <!-- Preconexión y resolución anticipada para Font Awesome -->
+   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+   <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+   <!-- Preload del archivo CSS de Font Awesome -->
+   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" as="stylesheet">
+   <!-- Hoja de estilos de Font Awesome -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+   <!-- Preload para Google Fonts -->
+   <!-- Preconexión y resolución anticipada para Google Fonts -->
+   <!-- Preload de la hoja de estilos para Google Fonts -->
+   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" as="stylesheet">
+   <!-- Hoja de estilos para Google Fonts -->
+--- fichas: 40 líneas
+   <li> <a href="/movies"> <i class="fas fa-film"></i> Películas </a> </li>
+   <li> <a href="/movies"> <i class="fas fa-film"></i> Películas </a> </li>
+   <a href="/movies/184346" class="movie-card">
+   <a href="/movies/184346">:Deliver Us from Evil: Líbranos del mal</a>
+   <a href="/movies/458594" class="movie-card">
+   <a href="/movies/458594">:Justicia impacable: Matar o Morir</a>
+   <a href="/movies/1198994" class="movie-card">
+   <a href="/movies/1198994">¡Ayuda!</a>
+   <a href="/movies/335797" class="movie-card">
+   <a href="/movies/335797">¡Canta!</a>
+   <a href="/movies/438695" class="movie-card">
+   <a href="/movies/438695">¡Canta! 2</a>
+   <a href="/movies/1371727" class="movie-card">
+   <a href="/movies/1371727">¡Canta!: Thriller</a>
+   <a href="/movies/7839" class="movie-card">
+   <a href="/movies/7839">¡Cásate conmigo!</a>
+   <a href="/movies/11212" class="movie-card">
+   <a href="/movies/11212">¡Cuidado: Bebé suelto!</a>
+   <a href="/movies/11852" class="movie-card">
+   <a href="/movies/11852">¡Este cuerpo no es el mío!</a>
+   <a href="/movies/1391524" class="movie-card">
+   <a href="/movies/1391524">¡Hasta la Madre de la Navidad!</a>
+   <a href="/movies/454619" class="movie-card">
+   <a href="/movies/454619">¡Hombre al Agua!</a>
+   <a href="/movies/638597" class="movie-card">
+   <a href="/movies/638597">¡Hoy sí!</a>
+   <a href="/movies/419430" class="movie-card">
+   <a href="/movies/419430">¡Huye!</a>
+   <a href="/movies/1159831" class="movie-card">
+   <a href="/movies/1159831">¡La novia!</a>
+   <a href="/movies/1365884" class="movie-card">
+   <a href="/movies/1365884">¡Llama a mi agente!: La película</a>
+   <a href="/movies/834404" class="movie-card">
+   <a href="/movies/834404">¡Los Jóvenes Titanes en acción! ven Space Jam</a>
+   <a href="/movies/913205" class="movie-card">
+   <a href="/movies/913205">¡Los Jóvenes Titanes en Acción! y DC Super Hero Girls: Caos en el Multiverso</a>
+   <a href="/movies/999644" class="movie-card">
+   <a href="/movies/999644">¡No estás invitada a mi bat Mitzvah!</a>
+   <a href="/movies/375355" class="movie-card">
+   <a href="/movies/375355">¡No vayas a colgar!</a>
+--- episodios: 5 líneas
+   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+   <link rel="apple-touch-icon" sizes="152x152" href="/assets/img/apple-touch-icon-152x152.png">
+   <link rel="apple-touch-icon" sizes="167x167" href="/assets/img/to/apple-touch-icon-167x167.png">
+   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/to/apple-touch-icon-180x180.png">
+   data-src="http://image.tmdb.org/t/p/w500/https://image.tmdb.org/t/p/w500/4othL1YUfIrmlt8X2jYvqiJ1mtv.jpg"
+
+===== pelishax home :: https://pelishaxpro.com/
+status=200 type=text/html; charset=utf-8 bytes=117880 final=https://pelishaxpro.com/
+--- form: 1 líneas
+   <form action="/search" class="search-form"> <input class="search-input" name="search" placeholder="Buscar Películas..."> <span class="hide-search"></span> </form>
+--- search: 6 líneas
+   "@type": "SearchAction",
+   "target": "https://pelishaxpro.com/search/?search={searchTerm}",
+   "query-input": "required name=searchTerm"
+   </nav> <span class="show-search"></span>
+   <div class="nav-search" style="display: none;">
+   <form action="/search" class="search-form"> <input class="search-input" name="search" placeholder="Buscar Películas..."> <span class="hide-search"></span> </form>
+
+===== homecine película data-* :: https://www3.homecine.to/pequenos-secretos
+status=200 type=text/html; charset=UTF-8 bytes=77015 final=https://www3.homecine.to/pequenos-secretos
+--- data:
+   …"top-user-content guest"> <style tyle="text/css"> </style> <a href="#pt-login" class="btn btn-successful btn-login" title="Login" data-target="" data-toggle="modal"> LOGIN</a> </div> </div> <div id="search"> <div class="search-content"> <form method="get" id="searchform" action="https://ww…
+   …"searchform" action="https://www3.homecine.to"> <input class="form-control search-input" type="text" placeholder="Search.." name="s" id="s" value="" data-swplive="true"> <button type="submit"><i class="fa fa-search"></i></button> </form> </div> </div> <div class="clearfix"></div> </div> </…
+   …n></a> <span id="button-favorite"> <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-276473" data-nonce="5ea2191620" data-post-id="276473" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span> …
+   … <span id="button-favorite"> <a href="javascript:void(0)" class="sl-button btn bp-btn-like sl-button-276473" data-nonce="5ea2191620" data-post-id="276473" data-iscomment="0" title="Favorite"><i class="fa fa-heart"></i>Favorite</a><span id="sl-loader"></span> …
+   …"btn bp-btn-review"><i class="fa fa-comments"></i> <span>Comments</span> (<span id="comment-count">0</span>) </a> <a class="btn bp-btn-report" data-target="#pop-report" data-toggle="modal" style="color: #fff000; float: right"><i class="fa fa-warning"></i> <span>Report</span></a> <div class…
+   …ss="fa fa-comments"></i> <span>Comments</span> (<span id="comment-count">0</span>) </a> <a class="btn bp-btn-report" data-target="#pop-report" data-toggle="modal" style="color: #fff000; float: right"><i class="fa fa-warning"></i> <span>Report</span></a> <div class="clearfix"></div> </div>…
+--- iframe:
+   … </div> --> </div> <div id="content-embed" style=""> <!-- <div id="plays"> --> <div id="player2"> <div id="tab1" > <div class="movieplay"> <IFRAME SRC="https://fastream.to/embed-zkfc7qenyh7k.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen…
+   …IDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME> </div> </div> <div id="tab2" > <div class="movieplay"> <IFRAME SRC="https://fastream.to/embed-djqspksbj10d.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen…
+   …IDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME> </div> </div> <div id="tab3" > <div class="movieplay"> <IFRAME SRC="https://fastream.to/embed-8bkmoz4qvu3d.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen…
+   …tton> <h4 class="modal-title" id="myModalLabel">Trailer: Pequeños Secretos</h4> </div> <div class="modal-body"> <div class="modal-body-trailer"> <iframe id="iframe-trailer" width="600" height="450" src="//www.youtube.com/embed/_8fxE0UmBxc" frameborder="0" allowfullscreen></iframe><div itemscope…
+--- video:
+   (sin coincidencias)
+--- m3u8:
+   (sin coincidencias)
+--- onclick:
+   (sin coincidencias)
+
+===== frikiserie serie data-* :: https://www.frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986
+status=200 type=text/html; charset=utf-8 bytes=856062 final=https://www.frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986
+--- data:
+   …in, Robotech y más."> <meta name="twitter:image" content="https://ik.imagekit.io/xqyzlihzqf/frikiSeries/icon-512x512.png"> <script async="async" data-cfasync="false" src="https://bancadeltempoidea.org/21/1686ee819d87e64de74ff3ff164e1742"></script> <style>body{font-family:Comic Sans,sans-serif…
+   …</div></app-page-series><!----></div></main></app-root> <noscript>Please enable JavaScript to continue using this application.</noscript> <script data-cfasync="false" src="https://bancadeltempoidea.org/14/c23c48b31c8a49b3102367b708a51490"></script> <link rel="modulepreload" href="chunk-TW2P5JRF.…
+--- iframe:
+   (sin coincidencias)
+--- video:
+   (sin coincidencias)
+--- m3u8:
+   (sin coincidencias)
+--- onclick:
+   (sin coincidencias)
+
+===== pelishax película data-* :: https://pelishaxpro.com/movies/5084
+status=200 type=text/html; charset=utf-8 bytes=60472 final=https://pelishaxpro.com/movies/5084
+--- data:
+   …t" id="server-list"> <li class="server-item" data-link="https://vidmoly.biz/embed-i5h82uzxkt0k.html" data-lang="Japonés"> VIDMOLY ⚡ - …
+   … <li class="server-item" data-link="https://vidmoly.biz/embed-i5h82uzxkt0k.html" data-lang="Japonés"> VIDMOLY ⚡ - JAP <img src="/assets/img/japan_flag.…
+   … </li> <li class="server-item" data-link="https://streamwish.to/e/9zrnt5sv3wmz" data-lang="Japonés"> FWISH - …
+   … <li class="server-item" data-link="https://streamwish.to/e/9zrnt5sv3wmz" data-lang="Japonés"> FWISH - JAP <img src="/assets/img/japan_flag.png"…
+   … </li> <li class="server-item" data-link="https://vidhidevip.com/v/vzkabk1bx3xc" data-lang="Japonés"> FHIDE - …
+   … <li class="server-item" data-link="https://vidhidevip.com/v/vzkabk1bx3xc" data-lang="Japonés"> FHIDE - JAP <img src="/assets/img/japan_flag.png"…
+--- iframe:
+   (sin coincidencias)
+--- video:
+   (sin coincidencias)
+--- m3u8:
+   (sin coincidencias)
+--- onclick:
+   …tyle="display:none;"> <a id="fbShare" href="#" target="_blank">Facebook</a> <a id="waShare" href="#" target="_blank">WhatsApp</a> <button onclick="if (!window.__cfRLUnblockHandlers) return false; copyToClipboard()" data-cf-modified-7691321b1968fc44e8170dd7-="">Copiar enlace</button> </…
+   …ad portuaria, los habitantes se ven envueltos en una desesperada lucha por la supervivencia.</p> <span class="show-more" id="toggle-text" onclick="if (!window.__cfRLUnblockHandlers) return false; toggleText()" data-cf-modified-7691321b1968fc44e8170dd7-="">Mostrar más</span> </div…
+   …<div class="modal-message">No tienes conexión a Internet. Por favor, verifica tu conexión.</div> <button id="close-btn" class="close-btn" onclick="if (!window.__cfRLUnblockHandlers) return false; closeModal()" data-cf-modified-7691321b1968fc44e8170dd7-="">Cerrar</button> </div> …
+
+===== frikiserie ng-state bytes=798877
+claves: titulo, slug, totalCapitulos, fecha, imagen, descripcion, video, tipo, irAListaVideo, __nghData__
+--- http(s) con player/embed:
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/cool-mccool.jpg?tr=w-170,h-230,q-70,f-auto
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/sherlock-holmes.jpg?tr=w-170,h-230,q-70,f-auto
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/zone-of-enders.jpg?tr=w-170,h-230,q-70,f-auto
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/initial-d.jpg?tr=w-170,h-230,q-70,f-auto
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/aoki-densetsu-shoot.jpg?tr=w-170,h-230,q-70,f-auto
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/el-campeon.jpg?tr=w-170,h-230,q-70,f-auto
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/el-grupo-increi-ble.jpg?tr=w-170,h-230,q-70,f-auto
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/space-runaway-ideon.jpg?tr=w-170,h-230,q-70,f-auto
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/marco.jpg?tr=w-170,h-230,q-70,f-auto
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/patlabor.jpg?tr=w-170,h-230,q-70,f-auto
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/el-gran-chaparral.jpg?tr=w-170,h-230,q-70,f-auto
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/los-caballeros-del-zodiaco-1986.jpg?tr=w-150,h-100,q-70,f-auto
+   https://ok.ru/videoembed/14398744169198
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/sakura-card-captor-temporada-1-2-y-3-1998.jpg?tr=w-150,h-100,q-70,f-auto
+   https://ok.ru/videoembed/14600894483182
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/generador-rex-temporada-1-2-y-3-cartoon-n.jpg?tr=w-150,h-100,q-70,f-auto
+   https://ok.ru/videoembed/15862881192686
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/digimon-adventure-temporada-1-1999.jpg?tr=w-150,h-100,q-70,f-auto
+   https://ok.ru/videoembed/14208264768238
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/kenichi-el-disc-pulo-m-s-fuerte-2006.jpg?tr=w-150,h-100,q-70,f-auto
+   https://ok.ru/videoembed/14328363027182
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/la-vaca-y-el-pollito-temporada-1-2-3-y-4-cartoon-n.jpg?tr=w-150,h-100,q-70,f-auto
+   https://ok.ru/videoembed/15839006886638
+   https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/alien-monday-2024-2k-sub-espa-ol.jpg?tr=w-150,h-100,q-70,f-auto
+   https://ok.ru/videoembed/10574558595822
+--- capitulos/episodios:
+   "totalCapitulos"
+   "Serie de TV (1984-1985). 26 episodios. Esta serie de animación nos sitúa en el Londres de principios de siglo. Allí, los famosos personajes creados por Sir Arthur Conan Doyle han de solucionar los ca
+   "Serie de TV. 26 episodios. La serie nos habla de Jim, un transportista espacial cuya familia se ha ido desmoronando tras la muerte de su esposa. Jim intenta reconciliarse con sus hijos para que vuelv
+   "Serie de TV (1998). 26 episodios. Initial D cuenta la historia de Takumi Fujiwara, un estudiante de colegio de 18 años de edad que trabaja en una gasolinera con dos amigos: Itsuki (compañero de clase
+   "Serie de TV (1980-1981). 47 episodios. Seis meses tras la tragedia con Rikiishi, Joe Yabuki ha abandonado el boxeo, consumido por la culpa y el vacío. Sus amigos Danpei y Yoko lo empujan a volver al 
+   "16 episodios. Emitida en 1980. Drak, Frankie y Howler son los descendientes de los famosos Drácula, Frankenstein y el hombre lobo. Ellos han de pagar los pecados de sus antepasados usando sus poderes
+   "Serie de TV (1980-1981). 39 episodios. La búsqueda del conocimiento definitivo lleva a la humanidad hasta el planeta Solo, donde encuentran los misteriosos restos de una antigua civilización alieníge
+   "Serie de TV (1989-1990). 47 episodios. La acción se desarrolla en una realidad alternativa, donde desde principios de los 80 se han fabricado robots enormes en Japón, que han recibido el nombre genér
+   "Serie de TV (1967-1971). 4 temporadas. 98 episodios. Su trama giraba en torno a dos familias del oeste norteamericano, los Cannon y los Montoya, dueños de grandes parcelas de territorio en Arizona. L
+   "Sakura Card Captor - Temporada 1, 2 y 3 (1998)"
+   "sakura-card-captor-temporada-1-2-y-3-1998"
+   "https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/sakura-card-captor-temporada-1-2-y-3-1998.jpg?tr=w-150,h-100,q-70,f-auto"
+   "Generador Rex - Temporada 1, 2 y 3 (Cartoon N.)"
+   "generador-rex-temporada-1-2-y-3-cartoon-n"
+   "https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/generador-rex-temporada-1-2-y-3-cartoon-n.jpg?tr=w-150,h-100,q-70,f-auto"
+   "Digimon Adventure - Temporada 1 (1999)"
+   "digimon-adventure-temporada-1-1999"
+   "https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/digimon-adventure-temporada-1-1999.jpg?tr=w-150,h-100,q-70,f-auto"
+   "La vaca y el pollito - Temporada 1, 2, 3 y 4 (Cartoon N.)"
+   "la-vaca-y-el-pollito-temporada-1-2-3-y-4-cartoon-n"
+   "https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/la-vaca-y-el-pollito-temporada-1-2-3-y-4-cartoon-n.jpg?tr=w-150,h-100,q-70,f-auto"
+   "Las Aventuras de Silvestre y Piolín - Temporada 1, 2, 3, 4 y 5 (WarnerBros)"
+   "las-aventuras-de-silvestre-y-piol-n-temporada-1-2-3-4-y-5-warnerbros"
+   "https://ik.imagekit.io/xqyzlihzqf/frikiSeries/caratulas/las-aventuras-de-silvestre-y-piol-n-temporada-1-2-3-4-y-5-warnerbros.jpg?tr=w-150,h-100,q-70,f-auto"
+   "Ben 10 - Temporada 1, 2, 3 y 4 (Cartoon N.)"
+--- campos link/url:
+   (sin coincidencias)
+
+===== friki bundle :: https://www.frikiserie.com/
+status=200 type=text/html; charset=utf-8 bytes=856062 final=https://www.frikiserie.com/
+--- js:
+   …><link rel="modulepreload" href="chunk-RPCB56O6.js"><script src="polyfills-FFHMD2TL.js" type="module"></script><script s…
+   … src="polyfills-FFHMD2TL.js" type="module"></script><script src="main-SNXQBTSJ.js" type="module"></script> <script id="…
+
+===== friki js main-4BWVI3NJ.js :: https://www.frikiserie.com/main-4BWVI3NJ.js
+status=404 type=text/plain; charset=utf-8 bytes=9 final=https://www.frikiserie.com/main-4BWVI3NJ.js
+--- api:
+   (sin coincidencias)
+--- video:
+   (sin coincidencias)
+
+===== friki js main.js :: https://www.frikiserie.com/main.js
+status=404 type=text/plain; charset=utf-8 bytes=9 final=https://www.frikiserie.com/main.js
+--- api:
+   (sin coincidencias)
+--- video:
+   (sin coincidencias)
+
+===== friki js polyfills.js :: https://www.frikiserie.com/polyfills.js
+status=404 type=text/plain; charset=utf-8 bytes=9 final=https://www.frikiserie.com/polyfills.js
+--- api:
+   (sin coincidencias)
+--- video:
+   (sin coincidencias)
+
+===== homecine fastream :: https://fastream.to/embed-zkfc7qenyh7k.html
+status=200 type=text/html; charset=UTF-8 bytes=7629 final=https://fastream.to/embed-zkfc7qenyh7k.html
+--- iframe/embed: 1 líneas
+   <script type='text/javascript'>eval(function(p,a,c,k,e,d){while(c--)if(k[c])p=p.replace(new RegExp('\\b'+c.toString(a)+'\\b','g'),k[c]);return p}('b("8r").8q({8p:[{3e:"w://3i.18.u/8o/19/3h/8n/8m.8l?t=8k&s=37&e=8j&v=38&i=0.3&8i=0"}],8h:"w://3i.18.u/i/19/3h/1a.8g",8f:"3g%",8e:"3g%",8d:"8c",8b:"",8a:"8…
+--- hls/mp4: 0 líneas
+--- json: 0 líneas
+
+===== homecine tabs :: https://www3.homecine.to/pequenos-secretos
+status=200 type=text/html; charset=UTF-8 bytes=76839 final=https://www3.homecine.to/pequenos-secretos
+--- tabs:
+   …s="fa fa-server mr5"></i> <strong>Server Cload</strong> </div> <div class="les-content"><a href="#tab1">480p - Latino</a></div> </li> <li><div class="les-title"> <i class="fa fa-server mr5"…
+   …a-server mr5"></i> <strong>Server Cload</strong> </div> <div class="les-content"><a href="#tab1">480p - Latino</a></div> </li> <li><div class="les-title"> <i class="fa fa-server mr5"></i> …
+   …s="fa fa-server mr5"></i> <strong>Server Cload</strong> </div> <div class="les-content"><a href="#tab2">HD 1080p - Castellano</a></div> </li> <li><div class="les-title"> <i class="fa fa-ser…
+   …erver mr5"></i> <strong>Server Cload</strong> </div> <div class="les-content"><a href="#tab2">HD 1080p - Castellano</a></div> </li> <li><div class="les-title"> <i class="fa fa-server mr5"><…
+   …s="fa fa-server mr5"></i> <strong>Server Cload</strong> </div> <div class="les-content"><a href="#tab3">480p - Subtitulado</a></div> </li> </ul> </div> <!-- </div> --> </div> <!-- …
+   …a-server mr5"></i> <strong>Server Cload</strong> </div> <div class="les-content"><a href="#tab3">480p - Subtitulado</a></div> </li> </ul> </div> <!-- </div> --> </div> <!-- <script…
+
+===== pelishax search dune :: https://pelishaxpro.com/search?q=dune
+status=200 type=text/html; charset=utf-8 bytes=75302 final=https://pelishaxpro.com/search?q=dune
+--- fichas: 40 líneas
+   <a href="/movies/184346" class="movie-card">
+   <a href="/movies/184346">:Deliver Us from Evil: Líbranos del mal</a>
+   <a href="/movies/458594" class="movie-card">
+   <a href="/movies/458594">:Justicia impacable: Matar o Morir</a>
+   <a href="/movies/1198994" class="movie-card">
+   <a href="/movies/1198994">¡Ayuda!</a>
+   <a href="/movies/335797" class="movie-card">
+   <a href="/movies/335797">¡Canta!</a>
+   <a href="/movies/438695" class="movie-card">
+   <a href="/movies/438695">¡Canta! 2</a>
+   <a href="/movies/1371727" class="movie-card">
+   <a href="/movies/1371727">¡Canta!: Thriller</a>
+   <a href="/movies/7839" class="movie-card">
+   <a href="/movies/7839">¡Cásate conmigo!</a>
+   <a href="/series/285906" class="movie-card">
+   <a href="/series/285906">¡Corre!</a>
+   <a href="/movies/11212" class="movie-card">
+   <a href="/movies/11212">¡Cuidado: Bebé suelto!</a>
+   <a href="/movies/11852" class="movie-card">
+   <a href="/movies/11852">¡Este cuerpo no es el mío!</a>
+   <a href="/movies/1391524" class="movie-card">
+   <a href="/movies/1391524">¡Hasta la Madre de la Navidad!</a>
+   <a href="/movies/454619" class="movie-card">
+   <a href="/movies/454619">¡Hombre al Agua!</a>
+   <a href="/movies/638597" class="movie-card">
+   <a href="/movies/638597">¡Hoy sí!</a>
+   <a href="/movies/419430" class="movie-card">
+   <a href="/movies/419430">¡Huye!</a>
+   <a href="/movies/1159831" class="movie-card">
+   <a href="/movies/1159831">¡La novia!</a>
+   <a href="/movies/1365884" class="movie-card">
+   <a href="/movies/1365884">¡Llama a mi agente!: La película</a>
+   <a href="/movies/834404" class="movie-card">
+   <a href="/movies/834404">¡Los Jóvenes Titanes en acción! ven Space Jam</a>
+   <a href="/movies/913205" class="movie-card">
+   <a href="/movies/913205">¡Los Jóvenes Titanes en Acción! y DC Super Hero Girls: Caos en el Multiverso</a>
+   <a href="/movies/999644" class="movie-card">
+   <a href="/movies/999644">¡No estás invitada a mi bat Mitzvah!</a>
+   <a href="/movies/375355" class="movie-card">
+   <a href="/movies/375355">¡No vayas a colgar!</a>
+--- json: 3 líneas
+   "url": "https://pelishaxpro.com/search?q=dune",
+   "url": "https://pelishaxpro.com/assets/img/covers.webp",
+   "url": "https://pelishaxpro.com/assets/img/logo.png"
+
+===== pelishax episodio :: https://pelishaxpro.com/series/575/1/1
+status=200 type=text/html; charset=utf-8 bytes=66566 final=https://pelishaxpro.com/series/575/1/1
+--- servers: 0 líneas
+--- episodios: 40 líneas
+   <p><strong class="total-seasons">Total de Temporadas:</strong> 2</p>
+   <option value="1385">Temporada 1</option>
+   <option value="1386">Temporada 2</option>
+   <div class="episode-list" id="season-1385">
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 1 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 2 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 3 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 4 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 5 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 6 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 7 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 8 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 9 </strong>
+
+===== pelishax episodio :: https://pelishaxpro.com/series/575/season/1
+status=200 type=text/html; charset=utf-8 bytes=66581 final=https://pelishaxpro.com/series/575/season/1
+--- servers: 0 líneas
+--- episodios: 40 líneas
+   <p><strong class="total-seasons">Total de Temporadas:</strong> 2</p>
+   <option value="1385">Temporada 1</option>
+   <option value="1386">Temporada 2</option>
+   <div class="episode-list" id="season-1385">
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 1 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 2 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 3 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 4 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 5 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 6 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 7 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 8 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 9 </strong>
+
+===== pelishax episodio :: https://pelishaxpro.com/episode/575/1/1
+status=404 type=text/html bytes=915 final=https://pelishaxpro.com/episode/575/1/1
+--- servers: 0 líneas
+--- episodios: 0 líneas
+
+===== pelishax episodio :: https://pelishaxpro.com/series/575/1
+status=200 type=text/html; charset=utf-8 bytes=66560 final=https://pelishaxpro.com/series/575/1
+--- servers: 0 líneas
+--- episodios: 40 líneas
+   <p><strong class="total-seasons">Total de Temporadas:</strong> 2</p>
+   <option value="1385">Temporada 1</option>
+   <option value="1386">Temporada 2</option>
+   <div class="episode-list" id="season-1385">
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 1 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 2 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 3 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 4 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 5 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 6 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 7 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 8 </strong>
+   <div class="episode-item">
+   class="episode-image"
+   <div class="episode-info-detalle">
+   <strong> Temporada 1 Episodio 9 </strong>
+
+===== friki main bundle :: https://www.frikiserie.com/main-SNXQBTSJ.js
+status=200 type=application/javascript bytes=15420 final=https://www.frikiserie.com/main-SNXQBTSJ.js
+--- api hosts:
+   (sin coincidencias)
+--- rutas api:
+   (sin coincidencias)
+--- json fields:
+   ….scrollTop=a*(1-we),B<1&&requestAnimationFrame(l)};requestAnimationFrame(l)}irUrl(e){return c(this,null,function*(){let t={state:{video:e.url,isBackButton:!0}};this.router.navigate(["ver-serie",e.nombre],t)})}irUrlOtros(e,t){return c(this,null,function*(){let …
+   …l,isBackButton:!0}};this.router.navigate(["ver-serie",e.nombre],t)})}irUrlOtros(e,t){return c(this,null,function*(){let a={state:{video:e,isBackButton:!0}};this.router.navigate(["ver-serie",t],a)})}irUrlDirecta(e){return c(this,null,function*(){this.isBrowser&…
+   …his.isBrowser)if(navigator.share)navigator.share({title:"FrikiSeries",text:"Mira series y pel\xEDculas cl\xE1sicas online gratis",url:window.location.href}).catch(t=>{console.log("Compartir cancelado:",t)});else{let t=window.location.href;navigator.clipboard.w…
+
+===== pelishax episodios :: https://pelishaxpro.com/series/575/1/1
+status=200 type=text/html; charset=utf-8 bytes=66566 final=https://pelishaxpro.com/series/575/1/1
+--- episode-item:
+   … <div class="episode-list" id="season-1385"> <a href="/tv/247718/1/1"> <div class="episode-item"> <img src="https://image.tmdb.org/t/p/w500/5IBWjTRedZgLgUEx5MYAq76FBZf.jpg" …
+   … </div> </a> <a href="/tv/247718/1/2"> <div class="episode-item"> <img src="https://image.tmdb.org/t/p/w500/22kcWCxB4bf4ZlKx1UiE1zArFr2.jpg" …
+   … </div> </a> <a href="/tv/247718/1/3"> <div class="episode-item"> <img src="https://image.tmdb.org/t/p/w500/jKXqCG2lyCgWHSRyukpriRzoI14.jpg" …
+   … </div> </a> <a href="/tv/247718/1/4"> <div class="episode-item"> <img src="https://image.tmdb.org/t/p/w500/vZFTF8722Rb2ERHLzy59kZLCNcO.jpg" …
+   … </div> </a> <a href="/tv/247718/1/5"> <div class="episode-item"> <img src="https://image.tmdb.org/t/p/w500/5qmnYYdQeeDpfo0Y5OxydemNdJl.jpg" …
+   … </div> </a> <a href="/tv/247718/1/6"> <div class="episode-item"> <img src="https://image.tmdb.org/t/p/w500/oOt4vYbcx4agDz6z0469mpsKtFG.jpg" …
+--- links:
+   …ase-date"><i class="fa-solid fa-calendar-days"></i> 2025</span> </p> <p class="movie-genres" > <strong>Géneros:</strong> <a href="/genres/80">Crimen</a> <strong class="separator">»</strong> <a href="/genres/18">Drama</a> </p> <p><strong class="total-seasons">Total de Temporadas:</strong> 2</p>…
+   … </p> <p class="movie-genres" > <strong>Géneros:</strong> <a href="/genres/80">Crimen</a> <strong class="separator">»</strong> <a href="/genres/18">Drama</a> </p> <p><strong class="total-seasons">Total de Temporadas:</strong> 2</p> </div> <div class="w…
+   … class="horizontal-line center-high"></div> <div class="episode-list" id="season-1385"> <a href="/tv/247718/1/1"> <div class="episode-item"> <img src="https://image.tmdb…
+   … </p> </div> </div> </a> <a href="/tv/247718/1/2"> <div class="episode-item"> <img src="https://image.tmdb…
+   … </p> </div> </div> </a> <a href="/tv/247718/1/3"> <div class="episode-item"> <img src="https://image.tmdb…
+   … </p> </div> </div> </a> <a href="/tv/247718/1/4"> <div class="episode-item"> <img src="https://image.tmdb…
+
+===== homecine serie tabs :: https://www3.homecine.to/series/mouse
+status=200 type=text/html; charset=UTF-8 bytes=71745 final=https://www3.homecine.to/series/mouse
+--- tabs:
+   …ml-title span { background:none; }#menu .sub-container {border:0;}#menu ul.top-menu li a {color:#ff722c!important; }}.tvseason .les-content a:hover {border-bottom:3px solid #e65e2a;background:#f3702f;}.home-main #hm-search button, .search-s…
+   … span { background:none; }#menu .sub-container {border:0;}#menu ul.top-menu li a {color:#ff722c!important; }}.tvseason .les-content a:hover {border-bottom:3px solid #e65e2a;background:#f3702f;}.home-main #hm-search button, .search-suggest u…
+   …: right"><i class="fa fa-warning"></i> <span>Report</span></a> <div class="clearfix"></div> </div> <div id="seasons"> <div class="tvseason" > <div class="les-title"> <i class="fa fa-server mr5"></i><strong>Season 1</…
+   …ing"></i> <span>Report</span></a> <div class="clearfix"></div> </div> <div id="seasons"> <div class="tvseason" > <div class="les-title"> <i class="fa fa-server mr5"></i><strong>Season 1</strong></div> <div class…
+   … <div id="seasons"> <div class="tvseason" > <div class="les-title"> <i class="fa fa-server mr5"></i><strong>Season 1</strong></div> <div class="les-content" style="display: block"> <a href="https://www3.homecine.to/episode…
+   …ason" > <div class="les-title"> <i class="fa fa-server mr5"></i><strong>Season 1</strong></div> <div class="les-content" style="display: block"> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1"> Episode …
+--- episodios:
+   …strong>Season 1</strong></div> <div class="les-content" style="display: block"> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1"> Episode 1 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-c…
+   …div> <div class="les-content" style="display: block"> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1"> Episode 1 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-2"> Episode 2 </a…
+   … class="les-content" style="display: block"> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1"> Episode 1 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-2"> Episode 2 </a> <a href=…
+   …="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1"> Episode 1 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-2"> Episode 2 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-c…
+   …/episode/mouse-temporada-1-capitulo-1"> Episode 1 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-2"> Episode 2 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-3"> Episode 3 </a…
+   …-temporada-1-capitulo-1"> Episode 1 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-2"> Episode 2 </a> <a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-3"> Episode 3 </a> <a href=…
+
+===== pelishax tv episodio :: https://pelishaxpro.com/tv/247718/1/1
+status=200 type=text/html; charset=utf-8 bytes=74321 final=https://pelishaxpro.com/tv/247718/1/1
+--- servers: 4 líneas
+   <li class="server-item" data-link="https://vidhidevip.com/v/4y3ruku8qhtl" data-lang="Español Latino">
+   <li class="server-item" data-link="https://streamwish.to/e/ikofap9od1s2" data-lang="Español Latino">
+   <li class="server-item" data-link="https://streamwish.to/e/u8jqwoe4cnpt" data-lang="Español Latino">
+   <li class="server-item" data-link="https://vidhidevip.com/v/4y3ruku8qhtl" data-lang="Español Latino">
+--- fichas: 0 líneas
+
+===== homecine episodio :: https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1
+status=200 type=text/html; charset=UTF-8 bytes=79627 final=https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1
+--- tabs: 2 líneas
+   <style type='text/css'>@media screen and (max-width: 1325px) {#slider:hover .slide-caption { left: auto; right: 320px!important; opacity: 1;}}@media screen and (max-width: 1199px) {#slider:hover .slide-caption { right: 280px!important;}}@media screen and (max-width: 991px) {#slider .slide-caption { …
+   <div class="les-content"><a href="#tab1">HD 720p - Subtitulado</a></div>
+--- iframes: 1 líneas
+   <IFRAME SRC="https://fastream.to/embed-na7qvkup7rt4.html" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>
+--- hls/mp4: 0 líneas
+
+===== friki ficha estado :: https://www.frikiserie.com/ver-serie/marco
+status=200 type=text/html; charset=utf-8 bytes=856062 final=https://www.frikiserie.com/ver-serie/marco
+--- video:
+   …230,q-70,f-auto","descripcion":"Serie de TV (1966-1969). Cool McCool es una especie de James Bond que atrapa a los malhechores. Harry es su hermano.","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"Sherlock Holmes","slug":"sherlock-holmes","totalCapitulos":"26","fecha":"1984","imagen"…
+   … más intrigantes y enfrentarse con el malvado profesor Moriarty, en unas aventuras con mucha acción, finales inesperados y una buena dosis de humor.","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"Zone Of Enders ","slug":"zone-of-enders","totalCapitulos":"26","fecha":"2001","imagen":…
+   …ecide aprovechar un viaje llevando una carga desconocida en un cajon gigantesco de color rosa. Spin-off del videojuego de Konami \"Zone of Enders\".","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"Initial D","slug":"initial-d","totalCapitulos":"26","fecha":"1998","imagen":"https://ik…
+   … corredores callejeros: Los Akina Speedstars). Takumi, a ojos de sus amigos, no tiene la más mínima idea de coches ni tampoco el más mínimo interés.","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"Aoki Densetsu Shoot","slug":"aoki-densetsu-shoot","totalCapitulos":"58","fecha":"1993",…
+   …aishi Kenji y Kazuhiro Hiramatsu) entrarán a formar parte del Kakegawa, un equipo donde milita la estrella juvenil e ídolo de Toshi, Yoshiharu Kubo.","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"El campeon","slug":"el-campeon","totalCapitulos":"47","fecha":"1980","imagen":"https://…
+   …es hacia el desafío definitivo por el título mundial. Una secuela cruda de redención, obsesión y sacrificio que lleva la leyenda de Joe a su clímax.","video":"xxxx","tipo":"serie","irAListaVideo":true},{"titulo":"El grupo increíble","slug":"el-grupo-increi-ble","totalCapitulos":"16","fecha":"1980",…
+--- capitulos:
+   (sin coincidencias)
+--- okru:
+   …k rel="preconnect" href="https://pics.filmaffinity.com"> <link rel="dns-prefetch" href="//filmaffinity.com"> <link rel="preconnect" href="https://ok.ru"> <link rel="dns-prefetch" href="https://ok.ru"> <link rel="alternate" hreflang="es" href="https://www.frikiserie.com/"> <!-- Open Graph -…
+   …y.com"> <link rel="dns-prefetch" href="//filmaffinity.com"> <link rel="preconnect" href="https://ok.ru"> <link rel="dns-prefetch" href="https://ok.ru"> <link rel="alternate" hreflang="es" href="https://www.frikiserie.com/"> <!-- Open Graph --> <meta property="og:site_name" content="Friki…
+   …kiSeries/caratulas/los-caballeros-del-zodiaco-1986.jpg?tr=w-150,h-100,q-70,f-auto","descripcion":"Los Caballeros del Zodiaco (1986)","video":"https://ok.ru/videoembed/14398744169198","tipo":"serie","irAListaVideo":false},{"titulo":"Sakura Card Captor - Temporada 1, 2 y 3 (1998)","slug":"sakura-card-…
+   …ra-card-captor-temporada-1-2-y-3-1998.jpg?tr=w-150,h-100,q-70,f-auto","descripcion":"Sakura Card Captor - Temporada 1, 2 y 3 (1998)","video":"https://ok.ru/videoembed/14600894483182","tipo":"serie","irAListaVideo":false},{"titulo":"Generador Rex - Temporada 1, 2 y 3 (Cartoon N.)","slug":"generador-r…
+   …ador-rex-temporada-1-2-y-3-cartoon-n.jpg?tr=w-150,h-100,q-70,f-auto","descripcion":"Generador Rex - Temporada 1, 2 y 3 (Cartoon N.)","video":"https://ok.ru/videoembed/15862881192686","tipo":"serie","irAListaVideo":false},{"titulo":"Digimon Adventure - Temporada 1 (1999)","slug":"digimon-adventure-te…
+   …/caratulas/digimon-adventure-temporada-1-1999.jpg?tr=w-150,h-100,q-70,f-auto","descripcion":"Digimon Adventure - Temporada 1 (1999)","video":"https://ok.ru/videoembed/14208264768238","tipo":"serie","irAListaVideo":false},{"titulo":"Kenichi: El discípulo más fuerte (2006)","slug":"kenichi-el-disc-pul…
+
+===== okru embed :: https://ok.ru/videoembed/14398744169198
+status=200 type=text/html;charset=UTF-8 bytes=47948 final=https://ok.ru/videoembed/14398744169198
+--- hls/mp4: 1 líneas
+   //# sourceURL=xray.init.js</script><script src="//st-ok.cdn-vk.ru/res/js/userKeeper_eqgk1owd.js"></script><script>(function(m,e,t,r,i,k,a) { m[i]=m[i] || function() { (m[i].a = m[i].a || []).push(arguments); }; m[i].l = 1 * new Date(); k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.asyn…
+--- json: 0 líneas
+
+===== okru 14398744169198 :: https://ok.ru/videoembed/14398744169198
+status=200 type=text/html;charset=UTF-8 bytes=47948 final=https://ok.ru/videoembed/14398744169198
+--- mp4/m3u8:
+   …cYPDgnK3A\u0026ct=6\u0026urls=95.163.35.84%3B185.226.55.56\u0026clientType=0\u0026zs=43\u0026id=15523701459694&quot;,&quot;hlsManifestUrl&quot;:&quot;https://ok6-7.vkuser.net/video.m3u8?cmd=videoPlayerCdn\u0026expires=1795504606552\u0026srcIp=3.42.157.21\u0026pr=10\u0026srcAg=CHROME\u0026ch=-5361669…
+--- metadata:
+   (sin coincidencias)
+--- flashvars:
+   …ard vid-card__fullscreen h-mod" data-module="VideoEmbed"><div data-module="OKVideo" data-module-strategy="" data-movie-id="14398744169198" data-movie-options="{&quot;groupId&quot;:null,&quot;movieId&quot;:14398744169198,&quot;isClip&quot;:false}" data-options="{&quot;playerId&quot;:&quot;VideoPopup_…
+   …trategy="" data-movie-id="14398744169198" data-movie-options="{&quot;groupId&quot;:null,&quot;movieId&quot;:14398744169198,&quot;isClip&quot;:false}" data-options="{&quot;playerId&quot;:&quot;VideoPopup_player_14398744169198&quot;,&quot;width&quot;:&quot;491&quot;,&quot;height&quot;:&quot;275&quot;,…
+   …ersionNewPlayer&quot;:&quot;11.2&quot;,&quot;wmode&quot;:&quot;opaque&quot;,&quot;asa&quot;:true,&quot;provider&quot;:&quot;UPLOADED_ODKL&quot;,&quot;flashvars&quot;:{&quot;relatedAlways&quot;:&quot;1&quot;,&quot;metadata&quot;:{&quot;movie&quot;:{&quot;id&quot;:&quot;14398744169198&quot;,&quot;movi…
+--- mp4 literal:
+   …urls=95.163.35.84%3B185.226.55.56\u0026clientType=0\u0026zs=43\u0026id=15523701459694&quot;,&quot;hlsManifestUrl&quot;:&quot;https://ok6-7.vkuser.net/video.m3u8?cmd=videoPlayerCdn\u0026expires=1795504606552\u0026srcIp=3.42.157.21\u0026pr=10\u0026srcAg=CHROME\u0026ch=-536166974\u0026ms=95.142.206.134…
+
+===== okru 14600894483182 :: https://ok.ru/videoembed/14600894483182
+status=200 type=text/html;charset=UTF-8 bytes=46825 final=https://ok.ru/videoembed/14600894483182
+--- mp4/m3u8:
+   …xZ81Zllo\u0026ct=6\u0026urls=176.112.172.0%3B185.226.55.11\u0026clientType=0\u0026zs=43\u0026id=15888214592238&quot;,&quot;hlsManifestUrl&quot;:&quot;https://ok6-12.vkuser.net/video.m3u8?cmd=videoPlayerCdn\u0026expires=1795504606757\u0026srcIp=3.42.157.21\u0026pr=10\u0026srcAg=CHROME\u0026ch=-536166…
+--- metadata:
+   (sin coincidencias)
+--- flashvars:
+   …ard vid-card__fullscreen h-mod" data-module="VideoEmbed"><div data-module="OKVideo" data-module-strategy="" data-movie-id="14600894483182" data-movie-options="{&quot;groupId&quot;:null,&quot;movieId&quot;:14600894483182,&quot;isClip&quot;:false}" data-options="{&quot;playerId&quot;:&quot;VideoPopup_…
+   …trategy="" data-movie-id="14600894483182" data-movie-options="{&quot;groupId&quot;:null,&quot;movieId&quot;:14600894483182,&quot;isClip&quot;:false}" data-options="{&quot;playerId&quot;:&quot;VideoPopup_player_14600894483182&quot;,&quot;width&quot;:&quot;491&quot;,&quot;height&quot;:&quot;275&quot;,…
+   …ersionNewPlayer&quot;:&quot;11.2&quot;,&quot;wmode&quot;:&quot;opaque&quot;,&quot;asa&quot;:true,&quot;provider&quot;:&quot;UPLOADED_ODKL&quot;,&quot;flashvars&quot;:{&quot;relatedAlways&quot;:&quot;1&quot;,&quot;metadata&quot;:{&quot;movie&quot;:{&quot;id&quot;:&quot;14600894483182&quot;,&quot;movi…
+--- mp4 literal:
+   …ls=176.112.172.0%3B185.226.55.11\u0026clientType=0\u0026zs=43\u0026id=15888214592238&quot;,&quot;hlsManifestUrl&quot;:&quot;https://ok6-12.vkuser.net/video.m3u8?cmd=videoPlayerCdn\u0026expires=1795504606757\u0026srcIp=3.42.157.21\u0026pr=10\u0026srcAg=CHROME\u0026ch=-536166974\u0026ms=95.142.206.139…
+
+===== okru api :: https://ok.ru/dk?cmd=videoPlayerMetadata&mid=14398744169198
+status=200 type=text/html;charset=UTF-8 bytes=274341 final=https://ok.ru/dk?st.cmd=anonymMain&st.lgi=WzKhXAbYMCo5
+--- json: 40 líneas
+   <!DOCTYPE html>
+   <html class=" anonym__design21 anonym__design23 anonym__wide vkui vkui--vkIdOk--light webkit chrome nottouch small-toolbar content-width-v2 mail-ext-toolbar-disabled __ui-theme_colors-update __ui-theme_enabled __ui-theme_light __is-layout-v6 __fullscreen __is-layout-v6 __fullscreen __optimize-mobile…
+   <link href="//st-ok.cdn-vk.ru/res/css/nmain_full_h2yd2sfx.css" rel="prefetch">
+   <link href="//st-ok.cdn-vk.ru/res/css/nb_jnjxgsee.css" rel="prefetch">
+   <link href="//st-ok.cdn-vk.ru/res/css/nmain_postponed_mtl6mo07.css" rel="prefetch">
+   <link href="//st-ok.cdn-vk.ru/res/css/ncore_postponed_i7ipn07y.css" rel="prefetch">
+   <link href="//st-ok.cdn-vk.ru/res/css/smiles_ltz7o0bl.css" rel="prefetch">
+   <link href="//st-ok.cdn-vk.ru/res/css/layout_laz85us8.css" rel="prefetch"><link href="//st-ok.cdn-vk.ru/res/css/layout_laz85us8.css" type="text/css" rel="stylesheet"><link id="css-hacks" type="text/css" href="https://st.okcdn.ru/static/css-hacks/2-0-125/overrides_jmu2qsy4.css" rel="stylesheet" /><li…
+   <script src="//st-ok.cdn-vk.ru/res/js/require-2.1.11_kyyqpj4q.js"></script><script src="//st-ok.cdn-vk.ru/res/js/tracerPlaceholder_f6o24anf.js"></script><script crossorigin="" onload="this.setAttribute('data-loaded', 'true')" src="//st-ok.cdn-vk.ru/res/js/polyfillsModern_mx8ooaq7.js" id="polyfills-m…
+   defaultParams: {
+   p: 'odnoklassniki-web',
+   },
+   xrayRadarUrl: 'https://xray.mail.ru'        });
+   xray.send('pk-xray-ready');
+   //# sourceURL=xray.init.js</script><script src="//st-ok.cdn-vk.ru/res/js/userKeeper_eqgk1owd.js"></script><script>(function(m,e,t,r,i,k,a) { m[i]=m[i] || function() { (m[i].a = m[i].a || []).push(arguments); }; m[i].l = 1 * new Date(); k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.asyn…
+   <link href="//st-ok.cdn-vk.ru/res/js/tracerPlaceholder_f6o24anf.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/require-2.1.11_kyyqpj4q.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/classic_hh9f953w.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/scriptGifts_eulq8qh3.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/textarea_nfrdmzjx.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/jquery-1.8.3_65hpifcf.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/jquery.okTags_cmpu6l3b.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/jquery.autoGrowInput_krzvdosq.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/FaviconManager_kabh8a4o.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/NavigationProgressBar_g0r0emr4.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/UserClientCache_b53ouxkz.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/Notifications_gjrymlz8.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/Toolbar_c2c3vmh5.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/BehaviorLogger_e2ia4afm.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/theme_l0vp6x5x.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/GoSearch_bs6qe555.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/MainFeedsNewFeedPush_abhnlecu.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/LogSeen_ndi6hmkj.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/FriendshipFeedPortlet_iiwk8gcp.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/uslider_fev6j80e.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/WebPush_lsdziwc9.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/NotificationPermissionPopup_onjlg5mj.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/GiftToFriend_fy1vbaa7.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="https://st.okcdn.ru/static/hf/2026-10-12pts/pts_ehogujk3.js" rel="prefetch" fetchpriority="auto" as="script">
+   <link href="//st-ok.cdn-vk.ru/res/js/SpriteAnimation_kc6zs2br.js" rel="prefetch" fetchpriority="auto" as="script">
+--- mp4: 0 líneas
+
+===== okru api :: https://vk.com/video_ext.php?oid=&id=14398744169198
+status=200 type=text/html; charset=utf-8 bytes=23870 final=https://vk.com/video_ext.php?oid=&id=14398744169198
+--- json: 40 líneas
+   <!DOCTYPE html><html lang="EN"><head><meta http-equiv="content-type" content="text/html; charset=windows-1251"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewpor…
+   window.isBFF = true
+   window.currentStateCode = 0
+   window.deferStaticEntries = []
+   window._onloadDeferCallbacks = []
+   window.lang = {"global_date":["","{day} {month} {year}","yesterday","today","tomorrow"],"global_date_l":["","{day} {month} {year}","yesterday","today","tomorrow"],"global_date_pre_free":["","{day} {month} {year}","yesterday","today","tomorrow"],"global_hours_ago":["","%s hour ago","%s hours ago"],"g…
+   window.vk = {
+   apiConfigDomains: {"loginDomain":"login.vk.com","apiDomain":"api.vk.com","connectDomain":"id.vk.com","domain":"vk.com"},
+   webToken: {"access_token":"anonym.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbm9ueW1faWQiOjEwNDQzMTUxMTAsImFwcF9pZCI6NjI4NzQ4NywiaWF0IjoxNzk1NDE4MjA4LCJpc192ZXJpZmllZCI6ZmFsc2UsImV4cCI6MTc5NTUwNDYwOCwic2lnbmVkX3RpbWUiOm51bGwsImFub255bV9pZF9sb25nIjo5MDYxMjEzNjc5Nzg4NTk1NTgzLCJzY29wZSI6Nzg4MTI5OTM0Nzg5O…
+   anonymCookie: "9112442125549929723_mRsWS4gZXhjC1OO0bzrJySs7vG3Tl14hX3Bm3ZVftQs",
+   stDomain: "https://st.vk.com",
+   stExcludedMasks: null,
+   id: 0,
+   isCyrillic: false,
+   pabs: 0,
+   ex: {},
+   pe: {"frontend.remove_video_subtitles_from_api":1,"frontend.video_send_sticker_comments":1,"frontend.stories_template_mvk":1,"frontend.games_tags_genres_use_seo_description_block":1,"frontend.video_video_page_comments_analytics":1,"frontend.video_embed_has_storage_access_logs":1,"frontend.feed_spa_m…
+   cfg: {"akashi_endpoint":"https://akashi.vk-portal.net/api/v1/web","clips_encode_progress_attempts":300,"clips_encode_progress_delay":3000,"feed_redesign2024_percent_of_video_in_viewport_for_autoplay":70,"feed_requests_retries_count":{"newsfeed.get":1,"newsfeed.getByType":1,"wall.get":1},"front_metri…
+   toggles: {"feed_spa_web":{"abGroupId":null},"video_embed_spa_bff_anon":{"abGroupId":null},"video_safe_mode_enabled_anon":{"abGroupId":null},"feed_audience_research":{"abGroupId":null},"feed_prefetch":{"abGroupId":null}},
+   lang: 3,
+   isVideoStandalone: true,
+   logoutUrl: "",
+   rv: 256301,
+   ts: 1795418208,
+   "tjczka": false,
+   statsMeta: {"platform":"web2","st":false,"id":0,"time":1795418208,"hash":"2bihOajNkuhrppoVLhc3k8sbt6oEjmUb468n2PPlJoo","reloadVersion":42},
+   wsTransport: "https://stats.vk-portal.net",
+   reservedTransport: ["https://vk.com/usefull.php","https://vk.com/special.php"],
+   isOldBrowserVersion: false,
+   routerState: {"keyConfig":"main","data":{"params":{}}},
+   static: {
+   domain: "https://st.vk.com",
+   },
+   };
+   window.langConfig =
+   {"id":3,"parent":0,"locale":"en","numDel":",","numDelS":",","numDec":".","prepTags":null,"prep":[],"timeSys":["12hour","am","pm"],"yearOffset":0,"flexLast":false,"revOrder":false,"RTL":false,"numRules":{"int":[[0,[1],1],["*",0,2]],"float":2},"sexRules":[[1,2],["*",1]],"larr":"\u0026larr;","rarr":"\u…
+   window.onLayoutReady = () => {};
+   window.apiPrefetchReadyPromise = new Promise((_resolve) => {
+   window.apiPrefetchReadyResolve = _resolve;
+   });
+--- mp4: 0 líneas
+
+===== pelishax search :: https://pelishaxpro.com/search?q=The+Dark+Knight
+status=200 type=text/html; charset=utf-8 bytes=75335 final=https://pelishaxpro.com/search?q=The+Dark+Knight
+--- movies links:
+   … <div class="movie-grid"> <div class="card movie-card-link"> <a href="/movies/184346" class="movie-card"> <img src="/assets/img/media_placeholder.png" …
+   … </a> <div class="card card__content"> <h3 class="card__title"> <a href="/movies/184346">:Deliver Us from Evil: Líbranos del mal</a> </h3> </div> …
+   … </div> </div> <div class="card movie-card-link"> <a href="/movies/458594" class="movie-card"> <img src="/assets/img/media_placeholder.png" …
+   … </a> <div class="card card__content"> <h3 class="card__title"> <a href="/movies/458594">:Justicia impacable: Matar o Morir</a> </h3> </div> </di…
+   … </div> </div> <div class="card movie-card-link"> <a href="/movies/1198994" class="movie-card"> <img src="/assets/img/media_placeholder.png" …
+   … </a> <div class="card card__content"> <h3 class="card__title"> <a href="/movies/1198994">¡Ayuda!</a> </h3> </div> </div> …
+--- cards:
+   … la búsqueda para: <br> </h1> <div class="movie-grid"> <div class="card movie-card-link"> <a href="/movies/184346" class="movie-card"> <img src="/assets/img/media…
+   … <div class="card movie-card-link"> <a href="/movies/184346" class="movie-card"> <img src="/assets/img/media_placeholder.png" data-src="http://image.t…
+   …al</a> </h3> </div> </div> <div class="card movie-card-link"> <a href="/movies/458594" class="movie-card"> <img src="/assets/img/media…
+   …div> <div class="card movie-card-link"> <a href="/movies/458594" class="movie-card"> <img src="/assets/img/media_placeholder.png" data-src="http://image.t…
+   …ir</a> </h3> </div> </div> <div class="card movie-card-link"> <a href="/movies/1198994" class="movie-card"> <img src="/assets/img/medi…
+   …iv> <div class="card movie-card-link"> <a href="/movies/1198994" class="movie-card"> <img src="/assets/img/media_placeholder.png" data-src="http://image.t…
+--- total:
+   …ript> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Resultados de búsqueda</title> <meta name="description" content="Pelishax: Busca tus películas, series o animes favo…
+   … { "@context": "https://schema.org", "inLanguage": "es", "@type": "WebSite", "name": "Resultados de búsqueda", "url": "https://pelishaxpro.com/search?q=The+Dark+Knight", "@id": "https://peli…
+   …/li> </ul> </div> </div> <div class="main-container-hax"> <main> <h1 id="title-hax">Resultados de la búsqueda para: <br> </h1> <div class="movie-grid"> <div…
+--- forms:
+   … </nav> <span class="show-search"></span> <div class="nav-search" style="display: none;"> <form action="/search" class="search-form"> <input class="search-input" name="search" placeholder="Buscar Películas...">…
+
+===== pelishax movie 155 :: https://pelishaxpro.com/movies/155
+status=200 type=text/html; charset=utf-8 bytes=62477 final=https://pelishaxpro.com/movies/155
+--- title: 1 líneas
+   <title>Batman: El caballero de la noche (The Dark Knight) - PELISHAX</title>
+--- servers: 8 líneas
+   <li class="server-item" data-link="https://streamwish.to/e/6dz22bl4exq4" data-lang="Español Latino">
+   <li class="server-item" data-link="https://filemoon.sx/e/d02q4wt2b80n" data-lang="Español Latino">
+   <li class="server-item" data-link="https://vidhidevip.com/v/7edm3v3ca7mf" data-lang="Español Latino">
+   <li class="server-item" data-link="https://streamtape.com/e/rJv2zx284AsbQor" data-lang="Español Latino">
+   <li class="server-item" data-link="https://streamwish.to/e/bx9im04137cn" data-lang="Español Castellano">
+   <li class="server-item" data-link="https://filemoon.sx/e/2z90gzwo30kr" data-lang="Español Castellano">
+   <li class="server-item" data-link="https://streamwish.to/e/u4tw9kzcfh19" data-lang="English 🇺🇸 Sub ES">
+   <li class="server-item" data-link="https://ok.ru/video/7652106504857" data-lang="English">
+
+===== pelishax movie 155 ddg :: https://pelishaxpro.com/movies/155/the-dark-knight
+status=200 type=text/html; charset=utf-8 bytes=62525 final=https://pelishaxpro.com/movies/155/the-dark-knight
+--- title: 1 líneas
+   <title>Batman: El caballero de la noche (The Dark Knight) - PELISHAX</title>
+--- servers: 8 líneas
+   <li class="server-item" data-link="https://streamwish.to/e/6dz22bl4exq4" data-lang="Español Latino">
+   <li class="server-item" data-link="https://filemoon.sx/e/d02q4wt2b80n" data-lang="Español Latino">
+   <li class="server-item" data-link="https://vidhidevip.com/v/7edm3v3ca7mf" data-lang="Español Latino">
+   <li class="server-item" data-link="https://streamtape.com/e/rJv2zx284AsbQor" data-lang="Español Latino">
+   <li class="server-item" data-link="https://streamwish.to/e/bx9im04137cn" data-lang="Español Castellano">
+   <li class="server-item" data-link="https://filemoon.sx/e/2z90gzwo30kr" data-lang="Español Castellano">
+   <li class="server-item" data-link="https://streamwish.to/e/u4tw9kzcfh19" data-lang="English 🇺🇸 Sub ES">
+   <li class="server-item" data-link="https://ok.ru/video/7652106504857" data-lang="English">
+
+===== streamwish embed :: https://streamwish.to/e/6dz22bl4exq4
+status=200 type=text/html bytes=819 final=https://streamwish.to/e/6dz22bl4exq4
+--- eval/packer:
+   (sin coincidencias)
+--- m3u8/mp4:
+   (sin coincidencias)
+--- sources:
+   (sin coincidencias)
+--- scripts:
+   …iner"> <div class="spinner"></div> <div class="loading-text">Page is loading, please wait...</div> </div> <script src="/main.js?v=1.1.9"></script> <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e…
+   …> <div class="loading-text">Page is loading, please wait...</div> </div> <script src="/main.js?v=1.1.9"></script> <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" int…
+
+===== filemoon embed :: https://filemoon.sx/e/d02q4wt2b80n
+status=200 type=text/html bytes=1605 final=https://filemoon.sx/e/d02q4wt2b80n
+--- eval/packer:
+   (sin coincidencias)
+--- m3u8/mp4:
+   (sin coincidencias)
+--- sources:
+   (sin coincidencias)
+--- api:
+   (sin coincidencias)
+
+===== vidhide embed :: https://vidhidevip.com/v/7edm3v3ca7mf
+status=200 type=text/html; charset=UTF-8 bytes=15736 final=https://callistanise.com/v/7edm3v3ca7mf
+--- eval/packer:
+   …iner .jw-icon-inline { display: none; } </style> </div> <script type='text/javascript'>eval(function(p,a,c,k,e,d){while(c--)if(k[c])p=p.replace(new RegExp('\\b'+c.toString(a)+'\\b','g'),k[c]);return p}('b n={"1d":"1m:…
+--- m3u8/mp4:
+   (sin coincidencias)
+--- sources:
+   (sin coincidencias)
+
+===== okru video page :: https://ok.ru/video/7652106504857
+status=200 type=text/html;charset=UTF-8 bytes=230057 final=https://ok.ru/video/7652106504857
+--- m3u8:
+   (sin coincidencias)
+--- videoembed link:
+   (sin coincidencias)
+
+===== streamwish main.js :: https://streamwish.to/main.js?v=1.1.9
+status=200 type=application/javascript bytes=71214 final=https://streamwish.to/main.js?v=1.1.9
+--- api:
+   (sin coincidencias)
+--- fetch:
+   (sin coincidencias)
+--- eval:
+   (sin coincidencias)
+
+===== streamwish dl :: https://streamwish.to/dl?op=embed&file_code=6dz22bl4exq4&referer=
+status=200 type=text/html bytes=819 final=https://streamwish.to/dl?op=embed&file_code=6dz22bl4exq4&referer=
+--- m3u8/mp4:
+   (sin coincidencias)
+--- packer:
+   (sin coincidencias)
+
+===== streamwish dl :: https://streamwish.to/dl?op=view&file_code=6dz22bl4exq4
+status=200 type=text/html bytes=819 final=https://streamwish.to/dl?op=view&file_code=6dz22bl4exq4
+--- m3u8/mp4:
+   (sin coincidencias)
+--- packer:
+   (sin coincidencias)
+
+===== vidhide packed :: https://vidhidevip.com/v/7edm3v3ca7mf
+status=200 type=text/html; charset=UTF-8 bytes=15739 final=https://callistanise.com/v/7edm3v3ca7mf
+--- url en tabla:
+   (sin coincidencias)
+--- file:
+   …rientationLock|auto|preload|duration|uniform|stretching|7edm3v3ca7mf_xt|image|sources|setup|vplayer|txt|shop|maplebrookdesignstudio|asn|p2|p1|sp|srv|129600|Tq8Ol0ubpDhOX2WOASRmxxEGVu8|1S0Po2Ujs15u8tt|m3u8|cdn|dramiyos|'.split('|'))) </script> <!--static100 mainstream--> <script src="/assets/jquery/ev-static.js?type=mainstream&u=2640&v=2026080…
+evalmachine.<anonymous>:9
+  var pattern = /\}
+                ^
+
+SyntaxError: Invalid regular expression: missing /
+    at new Script (node:vm:117:7)
+    at createScript (node:vm:269:10)
+    at Object.runInContext (node:vm:300:10)
+    at loadUnpacker (/home/runner/work/NEW/NEW/tools/probe-sites.js:429:6)
+    at round23 (/home/runner/work/NEW/NEW/tools/probe-sites.js:434:18)
+    at main (/home/runner/work/NEW/NEW/tools/probe-sites.js:492:51)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)

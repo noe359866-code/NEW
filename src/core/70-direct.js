@@ -365,7 +365,8 @@ function vidaraSubtitles(data, origin) {
 function resolveDirectPlayers(seeds, options) {
   var opts = options || {};
   var queue = (seeds || []).map(function (s) {
-    return { url: s.url, referer: s.referer || '', name: s.name || '', language: s.language || '', depth: 0 };
+    return { url: s.url, referer: s.referer || '', name: s.name || '', language: s.language || '',
+      quality: s.quality || '', depth: 0 };
   });
   var seen = {};
   var found = [];
@@ -380,7 +381,10 @@ function resolveDirectPlayers(seeds, options) {
   function addMedia(url, ref, item, subtitles) {
     var media = directMediaUrl(url);
     if (!media || isPlayerAdvertisement(media)) return;
+    // La calidad la declara la ficha del sitio (pestañas, botones): se conserva
+    // para que el nombre del stream no tenga que adivinarla de la URL.
     var result = { url: media, name: item.name, language: item.language,
+      quality: item.quality || '',
       headers: { Referer: ref || item.referer, 'User-Agent': UA, Origin: playerOrigin(ref || item.referer) } };
     if (subtitles && subtitles.length) result.subtitles = subtitles;
     found.push(result);
@@ -436,7 +440,8 @@ function resolveDirectPlayers(seeds, options) {
       if (response.status >= 300 && response.status < 400) {
         var location = response.headers && response.headers.get ? response.headers.get('location') : '';
         var target = publicHttpUrl(location, url);
-        if (target) queue.push({ url: target, referer: url, name: item.name, language: item.language, depth: item.depth + 1 });
+        if (target) queue.push({ url: target, referer: url, name: item.name, language: item.language,
+          quality: item.quality || '', depth: item.depth + 1 });
         return null;
       }
       if (/anubis_challenge/i.test(response.text)) return passAnubis(response.text, url, item.referer);
@@ -456,11 +461,18 @@ function resolveDirectPlayers(seeds, options) {
       var actualUrl = publicHttpUrl(response.url, url) || url;
       var media = findDirectMedia(response.text, actualUrl);
       for (var i = 0; i < media.length; i++) addMedia(media[i], actualUrl, item);
+      if (media.length) {
+        // La calidad del reproductor se conserva para los enlaces que salieron
+        // de aquí, aunque la URL no la traiga (solo se rellena si falta).
+        for (var f = 0; f < found.length; f++) {
+          if (!found[f].quality && item.quality) found[f].quality = item.quality;
+        }
+      }
       if (item.depth >= maxDepth) return;
       var links = pagePlayerLinks(response.text, actualUrl).concat(embed69Links(response.text, actualUrl));
       for (var j = 0; j < links.length; j++) {
         queue.push({ url: links[j].url, referer: actualUrl, name: links[j].name || item.name,
-          language: links[j].language || item.language, depth: item.depth + 1 });
+          language: links[j].language || item.language, quality: item.quality || '', depth: item.depth + 1 });
       }
     }).catch(function () { /* un host caído no cancela los demás */ });
   }

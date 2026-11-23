@@ -23,7 +23,7 @@ test('el manifiesto es un único addon y los bundles son providers internos', ()
   assert.equal(manifest.id, 'org.nebula.es.unificado');
   assert.deepEqual(manifest.resources.map(r => r.name), ['catalog', 'meta', 'stream']);
   assert.equal(manifest.scrapers, undefined);
-  assert.deepEqual(fs.readdirSync(path.join(ROOT, 'providers')).sort(), ['cineplus123.js', 'flixlatam.js', 'framextv.js', 'fuegocine.js', 'kdrama.js', 'latanime.js', 'tioanime.js']);
+  assert.deepEqual(fs.readdirSync(path.join(ROOT, 'providers')).sort(), ['cineplus123.js', 'flixlatam.js', 'framextv.js', 'frikiserie.js', 'fuegocine.js', 'homecine.js', 'kdrama.js', 'latanime.js', 'pelishax.js', 'tioanime.js']);
 });
 
 test('FlixLatam: película → Embed69 AES → reproductor → HLS directo con cabeceras', async () => {
@@ -196,4 +196,157 @@ test('Latanime separa el título destacado de las etiquetas de tipo, idioma y a�
   const streams = await loadProvider('latanime', { fetch }).getStreams('21', 'tv', 1, 1);
   assert.equal(streams.length, 1);
   assert.equal(streams[0].url, 'https://cdn.example/episode.mp4');
+});
+
+test('PeliShax: la ficha se abre por id de TMDB, sin pasar por el buscador', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/movie/5084', tmdbMovie(5084, 'El señor de los anillos')],
+    ['pelishaxpro.com/movies/5084', `<ul class="servers">
+      <li class="server-item" data-link="https://vidara.to/e/latino1" data-lang="Español Latino"><strong>Vidara</strong></li>
+      <li class="server-item" data-link="https://streamwish.to/e/jap1" data-lang="Japonés"><strong>StreamWish</strong></li>
+      <li class="server-item" data-link="https://vidmoly.biz/embed-dup.html" data-lang="Español Latino"><strong>Vidmoly</strong></li>
+      </ul>`],
+    ['vidara.to/e/latino1', '<source src="https://cdn.pelishax.example/latino/master.m3u8">'],
+    ['streamwish.to/e/jap1', '<source src="https://cdn.pelishax.example/jap/720.mp4">'],
+    ['vidmoly.biz/embed-dup.html', '<source src="https://cdn.pelishax.example/latino/master.m3u8">']
+  ]);
+  const streams = await loadProvider('pelishax', { fetch }).getStreams('5084', 'movie', null, null);
+  assert.equal(streams.length, 2);
+  const latino = streams.find(item => item.url.includes('/latino/'));
+  assert.equal(latino.language, 'Latino');
+  assert.equal(latino.provider, 'pelishax');
+  assert.equal(latino.type, 'direct');
+  assert.match(latino.title, /Vidara/);
+  assert.equal(streams.find(item => item.url.includes('/jap/')).language, 'Japonés');
+  assert.ok(!fetch.calls.some(call => call.url.includes('/search?q=')), 'el id de TMDB basta');
+  assertNoMediaFetch(fetch);
+});
+
+test('PeliShax: serie usa la ficha del episodio concreto y no la de la temporada', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/tv/575', tmdbTv(575, 'El marginal')],
+    // La ficha de la serie lista reproductores y episodios en la misma página.
+    ['pelishaxpro.com/series/575', `<li class="server-item" data-link="https://vidmoly.biz/embed-trailer.html" data-lang="Español Latino">Vidmoly</li>
+      <div class="episode-list" id="season-1"><a href="/tv/575/1/1"><div class="episode-item">1</div></a>
+      <a href="/tv/575/1/2"><div class="episode-item">2</div></a></div>`],
+    ['pelishaxpro.com/tv/575/1/2', '<li class="server-item" data-link="https://vidhidevip.com/v/ep2" data-lang="Español Latino">VidHide</li>'],
+    ['vidhidevip.com/v/ep2', '<source src="https://cdn.pelishax.example/s01e02.mp4">']
+  ]);
+  const streams = await loadProvider('pelishax', { fetch }).getStreams('575', 'tv', 1, 2);
+  assert.equal(streams.length, 1);
+  assert.equal(streams[0].url, 'https://cdn.pelishax.example/s01e02.mp4');
+  assert.match(streams[0].title, /S01E02/);
+  assert.ok(!fetch.calls.some(call => call.url.endsWith('/tv/575/1/1')));
+  assert.equal((await loadProvider('pelishax', { fetch }).getStreams('575', 'tv', null, null)).length, 0);
+});
+
+test('HomeCine: pestañas de idioma emparejadas con su iframe de fastream', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/movie/603', tmdbMovie(603, 'Matrix')],
+    ['homecine.to/?s=', '<div class="item"><a href="/matrix"><img alt="Matrix"><h2>Matrix</h2></a></div>'],
+    ['homecine.to/matrix', `<div class="les-title"><strong>Server Cload</strong></div>
+      <div class="les-content"><a href="#tab1">480p - Latino</a></div>
+      <div class="les-content"><a href="#tab2">HD 1080p - Castellano</a></div>
+      <div id="content-embed"><IFRAME SRC="https://fastream.to/embed-lat1.html"></IFRAME>
+      <IFRAME SRC="https://fastream.to/embed-cast2.html"></IFRAME></div>`],
+    ['fastream.to/embed-lat1.html', '<source src="https://cdn.homecine.example/latino/480.mp4">'],
+    ['fastream.to/embed-cast2.html', '<source src="https://cdn.homecine.example/castellano/1080.mp4">']
+  ]);
+  const streams = await loadProvider('homecine', { fetch }).getStreams('603', 'movie', null, null);
+  assert.equal(streams.length, 2);
+  const cast = streams.find(item => item.url.includes('castellano'));
+  assert.equal(cast.language, 'Castellano');
+  assert.equal(cast.quality, '1080p');
+  const lat = streams.find(item => item.url.includes('latino'));
+  assert.equal(lat.language, 'Latino');
+  assert.equal(lat.quality, '480p');
+  assertNoMediaFetch(fetch);
+});
+
+test('HomeCine: la ficha de la serie lleva al episodio de la temporada pedida', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/tv/900', tmdbTv(900, 'Mouse')],
+    ['homecine.to/?s=', '<a href="/series/mouse"><h2>Mouse</h2></a>'],
+    ['homecine.to/series/mouse', `<a href="https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1">Episode 1</a>
+      <a href="https://www3.homecine.to/episode/mouse-temporada-2-capitulo-3">Episode 3</a>`],
+    ['homecine.to/episode/mouse-temporada-2-capitulo-3', `<div class="les-content"><a href="#tab1">HD 720p - Subtitulado</a></div>
+      <IFRAME SRC="https://fastream.to/embed-ep23.html"></IFRAME>`],
+    ['fastream.to/embed-ep23.html', '<source src="https://cdn.homecine.example/s02e03.mp4">']
+  ]);
+  const streams = await loadProvider('homecine', { fetch }).getStreams('900', 'tv', 2, 3);
+  assert.equal(streams.length, 1);
+  assert.match(streams[0].title, /S02E03/);
+  assert.equal(streams[0].language, 'Subtitulado');
+  assert.ok(!fetch.calls.some(call => call.url.includes('temporada-1-capitulo-1')));
+});
+
+test('FrikiSeries: catálogo en ng-state → ficha → MP4 de OK.ru', async () => {
+  const state = { '0': { 'data-info': [
+    { titulo: 'Los Caballeros del Zodiaco (1986)', slug: 'los-caballeros-del-zodiaco-1986', totalCapitulos: '114',
+      fecha: '1986', video: 'https://ok.ru/videoembed/14398744169198', tipo: 'serie', irAListaVideo: false },
+    { titulo: 'Otra cosa', slug: 'otra-cosa', totalCapitulos: '10', fecha: '1990',
+      video: 'xxxx', tipo: 'serie', irAListaVideo: true }
+  ] } };
+  const ngState = raw => `<html><script id="ng-state" type="application/json">${JSON.stringify(raw)}</script></html>`;
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/tv/1259', tmdbTv(1259, 'Los Caballeros del Zodiaco')],
+    ['frikiserie.com/', ngState(state)],
+    ['frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986', ngState(state)],
+    // Formato real: JSON con entidades HTML dentro de data-options.
+    ['ok.ru/videoembed/14398744169198', `<div class="h-mod" data-module="OKVideo"
+      data-movie-id="14398744169198"
+      data-options="{&quot;flashvars&quot;:{&quot;metadata&quot;:{&quot;movie&quot;:{&quot;id&quot;:&quot;14398744169198&quot;},&quot;videos&quot;:[{&quot;name&quot;:&quot;mobile&quot;,&quot;url&quot;:&quot;https://vd.okcdn.ru/720.mp4?cmd=videoPlayerCdn\u0026expires=1&quot;}],&quot;hlsManifestUrl&quot;:&quot;https://ok6-7.vkuser.net/video.m3u8?cmd=videoPlayerCdn\u0026expires=1795501360418&quot;}}}"></div>`]
+  ]);
+  const streams = await loadProvider('frikiserie', { fetch }).getStreams('1259', 'tv', 1, 1);
+  assert.equal(streams.length, 1);
+  assert.equal(streams[0].url, 'https://ok6-7.vkuser.net/video.m3u8?cmd=videoPlayerCdn&expires=1795501360418');
+  assert.equal(streams[0].language, 'Latino');
+  assert.equal(streams[0].provider, 'frikiserie');
+  assert.equal(streams[0].headers.Origin, 'https://ok.ru');
+  assertNoMediaFetch(fetch);
+});
+
+test('FrikiSeries: un título sin enlace real no produce resultados', async () => {
+  const ngState = `<script id="ng-state" type="application/json">${JSON.stringify({ d: [
+    { titulo: 'Relleno', slug: 'relleno', totalCapitulos: '3', fecha: '1999', video: 'xxxx', tipo: 'serie' }] })}</script>`;
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/tv/1', tmdbTv(1, 'Relleno')],
+    ['frikiserie.com/', ngState]
+  ]);
+  const streams = await loadProvider('frikiserie', { fetch }).getStreams('1', 'tv', 1, 1);
+  assert.equal(streams.length, 0);
+  assert.ok(!fetch.calls.some(call => call.url.includes('ok.ru')));
+});
+
+test('PeliShax: los servidores de OK.ru se leen de su reproductor, no se descartan', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/movie/155', tmdbMovie(155, 'The Dark Knight')],
+    ['pelishaxpro.com/movies/155', `<li class="server-item" data-link="https://ok.ru/video/7652106504857" data-lang="English">OK.ru</li>`],
+    ['ok.ru/videoembed/7652106504857', `data-options="{&quot;flashvars&quot;:{&quot;metadata&quot;:{&quot;hlsManifestUrl&quot;:&quot;https://vd9.okcdn.ru/video.m3u8?cmd=videoPlayerCdn\\u0026expires=9&quot;}}}"`]
+  ]);
+  const streams = await loadProvider('pelishax', { fetch }).getStreams('155', 'movie', null, null);
+  assert.equal(streams.length, 1);
+  assert.equal(streams[0].url, 'https://vd9.okcdn.ru/video.m3u8?cmd=videoPlayerCdn&expires=9');
+  assert.equal(streams[0].language, 'Inglés');
+});
+
+test('HomeCine: con más reproductores que pestañas, cada uno hereda su idioma por posición', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/movie/1', tmdbMovie(1, 'Prueba')],
+    ['homecine.to/?s=', '<a href="/prueba"><h2>Prueba</h2></a>'],
+    ['homecine.to/prueba', `<div class="les-content"><a href="#tab1">480p - Latino</a></div>
+      <IFRAME SRC="https://fastream.to/embed-a.html"></IFRAME>
+      <div class="les-content"><a href="#tab2">HD 1080p - Castellano</a></div>
+      <IFRAME SRC="https://fastream.to/embed-b.html"></IFRAME>
+      <IFRAME SRC="https://fastream.to/embed-c.html"></IFRAME>`],
+    ['fastream.to/embed-a.html', '<source src="https://cdn.example/a.mp4">'],
+    ['fastream.to/embed-b.html', '<source src="https://cdn.example/b.mp4">'],
+    ['fastream.to/embed-c.html', '<source src="https://cdn.example/c.mp4">']
+  ]);
+  const streams = await loadProvider('homecine', { fetch }).getStreams('1', 'movie', null, null);
+  assert.equal(streams.length, 3);
+  assert.equal(streams.find(item => item.url.endsWith('/a.mp4')).language, 'Latino');
+  assert.equal(streams.find(item => item.url.endsWith('/b.mp4')).language, 'Castellano');
+  assert.equal(streams.find(item => item.url.endsWith('/c.mp4')).language, 'Castellano');
+  assert.equal(streams.find(item => item.url.endsWith('/b.mp4')).quality, '1080p');
 });

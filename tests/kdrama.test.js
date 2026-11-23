@@ -52,3 +52,19 @@ test('KatDrama: sin id de TMDB no se inventa la URL', async () => {
   assert.equal(streams.length, 0);
   assert.ok(!fetch.calls.some(c => c.url.includes('watch/')));
 });
+
+test('KatDrama: un id de TMDB de Nuvio sin título resuelto igual llega al sitio', async () => {
+  // TMDB responde 403 al servidor del addon y Wikidata puede no devolver la
+  // ficha: antes el provider abandonaba y Nuvio no mostraba ninguna fuente.
+  const fetch = mockFetch([
+    ['api.themoviedb.org', { __response: { status: 403 } }],
+    ['www.themoviedb.org', { __response: { status: 403 } }],
+    ['www.wikidata.org/w/api.php?action=query&list=search', { __json: { query: { search: [] } } }],
+    [/k-drama\.in\/watch\/movie\/n-a-603/, '<button onclick="switchServer(\'kat2\', \'https://k-drama.in/mx1.php?type=movie&id=603\', \'embed\', \'\')">'],
+    ['k-drama.in/mx1.php', '<video src="https://cdn.example/matrix.mp4"></video>']
+  ]);
+  const streams = await loadProvider('kdrama', { fetch, tmdbKey: '' }).getStreams('tmdb:603', 'movie');
+  assert.equal(streams.length, 1, JSON.stringify(streams.map(s => s.url)));
+  assert.equal(streams[0].url, 'https://cdn.example/matrix.mp4');
+  assert.ok(fetch.calls.some(c => /\/watch\/movie\/n-a-603$/.test(c.url)), 'usa el id de TMDB');
+});

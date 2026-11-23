@@ -85,29 +85,90 @@ function contentIdLabel(parsed) {
 
 /* ------------------------- Wikidata (sin clave) ------------------------- */
 
-/* Solo se consultan propiedades externas conocidas y el valor es siempre
- * numérico, así que la consulta no incorpora texto del cliente. */
-function wikidataLookup(property, value) {
-  if (!/^P\d{1,6}$/.test(String(property)) || !/^\d{1,9}$/.test(String(value))) return Promise.resolve(null);
-  var query = 'SELECT ?imdb ?tmdb ?tvdb WHERE {' +
-    ' ?item wdt:' + property + ' "' + value + '" .' +
-    ' OPTIONAL { ?item wdt:P345 ?imdb }' +
-    ' OPTIONAL { ?item wdt:P4983 ?tmdb }' +
-    ' OPTIONAL { ?item wdt:P4835 ?tvdb }' +
-    '} LIMIT 1';
-  var url = 'https://query.wikidata.org/sparql?format=json&query=' + encodeURIComponent(query);
-  return getJson(url, { timeout: 9000, retries: 0, headers: { Accept: 'application/sparql-results+json' } })
+/* Wikidata entrega los enlaces externos de una ficha (IMDb, TMDB, TheTVDB)
+ * sin clave de API. Se usa la Action API y no el servicio SPARQL porque
+ * query.wikidata.org responde 403 a las IP de los servidores (política de
+ * Wikimedia), mientras que www.wikidata.org/w/api.php responde con normalidad.
+ *
+ * Solo se consultan propiedades externas conocidas y el valor es siempre
+ * numérico, así que la URL no incorpora texto del cliente. `cache` evita
+ * repetir la misma pareja en una misma solicitud del addon. */
+var WIKIDATA_PROPERTIES = {
+  // IMDb → TMDB (temporada/serie) y TMDB → IMDb
+  P345: 'imdb', P4947: 'tmdbMovie', P4983: 'tmdbTv',
+  // TheTVDB (los sitios hispanos etiquetan el tipo por su cuenta)
+  P4835: 'tvdb',
+  // Título original y fecha: son los títulos del buscador de cada sitio
+  P1476: 'title', P577: 'date'
+};
+
+function wikidataEntitySearch(property, value) {
+  // haswbstatement es una palabra clave de búsqueda de CirrusSearch: devuelve
+  // la ficha que declara esa propiedad con ese valor exacto.
+  var url = 'https://www.wikidata.org/w/api.php?action=query&list=search&srsearch=' +
+    encodeURIComponent('haswbstatement:' + property + '=' + value) +
+    '&srlimit=1&srnamespace=0&format=json';
+  return getJson(url, { timeout: 8000, retries: 0, headers: { Accept: 'application/json' } })
     .then(function (data) {
-      var rows = data && data.results && Array.isArray(data.results.bindings) ? data.results.bindings : [];
-      if (!rows.length) return null;
-      var row = rows[0];
-      function text(key) { return row[key] && typeof row[key].value === 'string' ? row[key].value : ''; }
-      var imdb = /^tt\d{5,12}$/i.test(text('imdb')) ? text('imdb').toLowerCase() : null;
-      var tmdb = /^\d{1,9}$/.test(text('tmdb')) ? text('tmdb') : null;
-      var tvdb = /^\d{1,9}$/.test(text('tvdb')) ? text('tvdb') : null;
-      if (!imdb && !tmdb && !tvdb) return null;
-      return { imdbId: imdb, tmdbId: tmdb, tvdbId: tvdb };
+      var hits = data && data.query && Array.isArray(data.query.search) ? data.query.search : [];
+      var title = hits.length && hits[0] && /^Q\d{1,9}$/.test(String(hits[0].title)) ? String(hits[0].title) : '';
+      return title || null;
     }, function () { return null; });
+}
+
+function wikidataClaims(entity) {
+  if (!/^Q\d{1,9}$/.test(String(entity))) return Promise.resolve(null);
+  var properties = Object.keys(WIKIDATA_PROPERTIES).join('|');
+  var url = 'https://www.wikidata.org/w/api.php?action=wbgetclaims&entity=' + entity +
+    '&property=' + properties + '&format=json';
+  return getJson(url, { timeout: 8000, retries: 0, headers: { Accept: 'application/json' } })
+    .then(function (data) {
+      var claims = data && data.claims && typeof data.claims === 'object' ? data.claims : null;
+      if (!claims) return null;
+      var out = { imdbId: null, tmdbId: null, tvdbId: null, title: null, year: null };
+      for (var property in WIKIDATA_PROPERTIES) {
+        if (!Object.prototype.hasOwnProperty.call(claims, property)) continue;
+        var statements = Array.isArray(claims[property]) ? claims[property] : [];
+        for (var i = 0; i < statements.length; i++) {
+          var snak = statements[i] && statements[i].mainsnak;
+          var value = snak && snak.datavalue && snak.datavalue.value;
+          var name = WIKIDATA_PROPERTIES[property];
+          var raw = typeof value === 'string' ? value : '';
+          if (name === 'imdb' && /^tt\d{5,12}$/i.test(raw)) out.imdbId = out.imdbId || raw.toLowerCase();
+          else if (name === 'tvdb' && /^\d{1,9}$/.test(raw)) out.tvdbId = out.tvdbId || raw;
+          // La misma cifra puede ser de película o de serie: se acepta como
+          // id de TMDB y el llamador decide si le sirve.
+          else if ((name === 'tmdbMovie' || name === 'tmdbTv') && /^\d{1,9}$/.test(raw)) out.tmdbId = out.tmdbId || raw;
+          // P1476 es un monolingüe: { text, language }. Se prefiere el título
+          // en español, porque es el idioma del catálogo de estos sitios.
+          else if (name === 'title') {
+            var text = value && typeof value.text === 'string' ? value.text.trim() : '';
+            var language = value && typeof value.language === 'string' ? value.language : '';
+            if (text && text.length <= 160 && !out.title) out.title = text;
+            else if (text && text.length <= 160 && /^es/i.test(language) && !/^es/i.test(out.titleLang || '')) {
+              out.title = text;
+              out.titleLang = language;
+            }
+            if (/^es/i.test(language)) out.titleLang = language;
+          }
+          // P577 es la fecha de publicación: { time: '+2011-04-17T00:00:00Z' }.
+          else if (name === 'date' && value && typeof value.time === 'string') {
+            var year = parseInt(String(value.time).replace(/^[+-]/, '').slice(0, 4), 10);
+            if (year > 1800 && year < 2200) out.year = out.year || year;
+          }
+        }
+      }
+      delete out.titleLang;
+      return out.imdbId || out.tmdbId || out.tvdbId || out.title ? out : null;
+    }, function () { return null; });
+}
+
+function wikidataLookup(property, value) {
+  if (!Object.prototype.hasOwnProperty.call(WIKIDATA_PROPERTIES, String(property))) return Promise.resolve(null);
+  if (!/^\d{1,9}$/.test(String(value))) return Promise.resolve(null);
+  return wikidataEntitySearch(property, value).then(function (entity) {
+    return entity ? wikidataClaims(entity) : null;
+  }, function () { return null; });
 }
 
 /* -------------------------- Anime (sin clave) -------------------------- */
@@ -181,14 +242,42 @@ function resolveAnimeMedia(parsed) {
  * Punto único que usan los providers: convierte el ID ya normalizado en los
  * metadatos que necesitan las búsquedas, sea IMDb, TMDB, TVDB o anime.
  */
+/** Ficha mínima cuando Wikidata solo da el título (sin IMDb ni TMDB): esos
+ * sitios buscan por nombre, así que todavía se pueden encontrar enlaces. */
+function mediaFromWikidata(ids, parsed) {
+  var title = ids && ids.title ? String(ids.title).slice(0, 200) : '';
+  return {
+    id: contentIdLabel(parsed),
+    tmdbId: ids && ids.tmdbId || null,
+    imdbId: ids && ids.imdbId || null,
+    isTv: parsed.type === 'series',
+    season: parsed.season,
+    episode: parsed.episode,
+    title: title,
+    originalTitle: title,
+    year: ids && ids.year || null,
+    titles: title ? [title] : [],
+    seasons: []
+  };
+}
+
 function resolveRequestMedia(parsed) {
   if (!parsed) return Promise.resolve(null);
   if (parsed.anime) return resolveAnimeMedia(parsed);
   if (parsed.tvdbId) {
     return wikidataLookup('P4835', parsed.tvdbId).then(function (ids) {
-      var target = ids && (ids.imdbId || ids.tmdbId);
-      if (!target) return null;
-      return resolveMedia(target, 'series', parsed.season, parsed.episode);
+      if (!ids) return null;
+      var target = ids.imdbId || ids.tmdbId;
+      if (!target) return mediaFromWikidata(ids, parsed);
+      return resolveMedia(target, 'series', parsed.season, parsed.episode).then(function (info) {
+        // El título de la ficha sirve cuando IMDb/TMDB no responden.
+        if (info && !info.title && ids.title) {
+          info.title = String(ids.title).slice(0, 200);
+          info.titles = [info.title];
+          info.year = info.year || ids.year || null;
+        }
+        return info;
+      });
     });
   }
   return resolveMedia(contentIdLabel(parsed), parsed.type, parsed.season, parsed.episode);

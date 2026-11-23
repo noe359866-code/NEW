@@ -176,13 +176,17 @@ function fuegoEpisodes(html) {
 /** Reproductores de una ficha: iframes de /watch o de la propia página. */
 function fuegoPlayers(html, base) {
   var links = [];
+  var text = String(html || '');
+  // El idioma suele estar en el texto del propio botón o del contenedor:
+  // «Servidor 1 · Latino», «Audio: Castellano», «SUB», «Dual Audio».
+  var declared = languageLabel(stripTags(text).slice(0, 4000));
   var re = /<iframe\b[^>]*>/gi;
   var match;
-  while ((match = re.exec(String(html || ''))) && links.length < 20) {
+  while ((match = re.exec(text)) && links.length < 20) {
     var src = attrOf(match[0], 'src') || attrOf(match[0], 'data-src');
     var url = publicHttpUrl(src, base || FUEGO_BASE + '/');
     if (!url || isPlayerAdvertisement(url)) continue;
-    links.push({ url: url, name: playerName(url) });
+    links.push({ url: url, name: playerName(url), language: declared });
   }
   return uniqueBy(links, function (item) { return item.url; });
 }
@@ -237,12 +241,16 @@ function unlimplayStreams(id, referer, season, episode) {
     if (!embeds) return [];
     var out = [];
     var languages = Object.keys(embeds).slice(0, 6);
+    // Más de un idioma en el mismo título: el archivo es multi-audio.
+    var multi = languages.length > 1;
     for (var i = 0; i < languages.length; i++) {
       var language = languages[i];
       var entry = (embeds[language] && embeds[language].direct) || '';
       var media = playerMediaUrl(entry);
       if (!media) continue;
-      out.push({ url: media, name: 'Unlimplay', language: languageLabel(language) || language,
+      // `embeds` viene indexado por idioma: latino, castellano, subtitulado, english...
+      out.push({ url: media, name: 'Unlimplay',
+        language: languageLabel(language) || language || (multi ? 'Multi' : null),
         headers: { Referer: referer || 'https://unlimplay.com/', 'User-Agent': UA,
           Origin: 'https://unlimplay.com' } });
     }

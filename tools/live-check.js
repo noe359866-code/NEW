@@ -13,10 +13,12 @@ const ROOT = path.join(__dirname, '..');
 function parseArgs(argv) {
   const args = { type: 'movie', season: null, episode: null };
   const fields = new Set(['--site', '--type', '--id', '--season', '--episode', '--settings', '--title', '--year', '--season-counts']);
+  // --trace imprime cada petición real: sirve para ver dónde se corta una fuente.
   for (let i = 0; i < argv.length; i++) {
     const token = argv[i];
     if (token === '--all') args.all = true;
     else if (token === '--help' || token === '-h') args.help = true;
+    else if (token === '--trace') args.trace = true;
     else if (fields.has(token)) {
       if (!argv[i + 1] || argv[i + 1].startsWith('--')) throw new Error(`Falta el valor de ${token}`);
       const value = argv[++i];
@@ -56,6 +58,7 @@ function usage() {
 --title "Título"             simula los metadatos TMDB/IMDb, no el sitio
 --year 2014                  año para la simulación de metadatos
 --season-counts 12,10        episodios previos por temporada (con --title)
+--trace                      imprime cada petición real (para depurar una fuente)
 TMDB_API_KEY                 clave de TMDB; sin ella se intenta la web pública
 
 La herramienta analiza páginas y muestra enlaces hallados; no solicita ni
@@ -132,12 +135,18 @@ async function main(argv = process.argv.slice(2)) {
     const stats = { requests: 0, success: 0, failures: 0 };
     const networkFetch = async (url, init) => {
       stats.requests++;
+      const label = String(url).replace(/[?#].*$/, '').slice(0, 150);
       try {
         const response = await safeFetch(url, init);
         if (response.ok || (response.status >= 300 && response.status < 400)) stats.success++;
         else stats.failures++;
+        if (args.trace) console.log(`  · ${response.status} ${label}`);
         return response;
-      } catch (error) { stats.failures++; throw error; }
+      } catch (error) {
+        stats.failures++;
+        if (args.trace) console.log(`  · ERR ${label} (${error && error.message})`);
+        throw error;
+      }
     };
     const fetcher = args.title ? tmdbStubFetch(args.title, args.year, args.type, networkFetch, args.seasonCounts) : networkFetch;
     const provider = loadProvider(id, { settings: args.settings, fetcher, tmdbKey: args.title ? 'metadatos-simulados' : (process.env.TMDB_API_KEY || '') });

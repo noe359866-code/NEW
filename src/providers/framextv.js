@@ -98,10 +98,13 @@ function vidLanguage(source) {
 function vidGetStreams(tmdbId, mediaType, season, episode) {
   var conf = settings({ maxResults: '10' });
   return requestMedia(tmdbId, mediaType, season, episode).then(function (info) {
-    if (!info || !info.title) return [];
+    // La API de frameXTV solo necesita el id de TMDB; el título únicamente
+    // etiqueta el enlace. Si TMDB/Wikidata no dan el nombre se sigue igual.
+    if (!info) return [];
     if (info.isTv && (!Number.isInteger(info.season) || info.season < 1 ||
         !Number.isInteger(info.episode) || info.episode < 1)) return [];
     if (!info.tmdbId) return [];
+    var label = info.title || ('TMDB ' + info.tmdbId);
     var params = { type: info.isTv ? 'tv' : 'movie', id: info.tmdbId,
       season: info.season, episode: info.episode };
     return vidFindStreams(params).then(function (data) {
@@ -113,7 +116,7 @@ function vidGetStreams(tmdbId, mediaType, season, episode) {
         var url = directMediaUrl(source.url);
         if (!url) continue;
         var server = (source.provider && source.provider.name) || source.server || 'VidSync';
-        var title = info.title + (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
+        var title = label + (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
           ' · ' + server;
         streams.push(makeStream({ name: 'frameXTV', title: title, provider: 'framextv', url: url,
           quality: vidQuality(source), language: vidLanguage(source),

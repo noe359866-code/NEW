@@ -223,6 +223,241 @@ async function kdesa() {
   await probe('kdesa home', 'https://kdesa.stream/', LINKS);
 }
 
+/* ------------------- ronda 15: homecine / frikiserie / pelishax ------------------- */
+
+const MEDIA = [['hls/mp4', '\\.m3u8|\\.mp4'], ['iframes', '<iframe[^>]*>'],
+  ['players', 'player|embed|reproductor|servidor|server|data-']];
+
+async function homecine() {
+  await probe('homecine home', 'https://www3.homecine.to/', [['form', '<form[^>]*>'], ['search', 'name="s"|search'], ['links', 'href="[^"]*/cartelera']]);
+  await probe('homecine película', 'https://www3.homecine.to/pequenos-secretos', PLAYERS.concat(MEDIA));
+  await probe('homecine serie', 'https://www3.homecine.to/series/mouse', PLAYERS.concat(MEDIA));
+  for (const candidate of ['?s=mouse', 'search?q=mouse', 'buscar?q=mouse']) {
+    await probe('homecine búsqueda', 'https://www3.homecine.to/' + candidate, LINKS);
+  }
+}
+
+async function frikiserie() {
+  await probe('frikiserie home', 'https://www.frikiserie.com/', [['form', '<form[^>]*>'], ['links', 'href="[^"]*(?:lista-series|ver-serie)']]);
+  await probe('frikiserie serie', 'https://www.frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986', PLAYERS.concat(MEDIA));
+  await probe('frikiserie lista', 'https://www.frikiserie.com/lista-series/cool-mccool', PLAYERS.concat(MEDIA).concat(LINKS));
+  for (const candidate of ['buscar?q=marco', 'search?q=marco', '?s=marco']) {
+    await probe('frikiserie búsqueda', 'https://www.frikiserie.com/' + candidate, LINKS);
+  }
+}
+
+async function pelishax() {
+  await probe('pelishax película', 'https://pelishaxpro.com/movies/5084', PLAYERS.concat(MEDIA));
+  await probe('pelishax serie', 'https://pelishaxpro.com/series/575', PLAYERS.concat(MEDIA));
+  for (const candidate of ['/search?q=dune', '/buscar?q=dune', '/api/search?q=dune', '/search/dune']) {
+    await probe('pelishax búsqueda', 'https://pelishaxpro.com' + candidate, [['json', '.*']].concat(LINKS));
+  }
+  await probe('pelishax home', 'https://pelishaxpro.com/', [['form', '<form[^>]*>'], ['search', 'search|buscar']]);
+}
+
+/* Imprime los atributos que publican la URL del reproductor, que es lo que
+ * necesita el addon: sin un enlace directo o un iframe no hay nada que ofrecer. */
+/* Vuelca el JSON de estado de Angular (ng-state) de FrikiSeries: ahí viven los
+ * capítulos y la URL de cada reproductor. */
+async function frikiState() {
+  const url = 'https://www.frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986';
+  try {
+    const res = await fetchRaw(url);
+    const match = /<script id="ng-state" type="application\/json">([\s\S]*?)<\/script>/i.exec(res.body);
+    if (!match) { console.log('\n===== frikiserie ng-state\n(no encontrado)'); return; }
+    const raw = match[1].replace(/&quot;/g, '"');
+    console.log(`\n===== frikiserie ng-state bytes=${raw.length}`);
+    const keys = new Set((raw.match(/"[a-zA-Z_][a-zA-Z0-9_]{2,30}"\s*:/g) || []).map(k => k.replace(/[":\s]/g, '')));
+    console.log('claves: ' + Array.from(keys).slice(0, 80).join(', '));
+    for (const [label, pattern] of [
+      ['http(s) con player/embed', 'https?://[^"\\\s]{10,160}'],
+      ['capitulos/episodios', '"[^"]*(?:capitulo|episodio|episode|temporada|season)[^"]*"'],
+      ['campos link/url', '"(?:link|url|enlace|iframe|player|reproductor|embed)"[^,]{0,200}']
+    ]) {
+      const re = new RegExp(pattern, 'gi');
+      const seen = new Set();
+      let m;
+      console.log('--- ' + label + ':');
+      let shown = 0;
+      while ((m = re.exec(raw)) && shown < 25) {
+        const value = m[0].slice(0, 200);
+        if (seen.has(value)) continue;
+        seen.add(value);
+        console.log('   ' + value);
+        shown++;
+      }
+      if (!shown) console.log('   (sin coincidencias)');
+    }
+  } catch (error) {
+    console.log('\n===== frikiserie ng-state\nERROR ' + (error && error.message));
+  }
+}
+
+/* Ronda 16: API de las tres fuentes nuevas y resolución de sus reproductores. */
+async function round16() {
+  // FrikiSeries es Angular: los capítulos llegan por API, no en el HTML.
+  await probeSnippets('friki bundle', 'https://www.frikiserie.com/', [['js', 'src="[^"]+\\.js"']], 120);
+  for (const name of ['main-4BWVI3NJ.js', 'main.js', 'polyfills.js']) {
+    await probeSnippets('friki js ' + name, 'https://www.frikiserie.com/' + name,
+      [['api', 'https?://[a-z0-9.-]+/(?:api|v1)[a-zA-Z0-9/_-]*|/api/[a-zA-Z0-9/_-]+'], ['video', 'videoembed|ok\\.ru|"video"']], 200);
+  }
+  // HomeCine: el reproductor es fastream.to por pestaña de idioma.
+  await probe('homecine fastream', 'https://fastream.to/embed-zkfc7qenyh7k.html',
+    [['iframe/embed', 'iframe|data-src|data-url'], ['hls/mp4', '\\.m3u8|\\.mp4'], ['json', '"file"|"src"|"sources"']]);
+  await probeSnippets('homecine tabs', 'https://www3.homecine.to/pequenos-secretos',
+    [['tabs', '#tab\\d|[0-9]{3,4}p - [A-Za-z]+']], 200);
+  // PeliShax: página de episodio y búsqueda.
+  await probe('pelishax search dune', 'https://pelishaxpro.com/search?q=dune',
+    [['fichas', 'href="/movies/\\d+"|href="/series/\\d+"'], ['json', '"url"|"title"']]);
+  for (const candidate of ['/series/575/1/1', '/series/575/season/1', '/episode/575/1/1', '/series/575/1']) {
+    await probe('pelishax episodio', 'https://pelishaxpro.com' + candidate,
+      [['servers', 'server-item|data-link'], ['episodios', 'episode|capitulo|temporada']]);
+  }
+}
+
+/* Ronda 17: bundle real de FrikiSeries y detalle de episodios de PeliShax. */
+async function round17() {
+  await probeSnippets('friki main bundle', 'https://www.frikiserie.com/main-SNXQBTSJ.js',
+    [['api hosts', 'https?://[a-z0-9.-]+\\.[a-z]{2,}(?::\\d+)?/(?:api|v1|api/v1)[a-zA-Z0-9/_-]*'],
+      ['rutas api', '"/(?:api|v1)/[a-zA-Z0-9/_$\\{\\}-]+"'],
+      ['json fields', '(?:video|capitulo|episodio|iframe|link|url)\\s*[:=]']], 260);
+  // PeliShax: el listado de capítulos trae la URL real del episodio.
+  await probeSnippets('pelishax episodios', 'https://pelishaxpro.com/series/575/1/1',
+    [['episode-item', 'episode-item[\\s\\S]{0,400}'], ['links', 'href="/[a-z]+/[0-9/]+"']], 420);
+  await probeSnippets('homecine serie tabs', 'https://www3.homecine.to/series/mouse',
+    [['tabs', '#tab\\d|les-content|season'], ['episodios', '/episodios?/|episode|capitulo']], 240);
+}
+
+/* Ronda 18: confirmar el modelo final de las tres fuentes nuevas. */
+async function round18() {
+  // PeliShax: la ficha de episodio debe traer los mismos server-item.
+  await probe('pelishax tv episodio', 'https://pelishaxpro.com/tv/247718/1/1',
+    [['servers', 'server-item|data-link|data-lang'], ['fichas', 'href="/movies/\\d+"']]);
+  // HomeCine: episodio con su lista de pestañas de idioma.
+  await probe('homecine episodio', 'https://www3.homecine.to/episode/mouse-temporada-1-capitulo-1',
+    [['tabs', '#tab\\d|les-content'], ['iframes', '<IFRAME[^>]*>|<iframe[^>]*>'], ['hls/mp4', '\\.m3u8|\\.mp4']]);
+  // FrikiSeries: los capítulos viven en el estado de la ficha.
+  await probeSnippets('friki ficha estado', 'https://www.frikiserie.com/ver-serie/marco',
+    [['video', '"video"[^,]{0,200}'], ['capitulos', '"(?:capitulos|episodios|lista|videos)"[^[]{0,80}'],
+      ['okru', 'ok\\.ru[^"\\\s]{0,60}']], 300);
+  // ¿Se puede resolver un embed de OK.ru a un enlace directo?
+  await probe('okru embed', 'https://ok.ru/videoembed/14398744169198',
+    [['hls/mp4', '\\.m3u8|\\.mp4'], ['json', '"videoUrl"|"hlsMasterPlaylistUrl"|"metadata"']]);
+}
+
+/* Ronda 19: ¿qué publica el embed de OK.ru? FrikiSeries solo enlaza ese host. */
+async function round19() {
+  for (const id of ['14398744169198', '14600894483182']) {
+    await probeSnippets('okru ' + id, 'https://ok.ru/videoembed/' + id, [
+      ['mp4/m3u8', 'https?(?:%3A|:)?(?:%2F|/){2}[^"\\\s]{10,220}\\.(?:mp4|m3u8)[^"\\\s]{0,120}'],
+      ['metadata', '"metadata"|"videoUrl"|"videos"|"hls"|"playlist"'],
+      ['flashvars', 'flashvars|data-options|data-video|options='],
+      ['mp4 literal', '[a-z0-9_.-]+\\.(?:mp4|m3u8)']
+    ], 300);
+  }
+  // La API pública de VK/OK para un vídeo por id (si existe) evita el HTML.
+  for (const candidate of [
+    'https://ok.ru/dk?cmd=videoPlayerMetadata&mid=14398744169198',
+    'https://vk.com/video_ext.php?oid=&id=14398744169198'
+  ]) {
+    await probe('okru api', candidate, [['json', '.*'], ['mp4', '\\.mp4']]);
+  }
+}
+
+/* Ronda 20: ¿cómo responde el buscador de PeliShax y sus fichas por id? */
+async function round20() {
+  await probeSnippets('pelishax search', 'https://pelishaxpro.com/search?q=The+Dark+Knight', [
+    ['movies links', 'href="/movies/[0-9]+"[^>]*>'],
+    ['cards', 'movie-card|card-title|search-result|class="[^"]*item[^"]*"'],
+    ['total', 'result|Total|no se encontr'],
+    ['forms', '<form[^>]*>|name="q"']
+  ], 240);
+  await probe('pelishax movie 155', 'https://pelishaxpro.com/movies/155', [['title', '<title>[^<]*'], ['servers', 'server-item']]);
+  await probe('pelishax movie 155 ddg', 'https://pelishaxpro.com/movies/155/the-dark-knight', [['title', '<title>[^<]*'], ['servers', 'server-item']]);
+}
+
+/* Ronda 21: qué publican los hosts de PeliShax (StreamWish, Filemoon, VidHide)
+ * y si el embed de OK.ru es el que sí trae enlaces. */
+async function round21() {
+  await probeSnippets('streamwish embed', 'https://streamwish.to/e/6dz22bl4exq4', [
+    ['eval/packer', 'eval\\(function\\(p,a,c,k,e'], ['m3u8/mp4', '\\.m3u8|\\.mp4'],
+    ['sources', 'sources\\s*[:=]|file\\s*[:=]'], ['scripts', '<script[^>]*src="[^"]+"']
+  ], 260);
+  await probeSnippets('filemoon embed', 'https://filemoon.sx/e/d02q4wt2b80n', [
+    ['eval/packer', 'eval\\(function\\(p,a,c,k,e'], ['m3u8/mp4', '\\.m3u8|\\.mp4'],
+    ['sources', 'sources\\s*[:=]|file\\s*[:=]'], ['api', '\\/api\\/|\\/dl\\?']
+  ], 260);
+  await probeSnippets('vidhide embed', 'https://vidhidevip.com/v/7edm3v3ca7mf', [
+    ['eval/packer', 'eval\\(function\\(p,a,c,k,e'], ['m3u8/mp4', '\\.m3u8|\\.mp4'], ['sources', 'sources\\s*[:=]']
+  ], 260);
+  await probeSnippets('okru video page', 'https://ok.ru/video/7652106504857', [
+    ['m3u8', 'video\\.m3u8|\\.mp4'], ['videoembed link', 'videoembed/[0-9]+']
+  ], 200);
+}
+
+/* Ronda 22: StreamWish por su API interna y el packer de VidHide ya descomprimido. */
+async function round22() {
+  await probeSnippets('streamwish main.js', 'https://streamwish.to/main.js?v=1.1.9',
+    [['api', '\\/dl\\?[^"\'`]{0,80}|op=embed|file_code'], ['fetch', 'fetch\\([^)]{0,120}'], ['eval', 'eval\\(|atob\\(']], 220);
+  for (const u of ['https://streamwish.to/dl?op=embed&file_code=6dz22bl4exq4&referer=',
+                   'https://streamwish.to/dl?op=view&file_code=6dz22bl4exq4']) {
+    await probeSnippets('streamwish dl', u, [['m3u8/mp4', '\\.m3u8|\\.mp4'], ['packer', 'eval\\(function\\(p,a,c,k,e']], 300);
+  }
+  await probeSnippets('vidhide packed', 'https://vidhidevip.com/v/7edm3v3ca7mf',
+    [['url en tabla', 'https?[^"\'\\s]{0,120}\\.(?:m3u8|mp4)'], ['file', 'm3u8|master\\.']], 400);
+}
+
+/* Ronda 23: usar el descompresor real del addon sobre los hosts con packer. */
+function loadUnpacker() {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const vm = require('node:vm');
+  const file = fs.readFileSync(path.join(__dirname, '..', 'src', 'core', '70-direct.js'), 'utf8');
+  const pick = (name) => {
+    const start = file.indexOf('function ' + name + '(');
+    if (start === -1) return '';
+    let depth = 0, i = file.indexOf('{', start);
+    for (let j = i; j < file.length; j++) {
+      if (file[j] === '{') depth++;
+      else if (file[j] === '}') { depth--; if (!depth) return file.slice(start, j + 1); }
+    }
+    return '';
+  };
+  const sandbox = { console, URL, decodeURIComponent, String, RegExp };
+  sandbox.globalThis = sandbox;
+  vm.createContext(sandbox);
+  vm.runInContext(pick('unescapePlayerText') + '\n' + pick('unpackPlayerScript'), sandbox);
+  return sandbox.unpackPlayerScript;
+}
+
+async function round23() {
+  const unpack = loadUnpacker();
+  for (const url of ['https://vidhidevip.com/v/7edm3v3ca7mf', 'https://filemoon.sx/e/d02q4wt2b80n',
+    'https://streamwish.to/e/6dz22bl4exq4', 'https://vidara.to/e/x']) {
+    const res = await fetchRaw(url);
+    const out = unpack(res.text || '') || '';
+    console.log('===== unpack ' + url);
+    console.log('status=' + res.status + ' bytes=' + (res.text || '').length + ' descomprimido=' + out.length);
+    const media = out.match(/https?:[^"'\\s]{10,220}\.(?:m3u8|mp4)[^"'\\s]{0,120}/g) || [];
+    console.log('--- media:\n' + (media.length ? media.slice(0, 6).map((u) => '   ' + u).join('\n') : '   (sin coincidencias)'));
+    console.log('--- muestra:\n' + out.slice(0, 700).replace(/\n/g, ' '));
+  }
+}
+
+async function playersRaw() {
+  const targets = [
+    ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
+    ['frikiserie serie', 'https://www.frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986'],
+    ['pelishax película', 'https://pelishaxpro.com/movies/5084']
+  ];
+  for (const [name, url] of targets) {
+    await probeSnippets(name + ' data-*', url,
+      [['data', 'data-[a-z-]+="[^"]{4,200}"'], ['iframe', '<iframe[^>]{0,300}'],
+        ['video', '<video[^>]{0,200}|<source[^>]{0,200}'], ['m3u8', 'm3u8|\\.mp4'],
+        ['onclick', 'onclick="[^"]{4,200}"']], 300);
+  }
+}
+
 async function main() {
   const only = (process.argv[2] || 'all').toLowerCase();
   if (only === 'all' || only === 'fuegocine') await fuegocine();
@@ -242,6 +477,19 @@ async function main() {
   if (only === 'all' || only === 'round13') await round13();
   if (only === 'all' || only === 'round14') await round14();
   if (only === 'all' || only === 'kdesa') await kdesa();
+  if (only === 'all' || only === 'homecine') await homecine();
+  if (only === 'all' || only === 'frikiserie') await frikiserie();
+  if (only === 'all' || only === 'pelishax') await pelishax();
+  if (only === 'all' || only === 'players') await playersRaw();
+  if (only === 'all' || only === 'friki-state') await frikiState();
+  if (only === 'all' || only === 'round16') await round16();
+  if (only === 'all' || only === 'round17') await round17();
+  if (only === 'all' || only === 'round18') await round18();
+  if (only === 'all' || only === 'round19') await round19();
+  if (only === 'all' || only === 'round20') await round20();
+  if (only === 'all' || only === 'round21') await round21();
+  if (only === 'all' || only === 'round22') await round22();
+  if (only === 'all' || only === 'round23') await round23();
 }
 
 if (require.main === module) {

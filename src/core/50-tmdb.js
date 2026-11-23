@@ -209,9 +209,8 @@ function resolveFromWeb(id, mediaType) {
     }, function () { return null; });
   }
 
-  function fromWikidata() {
+  function fromWikidata(property) {
     // Wikidata solo aporta IDs; el título sale de IMDb o de TVMaze.
-    var property = type === 'tv' ? 'P4983' : 'P4947';
     if (typeof wikidataLookup !== 'function') return Promise.resolve(null);
     return Promise.resolve(wikidataLookup(property, id)).then(function (ids) {
       if (!ids) return null;
@@ -223,9 +222,13 @@ function resolveFromWeb(id, mediaType) {
       if (ids.tvdbId) {
         return getJson('https://api.tvmaze.com/lookup/shows?thetvdb=' + ids.tvdbId, { timeout: 8000, retries: 0 })
           .then(function (show) {
-            return show && show.name ? webResult(id, type, String(show.name).slice(0, 200), parseYear(show.premiered || ''), null) : null;
+            if (show && show.name) return webResult(id, type, String(show.name).slice(0, 200), parseYear(show.premiered || ''), null);
+            return ids.title ? webResult(id, type, String(ids.title).slice(0, 200), ids.year || null, null) : null;
           }, function () { return null; });
       }
+      // Sin IMDb ni TVMaze queda el título original de la ficha, que es el
+      // que usan estos sitios cuando la clave de TMDB no está configurada.
+      if (ids.title) return webResult(id, type, String(ids.title).slice(0, 200), ids.year || null, null);
       return null;
     }, function () { return null; });
   }
@@ -237,7 +240,14 @@ function resolveFromWeb(id, mediaType) {
       return null;
     });
   }).then(function () {
-    return found || fromWikidata();
+    if (found) return found;
+    // La misma cifra puede estar declarada como película o como serie; se
+    // prueban las dos propiedades porque el tipo del cliente no siempre
+    // coincide con el de Wikidata (Nuvio llama «tv» a series de TMDB).
+    var properties = type === 'tv' ? ['P4983', 'P4947'] : ['P4947', 'P4983'];
+    return fromWikidata(properties[0]).then(function (result) {
+      return result || fromWikidata(properties[1]);
+    });
   });
 }
 

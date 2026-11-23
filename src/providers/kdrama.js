@@ -34,7 +34,11 @@ function kdServers(html, base) {
   while ((match = re.exec(String(html || ''))) && out.length < 30) {
     var url = publicHttpUrl(match[2], base || KD_BASE + '/');
     if (!url || isPlayerAdvertisement(url)) continue;
-    out.push({ url: url, name: kdServerName(match[1]), kind: match[1] });
+    // El botón incluye su etiqueta visible (idioma y calidad) en el HTML;
+    // `switchServer` solo trae el id, así que se busca el texto del botón.
+    var label = kdButtonLabel(html, match[1]);
+    out.push({ url: url, name: kdServerName(match[1]), kind: match[1],
+      language: kdServerLanguage(label), label: label });
   }
   if (!out.length) {
     // Sin botones, al menos el iframe principal.
@@ -44,6 +48,26 @@ function kdServers(html, base) {
     if (url && !isPlayerAdvertisement(url)) out.push({ url: url, name: 'KatDrama' });
   }
   return uniqueBy(out, function (item) { return item.url; });
+}
+
+/** Texto visible del botón que lanza `switchServer('<id>', ...)`. */
+function kdButtonLabel(html, id) {
+  var text = String(html || '');
+  var escaped = String(id || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  var re = new RegExp("<button\\b[^>]*switchServer\\(\\s*'" + escaped + "'[\\s\\S]{0,400}?</button>", 'i');
+  var match = re.exec(text);
+  if (match) return stripTags(match[0]).replace(/\s+/g, ' ').trim();
+  return '';
+}
+
+/** Idioma del servidor: KatDrama etiqueta sus botones «Kat 1 - Hindi»,
+ * «Kat 2 - English», «Kat 3 - Original», «Aurora - English subtitles». */
+function kdServerLanguage(text) {
+  var label = languageLabel(text);
+  if (label) return label;
+  // «Original» en este sitio es el audio original con subtítulos en inglés.
+  if (/\boriginal\b/i.test(String(text || ''))) return 'Original Subtitulado';
+  return null;
 }
 
 function kdServerName(id) {
@@ -62,10 +86,15 @@ function kdServerName(id) {
 function kdGetStreams(tmdbId, mediaType, season, episode) {
   var conf = settings({ maxResults: '8' });
   return requestMedia(tmdbId, mediaType, season, episode).then(function (info) {
-    if (!info || !info.title) return [];
+    // Este sitio identifica cada ficha por el id de TMDB: el título solo se usa
+    // para etiquetar el enlace. Sin título resuelto (TMDB bloquea al servidor y
+    // Wikidata puede no tener la ficha) se sigue igualmente, porque la URL no
+    // depende de él.
+    if (!info) return [];
     if (info.isTv && (!Number.isInteger(info.season) || info.season < 1 ||
         !Number.isInteger(info.episode) || info.episode < 1)) return [];
     if (!info.tmdbId) return [];
+    var label = info.title || ('TMDB ' + info.tmdbId);
     var watch = kdWatchUrl(info.tmdbId, info.isTv, info.season, info.episode);
     return getText(watch, { timeout: 15000, retries: 1 }).then(function (html) {
       var servers = kdServers(html, watch);
@@ -75,10 +104,14 @@ function kdGetStreams(tmdbId, mediaType, season, episode) {
       var streams = [];
       for (var i = 0; i < (items || []).length; i++) {
         var item = items[i];
-        var title = info.title + (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
-          (item.name ? ' · ' + item.name : '');
+        // El botón del sitio suele resumir idioma y calidad («Kat 1 - Hindi1080p»).
+        var title = label + (info.isTv ? ' · ' + seasonEpisodeLabel(info.season, info.episode) : '') +
+          (item.name ? ' · ' + item.name : '') +
+          (item.label && item.label !== item.name ? ' · ' + item.label : '');
         streams.push(makeStream({ name: 'KatDrama', title: title, provider: 'k-drama', url: item.url,
-          quality: parseQuality(title + ' ' + item.url), language: item.language || languageLabel(title),
+          quality: parseQuality(title + ' ' + item.url + ' ' + (item.label || '')),
+          // El idioma del botón del sitio manda; si no lo declara, se deduce del título.
+          language: languageLabel(item.language) || languageLabel(item.label || '') || languageLabel(title),
           headers: item.headers, subtitles: item.subtitles }));
       }
       return finalizeStreams('KatDrama', streams, { max: conf.maxResults });
