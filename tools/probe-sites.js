@@ -345,6 +345,25 @@ async function round18() {
     [['hls/mp4', '\\.m3u8|\\.mp4'], ['json', '"videoUrl"|"hlsMasterPlaylistUrl"|"metadata"']]);
 }
 
+/* Ronda 19: ¿qué publica el embed de OK.ru? FrikiSeries solo enlaza ese host. */
+async function round19() {
+  for (const id of ['14398744169198', '14600894483182']) {
+    await probeSnippets('okru ' + id, 'https://ok.ru/videoembed/' + id, [
+      ['mp4/m3u8', 'https?(?:%3A|:)?(?:%2F|/){2}[^"\\\s]{10,220}\\.(?:mp4|m3u8)[^"\\\s]{0,120}'],
+      ['metadata', '"metadata"|"videoUrl"|"videos"|"hls"|"playlist"'],
+      ['flashvars', 'flashvars|data-options|data-video|options='],
+      ['mp4 literal', '[a-z0-9_.-]+\\.(?:mp4|m3u8)']
+    ], 300);
+  }
+  // La API pública de VK/OK para un vídeo por id (si existe) evita el HTML.
+  for (const candidate of [
+    'https://ok.ru/dk?cmd=videoPlayerMetadata&mid=14398744169198',
+    'https://vk.com/video_ext.php?oid=&id=14398744169198'
+  ]) {
+    await probe('okru api', candidate, [['json', '.*'], ['mp4', '\\.mp4']]);
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -386,6 +405,7 @@ async function main() {
   if (only === 'all' || only === 'round16') await round16();
   if (only === 'all' || only === 'round17') await round17();
   if (only === 'all' || only === 'round18') await round18();
+  if (only === 'all' || only === 'round19') await round19();
 }
 
 if (require.main === module) {
