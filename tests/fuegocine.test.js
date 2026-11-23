@@ -5,7 +5,11 @@ const { loadProvider, mockFetch } = require('../tests/utils');
 
 const MOVIE = [
   ['v3-cinemeta.strem.io/meta/movie/tt0000001.json', { __json: { meta: { type: 'movie', name: 'La Odisea', year: '2026' } } }],
-  ['fuegocine.com/search?s=', '<p>Sin resultados</p>'],
+  // El buscador de /search del sitio responde 500: se usa /search_elastic.
+  ['fuegocine.com/search_elastic?s=', [
+    '<div class="search-item"><a href="https://fuegocine.com/movies/details/otra-pelicula/100">',
+    '<img src="https://media.themoviedb.org/x.jpg" alt="Otra Película" title="Otra Película"></a></div>'
+  ].join('')],
   [/(?:fuegocine\.com\/movies|fuegocine\.com\/movies\?page=\d)$/, [
     '<div class="item"><a href="https://fuegocine.com/movies/details/otra-pelicula/100" title="Otra Película">',
     '<a href="/movies/details/la-odisea/227" title="La Odisea"><img src="https://image.tmdb.org/x.jpg"></a>'
@@ -64,4 +68,21 @@ test('FuegoCine: sin episodio válido no pide nada', async () => {
   ]);
   const streams = await loadProvider('fuegocine', { fetch, tmdbKey: '' }).getStreams('tt0000002', 'series');
   assert.equal(streams.length, 0);
+});
+
+test('FuegoCine: usa /search_elastic y descarta las sugerencias de otro tipo', async () => {
+  const fetch = mockFetch([
+    ['v3-cinemeta.strem.io/meta/movie/tt0000003.json', { __json: { meta: { type: 'movie', name: 'Akira', year: '1988' } } }],
+    ['fuegocine.com/search_elastic?s=', [
+      '<a href="https://fuegocine.com/shows/details/akira-serie/900"><img alt="Akira" title="Akira"></a>',
+      '<a href="https://fuegocine.com/movies/details/akira/901"><img alt="Akira" title="Akira"></a>'
+    ].join('')],
+    [/fuegocine\.com\/movies\/watch\/akira\/901/, '<iframe src="https://videro.my/e/akira1"></iframe>'],
+    ['videro.my/e/akira1', '<script>src="https://cdn.example/akira.mp4"</script>']
+  ]);
+  const streams = await loadProvider('fuegocine', { fetch, tmdbKey: '' }).getStreams('tt0000003', 'movie');
+  assert.equal(streams.length, 1, JSON.stringify(streams.map(s => s.url)));
+  assert.equal(streams[0].url, 'https://cdn.example/akira.mp4');
+  assert.ok(!fetch.calls.some(c => c.url.includes('/shows/details/akira-serie')), 'no abre la serie homónima');
+  assert.ok(!fetch.calls.some(c => c.url.includes('/search?s=')), 'no insiste con el buscador roto');
 });

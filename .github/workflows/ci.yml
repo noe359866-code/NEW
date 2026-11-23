@@ -65,6 +65,7 @@ jobs:
         run: |
           {
             node tools/live-check.js --site fuegocine --id 1368337 --type movie --title "La Odisea" --year 2026 || true
+            node tools/live-check.js --site fuegocine --id 1368337 --type movie --title "Odisea" --year 1997 || true
             node tools/live-check.js --site fuegocine --id 776503 --type tv --season 1 --episode 2 --title "VisionQuest" --year 2025 --season-counts 8 || true
             node tools/live-check.js --site tioanime --id 16498 --type tv --season 1 --episode 1 --title "Shingeki no Kyojin" --year 2013 --season-counts 25 || true
           } > live.txt 2>&1

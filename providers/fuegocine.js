@@ -1969,6 +1969,11 @@ function fuegoCards(html) {
       var tail = String(html || '').slice(match.index, match.index + 600);
       var heading = /<(?:h[1-4]|h5)\b[^>]*>([\s\S]{1,160}?)<\/(?:h[1-4]|h5)>/i.exec(tail);
       title = heading ? stripTags(heading[1]) : '';
+      if (!title) {
+        // /search_elastic solo publica <img alt="Título"> dentro del enlace.
+        var image = /<img\b[^>]*>/i.exec(tail);
+        title = image ? (attrOf(image[0], 'alt') || attrOf(image[0], 'title')) : '';
+      }
     }
     title = String(title || '').trim();
     if (!title || title.length > 200) continue;
@@ -1993,17 +1998,22 @@ function fuegoScore(card, info) {
   return score;
 }
 
-/** Busca por título: primero /search?s= (puede estar caído) y luego el
- * catálogo paginado de películas o series hasta encontrar coincidencias. */
+/** Busca por título en el endpoint del cuadro de búsqueda del sitio
+ * (/search_elastic, el que usa showSuggestions) y, si no responde, en el
+ * catálogo paginado. Las sugerencias solo traen imagen, así que el título del
+ * enlace se completa con el alt de la imagen. */
 function fuegoSearch(info) {
   var section = info.isTv ? 'shows' : 'movies';
-  var queries = searchQueries(info).slice(0, 2);
+  var queries = searchQueries(info).slice(0, 3);
   var found = [];
 
-  function collect(cards) {
+  function collect(html) {
+    var cards = fuegoCards(html);
     for (var i = 0; i < cards.length; i++) {
       var card = cards[i];
       if (card.kind !== section) continue;
+      // Nunca se acepta una ficha por venir de una sugerencia: el título tiene
+      // que coincidir, o se acabaría devolviendo el medio equivocado.
       var score = fuegoScore(card, info);
       if (score < 0.78) continue;
       card.score = score;
@@ -2011,32 +2021,30 @@ function fuegoSearch(info) {
     }
   }
 
-  function pages() {
-    var page = 1;
-    function next() {
-      if (page > 3 || found.some(function (item) { return item.score >= 0.95; })) return Promise.resolve();
-      var url = FUEGO_BASE + '/' + section + (page === 1 ? '' : '?page=' + page);
-      page++;
-      return getText(url, { timeout: 8000, retries: 0 }).then(function (html) {
-        var before = found.length;
-        collect(fuegoCards(html));
-        // Sin coincidencias nuevas en las dos primeras páginas se para.
-        if (before === found.length && page > 3) return;
-        return next();
-      }, function () { return null; });
-    }
-    return next();
+  function suggest(index) {
+    if (index >= queries.length) return Promise.resolve(false);
+    return getText(FUEGO_BASE + '/search_elastic?s=' + encodeURIComponent(queries[index]),
+      { timeout: 8000, retries: 0 }).then(function (html) {
+        if (!html || !/details\//.test(html)) return suggest(index + 1);
+        collect(html);
+        return found.length > 0 || suggest(index + 1);
+      }, function () { return suggest(index + 1); });
   }
 
-  var first = !queries.length ? Promise.resolve() : getText(
-    FUEGO_BASE + '/search?s=' + encodeURIComponent(queries[0]), { timeout: 8000, retries: 0 })
-    .then(function (html) {
-      if (!html) return null;
-      collect(fuegoCards(html));
-      return null;
-    }, function () { return null; });
+  function pages(page, empty) {
+    if (page > 4) return Promise.resolve();
+    return getText(FUEGO_BASE + '/' + section + (page === 1 ? '' : '?page=' + page),
+      { timeout: 8000, retries: 0 }).then(function (html) {
+        var before = found.length;
+        collect(html);
+        // Dos páginas seguidas sin coincidencias: el título no está en el catálogo reciente.
+        var blank = found.length === before ? empty + 1 : 0;
+        if (blank >= 2 || found.some(function (item) { return item.score >= 0.95; })) return;
+        return pages(page + 1, blank);
+      }, function () { return page <= 2 ? pages(page + 1, empty) : null; });
+  }
 
-  return first.then(pages).then(function () {
+  return suggest(0).then(function () { return pages(1, 0); }).then(function () {
     return uniqueBy(found, function (item) { return item.url; })
       .sort(function (a, b) { return b.score - a.score; });
   });
