@@ -13,7 +13,9 @@ function loadProvider(id, options = {}) {
   const sandbox = {
     module, exports: module.exports,
     console: options.quiet === false ? console : { log() {}, info() {}, warn() {}, error() {} },
-    fetch: options.fetch, TMDB_API_KEY: options.tmdbKey || 'test-key',
+    fetch: options.fetch,
+    // Por defecto se emula Nuvio con clave; `tmdbKey: ''` la desactiva del todo.
+    TMDB_API_KEY: 'tmdbKey' in options ? options.tmdbKey : 'test-key',
     SCRAPER_SETTINGS: options.settings || {},
     require: name => {
       if (name === 'crypto-js') return require('crypto-js');

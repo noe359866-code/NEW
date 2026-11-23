@@ -1166,6 +1166,47 @@ function wikidataLookup(property, value) {
   }, function () { return null; });
 }
 
+/* Títulos localizados de una ficha IMDb (labels y aliases de Wikidata).
+ * Cinemeta solo publica el título internacional ("Money Heist") y los sitios
+ * hispanos catalogan el suyo ("La casa de papel"): sin la clave de TMDB esta
+ * es la única fuente de títulos en español para los IDs tt… que envía
+ * Stremio. Se pide es|en y el español se coloca primero porque es el idioma
+ * del catálogo de estas fuentes. */
+function wikidataTitlesByImdb(imdbId) {
+  var id = /^tt\d{5,12}$/i.test(String(imdbId || '')) ? String(imdbId).toLowerCase() : '';
+  if (!id) return Promise.resolve(null);
+  return wikidataEntitySearch('P345', id).then(function (entity) {
+    if (!entity) return null;
+    var url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=' + entity +
+      '&props=labels|aliases&languages=es|en&format=json';
+    return getJson(url, { timeout: 8000, retries: 0, headers: { Accept: 'application/json' } })
+      .then(function (data) {
+        var record = data && data.entities && data.entities[entity];
+        var labels = record && record.labels;
+        var aliases = record && record.aliases;
+        var titles = [];
+        var esTitle = '';
+        function take(language, value) {
+          var text = typeof value === 'string' ? value.trim() : '';
+          if (!text || text.length > 160 || /[\x00-\x1f\x7f]/.test(text)) return;
+          if (language === 'es' && !esTitle) esTitle = text;
+          if (titles.indexOf(text) === -1 && titles.length < 8) titles.push(text);
+        }
+        // El label en español primero y después los alias: los buscadores
+        // prueban las variantes por este orden.
+        if (labels && labels.es) take('es', labels.es.value);
+        if (aliases && Array.isArray(aliases.es)) {
+          for (var i = 0; i < aliases.es.length; i++) take('es', aliases.es[i] && aliases.es[i].value);
+        }
+        if (labels && labels.en) take('en', labels.en.value);
+        if (aliases && Array.isArray(aliases.en)) {
+          for (var j = 0; j < aliases.en.length; j++) take('en', aliases.en[j] && aliases.en[j].value);
+        }
+        return titles.length ? { titles: titles, esTitle: esTitle } : null;
+      }, function () { return null; });
+  }, function () { return null; });
+}
+
 /* -------------------------- Anime (sin clave) -------------------------- */
 
 /* ani.zip reúne los IDs de cada anime (Kitsu, MAL, AniList, AniDB), sus
@@ -1340,7 +1381,9 @@ function cinemetaRequest(id, type) {
         isTv: meta.type === 'series',
         title: meta.name || meta.original_name || '',
         originalTitle: meta.original_name || meta.name || '',
-        year: meta.year ? parseInt(String(meta.year).slice(0, 4), 10) : null,
+        // Las series de Cinemeta no siempre traen `year`: el año sale de
+        // `releaseInfo` («2017–2021») para las búsquedas «título año».
+        year: meta.year ? parseInt(String(meta.year).slice(0, 4), 10) : parseYear(meta.releaseInfo || ''),
         titles: [meta.name, meta.original_name].filter(Boolean)
       };
     }, function () { return null; });
@@ -1368,11 +1411,47 @@ function imdbSlugTitle(id) {
   }, function () { return null; });
 }
 
+/**
+ * Cinemeta devuelve el título internacional ("Money Heist") y los sitios
+ * hispanos catalogan el suyo ("La casa de papel"). Con `TMDB_API_KEY` los
+ * títulos localizados salen de la API de TMDB; sin clave se piden a Wikidata,
+ * que sí responde a las IP de los servidores. El título en español se coloca
+ * primero: los buscadores de las fuentes prueban `title` antes que el resto
+ * y es el nombre que ve el cliente en las etiquetas.
+ */
+function withWikidataTitles(meta, imdbId, isTv) {
+  return wikidataTitlesByImdb(imdbId).then(function (found) {
+    if (!found) return meta;
+    if (!meta || !meta.title) {
+      return {
+        tmdbId: null,
+        imdbId: imdbId,
+        isTv: isTv,
+        title: found.esTitle || found.titles[0],
+        originalTitle: meta && meta.originalTitle || found.titles[found.titles.length - 1] || '',
+        year: meta && meta.year || null,
+        titles: found.titles,
+        seasons: meta && meta.seasons || []
+      };
+    }
+    var merged = found.titles.slice();
+    var known = meta.titles && meta.titles.length ? meta.titles : [meta.title, meta.originalTitle];
+    for (var i = 0; i < known.length; i++) {
+      if (known[i] && merged.indexOf(known[i]) === -1) merged.push(known[i]);
+    }
+    meta.titles = merged;
+    if (found.esTitle) meta.title = found.esTitle;
+    return meta;
+  }, function () { return meta; });
+}
+
 function resolveImdb(id, isTv) {
   var type = isTv ? 'series' : 'movie';
   return cinemetaRequest(id, type).then(function (meta) {
     if (meta && meta.title) return meta;
     return imdbSlugTitle(id);
+  }).then(function (meta) {
+    return withWikidataTitles(meta, id, isTv);
   });
 }
 

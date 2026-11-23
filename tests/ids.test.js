@@ -66,6 +66,34 @@ test('tipo "anime" se trata como serie en los metadatos', async () => {
   assert.equal(info.episode, 1);
 });
 
+test('sin TMDB_API_KEY, un ID IMDb se busca en las fuentes con el título en español de Wikidata', async () => {
+  const fetch = mockFetch([
+    ['v3-cinemeta.strem.io/meta/series/tt6468322.json', { __json: { meta: { type: 'series', name: 'Money Heist', year: '2017' } } }],
+    ['api.themoviedb.org', { __response: { status: 403 } }],
+    ['www.wikidata.org/w/api.php?action=query&list=search', { __json: { query: { search: [{ title: 'Q29647346' }] } } }],
+    ['www.wikidata.org/w/api.php?action=wbgetentities', { __json: { entities: { Q29647346: {
+      labels: { es: { value: 'La casa de papel' }, en: { value: 'Money Heist' } },
+      aliases: { es: [{ value: 'Casa de papel' }] } } } } }],
+    ['homecine.to/?s=', url => {
+      const query = new URL(url).searchParams.get('s');
+      return query === 'La casa de papel'
+        ? '<a href="/series/la-casa-de-papel"><h2>La casa de papel</h2></a>'
+        : '<p>Sin resultados</p>';
+    }],
+    ['homecine.to/series/la-casa-de-papel', '<a href="/episode/la-casa-de-papel-temporada-1-capitulo-1">Episodio 1</a>'],
+    ['homecine.to/episode/la-casa-de-papel-temporada-1-capitulo-1', '']
+  ]);
+  const provider = loadProvider('homecine', { fetch, tmdbKey: '' });
+  const info = await provider.resolveMeta('tt6468322', 'series', 1, 1);
+  assert.equal(info.title, 'La casa de papel', 'el título localizado llega a la fuente');
+  await provider.getStreams('tt6468322', 'series', 1, 1);
+  const searched = fetch.calls
+    .filter(call => /homecine\.to\/\?s=/.test(call.url))
+    .map(call => new URL(call.url).searchParams.get('s'));
+  assert.ok(searched.includes('La casa de papel'),
+    'la fuente prueba el título en español, no solo el internacional: ' + searched.join(', '));
+});
+
 test('un ID TheTVDB se traduce con Wikidata a IMDb/TMDB antes de buscar', async () => {
   const fetch = mockFetch([
     ...wikidataRoutes('Q23572', { imdb: 'tt0944947', tmdb: '1399', tvdb: '121361' }),

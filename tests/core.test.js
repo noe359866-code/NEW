@@ -181,6 +181,49 @@ test('Cinemeta aporta el id de TMDB cuando el metadato lo incluye', async () => 
   assert.equal(media.isTv, true);
 });
 
+test('sin TMDB_API_KEY, los IDs IMDb se localizan en español con Wikidata', async () => {
+  const fetch = mockFetch([
+    ['v3-cinemeta.strem.io/meta/series/tt6468322.json', { __json: { meta: {
+      type: 'series', name: 'Money Heist', releaseInfo: '2017–2021' } } }],
+    ['api.themoviedb.org', { __response: { status: 403 } }],
+    ['www.wikidata.org/w/api.php?action=query&list=search', { __json: {
+      query: { search: [{ title: 'Q29647346' }] } } }],
+    ['www.wikidata.org/w/api.php?action=wbgetentities', { __json: { entities: { Q29647346: {
+      labels: { en: { value: 'Money Heist' }, es: { value: 'La casa de papel' } },
+      aliases: { es: [{ value: 'Casa de papel' }], en: [{ value: 'La casa de papel' }] }
+    } } } }]
+  ]);
+  const previous = globalThis.fetch;
+  globalThis.fetch = fetch;
+  let media;
+  try {
+    media = await core.resolveMedia('tt6468322', 'series', 1, 1);
+  } finally { globalThis.fetch = previous; }
+  // El título en español primero: los buscadores de las fuentes prueban este.
+  assert.equal(media.title, 'La casa de papel');
+  assert.deepEqual(core.searchQueries(media).slice(0, 3),
+    ['La casa de papel', 'Money Heist', 'Casa de papel']);
+  assert.equal(media.year, 2017, 'el año sale de releaseInfo cuando Cinemeta no lo trae');
+  assert.ok(media.titles.includes('Money Heist'), 'conserva el título internacional');
+});
+
+test('sin Wikidata ni TMDB, el título de Cinemeta sigue siendo válido', async () => {
+  const fetch = mockFetch([
+    ['v3-cinemeta.strem.io/meta/movie/tt0245429.json', { __json: { meta: {
+      type: 'movie', name: 'Spirited Away', year: '2003' } } }],
+    ['www.wikidata.org/w/api.php', { __response: { status: 503 } }],
+    ['api.themoviedb.org', { __response: { status: 403 } }]
+  ]);
+  const previous = globalThis.fetch;
+  globalThis.fetch = fetch;
+  let media;
+  try {
+    media = await core.resolveMedia('tt0245429', 'movie');
+  } finally { globalThis.fetch = previous; }
+  assert.equal(media.title, 'Spirited Away');
+  assert.equal(media.year, 2003);
+});
+
 test('idiomas: cada web se etiqueta como Multi, Latino, Castellano, Inglés o Subtitulado', () => {
   const core = require('./.build/core.cjs');
   const expected = {
