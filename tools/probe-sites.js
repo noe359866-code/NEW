@@ -59,6 +59,14 @@ async function main() {
     await probe('pelis24 search', 'https://ww1.pelis24.blog/search?q=interstellar', playerPatterns);
     await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
   }
+  if (only === 'all' || only === 'fuegocine11') {
+    // Catálogo: cómo se llama el sitio a los títulos populares (para el matcher).
+    for (const page of [1, 2, 3]) {
+      await probe('fc catálogo', 'https://fuegocine.com/movies?page=' + page,
+        [['fichas', 'details/.*title=|details/']]);
+    }
+    await probe('fc catálogo series', 'https://fuegocine.com/shows?page=1', [['fichas', 'details/']]);
+  }
   if (only === 'all' || only === 'fuegocine10') {
     for (const q of ['interstellar', 'interestelar', 'shingeki', 'breaking%20bad', 'dune']) {
       await probe('fc excelastic ' + q, 'https://fuegocine.com/search_elastic?s=' + q,
