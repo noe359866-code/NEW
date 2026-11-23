@@ -112,7 +112,7 @@ function homecineTabs(html) {
     var before = text.slice(Math.max(0, match.index - 1200), match.index);
     var names = before.match(/<strong[^>]*>([\s\S]{0,80}?)<\/strong>/gi) || [];
     var server = names.length ? stripTags(names[names.length - 1]).replace(/\s+/g, ' ').trim() : 'Server';
-    tabs.push({ id: match[1], server: server || 'Server', label: label,
+    tabs.push({ id: match[1], server: server || 'Server', label: label, position: match.index,
       quality: parseQuality(label), language: languageLabel(label) });
   }
   return tabs;
@@ -140,8 +140,18 @@ function homecineTabLinks(html) {
   var tabs = homecineTabs(html);
   var frames = homecineIframes(html);
   var links = [];
+  // Si hay una pestaña por reproductor, el orden es la correspondencia. Cuando
+  // el sitio repite un reproductor para varios idiomas, se hereda la última
+  // pestaña que aparece antes del iframe.
+  var pairwise = tabs.length === frames.length;
   for (var i = 0; i < frames.length; i++) {
-    var tab = tabs[i] || tabs[tabs.length - 1] || null;
+    var tab = pairwise ? tabs[i] : null;
+    if (!tab) {
+      for (var j = 0; j < tabs.length; j++) {
+        if (tabs[j].position < frames[i].position) tab = tabs[j];
+      }
+    }
+    if (!tab) tab = tabs[i] || tabs[0] || null;
     links.push({
       url: frames[i].url,
       name: tab ? tab.server : 'Server',

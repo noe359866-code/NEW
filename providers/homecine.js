@@ -2006,7 +2006,8 @@ function vidaraSubtitles(data, origin) {
 function resolveDirectPlayers(seeds, options) {
   var opts = options || {};
   var queue = (seeds || []).map(function (s) {
-    return { url: s.url, referer: s.referer || '', name: s.name || '', language: s.language || '', depth: 0 };
+    return { url: s.url, referer: s.referer || '', name: s.name || '', language: s.language || '',
+      quality: s.quality || '', depth: 0 };
   });
   var seen = {};
   var found = [];
@@ -2080,7 +2081,8 @@ function resolveDirectPlayers(seeds, options) {
       if (response.status >= 300 && response.status < 400) {
         var location = response.headers && response.headers.get ? response.headers.get('location') : '';
         var target = publicHttpUrl(location, url);
-        if (target) queue.push({ url: target, referer: url, name: item.name, language: item.language, depth: item.depth + 1 });
+        if (target) queue.push({ url: target, referer: url, name: item.name, language: item.language,
+          quality: item.quality || '', depth: item.depth + 1 });
         return null;
       }
       if (/anubis_challenge/i.test(response.text)) return passAnubis(response.text, url, item.referer);
@@ -2100,11 +2102,18 @@ function resolveDirectPlayers(seeds, options) {
       var actualUrl = publicHttpUrl(response.url, url) || url;
       var media = findDirectMedia(response.text, actualUrl);
       for (var i = 0; i < media.length; i++) addMedia(media[i], actualUrl, item);
+      if (media.length) {
+        // La calidad del reproductor se conserva para los enlaces que salieron
+        // de aquí, aunque la URL no la traiga (solo se rellena si falta).
+        for (var f = 0; f < found.length; f++) {
+          if (!found[f].quality && item.quality) found[f].quality = item.quality;
+        }
+      }
       if (item.depth >= maxDepth) return;
       var links = pagePlayerLinks(response.text, actualUrl).concat(embed69Links(response.text, actualUrl));
       for (var j = 0; j < links.length; j++) {
         queue.push({ url: links[j].url, referer: actualUrl, name: links[j].name || item.name,
-          language: links[j].language || item.language, depth: item.depth + 1 });
+          language: links[j].language || item.language, quality: item.quality || '', depth: item.depth + 1 });
       }
     }).catch(function () { /* un host caído no cancela los demás */ });
   }
@@ -2237,7 +2246,7 @@ function homecineTabs(html) {
     var before = text.slice(Math.max(0, match.index - 1200), match.index);
     var names = before.match(/<strong[^>]*>([\s\S]{0,80}?)<\/strong>/gi) || [];
     var server = names.length ? stripTags(names[names.length - 1]).replace(/\s+/g, ' ').trim() : 'Server';
-    tabs.push({ id: match[1], server: server || 'Server', label: label,
+    tabs.push({ id: match[1], server: server || 'Server', label: label, position: match.index,
       quality: parseQuality(label), language: languageLabel(label) });
   }
   return tabs;
@@ -2265,8 +2274,18 @@ function homecineTabLinks(html) {
   var tabs = homecineTabs(html);
   var frames = homecineIframes(html);
   var links = [];
+  // Si hay una pestaña por reproductor, el orden es la correspondencia. Cuando
+  // el sitio repite un reproductor para varios idiomas, se hereda la última
+  // pestaña que aparece antes del iframe.
+  var pairwise = tabs.length === frames.length;
   for (var i = 0; i < frames.length; i++) {
-    var tab = tabs[i] || tabs[tabs.length - 1] || null;
+    var tab = pairwise ? tabs[i] : null;
+    if (!tab) {
+      for (var j = 0; j < tabs.length; j++) {
+        if (tabs[j].position < frames[i].position) tab = tabs[j];
+      }
+    }
+    if (!tab) tab = tabs[i] || tabs[0] || null;
     links.push({
       url: frames[i].url,
       name: tab ? tab.server : 'Server',

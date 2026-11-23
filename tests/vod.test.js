@@ -329,3 +329,24 @@ test('PeliShax: los servidores de OK.ru se leen de su reproductor, no se descart
   assert.equal(streams[0].url, 'https://vd9.okcdn.ru/video.m3u8?cmd=videoPlayerCdn&expires=9');
   assert.equal(streams[0].language, 'Inglés');
 });
+
+test('HomeCine: con más reproductores que pestañas, cada uno hereda su idioma por posición', async () => {
+  const fetch = mockFetch([
+    ['api.themoviedb.org/3/movie/1', tmdbMovie(1, 'Prueba')],
+    ['homecine.to/?s=', '<a href="/prueba"><h2>Prueba</h2></a>'],
+    ['homecine.to/prueba', `<div class="les-content"><a href="#tab1">480p - Latino</a></div>
+      <IFRAME SRC="https://fastream.to/embed-a.html"></IFRAME>
+      <div class="les-content"><a href="#tab2">HD 1080p - Castellano</a></div>
+      <IFRAME SRC="https://fastream.to/embed-b.html"></IFRAME>
+      <IFRAME SRC="https://fastream.to/embed-c.html"></IFRAME>`],
+    ['fastream.to/embed-a.html', '<source src="https://cdn.example/a.mp4">'],
+    ['fastream.to/embed-b.html', '<source src="https://cdn.example/b.mp4">'],
+    ['fastream.to/embed-c.html', '<source src="https://cdn.example/c.mp4">']
+  ]);
+  const streams = await loadProvider('homecine', { fetch }).getStreams('1', 'movie', null, null);
+  assert.equal(streams.length, 3);
+  assert.equal(streams.find(item => item.url.endsWith('/a.mp4')).language, 'Latino');
+  assert.equal(streams.find(item => item.url.endsWith('/b.mp4')).language, 'Castellano');
+  assert.equal(streams.find(item => item.url.endsWith('/c.mp4')).language, 'Castellano');
+  assert.equal(streams.find(item => item.url.endsWith('/b.mp4')).quality, '1080p');
+});
