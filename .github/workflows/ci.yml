@@ -62,11 +62,11 @@ jobs:
           MSG="${{ github.event.head_commit.message }}"
           MODE="${{ inputs.probe }}"
           if [ -z "$MODE" ]; then
-            for tag in dlx41 dlx40 dlx39 dlx38 dlx37 dlx36 dlx35 dlx34 dlx33 dlx32 dlx31 dlx30 dlx29 dlx28 dlx27 dlx26 dlx probe24; do
+            for tag in dlx42 dlx41 dlx40 dlx39 dlx38 dlx37 dlx36 dlx35 dlx34 dlx33 dlx32 dlx31 dlx30 dlx29 dlx28 dlx27 dlx26 dlx probe24; do
               case "$MSG" in *"[$tag]"*) MODE="$tag"; break;; esac
             done
             case "$MODE" in
-              dlx41) MODE=dlx41;; dlx40) MODE=dlx40;; dlx39) MODE=dlx39;; dlx38) MODE=dlx38;; dlx37) MODE=dlx37;; dlx36) MODE=dlx36;; dlx35) MODE=dlx35;; dlx34) MODE=dlx34;; dlx33) MODE=dlx33;; dlx32) MODE=dlx32;; dlx31) MODE=dlx31;; dlx30) MODE=dlx30;; dlx29) MODE=dlx29;; dlx28) MODE=dlx28;; dlx27) MODE=dlx27;; dlx26) MODE=dlx26;;
+              dlx42) MODE=dlx42;; dlx41) MODE=dlx41;; dlx40) MODE=dlx40;; dlx39) MODE=dlx39;; dlx38) MODE=dlx38;; dlx37) MODE=dlx37;; dlx36) MODE=dlx36;; dlx35) MODE=dlx35;; dlx34) MODE=dlx34;; dlx33) MODE=dlx33;; dlx32) MODE=dlx32;; dlx31) MODE=dlx31;; dlx30) MODE=dlx30;; dlx29) MODE=dlx29;; dlx28) MODE=dlx28;; dlx27) MODE=dlx27;; dlx26) MODE=dlx26;;
               dlx) MODE=doramaslatinox;; probe24) MODE=round24only;; *) MODE=all;;
             esac
           fi

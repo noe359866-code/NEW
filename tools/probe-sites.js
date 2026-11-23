@@ -832,6 +832,58 @@ async function round41() {
   }
 }
 
+/* Ronda 42: el 403→404 sugiere que el CDN valida el Referer exacto. */
+async function round42() {
+  const C = require('crypto-js');
+  const crypto = require('crypto');
+  const B = 'https://player.abyssplayer.com/K8R6OOjS7';
+  const res = await fetchRaw(B);
+  const m = /datas\s*=\s*"([A-Za-z0-9+/=]{20,})"/.exec(res.body);
+  if (!m) return;
+  const payload = Buffer.from(m[1], 'base64').toString('latin1');
+  const slug = /"slug"\s*:\s*"([^"]{1,40})"/.exec(payload)[1];
+  const md5 = /"md5_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload)[1];
+  const uid = /"user_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload)[1];
+  const at = payload.indexOf('"media":"');
+  let media = payload.slice(at + 9); media = media.slice(0, media.lastIndexOf('"'));
+  const bytes = [];
+  for (let i = 0; i < media.length; i++) {
+    if (media[i] !== '\\') { bytes.push(media.charCodeAt(i) & 0xff); continue; }
+    const n = media[++i];
+    if (n === 'u') { bytes.push(parseInt(media.substr(i + 1, 4), 16) & 0xff); i += 4; }
+    else if (n === 'n') bytes.push(10); else if (n === 'r') bytes.push(13);
+    else if (n === 't') bytes.push(9); else if (n === 'f') bytes.push(12);
+    else bytes.push(n.charCodeAt(0) & 0xff);
+  }
+  const key = Buffer.from(C.MD5(uid + ':' + slug + ':' + md5).toString(C.enc.Hex), 'latin1');
+  const dec = crypto.createDecipheriv('aes-256-ctr', key, key.subarray(0, 16));
+  const plain = Buffer.concat([dec.update(Buffer.from(bytes)), dec.final()]).toString('utf8');
+  const host = (/url\\?":\\?"(https:\/\/[a-z0-9][a-z0-9.-]{3,40}\.[a-z]{2,10})/.exec(plain) || [])[1];
+  const size = (/size\\?":(\d+)/.exec(plain) || [])[1];
+  const resId = (/res_id\\?":(\d+)/.exec(plain) || [])[1];
+  if (!host) { console.log('===== dlx ref: sin host'); return; }
+  const enc = crypto.createCipheriv('aes-256-ctr', key, key.subarray(0, 16));
+  const cipher = Buffer.concat([enc.update(Buffer.from('/mp4/' + md5 + '/' + resId + '/' + size + '?v=' + slug, 'latin1')), enc.final()]);
+  const token = Buffer.from(Buffer.from(cipher.toString('base64').replace(/=/g, ''), 'latin1').toString('base64').replace(/=/g, ''), 'latin1');
+  const target = host + '/sora/' + size + '/' + token.toString('latin1');
+  console.log('===== dlx ref ' + target.slice(0, 100));
+  const refs = [B, B + '/', 'https://doramaslatinox.com/', 'https://abyss.to/', 'https://' + host.split('//')[1] + '/'];
+  for (const ref of refs) {
+    try {
+      const r = await fetch(target, { headers: { 'User-Agent': UA, Referer: ref, Origin: ref.replace(/\/$/, ''), Range: 'bytes=0-255' } });
+      console.log('ref=' + ref.slice(0, 46) + ' → ' + r.status + ' ' + (r.headers.get('content-type') || '') +
+        ' len=' + (r.headers.get('content-length') || ''));
+    } catch (e) { console.log('ref=' + ref.slice(0, 46) + ' ERR ' + e.message.slice(0, 50)); }
+  }
+  // ¿El reproductor pide primero un manifiesto?
+  for (const probe of ['/sora/' + size, '/sora/' + size + '/', '/manifest/' + size, '/' + md5 + '/' + resId]) {
+    try {
+      const r = await fetch(host + probe, { headers: { 'User-Agent': UA, Referer: B, Range: 'bytes=0-255' } });
+      console.log('probe ' + probe.slice(0, 40) + ' → ' + r.status + ' ' + (r.headers.get('content-type') || ''));
+    } catch (e) { console.log('probe ERR'); }
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -898,6 +950,7 @@ async function main() {
   if (only === 'dlx39') await round39();
   if (only === 'dlx40') await round39();
   if (only === 'dlx41') await round41();
+  if (only === 'dlx42') await round42();
 }
 
 if (require.main === module) {
