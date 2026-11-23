@@ -91,6 +91,11 @@ async function fuegocine() {
   await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
 }
 
+async function round14() {
+  await probeSnippets('shard movie keys', 'https://vidsync-shard.vs-deals79.workers.dev/api/core/streams?type=movie&id=155',
+    [['head', '^\\{.{0,1200}'], ['subtitles', '"subtitles"'], ['audio', '"audioTracks"'], ['keys', '"quality"']], 700);
+}
+
 async function round13() {
   await probeSnippets('vidsync shard list', 'https://vidsync.pro/assets/index-DO1zww39.js',
     [['shards', 'vidsync-shard\\.vs-deals\\d+\\.workers\\.dev']], 60);
@@ -235,6 +240,7 @@ async function main() {
   if (only === 'all' || only === 'round11') await round11();
   if (only === 'all' || only === 'round12') await round12();
   if (only === 'all' || only === 'round13') await round13();
+  if (only === 'all' || only === 'round14') await round14();
   if (only === 'all' || only === 'kdesa') await kdesa();
 }
 
