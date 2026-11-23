@@ -257,6 +257,42 @@ async function pelishax() {
 
 /* Imprime los atributos que publican la URL del reproductor, que es lo que
  * necesita el addon: sin un enlace directo o un iframe no hay nada que ofrecer. */
+/* Vuelca el JSON de estado de Angular (ng-state) de FrikiSeries: ahí viven los
+ * capítulos y la URL de cada reproductor. */
+async function frikiState() {
+  const url = 'https://www.frikiserie.com/ver-serie/los-caballeros-del-zodiaco-1986';
+  try {
+    const res = await fetchRaw(url);
+    const match = /<script id="ng-state" type="application\/json">([\s\S]*?)<\/script>/i.exec(res.body);
+    if (!match) { console.log('\n===== frikiserie ng-state\n(no encontrado)'); return; }
+    const raw = match[1].replace(/&quot;/g, '"');
+    console.log(`\n===== frikiserie ng-state bytes=${raw.length}`);
+    const keys = new Set((raw.match(/"[a-zA-Z_][a-zA-Z0-9_]{2,30}"\s*:/g) || []).map(k => k.replace(/[":\s]/g, '')));
+    console.log('claves: ' + Array.from(keys).slice(0, 80).join(', '));
+    for (const [label, pattern] of [
+      ['http(s) con player/embed', 'https?://[^"\\\s]{10,160}'],
+      ['capitulos/episodios', '"[^"]*(?:capitulo|episodio|episode|temporada|season)[^"]*"'],
+      ['campos link/url', '"(?:link|url|enlace|iframe|player|reproductor|embed)"[^,]{0,200}']
+    ]) {
+      const re = new RegExp(pattern, 'gi');
+      const seen = new Set();
+      let m;
+      console.log('--- ' + label + ':');
+      let shown = 0;
+      while ((m = re.exec(raw)) && shown < 25) {
+        const value = m[0].slice(0, 200);
+        if (seen.has(value)) continue;
+        seen.add(value);
+        console.log('   ' + value);
+        shown++;
+      }
+      if (!shown) console.log('   (sin coincidencias)');
+    }
+  } catch (error) {
+    console.log('\n===== frikiserie ng-state\nERROR ' + (error && error.message));
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -294,6 +330,7 @@ async function main() {
   if (only === 'all' || only === 'frikiserie') await frikiserie();
   if (only === 'all' || only === 'pelishax') await pelishax();
   if (only === 'all' || only === 'players') await playersRaw();
+  if (only === 'all' || only === 'friki-state') await frikiState();
 }
 
 if (require.main === module) {
