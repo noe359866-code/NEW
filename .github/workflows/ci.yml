@@ -57,7 +57,7 @@ jobs:
       # publica como artefacto porque los registros no son accesibles aquí.
       - name: Sonda de fuentes
         if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]')) }}
-        run: node tools/probe-sites.js "${{ inputs.probe || (contains(github.event.head_commit.message, '[probe24]') && 'round24only' || 'all') }}" > probe.txt 2>&1 || true
+        run: node tools/probe-sites.js "${{ inputs.probe || (contains(github.event.head_commit.message, '[dlx]') && 'doramaslatinox' || contains(github.event.head_commit.message, '[probe24]') && 'round24only' || 'all') }}" > probe.txt 2>&1 || true
       # Comprobación en vivo contra los sitios reales: se activa con [live] en
       # el mensaje del commit. Solo analiza páginas; no descarga medios.
       - name: Comprobación en vivo

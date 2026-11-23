@@ -448,6 +448,35 @@ async function round24() {
     [['idioma', 'latino|castellano|subtitulado'], ['switchServer', 'switchServer[^)]{0,120}']]);
 }
 
+/* Ronda 25: doramaslatinox.com — estructura de fichas, episodios y reproductores. */
+async function round25() {
+  const B = 'https://doramaslatinox.com';
+  await probeSnippets('dlx serie', B + '/series/gift/', [
+    ['temporadas', 'Temporada|season|episodios|episode'],
+    ['episodios', 'href="[^"]*/episodio/[^"]+"'],
+    ['servidores', 'server-item|data-link|data-lang|dooplay_player|playeroptions'],
+    ['tmdb', 'themoviedb|tmdb[^0-9]{0,6}[0-9]+']
+  ], 300);
+  await probeSnippets('dlx episodio', B + '/episodio/gift-1x2-episodio-2/', [
+    ['servidores', 'server-item|data-link|data-lang|dooplay_player_option|data-nume|data-post'],
+    ['iframes', '<iframe[^>]{0,200}>'],
+    ['script opts', 'var\s+\w*\s*=\s*\\{["\']|sources\s*[:=]|file\s*[:=]'],
+    ['hls', '\\.m3u8|\\.mp4'],
+    ['idioma', 'latino|castellano|subtitulado']
+  ], 300);
+  await probeSnippets('dlx pelicula', B + '/peliculas/un-poco-de-compania-antes-de-morir/', [
+    ['servidores', 'server-item|data-link|data-lang|dooplay_player_option|data-nume'],
+    ['iframes', '<iframe[^>]{0,200}>'], ['hls', '\\.m3u8|\\.mp4']
+  ], 300);
+  await probeSnippets('dlx busqueda', B + '/?s=gift', [
+    ['resultados', 'result-item|href="[^"]*/(series|peliculas)/[^"]+"'],
+    ['forms', 'name="s"|action="[^"]*"']
+  ], 250);
+  await probeSnippets('dlx ajax', B + '/wp-admin/admin-ajax.php?action=doo_player_ajax&post=0&nume=1&type=tv', [
+    ['json', '.*']
+  ], 200);
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -497,6 +526,7 @@ async function main() {
   if (only === 'all' || only === 'round24') await round24();
   // Solo esta ronda: útil mientras se investiga un sitio concreto.
   else if (only === 'round24only') await round24();
+  if (only === 'doramaslatinox' || only === 'dlx') await round25();
 }
 
 if (require.main === module) {
