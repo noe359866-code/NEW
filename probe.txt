@@ -125,7 +125,7 @@ status=200 type=application/json bytes=389 final=https://vimeos.unlimplay.com/?i
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p4.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=T0CX8XFPv5jpsQAPYW0MRdoNxdIN6Uhbi5BwN28VvBk&s=1795406585&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
+   "direct": "https://p4.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=LCZ4XpEIlBuMZaoSPWb7d3RXR3CCGaO3-X3cajiMwfs&s=1795407048&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
    }
    }
    }
@@ -1988,9 +1988,11 @@ status=200 type=text/html; charset=utf-8 bytes=5098 final=https://player.vidzee.
    ….hasAttribute('data-tsr-stream-part'))p.remove();s.remove()}</script><script type="module" async="" src="/assets/index-B4sylo0D.js"></script><script>document.currentScript.remove();/*$tsr-stream-bound…
 
 ===== reels data :: https://embed.reelsdownload.online/player/117376/1/1?key=k_3db7ca4f00d84e94c9d62159
-status=200 type=text/html; charset=utf-8 bytes=19926 final=https://embed.reelsdownload.online/player/117376/1/1?key=k_3db7ca4f00d84e94c9d62159
+status=200 type=text/html; charset=utf-8 bytes=26238 final=https://embed.reelsdownload.online/player/117376/1/1?key=k_3db7ca4f00d84e94c9d62159
 --- config:
-   (sin coincidencias)
+   …ode.removeChild(b)};$RS("S:1","P:1")</script><script>$RC=function(b,c,e){c=document.getElementById(c);c.parentNode.removeChild(c);var a=document.getElementById(b);if(a){b=a.previousSibling;if(e)b.data="$!",a.setAttribute("data-dgst",e);else{e=b.parentNode;a=b.…
+   …nt.getElementById(b);if(a){b=a.previousSibling;if(e)b.data="$!",a.setAttribute("data-dgst",e);else{e=b.parentNode;a=b.nextSibling;var f=0;do{if(a&&8===a.nodeType){var d=a.data;if("/$"===d)if(0===f)break;else f--;else"$"!==d&&"$?"!==d&&"$!"!==d||f++}d=a.nextSib…
+   …eviousSibling;if(e)b.data="$!",a.setAttribute("data-dgst",e);else{e=b.parentNode;a=b.nextSibling;var f=0;do{if(a&&8===a.nodeType){var d=a.data;if("/$"===d)if(0===f)break;else f--;else"$"!==d&&"$?"!==d&&"$!"!==d||f++}d=a.nextSibling;e.removeChild(a);a=d}while(a…
 --- script:
    …ence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-498b93c25969d560.js"/><script src="/_next/static/chunks/fd9d1056-5c8af1b7ddde828f.js" async=""></script><script src="/_next/static/chunks/7023-15501e830d351863.…
    …ic/chunks/webpack-498b93c25969d560.js"/><script src="/_next/static/chunks/fd9d1056-5c8af1b7ddde828f.js" async=""></script><script src="/_next/static/chunks/7023-15501e830d351863.js" async=""></script><script src="/_next/static/chunks/main-app-00f82570c917c889.…
@@ -2043,14 +2045,240 @@ status=403 type=text/html; charset=UTF-8 bytes=4915 final=https://api.wecollege.
    </div>
    </div>
 
+===== vidsync ep :: https://vidsync.pro/api/core/shards
+status=200 type=text/html; charset=utf-8 bytes=3694 final=https://vidsync.pro/api/core/shards
+--- body: 40 líneas
+   <!doctype html>
+   <html lang="en">
+   <head>
+   <meta charset="UTF-8" />
+   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>▶</text></svg>" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+   <style>
+   html, body {
+   margin: 0;
+   padding: 0;
+   width: 100%;
+   height: 100%;
+   background-color: #000;
+   overflow: hidden;
+   overscroll-behavior: none;
+   }
+   #root {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   overflow: hidden;
+   }
+   media-player,
+   media-controls,
+   .vidsync-player-root {
+   width: 100% !important;
+   height: 100% !important;
+   display: flex !important;
+   flex-direction: column !important;
+   position: relative !important;
+   overflow: hidden !important;
+   }
+   media-controls,
+   .vds-controls {
+   position: absolute !important;
+   inset: 0 !important;
+   display: flex !important;
+   flex-direction: column !important;
+   justify-content: space-between !important;
+
+===== vidsync ep :: https://vidsync.pro/api/shards
+status=200 type=text/html; charset=utf-8 bytes=3694 final=https://vidsync.pro/api/shards
+--- body: 40 líneas
+   <!doctype html>
+   <html lang="en">
+   <head>
+   <meta charset="UTF-8" />
+   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>▶</text></svg>" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+   <style>
+   html, body {
+   margin: 0;
+   padding: 0;
+   width: 100%;
+   height: 100%;
+   background-color: #000;
+   overflow: hidden;
+   overscroll-behavior: none;
+   }
+   #root {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   overflow: hidden;
+   }
+   media-player,
+   media-controls,
+   .vidsync-player-root {
+   width: 100% !important;
+   height: 100% !important;
+   display: flex !important;
+   flex-direction: column !important;
+   position: relative !important;
+   overflow: hidden !important;
+   }
+   media-controls,
+   .vds-controls {
+   position: absolute !important;
+   inset: 0 !important;
+   display: flex !important;
+   flex-direction: column !important;
+   justify-content: space-between !important;
+
+===== vidsync ep :: https://vidsync.pro/api/core/config
+status=200 type=text/html; charset=utf-8 bytes=3694 final=https://vidsync.pro/api/core/config
+--- body: 40 líneas
+   <!doctype html>
+   <html lang="en">
+   <head>
+   <meta charset="UTF-8" />
+   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>▶</text></svg>" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+   <style>
+   html, body {
+   margin: 0;
+   padding: 0;
+   width: 100%;
+   height: 100%;
+   background-color: #000;
+   overflow: hidden;
+   overscroll-behavior: none;
+   }
+   #root {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   overflow: hidden;
+   }
+   media-player,
+   media-controls,
+   .vidsync-player-root {
+   width: 100% !important;
+   height: 100% !important;
+   display: flex !important;
+   flex-direction: column !important;
+   position: relative !important;
+   overflow: hidden !important;
+   }
+   media-controls,
+   .vds-controls {
+   position: absolute !important;
+   inset: 0 !important;
+   display: flex !important;
+   flex-direction: column !important;
+   justify-content: space-between !important;
+
+===== vidsync ep :: https://vidsync.pro/api/health
+status=200 type=text/html; charset=utf-8 bytes=3694 final=https://vidsync.pro/api/health
+--- body: 40 líneas
+   <!doctype html>
+   <html lang="en">
+   <head>
+   <meta charset="UTF-8" />
+   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>▶</text></svg>" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+   <style>
+   html, body {
+   margin: 0;
+   padding: 0;
+   width: 100%;
+   height: 100%;
+   background-color: #000;
+   overflow: hidden;
+   overscroll-behavior: none;
+   }
+   #root {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   overflow: hidden;
+   }
+   media-player,
+   media-controls,
+   .vidsync-player-root {
+   width: 100% !important;
+   height: 100% !important;
+   display: flex !important;
+   flex-direction: column !important;
+   position: relative !important;
+   overflow: hidden !important;
+   }
+   media-controls,
+   .vds-controls {
+   position: absolute !important;
+   inset: 0 !important;
+   display: flex !important;
+   flex-direction: column !important;
+   justify-content: space-between !important;
+
+===== vidsync ep :: https://vidsync.pro/api/core/streams?type=movie&id=155
+status=200 type=text/html; charset=utf-8 bytes=3694 final=https://vidsync.pro/api/core/streams?type=movie&id=155
+--- body: 40 líneas
+   <!doctype html>
+   <html lang="en">
+   <head>
+   <meta charset="UTF-8" />
+   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>▶</text></svg>" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+   <style>
+   html, body {
+   margin: 0;
+   padding: 0;
+   width: 100%;
+   height: 100%;
+   background-color: #000;
+   overflow: hidden;
+   overscroll-behavior: none;
+   }
+   #root {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   overflow: hidden;
+   }
+   media-player,
+   media-controls,
+   .vidsync-player-root {
+   width: 100% !important;
+   height: 100% !important;
+   display: flex !important;
+   flex-direction: column !important;
+   position: relative !important;
+   overflow: hidden !important;
+   }
+   media-controls,
+   .vds-controls {
+   position: absolute !important;
+   inset: 0 !important;
+   display: flex !important;
+   flex-direction: column !important;
+   justify-content: space-between !important;
+
+===== vidsync L6C6 :: https://vidsync.pro/assets/index-DO1zww39.js
+status=200 type=application/javascript bytes=1991970 final=https://vidsync.pro/assets/index-DO1zww39.js
+--- L6:
+   …ction A6(s){let e=2166136261;for(let t=0;t<s.length;t++)e=Math.imul(e^s.charCodeAt(t),16777619);return Math.abs(e)}const s1=new Map,zy="vidsync_healthy_shard_v2";let Zo="",Th=0,i1=0,Uu=null;function L6(){if(Zo&&Date.now()<Th&&rl(Zo))return Zo;if(typeof window<"u")for(const s of[window.localStorage,window.sessionStorage])try{const e=s?.getItem(zy);if(e){const t=JSON.parse(e);if(…
+--- C6:
+   …c-shard.vs-deals79.workers.dev","https://vidsync-shard.vs-deals82.workers.dev","https://vidsync-shard.vs-deals80.workers.dev"],zD="vidsync_active_cluster_nodes_v2",mE=300*1e3;let xm=[],pE=0;function C6(){if(xm.length>0&&Date.now()-pE<mE)return xm;if(typeof window<"u"&&window.localStorage)try{const s=window.localStorage.getItem(zD);if(s){const e=JSON.parse(s);if(Array.isArray(e.…
+
 ===== kdesa movie :: https://kdesa.stream/media/tmdb-movie-1595124
 status=403 type=text/html; charset=UTF-8 bytes=5698 final=https://kdesa.stream/media/tmdb-movie-1595124
 --- iframe/embed: 0 líneas
 --- servers/ajax: 0 líneas
 --- json-inline: 0 líneas
 --- fichas: 0 líneas
---- episodios: 1 líneas
-   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
+--- episodios: 0 líneas
 
 ===== kdesa tv :: https://kdesa.stream/media/tmdb-tv-1399-1-1
 status=403 type=text/html; charset=UTF-8 bytes=5692 final=https://kdesa.stream/media/tmdb-tv-1399-1-1
