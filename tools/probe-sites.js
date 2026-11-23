@@ -13,6 +13,10 @@
  */
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
 const MAX_LINES = 40;
 
@@ -621,48 +625,35 @@ async function round34() {
   }
 }
 
-/* Ronda 35: ¿responden los medios de Abyss (sssrr.org) con cabecera? */
+/* Ronda 35: ¿los medios de Abyss (sssrr.org) entregan vídeo? */
 async function round35() {
-  const C = require('crypto-js');
-  const B = 'https://player.abyssplayer.com/K8R6OOjS7';
-  const res = await fetchRaw(B);
-  const m = /datas\s*=\s*"([A-Za-z0-9+/=]{20,})"/.exec(res.body);
-  if (!m) { console.log('===== dlx media: sin datas'); return; }
-  const payload = Buffer.from(m[1], 'base64').toString('latin1');
-  const slug = /"slug"\s*:\s*"([^"]{1,40})"/.exec(payload)[1];
-  const md5 = /"md5_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload)[1];
-  const uid = /"user_id"\s*:\s*"?([0-9]{1,20})"?/.exec(payload)[1];
-  const at = payload.indexOf('"media":"');
-  let media = payload.slice(at + 9);
-  media = media.slice(0, media.lastIndexOf('"'));
-  const bytes = [];
-  for (let i = 0; i < media.length; i++) {
-    if (media[i] !== '\\') { bytes.push(media.charCodeAt(i) & 0xff); continue; }
-    const n = media[++i];
-    if (n === 'u') { bytes.push(parseInt(media.substr(i + 1, 4), 16) & 0xff); i += 4; }
-    else if (n === 'n') bytes.push(10); else if (n === 'r') bytes.push(13);
-    else if (n === 't') bytes.push(9); else if (n === 'f') bytes.push(12);
-    else bytes.push(n.charCodeAt(0) & 0xff);
-  }
-  const keyHex = C.MD5(uid + ':' + slug + ':' + md5).toString(C.enc.Hex);
-  const dec = C.AES.decrypt({ ciphertext: C.enc.Hex.parse(Buffer.from(bytes).toString('hex')) },
-    C.enc.Latin1.parse(keyHex), { iv: C.enc.Latin1.parse(keyHex.slice(0, 16)), mode: C.mode.CTR, padding: C.pad.NoPadding });
-  const plain = Buffer.from(dec.toString(C.enc.Latin1), 'latin1').toString('utf8');
-  const data = JSON.parse(plain.slice(0, plain.lastIndexOf('}') + 1));
-  const src = data.mp4.sources[0];
-  const enc = C.AES.encrypt(C.enc.Utf8.parse('/mp4/' + md5 + '/' + src.res_id + '/' + src.size + '?v=' + slug),
-    C.enc.Latin1.parse(keyHex), { iv: C.enc.Latin1.parse(keyHex.slice(0, 16)), mode: C.mode.CTR, padding: C.pad.NoPadding })
-    .ciphertext.toString(C.enc.Latin1);
-  let token = Buffer.from(Buffer.from(enc, 'latin1').toString('base64').replace(/=/g, ''), 'base64').toString('base64').replace(/=/g, '');
-  const url = src.url.replace(/\/$/, '') + '/sora/' + src.size + '/' + token;
-  console.log('===== dlx media ' + src.label);
-  console.log('url=' + url.slice(0, 120));
-  for (const [name, headers] of [['sin cabecera', {}], ['con Referer', { Referer: B + '/' }]]) {
+  const url = process.argv[3] || 'https://player.abyssplayer.com/K8R6OOjS7';
+  const provider = path.join(__dirname, '..', 'providers', 'doramaslatinox.js');
+  if (!fs.existsSync(provider)) { console.log('===== dlx media: falta el bundle'); return; }
+  const code = fs.readFileSync(provider, 'utf8')
+    .replace('function dlxAbyssStreams', 'globalThis.__abyss = dlxAbyssStreams;\nfunction dlxAbyssStreams');
+  const mod = { exports: {} };
+  const sandbox = { module: mod, exports: mod.exports, console,
+    fetch, HOSTED_MAX_POW_MS: 1500, TMDB_API_KEY: '', SCRAPER_SETTINGS: {},
+    require: name => require(name), URL, URLSearchParams, TextDecoder, TextEncoder,
+    AbortController, setTimeout, clearTimeout, Promise, Uint8Array, Date, JSON, Math,
+    RegExp, Error, isFinite, parseInt, parseFloat, decodeURIComponent, encodeURIComponent };
+  sandbox.globalThis = sandbox;
+  vm.createContext(sandbox);
+  vm.runInContext(code, sandbox);
+  const streams = await sandbox.__abyss(url, 'https://doramaslatinox.com/', 'Latino');
+  console.log('===== dlx media ' + url);
+  console.log('enlaces=' + streams.length);
+  if (!streams.length) return;
+  const target = streams[0];
+  console.log('probando ' + target.quality + ' ' + target.url.slice(0, 90));
+  for (const [name, headers] of [['sin cabecera', {}], ['con Referer', { Referer: url + '/' }]]) {
     try {
-      const head = await fetch(url, { headers: { 'User-Agent': UA, ...headers }, method: 'GET' });
-      const body = await head.arrayBuffer();
-      console.log(name + ': status=' + head.status + ' type=' + (head.headers.get('content-type') || '') +
-        ' bytes=' + body.byteLength + ' range=' + (head.headers.get('accept-ranges') || ''));
+      const res = await fetch(target.url, { headers: { 'User-Agent': UA, Range: 'bytes=0-1023', ...headers } });
+      const body = await res.arrayBuffer();
+      console.log(name + ': status=' + res.status + ' type=' + (res.headers.get('content-type') || '') +
+        ' bytes=' + body.byteLength + ' ranges=' + (res.headers.get('accept-ranges') || '') +
+        ' head=' + Buffer.from(body).toString('latin1').slice(0, 12).replace(/[^\x20-\x7e]/g, '.'));
     } catch (e) { console.log(name + ': ERR ' + e.message); }
   }
 }

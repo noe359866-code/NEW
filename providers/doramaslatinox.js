@@ -2487,20 +2487,41 @@ function dlxAbyssStreams(url, referer, language) {
       var plain = dlxAbyssCipher(dlxUnescapeBytes(mediaText), keyHex);
       if (!plain) return [];
       // Detrás del JSON quedan restos del relleno del cifrado: se recorta al
-      // último cierre de objeto equilibrado.
+      // último cierre equilibrado. Algunas cargas traen bytes de control
+      // sueltos, así que si JSON.parse falla se leen las fuentes directamente.
       var json = bytesToUtf8(plain);
       var end = json.lastIndexOf('}');
       if (end > 0) json = json.slice(0, end + 1);
       var data = null;
       try { data = JSON.parse(json); } catch (e) { data = null; }
-      if (!data) return [];
-      var kind = data.mp4 ? 'mp4' : (data.hls || data.m3u8 ? 'hls' : '');
-      var sources = (data.mp4 && data.mp4.sources) || (data.hls && data.hls.sources) ||
-        (data.m3u8 && data.m3u8.sources) || [];
+      var kind = '';
+      var sources = [];
+      if (data) {
+        kind = data.mp4 ? 'mp4' : (data.hls || data.m3u8 ? 'hls' : '');
+        sources = (data.mp4 && data.mp4.sources) || (data.hls && data.hls.sources) ||
+          (data.m3u8 && data.m3u8.sources) || [];
+      } else {
+        kind = /\{["'\s]*mp4["'\s]*:/i.test(json) ? 'mp4' : 'hls';
+        var raw = /\{[^{}]{0,400}?"res_id"\s*:\s*(\d{1,9})[^{}]{0,400}?\}/g;
+        var item;
+        while ((item = raw.exec(json)) && sources.length < 12) {
+          var chunk = item[0];
+          var pick = function (name) {
+            var found = new RegExp('"' + name + '"\\s*:\\s*"?([^",}]{1,120})"?').exec(chunk);
+            return found ? found[1] : '';
+          };
+          sources.push({ res_id: item[1], size: pick('size'), url: pick('url'),
+            label: pick('label'), status: true });
+        }
+      }
+      if (!sources.length) return [];
       var out = [];
       for (var i = 0; i < sources.length && out.length < 12; i++) {
         var source = sources[i] || {};
         if (!source.size || !source.res_id || !source.url || source.status === false) continue;
+        // Los hosts válidos son dominios ASCII limpios; un byte suelto del
+        // cifrado deja el nombre inservible y se descarta esa calidad.
+        if (!/^https:\/\/[a-z0-9][a-z0-9.-]{3,80}\.[a-z]{2,12}\/?$/i.test(String(source.url))) continue;
         var host = publicHttpUrl(source.url, url);
         if (!host) continue;
         var token = dlxAbyssToken('/' + kind + '/' + md5Id[1] + '/' + source.res_id + '/' + source.size +
