@@ -125,13 +125,13 @@ status=200 type=application/json bytes=389 final=https://vimeos.unlimplay.com/?i
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=6dPHfJE7J0p6UTwRnG4GFsT3I_j5cl2Yy9q7uyg1by4&s=1795404123&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
+   "direct": "https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=zczmcT-nwrNz9z8e8aMpi9lFxZSnemqb5db_A5F9oBs&s=1795404765&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
    }
    }
    }
 
 ===== k-drama home :: https://k-drama.in/
-status=200 type=text/html; charset=UTF-8 bytes=406793 final=https://k-drama.in/
+status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 17 líneas
@@ -201,7 +201,7 @@ status=200 type=text/html; charset=UTF-8 bytes=406793 final=https://k-drama.in/
    <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 23 líneas
+--- episodios: 24 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -212,11 +212,12 @@ status=200 type=text/html; charset=UTF-8 bytes=406793 final=https://k-drama.in/
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
@@ -227,7 +228,7 @@ status=200 type=text/html; charset=UTF-8 bytes=406793 final=https://k-drama.in/
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/search?q=squid
-status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/search?q=squid
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/search?q=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -269,7 +270,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/s
    <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 23 líneas
+--- episodios: 24 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -280,11 +281,12 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/s
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
@@ -295,7 +297,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/s
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/?s=squid
-status=200 type=text/html; charset=UTF-8 bytes=406793 final=https://k-drama.in/?s=squid
+status=200 type=text/html; charset=UTF-8 bytes=406679 final=https://k-drama.in/?s=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -337,7 +339,7 @@ status=200 type=text/html; charset=UTF-8 bytes=406793 final=https://k-drama.in/?
    <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 23 líneas
+--- episodios: 24 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -348,11 +350,12 @@ status=200 type=text/html; charset=UTF-8 bytes=406793 final=https://k-drama.in/?
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
@@ -363,7 +366,7 @@ status=200 type=text/html; charset=UTF-8 bytes=406793 final=https://k-drama.in/?
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/search?s=squid
-status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/search?s=squid
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/search?s=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -405,7 +408,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/s
    <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 23 líneas
+--- episodios: 24 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -416,11 +419,12 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/s
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
@@ -431,7 +435,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/s
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama búsqueda :: https://k-drama.in/buscar?q=squid
-status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/buscar?q=squid
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/buscar?q=squid
 --- fichas: 40 líneas
    <a href="/watchlist"
    <a href="/watchlist" style="flex: 1; text-align: center; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #d4d4d8; font-size: 0.77rem; font-weight: 700; font-family: 'Quicksand', sans-serif; text-decoration: none;"><i clas…
@@ -473,7 +477,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/b
    <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 23 líneas
+--- episodios: 24 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -484,11 +488,12 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/b
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
@@ -499,7 +504,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/b
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/pelicula/interestelar
-status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/pelicula/interestelar
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/pelicula/interestelar
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -584,7 +589,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/p
    <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 23 líneas
+--- episodios: 24 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -595,11 +600,12 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/p
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
@@ -610,7 +616,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/p
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/movie/interestelar
-status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/movie/interestelar
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/movie/interestelar
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -695,7 +701,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/m
    <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 23 líneas
+--- episodios: 24 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -706,11 +712,12 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/m
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
@@ -721,7 +728,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/m
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/ver/interestelar
-status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/ver/interestelar
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/ver/interestelar
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -806,7 +813,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/v
    <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 23 líneas
+--- episodios: 24 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -817,11 +824,12 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/v
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
@@ -832,7 +840,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/v
    var watchUrl = isMovie ? ('/watch/movie-' + slug) : ('/watch/' + slug + '-episode-' + ep);
 
 ===== k-drama ficha :: https://k-drama.in/serie/squid-game
-status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/serie/squid-game
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/serie/squid-game
 --- iframe/embed: 1 líneas
    document.querySelectorAll('iframe').forEach(function(f,i){
 --- servers/ajax: 25 líneas
@@ -917,7 +925,7 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/s
    <a href="/detail/tv/guardians-of-the-dafeng-233912" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/reply-1988-64010" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
    <a href="/detail/tv/the-legend-of-heroes-235351" class="cineapse-card" style="display:block;text-decoration:none;color:inherit;cursor:pointer;">
---- episodios: 23 líneas
+--- episodios: 24 líneas
    var watchUrl = '/watch/' + slug + '-episode-1';
    var m = /\/watch\/(?:tv|movie)\/(.+?)(?:-episode-(\d+))?$/.exec(u.split('?')[0]);
    if (!m) return {drama: u.split('/').filter(Boolean).pop() || 'unknown', episode: 0};
@@ -928,11 +936,12 @@ status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/s
    track('episode_play', {drama: p.drama, episode: p.episode, slot: i});
    <img src="https://image.tmdb.org/t/p/w342/vAiEEPOxGjZYqMfA7Mu2AQ1X206.jpg" alt="Fall in Love with Him" class="cineapse-poster-img" loading="lazy">
    <p style="font-size: 0.84rem; color: #8a8a92; margin: -8px 0 16px; line-height: 1.5;">Real reactions from viewers, newest first. Each card names the drama and episode &mdash; tap the title to jump straight to it.</p>
+   <a href="/watch/between-steps-307106-episode-2" class="community-comment-card cc">
+   <p class="cc__text">&ldquo;Hindi dubbed episode all please&rdquo;</p>
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-2" class="community-comment-card cc">
    <a href="/watch/wednesday-119051-episode-1" class="community-comment-card cc">
    <p class="cc__text">&ldquo;Season2 ep1 is not working&rdquo;</p>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <img src="https://image.tmdb.org/t/p/w342/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg" alt="Tokyo Revengers" class="cineapse-poster-img" loading="lazy">
@@ -1287,7 +1296,7 @@ status=200 type=text/html; charset=UTF-8 bytes=127954 final=https://k-drama.in/d
    <div class="ep-card"><a class="ep-card__link" href="/watch/tv/vincenzo-117376-episode-1" style="display:block;text-decoration:none;color:inherit;"><div class="ep-card__media"><img src="https://image.tmdb.org/t/p/w500/zsat0wHWuEBOU5OTGcVyMlROZNv.jpg" alt="Episode 1 - Episode 1" loading="lazy"><span c…
 
 ===== kd search api :: https://k-drama.in/api/search?q=vincenzo
-status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/api/search?q=vincenzo
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/api/search?q=vincenzo
 --- json: 40 líneas
    <!DOCTYPE html>
    <html lang="en">
@@ -1429,13 +1438,11 @@ status=200 type=text/html bytes=3193 final=https://framextv.cc/api
    } catch (e) {
 
 ===== kd search vincenzo :: https://k-drama.in/search?q=vincenzo
-status=200 type=text/html; charset=UTF-8 bytes=417891 final=https://k-drama.in/search?q=vincenzo
---- vincenzo: 11 líneas
+status=200 type=text/html; charset=UTF-8 bytes=417777 final=https://k-drama.in/search?q=vincenzo
+--- vincenzo: 9 líneas
    "text": "KatDrama (https://k-drama.in) is recognized as the best site to watch K-Dramas online. It offers an extensive catalog of popular and ongoing Korean dramas (such as Queen of Tears, Crash Landing on You, The K2, Vincenzo, Lovely Runner, and Marry My Husband) in 1080p Ultra HD with verified En…
    <button onclick="setSearchTerm('Vincenzo')" style="
    Vincenzo                        </button>
-   <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
-   <span class="cc__show"><i class="fas fa-tv"></i> Vincenzo</span>
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
    <span class="cc__show"><i class="fas fa-tv"></i> Vincenzo</span>
    <a href="/watch/vincenzo-117376-episode-13" class="community-comment-card cc">
@@ -1776,6 +1783,39 @@ status=200 type=application/json; charset=utf-8 bytes=4 final=https://vidlink.pr
    …null…
    …null…
 
+===== vidsync bundle :: https://vidsync.pro/assets/index-DO1zww39.js
+status=200 type=application/javascript bytes=1991970 final=https://vidsync.pro/assets/index-DO1zww39.js
+--- api:
+   (sin coincidencias)
+--- paths:
+   …new URLSearchParams({type:s,id:e,season:t||"1",episode:i||"1"});return n&&u.set("audio",n),r&&u.set("server",r),u.set("_t",String(Date.now())),h?`${h}/api/core/streams?${u.toString()}`:`/api/core/streams?${u.toString()}`}function _6(s){const e=`${s.type||"video"}-${s.id||"id"}-${s.season||"1"}-${s.e…
+   …son:t||"1",episode:i||"1"});return n&&u.set("audio",n),r&&u.set("server",r),u.set("_t",String(Date.now())),h?`${h}/api/core/streams?${u.toString()}`:`/api/core/streams?${u.toString()}`}function _6(s){const e=`${s.type||"video"}-${s.id||"id"}-${s.season||"1"}-${s.episode||"1"}`,t=s.useShards!==!1?bs(…
+   …0&&i.set("audioIndex",String(s.audioIndex)),s.filename&&i.set("filename",s.filename),s.title&&i.set("title",s.title),s.url&&i.set("url",s.url),t?`${t}/api/core/download?${i.toString()}`:`/api/core/download?${i.toString()}`}function n1(s){if(!s||s.length<188||s[0]===71&&(s.length<376||s[188]===71))re…
+   …ndex)),s.filename&&i.set("filename",s.filename),s.title&&i.set("title",s.title),s.url&&i.set("url",s.url),t?`${t}/api/core/download?${i.toString()}`:`/api/core/download?${i.toString()}`}function n1(s){if(!s||s.length<188||s[0]===71&&(s.length<376||s[188]===71))return s;for(let e=0;e<Math.min(s.lengt…
+   …SwarmId&&this.leaveSwarm(),this.currentSwarmId=r,this.joinSwarm())}getSignalUrl(){const e=bs(this.currentSwarmId||"vidsync-p2p-signal");return e?`${e}/api/p2p/signal`:"/api/p2p/signal"}async joinSwarm(){this.startHeartbeat,this.initiatePeerConnection}leaveSwarm(){this.heartbeatTimer&&(clearInterval(…
+   …eSwarm(),this.currentSwarmId=r,this.joinSwarm())}getSignalUrl(){const e=bs(this.currentSwarmId||"vidsync-p2p-signal");return e?`${e}/api/p2p/signal`:"/api/p2p/signal"}async joinSwarm(){this.startHeartbeat,this.initiatePeerConnection}leaveSwarm(){this.heartbeatTimer&&(clearInterval(this.heartbeatTime…
+--- src:
+   …reactFiber$"+Mt,ns="__reactProps$"+Mt,Ds="__reactContainer$"+Mt,ai="__reactEvents$"+Mt,dn="__reactListeners$"+Mt,oi="__reactHandles$"+Mt,pi="__reactResources$"+Mt,ts="__reactMarker$"+Mt;function ui(a){delete a[is],delete a[ns],delete a[ai],delete a[dn],delete a[oi]}function Hs(a){var c=a[is];if(c)re…
+   …tp://www.w3.org/1999/xlink","xlink:href",f);break;case"contentEditable":case"spellCheck":case"draggable":case"value":case"autoReverse":case"externalResourcesRequired":case"focusable":case"preserveAlpha":g!=null&&typeof g!="function"&&typeof g!="symbol"?a.setAttribute(f,""+g):a.removeAttribute(f);bre…
+   …,{className:"text-bone/60",children:"190+ subtitle languages"}),o.jsx("li",{className:"text-bone/60",children:"AEGIS anti-scraping shield"})]})),e("Resources",o.jsxs(o.Fragment,{children:[o.jsx("li",{children:o.jsx(bi,{to:"/docs#quickstart",className:t,children:"60-second quickstart"})}),o.jsx("li",…
+   …Code)}&defaultAudioIndex=${be.trackIndex}`;return{id:`castle-${q}-${be.langCode}-${Qe.toLowerCase()}`,url:Ge||pt,rawUrl:te,directUrl:Ge||te,permanent_m3u8_url:Ge,fallbackProxyUrl:pt,layer:Ge?1:2,layerName:Ge?"Layer 1: Permanent Google Cloud CDN":"Layer 2: Edge Auto-Healer Proxy",headers:O,streamHead…
+   …e.includes("/720/")&&(Ge=le.replace("/720/","/1080/"));const Le=Qe==="1080p"?2:Qe==="720p"?5:10;Y.push(Ze(Qe,Ge,Le))}}if(Y.length===0)continue;return{sources:Y,audioTracks:D,subtitles:F,title:m,year:p,tmdbId:String(u.tmdbId||e),extractionMs:Math.round(performance.now()-l),baseUsed:A}}catch{}return n…
+   …if(oe<=0)continue;const X=`${oe}p`,be=O.get(X);(!be||F>be.size)&&O.set(X,{url:Y.url,quality:X,resNum:oe,size:F,dur:ae,format:String(Y.url).includes(".m3u8")?"hls":"mp4"})}const de=Array.from(O.values()).sort((Y,F)=>F.resNum-Y.resNum);if(de.length===0)return;const G=de.map(Y=>Y.quality);W.push({subje…
+
+===== zxcstream :: https://zxcstream.cc/player/tv/117376/1/1
+status=200 type=text/html; charset=utf-8 bytes=15016 final=https://zxcstream.cc/player/tv/117376/1/1
+--- api:
+   (sin coincidencias)
+--- hls:
+   (sin coincidencias)
+
+===== reels :: https://embed.reelsdownload.online/player/117376/1/1?key=k_3db7ca4f00d84e94c9d62159
+status=200 type=text/html; charset=utf-8 bytes=19926 final=https://embed.reelsdownload.online/player/117376/1/1?key=k_3db7ca4f00d84e94c9d62159
+--- hls:
+   (sin coincidencias)
+--- src:
+   (sin coincidencias)
+
 ===== kdesa movie :: https://kdesa.stream/media/tmdb-movie-1595124
 status=403 type=text/html; charset=UTF-8 bytes=5698 final=https://kdesa.stream/media/tmdb-movie-1595124
 --- iframe/embed: 0 líneas
@@ -1801,10 +1841,9 @@ status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/s
    <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
 
 ===== kdesa búsqueda :: https://kdesa.stream/?s=dune
-status=403 type=text/html; charset=UTF-8 bytes=5641 final=https://kdesa.stream/?s=dune
+status=403 type=text/html; charset=UTF-8 bytes=5619 final=https://kdesa.stream/?s=dune
 --- fichas: 0 líneas
---- episodios: 1 líneas
-   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
+--- episodios: 0 líneas
 
 ===== kdesa búsqueda :: https://kdesa.stream/buscar?q=dune
 status=403 type=text/html; charset=UTF-8 bytes=5659 final=https://kdesa.stream/buscar?q=dune
@@ -1821,5 +1860,4 @@ status=403 type=text/html; charset=UTF-8 bytes=5671 final=https://kdesa.stream/a
 ===== kdesa home :: https://kdesa.stream/
 status=403 type=text/html; charset=UTF-8 bytes=5583 final=https://kdesa.stream/
 --- fichas: 0 líneas
---- episodios: 1 líneas
-   <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal…
+--- episodios: 0 líneas
