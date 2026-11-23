@@ -11,6 +11,25 @@ status=403 type=text/html; charset=UTF-8 bytes=5708 final=https://ww1.pelis24.bl
 --- servers/ajax: 0 líneas
 --- json-inline: 0 líneas
 
+===== fc ficha año :: https://fuegocine.com/shows/details/avatar-la-leyenda-de-aang/33
+status=200 type=text/html; charset=UTF-8 bytes=21807 final=https://fuegocine.com/shows/details/avatar-la-leyenda-de-aang/33
+--- año: 1 líneas
+   <p>© 2026 FuegoCine.com. Todos los derechos reservados.
+
+===== fc excelastic avatar :: https://fuegocine.com/search_elastic?s=avatar
+status=200 type=text/html; charset=UTF-8 bytes=5063 final=https://fuegocine.com/search_elastic?s=avatar
+--- resultados: 10 líneas
+   <a href="https://fuegocine.com/movies/details/avatar/80">
+   <img src="https://media.themoviedb.org/t/p/w440_and_h660_face/yV8R3DxAQAIhLSh2aAL0aBirkSR.jpg" alt="Avatar" title="Avatar">
+   <a href="https://fuegocine.com/movies/details/avatar-2-el-camino-del-agua/81">
+   <img src="https://media.themoviedb.org/t/p/w440_and_h660_face/oIVSTKNyKvjm4NmmJi4zjQqHJ02.jpg" alt="Avatar 2: El Camino del Agua" title="Avatar 2: El Camino del Agua">
+   <a href="https://fuegocine.com/movies/details/avatar-3-fuego-y-ceniza/82">
+   <img src="https://media.themoviedb.org/t/p/w440_and_h660_face/coJkkPBDeBsYecxoqMnZm8TKlBL.jpg" alt="Avatar 3: Fuego y Ceniza" title="Avatar 3: Fuego y Ceniza">
+   <a href="https://fuegocine.com/shows/details/avatar-la-leyenda-de-aang/33">
+   <img src="https://image.tmdb.org/t/p/original/7AlWGb7XxqK72OE1KUvhKtM9b7s.jpg" alt="Avatar: La Leyenda de Aang" title="Avatar: La Leyenda de Aang">
+   <a href="https://fuegocine.com/shows/details/avatar-los-siete-refugios/37">
+   <img src="https://media.themoviedb.org/t/p/w1000_and_h563_face/1sowkELiwlmlFJbeHEVmolhZhSv.jpg" alt="Avatar: Los Siete Refugios" title="Avatar: Los Siete Refugios">
+
 ===== embed :: https://embedorigin.cc/e/yc67a46nwbpn
 status=200 type=text/html; charset=utf-8 bytes=12722 final=https://embedorigin.cc/e/yc67a46nwbpn
 --- hls: 0 líneas
@@ -22,7 +41,7 @@ status=200 type=text/html; charset=utf-8 bytes=12722 final=https://embedorigin.c
 --- js: 0 líneas
 
 ===== embed :: https://fcplayer2.blogspot.com/?url=U2FsdGVkX1
-status=429 type=text/html bytes=3371 final=https://www.google.com/sorry/index?continue=https://fcplayer2.blogspot.com/%3Furl%3DU2FsdGVkX1&q=EgSszrPzGNrEjtgGIi3KTCxPgDvYCW3tkNw4Eqrby29HTbTeuErMCpHU0fuE6pbQFQvSE_8mYsdiF-UyAnJSWgFDYNr9mriZq86ozAE
+status=429 type=text/html bytes=3368 final=https://www.google.com/sorry/index?continue=https://fcplayer2.blogspot.com/%3Furl%3DU2FsdGVkX1&q=EgQUbVTEGJnGjtgGIi3oKptSRWklU85i4Mpf7YynRiqpij2QVJxIRNIav0vdFyQeBdS3N8Qy1EpV5bUyAnJSWgFDYMXIqPXf-9_pAg
 --- hls: 0 líneas
 --- js: 0 líneas
 
@@ -189,7 +208,7 @@ status=200 type=application/json bytes=386 final=https://vimeos.unlimplay.com/?i
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p5.vimeos.zip/hls2/02/00014/kr4k7o11ytq2_,n,h,.urlset/master.m3u8?t=cOw2FrIN85QM31yXF9L95diIfgOi7droXglmRE8qVFs&s=1795400302&e=43200&v=438010458&srv=s13&i=0.0&sp=0&fr=kr4k7o11ytq2&r=e"
+   "direct": "https://p6.vimeos.zip/hls2/02/00014/kr4k7o11ytq2_,n,h,.urlset/master.m3u8?t=qL0HRSHYX4oG5ExNUd19JUOnS9l1Rmx_XGPbHBxY1pQ&s=1795400482&e=43200&v=438010458&srv=s13&i=0.0&sp=0&fr=kr4k7o11ytq2&r=e"
    }
    }
    }
@@ -206,7 +225,7 @@ status=200 type=application/json bytes=386 final=https://vimeos.unlimplay.com/?t
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p5.vimeos.zip/hls2/02/00014/kr4k7o11ytq2_,n,h,.urlset/master.m3u8?t=MQKKlMRuEHrSqUYE5vu1s_8Q5SVx-P5eVmYTCfLwKK0&s=1795400303&e=43200&v=438010458&srv=s13&i=0.0&sp=0&fr=kr4k7o11ytq2&r=e"
+   "direct": "https://p6.vimeos.zip/hls2/02/00014/kr4k7o11ytq2_,n,h,.urlset/master.m3u8?t=XXbhDT7bbNb8SNJxZCYGDSq0PSeG3Ewepei9zVXeuHQ&s=1795400483&e=43200&v=438010458&srv=s13&i=0.0&sp=0&fr=kr4k7o11ytq2&r=e"
    }
    }
    }
@@ -306,7 +325,7 @@ status=200 type=text/html; charset=UTF-8 bytes=48578 final=https://fuegocine.com
    $("#search_box").css("background","#000000");
 
 ===== fc search error :: https://fuegocine.com/search?s=odisea
-status=500 type=text/html; charset=UTF-8 bytes=1113989 final=https://fuegocine.com/search?s=odisea
+status=500 type=text/html; charset=UTF-8 bytes=1113977 final=https://fuegocine.com/search?s=odisea
 --- error: 6 líneas
    InvalidArgumentException: View [pages.search] not found. in file /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/View/FileViewFinder.php on line 137
    <pre>InvalidArgumentException: View [pages.search] not found. in file /home/u311072709/domains/fuegocine.com/public_html/vendor/laravel/framework/src/Illuminate/View/FileViewFinder.php on line 137
@@ -428,11 +447,11 @@ status=200 type=text/html; charset=UTF-8 bytes=20378 final=https://fuegocine.com
    <a class="close" href="#" title="close"><i class="ion-close-round"></i></a>
 
 ===== fc search post-like :: https://fuegocine.com/search?s=la%20odisea&type=movie
-status=500 type=text/html; charset=UTF-8 bytes=1114089 final=https://fuegocine.com/search?s=la%20odisea&type=movie
+status=500 type=text/html; charset=UTF-8 bytes=1114083 final=https://fuegocine.com/search?s=la%20odisea&type=movie
 --- resultados: 0 líneas
 
 ===== fc search :: https://fuegocine.com/search?s=odisea
-status=500 type=text/html; charset=UTF-8 bytes=1113987 final=https://fuegocine.com/search?s=odisea
+status=500 type=text/html; charset=UTF-8 bytes=1113973 final=https://fuegocine.com/search?s=odisea
 --- tarjetas: 2 líneas
    function e(){return(e=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e}).apply(this,arguments)}var t="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"…
    return c.createElement(x,j,/*#__PURE__*/c.createElement(A,s,!h&&M,O({rows:B,stylesheet:a,useInlineStyles:f})))});Al.registerLanguage=sl.registerLanguage;var Il=Al;function Ll({highlight:e,row:t,frame:n,lineNumber:r}){const{url:a,clipboard:o}=Po({file:n.file,lineNumber:r});return c.createElement("spa…
@@ -445,7 +464,7 @@ status=200 type=text/html; charset=UTF-8 bytes=20378 final=https://fuegocine.com
    $("li[data-path]").click(function() {
 
 ===== fc abyss :: https://player.abyssplayer.com/KxBGoCWcV
-status=200 type=text/html; charset=utf-8 bytes=10632 final=https://player.abyssplayer.com/KxBGoCWcV
+status=200 type=text/html; charset=utf-8 bytes=10641 final=https://player.abyssplayer.com/KxBGoCWcV
 --- claves: 1 líneas
    <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>La Odisea (2026)</title><style>#overlay, html {background: #000;}#overlay,#playback {bottom: 0;position: absolute}#overlay, svg {cursor: pointer}* {margin: 0;padding: 0}html …
 
@@ -461,20 +480,20 @@ status=200 type=application/json bytes=389 final=https://vimeos.unlimplay.com/?i
    "imdb_id": null,
    "embeds": {
    "latino": {
-   "direct": "https://p7.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=G4W8kiU-O-Yhm6ol9CiV7c0tXPVbgqSBpifIIOHRhHg&s=1795400314&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
+   "direct": "https://p4.vimeos.zip/hls2/02/00015/m62pdrnlvwpw_,n,h,.urlset/master.m3u8?t=_gmaNTGpNctJ2gmVa-p8MauRhkMS4WCf4ScVSntQ8RQ&s=1795400490&e=43200&v=448563713&srv=s1&i=0.0&sp=0&fr=m62pdrnlvwpw&r=e"
    }
    }
    }
 
 ===== fc unlimplay embed :: https://unlimplay.com/f/embed/movie/1368337
-status=200 type=text/html; charset=utf-8 bytes=57978 final=https://unlimplay.com/f/embed/movie/1368337?_et=a16833d8c6caa1661528ba89df6c8dc3
+status=200 type=text/html; charset=utf-8 bytes=57413 final=https://unlimplay.com/f/embed/movie/1368337?_et=58e1c4b8ffb6f836ac68749ec48de350
 --- finalizePlayer: 6 líneas
-   <link rel="preconnect" href="https://p3.vimeos.zip" crossorigin>
+   <link rel="preconnect" href="https://p7.vimeos.zip" crossorigin>
    <link rel="dns-prefetch" href="https://vimeos.net"><style>
    <!-- Fake verificador: visible mientras PHP procesa, se oculta al llegar finalizePlayer() -->
-   <script src="/assets/ulp/0a03c17d6f118a6e67f6.js" type="08f6fc0f246b6e1ec0cae798-text/javascript"></script><script type="08f6fc0f246b6e1ec0cae798-text/javascript">__ulpRun("0a03c17d6f118a6e67f6",["{\"latino\":{\"XMovie\":\"https://unlimplay.com/mf.php?man=xm-035DC8C1084744C6AB570AECCE0699D3&s=6826f1…
-   <script type="08f6fc0f246b6e1ec0cae798-text/javascript">try{window.ULP_ORIG=window.ULP_ORIG||{};var _o={"latino":{"streamwish":"https://embedwish.com/e/oyr2nl0uuxar","vidhide":"https://morencius.com/v/rqkzgx2yzq23","vidara":"https://vidara.to/e/ic2DH3h8t3QR6","vimeos":"https://vimeos.net/embed-m62pd…
-   <script type="08f6fc0f246b6e1ec0cae798-text/javascript">(function(){var _wUrl="https:\/\/vimeos.unlimplay.com\/?id=1368337";var _proxy="https:\/\/vimeos.unlimplay.com\/stream.m3u8?url=";    fetch(_wUrl,{headers:{'Accept':'application/json'}})
+   <script src="/assets/ulp/0a03c17d6f118a6e67f6.js" type="46eefbd17dbb665b2cea77a1-text/javascript"></script><script type="46eefbd17dbb665b2cea77a1-text/javascript">__ulpRun("0a03c17d6f118a6e67f6",["{\"latino\":{\"XMovie\":\"https://unlimplay.com/mf.php?man=xm-035DC8C1084744C6AB570AECCE0699D3&s=6826f1…
+   <script type="46eefbd17dbb665b2cea77a1-text/javascript">try{console.log("[ULP] tiempos ms",{"total":32,"cache":"hit"})}catch(e){}</script><script type="46eefbd17dbb665b2cea77a1-text/javascript">if(typeof finalizePlayer==="function"){finalizePlayer({"latino":{"XMovie":"https://unlimplay.com/mf.php?ma…
+   <script type="46eefbd17dbb665b2cea77a1-text/javascript">(function(){var _wUrl="https:\/\/vimeos.unlimplay.com\/?id=1368337";var _proxy="https:\/\/vimeos.unlimplay.com\/stream.m3u8?url=";    fetch(_wUrl,{headers:{'Accept':'application/json'}})
 
 ===== fuegocine home/form :: https://fuegocine.com/
 status=200 type=text/html; charset=UTF-8 bytes=48578 final=https://fuegocine.com/
@@ -493,14 +512,14 @@ status=403 type=text/html; charset=UTF-8 bytes=5653 final=https://videro.my/e/ue
 ERROR Invalid regular expression: /sources|file|videoUrl|stream|eval(/i: Unterminated group
 
 ===== embed abyssplayer :: https://player.abyssplayer.com/KxBGoCWcV
-status=200 type=text/html; charset=utf-8 bytes=10632 final=https://player.abyssplayer.com/KxBGoCWcV
+status=200 type=text/html; charset=utf-8 bytes=10641 final=https://player.abyssplayer.com/KxBGoCWcV
 --- m3u8/mp4: 0 líneas
 
 ===== embed abyssplayer :: https://player.abyssplayer.com/KxBGoCWcV
 ERROR Invalid regular expression: /sources|file|videoUrl|stream|eval(/i: Unterminated group
 
 ===== embed unlimplay :: https://unlimplay.com/f/embed/movie/1368337
-status=200 type=text/html; charset=utf-8 bytes=57979 final=https://unlimplay.com/f/embed/movie/1368337?_et=a16833d8c6caa1661528ba89df6c8dc3
+status=200 type=text/html; charset=utf-8 bytes=57415 final=https://unlimplay.com/f/embed/movie/1368337?_et=58e1c4b8ffb6f836ac68749ec48de350
 --- m3u8/mp4: 13 líneas
    <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/hls.js@1.7.4/dist/hls.min.js" crossorigin>
    <!-- Botón Auto HLS -->
@@ -508,9 +527,9 @@ status=200 type=text/html; charset=utf-8 bytes=57979 final=https://unlimplay.com
    <span class="ca-tip">Auto HLS</span>
    .ulp-mode-hls #btn-auto-hls,.ulp-mode-iframe #btn-auto-hls,.ulp-mode-hls .drop-hls-item,.ulp-mode-iframe .drop-hls-item{display:none!important}
    .ulp-mode-hls .drop-hls-item+.drop-hls-sep,.ulp-mode-iframe .drop-hls-item+.drop-hls-sep,.drop-hls-sep.ulp-sep-off{display:none!important}</style>
-   <script src="/assets/ulp/0a03c17d6f118a6e67f6.js" type="2193ef44b6978841c8da22c8-text/javascript"></script><script type="2193ef44b6978841c8da22c8-text/javascript">__ulpRun("0a03c17d6f118a6e67f6",["{\"latino\":{\"XMovie\":\"https://unlimplay.com/mf.php?man=xm-035DC8C1084744C6AB570AECCE0699D3&s=6826f1…
-   <script type="2193ef44b6978841c8da22c8-text/javascript">try{window.ULP_ORIG=window.ULP_ORIG||{};var _o={"latino":{"streamwish":"https://embedwish.com/e/oyr2nl0uuxar","vidhide":"https://morencius.com/v/rqkzgx2yzq23","vidara":"https://vidara.to/e/ic2DH3h8t3QR6","vimeos":"https://vimeos.net/embed-m62pd…
-   <script type="2193ef44b6978841c8da22c8-text/javascript">(function(){var _wUrl="https:\/\/vimeos.unlimplay.com\/?id=1368337";var _proxy="https:\/\/vimeos.unlimplay.com\/stream.m3u8?url=";    fetch(_wUrl,{headers:{'Accept':'application/json'}})
+   <script src="/assets/ulp/0a03c17d6f118a6e67f6.js" type="41b65eeab27f21cd117c4e60-text/javascript"></script><script type="41b65eeab27f21cd117c4e60-text/javascript">__ulpRun("0a03c17d6f118a6e67f6",["{\"latino\":{\"XMovie\":\"https://unlimplay.com/mf.php?man=xm-035DC8C1084744C6AB570AECCE0699D3&s=6826f1…
+   <script type="41b65eeab27f21cd117c4e60-text/javascript">try{console.log("[ULP] tiempos ms",{"total":28,"cache":"hit"})}catch(e){}</script><script type="41b65eeab27f21cd117c4e60-text/javascript">if(typeof finalizePlayer==="function"){finalizePlayer({"latino":{"XMovie":"https://unlimplay.com/mf.php?ma…
+   <script type="41b65eeab27f21cd117c4e60-text/javascript">(function(){var _wUrl="https:\/\/vimeos.unlimplay.com\/?id=1368337";var _proxy="https:\/\/vimeos.unlimplay.com\/stream.m3u8?url=";    fetch(_wUrl,{headers:{'Accept':'application/json'}})
    // v3.9.18: el aviso sale recién cuando el video ya se está viendo (no mientras carga el HLS) y "Empezar de nuevo"
    // vale para toda la página: si el servidor falla y entra otro, o hls.js termina de cargar, ya no vuelve al minuto viejo.
    var guard = null; // {t, until}: después de reiniciar, nadie (hls.js, reintentos) puede volver a ese minuto
@@ -564,7 +583,7 @@ status=200 type=text/html; charset=UTF-8 bytes=32060 final=https://fuegocine.com
    <option value="https://fuegocine.com/movies?genre_id=16" >Bélica</option>
 
 ===== fuegocine búsqueda 2 :: https://fuegocine.com/search?query=odisea
-status=500 type=text/html; charset=UTF-8 bytes=1099661 final=https://fuegocine.com/search?query=odisea
+status=500 type=text/html; charset=UTF-8 bytes=1099653 final=https://fuegocine.com/search?query=odisea
 --- status: 40 líneas
    ErrorException: Undefined array key &quot;s&quot; in file /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php on line 189
    #1 /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php(189): Illuminate\Foundation\Bootstrap\HandleExceptions-&gt;Illuminate\Foundation\Bootstrap\{closure}()
@@ -593,7 +612,7 @@ status=500 type=text/html; charset=UTF-8 bytes=1099661 final=https://fuegocine.c
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    ! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com
    */*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,BlinkMacS…
-   window.data = {"report":{"notifier":"Laravel Client","language":"PHP","framework_version":"10.42.0","language_version":"8.3.37","exception_class":"ErrorException","seen_at":1795400317,"message":"Undefined array key \u0022s\u0022","glows":[],"solutions":[],"documentation_links":[],"stacktrace":[{"fil…
+   window.data = {"report":{"notifier":"Laravel Client","language":"PHP","framework_version":"10.42.0","language_version":"8.3.37","exception_class":"ErrorException","seen_at":1795400493,"message":"Undefined array key \u0022s\u0022","glows":[],"solutions":[],"documentation_links":[],"stacktrace":[{"fil…
    <!-- The noscript representation is for HTTP client like Postman that have JS disabled. -->
    <pre>ErrorException: Undefined array key &quot;s&quot; in file /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php on line 189
    #1 /home/u311072709/domains/fuegocine.com/public_html/app/Http/Controllers/IndexController.php(189): Illuminate\Foundation\Bootstrap\HandleExceptions-&gt;Illuminate\Foundation\Bootstrap\{closure}()
