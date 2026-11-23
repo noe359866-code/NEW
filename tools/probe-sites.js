@@ -59,6 +59,28 @@ async function main() {
     await probe('pelis24 search', 'https://ww1.pelis24.blog/search?q=interstellar', playerPatterns);
     await probe('pelis24 detail', 'https://ww1.pelis24.blog/pelicula/interestelar-2014', playerPatterns);
   }
+  if (only === 'all' || only === 'fuegocine2') {
+    // Formulario de búsqueda real y episodios de una temporada.
+    await probe('fuegocine home/form', 'https://fuegocine.com/', [['formularios', '<form|name=\"(?:search|q)\"|action=']]);
+    await probe('fuegocine temporada', 'https://fuegocine.com/shows/visionquest/seasons/temporada-1/55',
+      [['episodios', '/shows/watch|/episodes/|Episodio|Episode']]);
+    // ¿Los reproductores embebidos exponen HLS directo?
+    for (const [name, url] of [
+      ['videro', 'https://videro.my/e/ueuf2z2cltcp6sw'],
+      ['abyssplayer', 'https://player.abyssplayer.com/KxBGoCWcV'],
+      ['unlimplay', 'https://unlimplay.com/f/embed/movie/1368337']
+    ]) {
+      await probe('embed ' + name, url, [
+        ['m3u8/mp4', '\.m3u8|\.mp4|hls|playlist'],
+        ['config js', 'sources|file|videoUrl|stream|eval\(']
+      ]);
+    }
+    for (const candidate of ['/movies?keyword=odisea', '/search?query=odisea', '/movies?title=odisea',
+      '/api/movies?search=odisea', '/movies?search=la+odisea']) {
+      await probe('fuegocine búsqueda 2', 'https://fuegocine.com' + candidate,
+        [['status', 'HTTP']]);
+    }
+  }
   if (only === 'all' || only === 'fuegocine') {
     await probe('fuegocine watch', 'https://fuegocine.com/movies/watch/la-odisea/227', playerPatterns);
     await probe('fuegocine show', 'https://fuegocine.com/shows/details/visionquest/24', [
