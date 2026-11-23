@@ -66,6 +66,16 @@ async function fuegocine() {
   await probe('unlimplay api', 'https://vimeos.unlimplay.com/?id=1368337', [['json', '.*']]);
 }
 
+async function round3() {
+  await probe('kd search vincenzo', 'https://k-drama.in/search?q=vincenzo',
+    [['vincenzo', 'vincenzo'], ['api', '/api/[a-z]+']]);
+  await probe('kd vid2', 'https://k-drama.in/vid2.php/117376/1/1?m=en', PLAYERS.concat([['hls', '\\.m3u8|\\.mp4']]));
+  await probe('fx embed', 'https://framextv.xyz/embed/117376/1/1', PLAYERS.concat([['hls', '\\.m3u8|\\.mp4']]));
+  await probe('fx bundle api', 'https://framextv.cc/assets/index-DvMX4GhI.js',
+    [['endpoints', 'https://[a-z0-9.-]+/api[a-zA-Z0-9/_-]*'], ['embed', '/embed/[a-zA-Z0-9/_-]*']]);
+  await probe('vidly', 'https://vidly.pro/tv/117376/1/1', PLAYERS.concat([['hls', '\\.m3u8|\\.mp4']]));
+}
+
 async function kDrama2() {
   await probe('kd watch', 'https://k-drama.in/watch/vincenzo-117376-episode-1', PLAYERS);
   await probe('kd detail', 'https://k-drama.in/detail/tv/vincenzo-117376', PLAYERS.concat(LINKS));
@@ -112,6 +122,7 @@ async function main() {
   if (only === 'all' || only === 'k-drama' || only === 'kdrama') await kDrama();
   if (only === 'all' || only === 'framextv') await framextv();
   if (only === 'all' || only === 'round2') { await kDrama2(); await framextv2(); }
+  if (only === 'all' || only === 'round3') await round3();
   if (only === 'all' || only === 'kdesa') await kdesa();
 }
 
