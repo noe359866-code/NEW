@@ -71,7 +71,7 @@ jobs:
       # El artefacto y los registros no son accesibles desde este entorno, así
       # que el resultado se confirma en la misma rama (con [skip ci]).
       - name: Publicar la sonda en la rama
-        if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]')) }}
+        if: ${{ matrix.node == '22' && (inputs.probe != '' || contains(github.event.head_commit.message, '[probe]') || contains(github.event.head_commit.message, '[live]')) }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
