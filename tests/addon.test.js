@@ -492,3 +492,38 @@ test('el endpoint /stream cierra igual si la resolución falla tras la cabecera'
     assert.deepEqual(await response.json(), { streams: [] });
   } finally { await app.close(); }
 });
+
+test('las cabeceras se entregan en proxyHeaders y en la clave de Nuvio', () => {
+  const stream = toStremioStream({
+    url: 'https://s40.fastream.to/hls2/x/master.m3u8',
+    headers: { Referer: 'https://fastream.to/embed-a.html', Origin: 'https://fastream.to' }
+  });
+  assert.deepEqual(stream.behaviorHints.proxyHeaders.request, {
+    Referer: 'https://fastream.to/embed-a.html', Origin: 'https://fastream.to'
+  });
+  assert.deepEqual(stream.behaviorHints.headers, {
+    Referer: 'https://fastream.to/embed-a.html', Origin: 'https://fastream.to'
+  });
+});
+
+test('notWebReady solo cuando el enlace realmente necesita proxy', () => {
+  // Reproductor protegido: sin proxy el Referer no se envía y no hay vídeo.
+  const guarded = toStremioStream({
+    url: 'https://vd9.okcdn.ru/video.m3u8?expires=9',
+    headers: { Referer: 'https://ok.ru/videoembed/1', Origin: 'https://ok.ru' }
+  });
+  assert.equal(guarded.behaviorHints.notWebReady, true);
+
+  // CDN de un tercero al que no le hace falta el Referer: sigue sirviendo en Web.
+  const open = toStremioStream({
+    url: 'https://cdn.example/1080p/film.m3u8',
+    headers: { Referer: 'https://player.example/e/1' }
+  });
+  assert.equal(open.behaviorHints.notWebReady, undefined);
+  assert.ok(open.behaviorHints.proxyHeaders, 'las cabeceras se envían igual');
+
+  // Sin cabeceras no hay nada que forzar.
+  const plain = toStremioStream({ url: 'https://cdn.example/live.m3u8' });
+  assert.equal(plain.behaviorHints.notWebReady, undefined);
+  assert.equal(plain.behaviorHints.headers, undefined);
+});

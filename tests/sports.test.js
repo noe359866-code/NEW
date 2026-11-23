@@ -216,7 +216,9 @@ test('addon: manifest, catálogo, búsqueda, meta y stream; no existe endpoint d
     const streams = (await request('/stream/channel/' + encodeURIComponent(id) + '.json')).body.streams;
     assert.equal(streams[0].url, 'https://messi.damitv.st/c/abc.m3u8?sig=123');
     assert.equal(streams[0].behaviorHints.proxyHeaders.request.Referer, 'https://damitv.st/');
-    assert.equal(streams[0].behaviorHints.notWebReady, undefined);
+    // El CDN está en el mismo dominio que el Referer: sin proxy no arranca.
+    assert.equal(streams[0].behaviorHints.notWebReady, true);
+    assert.equal(streams[0].behaviorHints.headers.Referer, 'https://damitv.st/');
     assert.ok(get.calls.filter(call => call.url.includes('/papi/api/streams')).length >= 2, 'renueva la API al reproducir');
 
     const tv = (await request('/stream/tv/' + encodeURIComponent('nebula-sport:tvenvivo:espn-2') + '.json')).body.streams;

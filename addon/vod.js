@@ -108,6 +108,35 @@ function streamHeaders(raw) {
   return result;
 }
 
+function hostOf(url) {
+  try { return new URL(String(url)).hostname.toLowerCase().replace(/^www\./, ''); } catch { return ''; }
+}
+
+/**
+ * ¿El enlace necesita que el cliente reescriba cabeceras para poder reproducirse?
+ * Un CDN que solo entrega segmentos no las necesita: mandarle `Referer` de otro
+ * host no aporta nada y, si el cliente no proxya, estorba. Se consideran
+ * «protegidos» los reproductores y los CDN que exigen referer propio.
+ */
+const GUARDED_HOSTS = [
+  'fastream.to', 'ok.ru', 'okcdn.ru', 'vkuser.net', 'vk.com', 'vimeos.zip',
+  'unlimplay.com', 'vidara.to', 'vidmoly.biz', 'vidmoly.to', 'filemoon.sx',
+  'streamwish.to', 'vidhidevip.com', 'streamtape.com', 'yourupload.com', 'vidcache.net'
+];
+
+function needsProxy(url, headers) {
+  const host = hostOf(url);
+  if (!host) return false;
+  if (GUARDED_HOSTS.some(guarded => host === guarded || host.endsWith('.' + guarded))) return true;
+  // Un `Referer` que apunta al mismo host del vídeo casi siempre es obligatorio.
+  for (const value of [headers.Referer, headers.Origin]) {
+    if (!value) continue;
+    const refHost = hostOf(value);
+    if (refHost && (refHost === host || host.endsWith('.' + refHost) || refHost.endsWith('.' + host))) return true;
+  }
+  return false;
+}
+
 function streamSubtitles(raw) {
   if (!Array.isArray(raw)) return [];
   const result = [];
@@ -163,7 +192,16 @@ function toStremioStream(item) {
     hints.filename = [String(item.title || source).slice(0, 120), language, item.quality].filter(Boolean).join(' ').slice(0, 200);
   }
   const headers = streamHeaders(item.headers);
-  if (Object.keys(headers).length) hints.proxyHeaders = { request: headers };
+  if (Object.keys(headers).length) {
+    hints.proxyHeaders = { request: headers };
+    // Nuvio mantiene además su propia clave; se envía igual para que el
+    // reproductor reciba el Referer aunque el cliente solo lea una de las dos.
+    hints.headers = { ...headers };
+    // Stremio Web y los clientes sin proxy ignoran estas cabeceras: sin
+    // proxy el vídeo no arranca, así que se pide explícitamente. Solo cuando
+    // el enlace realmente las necesita, para no romper los que sí van en web.
+    if (needsProxy(url, headers)) hints.notWebReady = true;
+  }
   const stream = { name, title, description: title, url };
   if (Object.keys(hints).length) stream.behaviorHints = hints;
   const subtitles = streamSubtitles(item.subtitles);
