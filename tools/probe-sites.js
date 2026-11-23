@@ -444,6 +444,28 @@ async function round23() {
   }
 }
 
+/* Ronda 24: el selector de idiomas de KatDrama. ¿De dónde sale «Latino»? */
+async function round24() {
+  const page = 'https://k-drama.in/watch/tv/n-a-117376-episode-1';
+  await probe('kd selector idioma', page, [
+    ['switchServer', "switchServer\\([^)]{0,160}"],
+    ['buttons', '<button[^>]{0,200}switchServer[\\s\\S]{0,300}?</button>'],
+    ['selector/idiomas', 'idioma|language|doblaje|audio|latino|castellano|subtitulado'],
+    ['select/option', '<select[\\s\\S]{0,600}?</select>|<option[^>]*>[^<]{0,40}'],
+    ['data attrs', 'data-(?:lang|language|audio|dub|server)[a-z-]*="[^"]{0,40}"']
+  ]);
+  await probe('kd detail idioma', 'https://k-drama.in/detail/tv/vincenzo-117376', [
+    ['selector/idiomas', 'idioma|language|doblaje|audio|latino|castellano|subtitulado'],
+    ['select/option', '<select[\\s\\S]{0,600}?</select>|<option[^>]*>[^<]{0,40}'],
+    ['buttons', '<button[^>]{0,160}>[^<]{0,40}</button>']
+  ]);
+  // ¿El reproductor propio recibe el idioma por parámetro?
+  for (const u of ['https://k-drama.in/tubi2.php?id=117376&s=1&e=1&lang=latino',
+                   'https://k-drama.in/api/languages?tmdb=117376']) {
+    await probe('kd lang param', u, [['idioma', 'latino|castellano|subtitulado'], ['json', '.*']]);
+  }
+}
+
 async function playersRaw() {
   const targets = [
     ['homecine película', 'https://www3.homecine.to/pequenos-secretos'],
@@ -490,6 +512,7 @@ async function main() {
   if (only === 'all' || only === 'round21') await round21();
   if (only === 'all' || only === 'round22') await round22();
   if (only === 'all' || only === 'round23') await round23();
+  if (only === 'all' || only === 'round24') await round24();
 }
 
 if (require.main === module) {
