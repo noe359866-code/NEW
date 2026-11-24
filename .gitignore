@@ -1,14 +1,5 @@
 node_modules/
-dist/
-.DS_Store
-*.local
 .env
-.env.*
-!.env.example
-coverage/
-.build/
 *.log
-
-# Salida de la sonda de fuentes (tools/probe-sites.js)
-probe.txt
-live.txt
+.DS_Store
+onair_*.json

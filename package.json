@@ -1,22 +1,17 @@
 {
-  "name": "nebula-es-addon",
-  "version": "3.1.0",
-  "private": true,
-  "type": "commonjs",
-  "description": "Addon unificado para Nuvio y Stremio: cine, anime y deportes en vivo sin retransmisión.",
+  "name": "anime-solo-stremio-addon",
+  "version": "1.0.0",
+  "description": "Addon de Stremio solo streams de anime en español latino (TioAnime, Latanime, AnimeAV1). Sin catalogos ni metadatos.",
+  "main": "index.js",
   "scripts": {
-    "start": "node addon/server.js",
-    "build": "node build.js",
-    "test": "node build.js && node --test tests/*.test.js",
-    "check": "npm test",
-    "live": "node tools/live-check.js",
-    "probe": "node tools/probe-sites.js"
+    "start": "node index.js",
+    "dev": "node --watch index.js"
   },
-  "engines": {
-    "node": ">=20.3.0 <25"
-  },
+  "keywords": ["stremio", "anime", "addon", "tioanime", "latanime", "animeav1"],
   "license": "MIT",
+  "engines": { "node": ">=18" },
   "dependencies": {
-    "crypto-js": "^4.2.0"
+    "cheerio": "^1.0.0",
+    "express": "^4.19.2"
   }
 }
