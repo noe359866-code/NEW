@@ -8,10 +8,12 @@ Inspirado en la arquitectura de [animeflv-stremio-addon](https://github.com/Piga
 
 1. Sube este repo a GitHub.
 2. En Render → **New → Web Service** → conecta el repo.
-3. Render detecta `render.yaml` (build `npm install`, start `npm start`). Si lo creas manual:
-   - Build Command: `npm install`
+3. Con un Blueprint de Render se usa `render.yaml`. Si creas el servicio manualmente, configura:
+   - Build Command: `npm install && npm run build`
    - Start Command: `npm start`
-   - Environment: Node, versión 20.x
+   - Node.js: versión 22.x (por `engines` en `package.json` o con `NODE_VERSION=22.x`)
+
+   En un servicio existente, revisa estos valores en el panel de Render; `render.yaml` no cambia automáticamente la configuración de un servicio creado manualmente.
 4. Cuando esté en línea, instala en Stremio con:
    ```
    https://TU-SERVICIO.onrender.com/manifest.json

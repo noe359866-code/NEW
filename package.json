@@ -4,12 +4,13 @@
   "description": "Addon de Stremio solo streams de anime en español latino (TioAnime, Latanime, AnimeAV1). Sin catalogos ni metadatos.",
   "main": "index.js",
   "scripts": {
+    "build": "node --check index.js && node --check lib/anilist.js && node --check lib/http.js && node --check lib/text.js && node --check lib/streams.js && node --check providers/tioanime.js && node --check providers/latanime.js && node --check providers/animeav1.js",
     "start": "node index.js",
     "dev": "node --watch index.js"
   },
   "keywords": ["stremio", "anime", "addon", "tioanime", "latanime", "animeav1"],
   "license": "MIT",
-  "engines": { "node": ">=18" },
+  "engines": { "node": "22.x" },
   "dependencies": {
     "cheerio": "^1.0.0",
     "express": "^4.19.2"
